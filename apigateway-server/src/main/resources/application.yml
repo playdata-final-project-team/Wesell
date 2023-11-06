@@ -22,6 +22,11 @@ spring:
           predicates:
             - Path=/deal-service/**
 
+        - id: authentication-server
+          uri: lb://AUTHENTICATION-SERVER
+          predicates:
+            - Path=/authentication-server/**
+
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
