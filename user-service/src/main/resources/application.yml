@@ -17,6 +17,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        check_nullability: true
     show_sql: true
 
   profiles:
