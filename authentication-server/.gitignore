@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 민감정보 ###
+application-db.yml
