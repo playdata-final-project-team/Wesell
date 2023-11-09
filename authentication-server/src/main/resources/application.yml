@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: deal-service
+    name: authentication-server
 
   datasource:
     url: ${url}
