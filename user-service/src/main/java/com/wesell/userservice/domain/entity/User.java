@@ -25,32 +25,32 @@ public class User {
     @Column(name = "u_id")
     private Long id;
 
-    @Column(name = "u_name")
+    @Column(name = "u_name", nullable = false)
     private String name;
 
-    @Column(name = "u_nickname", length = 15)
+    @Column(name = "u_nickname", length = 15, nullable = false)
     private String nickname;
 
-    @Column(name = "u_phone", length = 11)
+    @Column(name = "u_phone", length = 11, nullable = false)
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "u_role")
+    @Column(name = "u_role", nullable = false)
     private Role role;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "u_createdAt")
+    @Column(name = "u_createdAt", nullable = false)
     private Date createdAt;
 
     @ColumnDefault(value = "false")
-    @Column(name = "u_isforced")
+    @Column(name = "u_isforced", nullable = false)
     private boolean isforced;
 
     @ColumnDefault(value = "false")
-    @Column(name = "u_agree")
+    @Column(name = "u_agree", nullable = false)
     private boolean agree;
 
-    @Column(name = "uuid")
+    @Column(name = "uuid", nullable = false)
     private String uid;
 
 
