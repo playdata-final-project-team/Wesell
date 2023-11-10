@@ -7,7 +7,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter @Builder
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name="auth")
 public class Authentication {
 
