@@ -10,17 +10,21 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AdminService {
 
     private final AdminRepository adminRepository;
     private final ModelMapper modelMapper;
+    private final ObjectMapper objectMapper;
 
     public ResponseAdminDto saveSiteConfig(RequestAdminDto requestAdminDto) {
         SiteConfig siteConfig = new SiteConfig(convertDtoToJson(requestAdminDto));
         SiteConfig savedEntity = adminRepository.save(siteConfig);
-        return modelMapper.map(savedEntity, ResponseAdminDto.class);
+        return siteConfigToResponseDto(savedEntity);
     }
 
     private String convertDtoToJson(RequestAdminDto requestAdminDto) {
@@ -31,5 +35,20 @@ public class AdminService {
             e.printStackTrace();
             return "{}";
         }
+    }
+
+    private ResponseAdminDto siteConfigToResponseDto(SiteConfig siteConfig) {
+        try {
+            RequestAdminDto requestAdminDto = objectMapper.readValue(siteConfig.getConfig(), RequestAdminDto.class);
+            return modelMapper.map(requestAdminDto, ResponseAdminDto.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new ResponseAdminDto();
+        }
+    }
+
+    public ResponseAdminDto getSiteConfig() {
+        Optional<SiteConfig> siteConfigOptional = adminRepository.findById(1L);
+        return siteConfigOptional.map(this::siteConfigToResponseDto).orElse(new ResponseAdminDto());
     }
 }
