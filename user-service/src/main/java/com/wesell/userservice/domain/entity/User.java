@@ -6,17 +6,16 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@RequiredArgsConstructor
-@AllArgsConstructor
 @ToString
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
+@Table(name = "user")
 public class User {
 
     @Id
@@ -30,12 +29,12 @@ public class User {
     @Column(name = "u_nickname", length = 15, nullable = false)
     private String nickname;
 
-    @Column(name = "u_phone", length = 11, nullable = false)
+    @Column(name = "u_phone", nullable = false)
     private String phone;
 
     @CreationTimestamp
     @Column(name = "u_createdAt", nullable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @ColumnDefault(value = "false")
     @Column(name = "u_isforced", nullable = false)
@@ -47,6 +46,5 @@ public class User {
 
     @Column(name = "u_uuid", nullable = false)
     private String uuid;
-
 
 }
