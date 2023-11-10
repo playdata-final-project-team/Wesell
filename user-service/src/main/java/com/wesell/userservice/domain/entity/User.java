@@ -12,6 +12,7 @@ import java.util.Date;
 @Entity
 @ToString
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
