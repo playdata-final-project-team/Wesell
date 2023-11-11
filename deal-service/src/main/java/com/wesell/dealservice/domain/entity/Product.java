@@ -14,9 +14,13 @@ public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "p_id", nullable = false)
     private String id;
+    @Column(nullable = false)
     private String uuid;
+    @Column(nullable = false)
     @ManyToOne(cascade = CascadeType.ALL)
     private Category category;
+    @Column(nullable = false)
+    private Long i_id;
     @Column(name = "p_title", nullable = false)
     private String title;
     @Column(name = "p_link", nullable = false)
