@@ -38,8 +38,9 @@ public class AuthUserService {
         log.debug("회원 인증 정보 - DB 저장");
         authUserRepository.save(user);
 
+        // 연동 전 테스트를 위해 주석처리
         log.debug("User-Service Api Call - 회원가입 요청");
-        CreateUserFeignResponseDto feignDto = converter.toFeignDto(createUserRequestDto);
-        userServiceFeignClient.registerUserDetailInfo(feignDto);
+//        CreateUserFeignResponseDto feignDto = converter.toFeignDto(createUserRequestDto);
+//        userServiceFeignClient.registerUserDetailInfo(feignDto);
     }
 }
