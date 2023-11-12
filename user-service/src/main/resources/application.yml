@@ -6,10 +6,10 @@ spring:
     name: user-service
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/wesell
-    username: beo
-    password: 7730
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${url}
+    username: ${username_}
+    password: ${password}
+    driver-class-name: ${driver-class-name}
 
   jpa:
     hibernate:

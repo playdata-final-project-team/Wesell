@@ -4,6 +4,7 @@ import com.wesell.userservice.domain.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ class UserRepositoryTest {
 
     @Test
     @Transactional  // 테스트 메서드 실행 후 롤백하여 데이터베이스 상태 유지
+    @Rollback(value = false)
     void save() {
         //  유저 정보 생성
         User user = User.builder()
@@ -43,6 +45,7 @@ class UserRepositoryTest {
 
     @Test
     @Transactional
+    @Rollback(value = false)
     void delete() {
         User user = User.builder()
                 .name("Beong ho")
@@ -69,6 +72,7 @@ class UserRepositoryTest {
 
     @Test
     @Transactional
+    @Rollback(value = false)
     void findAll() {
         // 새로운 유저 정보 생성
         User user1 = User.builder()

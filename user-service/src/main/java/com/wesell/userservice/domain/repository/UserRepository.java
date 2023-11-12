@@ -2,10 +2,8 @@ package com.wesell.userservice.domain.repository;
 
 import com.wesell.userservice.domain.entity.User;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -27,14 +25,10 @@ public class UserRepository {
     }
 
     public User findByOneId(Long id) {  // 유저 id로 유저 한명 조회
-        try {
             return em.createQuery("select u from User u where u.id = :id", User.class)
                     .setParameter("id", id)
                     .getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
         }
-    }
 
     public List<User> findAll() {   // 유저 정보 전체 조회
         return em.createQuery("select u from User u", User.class)
