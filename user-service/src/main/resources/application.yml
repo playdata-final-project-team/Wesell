@@ -1,15 +1,15 @@
 server:
-  port: 0
+  port: 8898
 
 spring:
   application:
     name: user-service
 
   datasource:
-    url: ${url}
-    username: ${username_}
-    password: ${password}
-    driver-class-name: ${driver-class-name}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/msa_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 1234
 
   jpa:
     hibernate:
