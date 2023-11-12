@@ -1,6 +1,7 @@
 package com.wesell.authenticationserver.dto.request;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class CreateUserRequestDto { // 회원가입(front) -> Auth-Server
 
     @NotBlank(message = "이름을 입력해주세요.")
     @Pattern(regexp = "^[가-힣]+$", message = "이름은 한글로 작성해주세요.")
+    @Size(min = 2, message= "이름은 2자 이상 입력하세요.")
     private String name; // 회원명
 
     @NotBlank(message = "닉네임을 입력해주세요.")
@@ -37,12 +39,13 @@ public class CreateUserRequestDto { // 회원가입(front) -> Auth-Server
     private String nickname; // 닉네임
 
     @NotBlank(message = "휴대전화 번호를 입력해주세요.")
-    @Pattern(regexp = "^01(0|1|[6-8])\\\\d{3,4}\\\\d{4}$")
+    @Pattern(regexp = "^01(0|1|[6-8])\\d{3,4}\\d{4}$", message="휴대전화 번호 양식이 아닙니다.")
     private String phone; // 휴대전화 번호
 
     @AssertTrue(message = "개인 정보 제공에 동의 해주세요.")
     private boolean agree; // 개인정보 제공 동의여부
-    
+
+    @JsonIgnore
     private String uuid; // 회원 구분 번호
 
 }
