@@ -1,0 +1,7 @@
+package com.wesell.dealservice.domain.repository;
+
+import com.wesell.dealservice.domain.entity.DealPost;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DealRepository extends JpaRepository<DealPost, Long> {
+}
