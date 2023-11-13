@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -14,7 +15,7 @@ public class SecurityConfig {
 
     /**
      * 인증 인가 과정을 거치지 않도록 처리한 설정 - swagger
-     * @return return WebSecurityCustomizer
+     * @return WebSecurityCustomizer
      */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
@@ -44,6 +45,12 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+    // 비밀번호 암호화
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
 }
