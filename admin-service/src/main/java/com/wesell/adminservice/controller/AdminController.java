@@ -31,7 +31,6 @@ public class AdminController {
         return new ResponseEntity<>(currentSiteConfig, HttpStatus.OK);
     }
 
-
     @GetMapping("get/user-list")
     public ResponseEntity<UserListResponseDto> getUserList() {
         UserListResponseDto userListResponseDto = adminService.getUserList();
