@@ -1,30 +1,19 @@
 package com.wesell.dealservice.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.*;
 
-@Entity @Getter @Setter
+@Entity @Getter @Setter @Builder
 @Table(name = "category")
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "c_id", nullable = false)
-    private Long id;
+    Long id;
 
     @Column(name = "c_value", nullable = false)
-    private String value;
+    String value;
 
-    @OneToMany(mappedBy = "category")
-    private List<Product> products = new ArrayList<>();
-
-    public Category(Long id, String value) {
-        this.id = id;
-        this.value = value;
-    }
 }
