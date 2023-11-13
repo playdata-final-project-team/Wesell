@@ -1,6 +1,7 @@
 package com.wesell.dealservice.domain.entity;
 
 import com.wesell.dealservice.domain.SaleStatus;
+import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -48,6 +49,14 @@ public class DealPost {
         this.link = link;
         this.detail = detail;
         this.status = SaleStatus.IN_PROGRESS;
+    }
+
+    public void editPost(EditPostRequestDto dto) {
+        this.category = dto.getCategory();
+        this.title = dto.getTitle();
+        this.price = dto.getPrice();
+        this.link = dto.getLink();
+        this.detail = dto.getDetail();
     }
 
 }

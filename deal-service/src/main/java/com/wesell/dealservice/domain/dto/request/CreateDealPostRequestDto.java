@@ -6,8 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Data
-@NoArgsConstructor @AllArgsConstructor
-public class RequestCreateDealPostDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateDealPostRequestDto {
 
     private String uuid;
 
