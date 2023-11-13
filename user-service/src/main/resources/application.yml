@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8080
 
 spring:
   application:
@@ -20,11 +20,11 @@ spring:
         check_nullability: true
     show_sql: true
 
-  profiles:
+spring.profiles:
     active: db
 
 springdoc:
-  packages-to-scan: com.test.swaggertest.controllers
+  packages-to-scan: com.wesell.userservice.contoller
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:

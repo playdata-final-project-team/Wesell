@@ -47,4 +47,5 @@ public class User {
     @Column(name = "u_uuid", nullable = false)
     private String uuid;
 
+
 }
