@@ -19,7 +19,7 @@ public class DealPost {
     private String uuid;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "c_id")
     private Category category;
 

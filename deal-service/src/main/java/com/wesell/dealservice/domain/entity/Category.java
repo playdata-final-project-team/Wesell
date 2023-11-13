@@ -1,5 +1,6 @@
 package com.wesell.dealservice.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
@@ -19,11 +20,11 @@ public class Category {
     String value;
 
     @OneToMany(mappedBy = "category")
+    @Transient
     private List<DealPost> products = new ArrayList<>();
 
     @Builder
     public Category(Long id, String value) {
-        this.id = id;
         this.value = value;
     }
 

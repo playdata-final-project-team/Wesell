@@ -3,6 +3,7 @@ package com.wesell.dealservice.domain.dto.request;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Data
@@ -15,10 +16,10 @@ public class CreateDealPostRequestDto {
     @NotBlank
     private String title;
 
-    @NotBlank
+    @NotNull
     private Category category;
 
-    @NotBlank
+    @NotNull
     private Long price;
 
     @NotBlank
