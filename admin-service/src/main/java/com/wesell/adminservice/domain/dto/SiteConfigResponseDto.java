@@ -5,7 +5,8 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RequestAdminDto {
+@AllArgsConstructor
+public class SiteConfigResponseDto {
 
     private String jsVersion;
     private String cssVersion;

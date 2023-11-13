@@ -6,9 +6,10 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseAdminDto {
+@Builder
+public class UserListResponseDto {
 
-    private String jsVersion;
-    private String cssVersion;
-    private String title;
+    private Long id;
+    private String name;
+    private String nickname;
 }
