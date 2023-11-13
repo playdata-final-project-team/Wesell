@@ -5,5 +5,5 @@ import com.wesell.dealservice.domain.entity.DealPost;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DealRepository extends JpaRepository<DealPost, Long> {
-    DealPost findPostByUserUuid(String uuid, String id);
+    DealPost findPostByUuid(String uuid, String id);
 }

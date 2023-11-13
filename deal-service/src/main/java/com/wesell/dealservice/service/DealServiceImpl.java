@@ -8,7 +8,6 @@ import com.wesell.dealservice.domain.repository.DealRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 @Transactional
@@ -24,10 +23,10 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public EditPostResponseDto editPost(EditPostRequestDto requestDto, String postId) {
-        DealPost editPost = dealRepository.findPostByUserUuid(requestDto.getUuid(), postId);
+    public void editPost(EditPostRequestDto requestDto, String postId) {
+        DealPost editPost = dealRepository.findPostByUuid(requestDto.getUuid(), postId);
         editPost.editPost(requestDto);
-        return new EditPostResponseDto(editPost.getCategory(), editPost.getTitle(), editPost.getPrice(), editPost.getLink(), editPost.getDetail());
+        new EditPostResponseDto(editPost.getCategory(), editPost.getTitle(), editPost.getPrice(), editPost.getLink(), editPost.getDetail());
     }
 
 
