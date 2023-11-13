@@ -19,7 +19,8 @@ public class DealPost {
     private String uuid;
 
     @Column(nullable = false)
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "c_id")
     private Category category;
 
     @Column(name = "p_title", nullable = false)

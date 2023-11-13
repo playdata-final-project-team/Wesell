@@ -2,6 +2,8 @@ package com.wesell.dealservice.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity @Getter @Setter @Builder
 @Table(name = "category")
@@ -15,5 +17,14 @@ public class Category {
 
     @Column(name = "c_value", nullable = false)
     String value;
+
+    @OneToMany(mappedBy = "category")
+    private List<DealPost> products = new ArrayList<>();
+
+    @Builder
+    public Category(Long id, String value) {
+        this.id = id;
+        this.value = value;
+    }
 
 }
