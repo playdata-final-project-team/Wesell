@@ -3,14 +3,11 @@ package com.wesell.authenticationserver.domain.entity;
 import com.wesell.authenticationserver.domain.enum_.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@DynamicInsert
 @Table(name="auth")
 public class AuthUser {
 
@@ -22,14 +19,13 @@ public class AuthUser {
     @Column(name = "a_email", nullable = false, unique = true, length = 60)
     private String email;
 
-    @Column(name= "a_password", length = 30)
+    @Column(name= "a_password", length = 100)
     private String password;
 
-    @Column(name="a_uuid", nullable = false, length = 20)
+    @Column(name="a_uuid", nullable = false, length = 50)
     private String uuid;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @ColumnDefault(value = "USER")
     private Role role;
 }

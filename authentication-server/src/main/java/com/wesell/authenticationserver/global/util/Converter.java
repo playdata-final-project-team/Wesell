@@ -1,6 +1,7 @@
 package com.wesell.authenticationserver.global.util;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
+import com.wesell.authenticationserver.domain.enum_.Role;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
 import com.wesell.authenticationserver.dto.response.CreateUserFeignResponseDto;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ public class Converter {
                 .email(email)
                 .password(password)
                 .uuid(uuid)
+                .role(Role.USER)
                 .build();
     }
 
