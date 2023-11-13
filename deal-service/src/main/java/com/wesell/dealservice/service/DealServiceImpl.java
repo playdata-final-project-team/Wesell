@@ -23,8 +23,8 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public void editPost(EditPostRequestDto requestDto, String postId) {
-        DealPost editPost = dealRepository.findPostByUuid(requestDto.getUuid(), postId);
+    public void editPost(EditPostRequestDto requestDto, Long postId) {
+        DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
         editPost.editPost(requestDto);
         new EditPostResponseDto(editPost.getCategory(), editPost.getTitle(), editPost.getPrice(), editPost.getLink(), editPost.getDetail());
     }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("deal")
+@CrossOrigin("http://127.0.0.1:5500")
 public class DealController {
 
     private final DealServiceImpl dealService;
@@ -23,7 +24,7 @@ public class DealController {
     }
 
     @PutMapping("edit")
-    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto, String postId) {
+    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto, Long postId) {
         dealService.editPost(requestDto, postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

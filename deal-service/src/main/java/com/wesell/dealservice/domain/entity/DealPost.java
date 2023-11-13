@@ -4,22 +4,21 @@ import com.wesell.dealservice.domain.SaleStatus;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 
-@Entity @Getter @DynamicUpdate
+@Entity @Getter
 @Table(name = "post")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DealPost {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "p_id", nullable = false)
-    private String id;
+    @Column(name = "p_id")
+    private Long id;
 
     @Column(name = "uuid", nullable = false)
     private String uuid;
 
-    @Column(nullable = false)
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "c_id")
     private Category category;

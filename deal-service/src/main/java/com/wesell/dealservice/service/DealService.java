@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public interface DealService {
     void createDealPost(CreateDealPostRequestDto requestCreatePostDto);
-    void editPost(EditPostRequestDto requestDto, @RequestParam String postId);
+    void editPost(EditPostRequestDto requestDto, @RequestParam Long postId);
 }
