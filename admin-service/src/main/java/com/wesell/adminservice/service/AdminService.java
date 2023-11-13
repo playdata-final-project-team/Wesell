@@ -9,7 +9,6 @@ import com.wesell.adminservice.domain.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -50,5 +49,10 @@ public class AdminService {
     public ResponseAdminDto getSiteConfig() {
         Optional<SiteConfig> siteConfigOptional = adminRepository.findById(1L);
         return siteConfigOptional.map(this::siteConfigToResponseDto).orElse(new ResponseAdminDto());
+    }
+
+        public RequestAdminDto mapToRequestAdminDto(Map<String, String> versions) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(versions, RequestAdminDto.class);
     }
 }

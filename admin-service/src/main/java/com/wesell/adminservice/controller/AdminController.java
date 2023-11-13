@@ -28,4 +28,19 @@ public class AdminController {
         ResponseAdminDto currentSiteConfig = adminService.getSiteConfig();
         return new ResponseEntity<>(currentSiteConfig, HttpStatus.OK);
     }
+
+    @GetMapping("version")
+    public ResponseEntity<ResponseAdminDto> getVersionAndSave(
+            @RequestParam(name = "jsVersion", defaultValue = "1.0") String jsVersion,
+            @RequestParam(name = "cssVersion", defaultValue = "1.0") String cssVersion,
+            @RequestParam(name = "title", defaultValue = "Default Title") String title) {
+
+        Map<String, String> versions = new HashMap<>();
+        versions.put("jsVersion", jsVersion);
+        versions.put("cssVersion", cssVersion);
+        versions.put("title", title);
+        RequestAdminDto requestAdminDto = adminService.mapToRequestAdminDto(versions);
+        ResponseAdminDto savedSiteConfig = adminService.saveSiteConfig(requestAdminDto);
+        return new ResponseEntity<>(savedSiteConfig, HttpStatus.CREATED);
+    }
 }
