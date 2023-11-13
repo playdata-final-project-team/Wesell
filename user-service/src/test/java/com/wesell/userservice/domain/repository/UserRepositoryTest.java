@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -34,7 +31,7 @@ class UserRepositoryTest {
         userRepository.save(user);
 
         // 저장된 유저 정보 확인
-        User savedUser = userRepository.findByOneId(user.getId());
+        User savedUser = userRepository.findByOneId(user.getUuid());
         assertNotNull(savedUser);
         assertEquals("Beong ho", savedUser.getName());
         assertEquals("PBH", savedUser.getNickname());
@@ -58,14 +55,14 @@ class UserRepositoryTest {
         userRepository.save(user);
 
         // 저장된 유저 정보 확인
-        User savedUser = userRepository.findByOneId(user.getId());
+        User savedUser = userRepository.findByOneId(user.getUuid());
         assertNotNull(savedUser);
 
         // 저장된 유저 정보 삭제
         userRepository.delete(savedUser);
 
         // 삭제된 유저 정보 확인
-        User deletedUser = userRepository.findByOneId(savedUser.getId());
+        User deletedUser = userRepository.findByOneId(savedUser.getUuid());
         assertNull(deletedUser);
 
     }
