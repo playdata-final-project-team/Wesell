@@ -1,8 +1,11 @@
 package com.wesell.dealservice.domain.dto.response;
 
 import com.wesell.dealservice.domain.entity.Category;
+import com.wesell.dealservice.domain.entity.DealPost;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +20,7 @@ public class EditPostResponseDto {
     @NotBlank
     private String title;
 
-    @NotBlank
+    @NotNull
     private Long price;
 
     @NotBlank
@@ -26,4 +29,11 @@ public class EditPostResponseDto {
     @NotBlank
     private String detail;
 
+    public EditPostResponseDto(DealPost post) {
+        category = post.getCategory();
+        title = post.getTitle();
+        price = post.getPrice();
+        link = post.getLink();
+        detail = post.getDetail();
+    }
 }

@@ -16,7 +16,7 @@ public class DealPost {
     private Long id;
 
     @ManyToOne( fetch = FetchType.LAZY)
-    @JoinColumn(name = "c_id")
+    @JoinColumn(name = "c_id", referencedColumnName = "c_value")
     private Category category;
 
     @Column(name = "uuid", nullable = false)
@@ -51,11 +51,14 @@ public class DealPost {
     }
 
     public void editPost(EditPostRequestDto dto) {
-        this.category = dto.getCategory();
         this.title = dto.getTitle();
         this.price = dto.getPrice();
         this.link = dto.getLink();
         this.detail = dto.getDetail();
+    }
+
+    public void editCategory(Category category) {
+        this.category = category;
     }
 
 }

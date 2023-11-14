@@ -21,7 +21,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public void createDealPost(CreateDealPostRequestDto requestDto) {
-        Category category = categoryRepository.findById(requestDto.getId()).get();
+        Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())
                 .category(category)
@@ -34,11 +34,13 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public void editPost(EditPostRequestDto requestDto, Long postId) {
+    public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
         DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
         editPost.editPost(requestDto);
-        new EditPostResponseDto(editPost.getCategory(), editPost.getTitle(), editPost.getPrice(), editPost.getLink(), editPost.getDetail());
-    }
+        Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
+        editPost.editCategory(category);
 
+        return new EditPostResponseDto(editPost);
+    }
 
 }

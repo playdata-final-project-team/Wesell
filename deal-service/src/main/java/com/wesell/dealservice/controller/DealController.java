@@ -24,9 +24,8 @@ public class DealController {
     }
 
     @PutMapping("edit")
-    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto, Long postId) {
-        dealService.editPost(requestDto, postId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto, @RequestParam("id") Long postId) {
+        return new ResponseEntity<>(dealService.editPost(requestDto, postId),HttpStatus.OK);
     }
 
 }

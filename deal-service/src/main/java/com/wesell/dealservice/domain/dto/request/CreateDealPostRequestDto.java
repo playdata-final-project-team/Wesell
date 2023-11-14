@@ -11,7 +11,8 @@ public class CreateDealPostRequestDto {
 
     private String uuid;
 
-    private Long id;
+    @NotNull
+    private Long categoryId;
 
     @NotBlank
     private String title;
