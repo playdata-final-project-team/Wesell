@@ -2,9 +2,11 @@ package com.wesell.userservice.domain.repository;
 
 import com.wesell.userservice.domain.entity.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -13,30 +15,31 @@ public class UserRepository {
     private final EntityManager em;
 
     public void save(User user) {   // 유저 정보 저장
-        if(user.getUuid() == null) {
-            em.persist(user);   // 새로운 유저 정보 저장
-        } else {
-            em.merge(user);     // 이미 존재하는 유저 정보이므로 업데이트
-        }
+        em.persist(user);
     }
+
+    public void update(User user) { // 유저 정보 수정
+        em.merge(user);
+    }
+
 
     public void delete(User user) { // 유저 정보 삭제
         em.remove(user);
     }
 
-    public User findByOneId(String uuid) {  // 유저 id로 유저 한명 조회
-        try {
-            return em.createQuery("select u from User u where u.uuid = :uuid", User.class)
+    public Optional<User> findByOneId(String uuid) {  // 유저 id로 유저 한명 조회
+
+            User user = em.createQuery("select u from User u where u.uuid = :uuid", User.class)
                     .setParameter("uuid", uuid)
                     .getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
+            return Optional.ofNullable(user);
+
     }
 
-    public List<User> findAll() {   // 유저 정보 전체 조회
-        return em.createQuery("select u from User u", User.class)
+    public Optional<List<User>> findAll() {   // 유저 정보 전체 조회
+        List<User> user = em.createQuery("select u from User u", User.class)
                 .getResultList();
+        return Optional.ofNullable(user);
     }
 
 
