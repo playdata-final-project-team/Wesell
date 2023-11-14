@@ -3,6 +3,7 @@ package com.wesell.authenticationserver.service;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
+import com.wesell.authenticationserver.dto.request.LoginUserRequestDto;
 import com.wesell.authenticationserver.dto.response.CreateUserFeignResponseDto;
 import com.wesell.authenticationserver.global.util.Converter;
 import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.UUID;
 
 @Service
@@ -25,6 +28,7 @@ public class AuthUserService {
     /**
      * 회원 가입 기능
      */
+    @Transactional
     public void createUser(CreateUserRequestDto createUserRequestDto){
         log.debug("회원 가입 시작");
 
@@ -42,5 +46,20 @@ public class AuthUserService {
         log.debug("User-Service Api Call - 회원가입 요청");
 //        CreateUserFeignResponseDto feignDto = converter.toFeignDto(createUserRequestDto);
 //        userServiceFeignClient.registerUserDetailInfo(feignDto);
+    }
+
+    public void login(LoginUserRequestDto dto){
+        // 이메일로 등록된 회원인지 확인
+
+        // 회원이 삭제된 회원인지 여부 확인
+
+        // 비밀번호 일치 여부 확인 - 로그인 성공
+
+    }
+
+    public AuthUser getOneByEmail(String email){
+        return authUserRepository.findByEmail(email).orElseThrow(
+                ()-> new RuntimeException("가입된 이메일이 아닙니다.")
+        );
     }
 }

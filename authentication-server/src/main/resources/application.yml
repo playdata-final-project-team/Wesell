@@ -32,3 +32,9 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
+
+token:
+  access-expired-time: 1
+  refresh-expired-time: 24
+  secret-key: test123456789
+  issuer: test@wesell.com
