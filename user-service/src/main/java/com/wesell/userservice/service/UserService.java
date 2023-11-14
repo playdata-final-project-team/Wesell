@@ -1,9 +1,11 @@
 package com.wesell.userservice.service;
 
+import com.wesell.userservice.dto.RequestSignupDTO;
 import com.wesell.userservice.dto.responseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.domain.entity.User;
 import com.wesell.userservice.domain.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -29,5 +31,20 @@ public class UserService {
         return responseDto.of(userList);
     }
 
+    @Transactional
+    public void save(RequestSignupDTO requestSignupDTO){
+        User userEntity = UserService.convertToentity(requestSignupDTO);
+        userRepository.save(userEntity);
+    }
+
+    public static User convertToentity(RequestSignupDTO userdto){
+        return User.builder()
+                .name(userdto.getName())
+                .nickname(userdto.getNickname())
+                .phone(userdto.getPhone())
+                .agree(userdto.isAgree())
+                .uuid(userdto.getUuid())
+                .build();
+    }
 
 }

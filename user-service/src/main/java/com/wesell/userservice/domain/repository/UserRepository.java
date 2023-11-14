@@ -12,12 +12,8 @@ public class UserRepository {
 
     private final EntityManager em;
 
-    public void save(User user) {   // 유저 정보 저장
-        if(user.getUuid() == null) {
-            em.persist(user);   // 새로운 유저 정보 저장
-        } else {
-            em.merge(user);     // 이미 존재하는 유저 정보이므로 업데이트
-        }
+    public void save(User user) {
+        em.persist(user);
     }
 
     public void delete(User user) { // 유저 정보 삭제
