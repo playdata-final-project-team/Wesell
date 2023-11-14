@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -31,8 +34,10 @@ class UserRepositoryTest {
         userRepository.save(user);
 
         // 저장된 유저 정보 확인
-        User savedUser = userRepository.findByOneId(user.getUuid());
-        assertNotNull(savedUser);
+        Optional<User> savedUserOpt = userRepository.findByOneId(user.getUuid());
+        assertNotNull(savedUserOpt.isPresent());
+
+        User savedUser = savedUserOpt.get();
         assertEquals("Beong ho", savedUser.getName());
         assertEquals("PBH", savedUser.getNickname());
         assertEquals("010-1234-5678", savedUser.getPhone());
@@ -55,15 +60,15 @@ class UserRepositoryTest {
         userRepository.save(user);
 
         // 저장된 유저 정보 확인
-        User savedUser = userRepository.findByOneId(user.getUuid());
-        assertNotNull(savedUser);
+        Optional<User> savedUserOpt = userRepository.findByOneId(user.getUuid());
+        assertTrue(savedUserOpt.isPresent());
 
         // 저장된 유저 정보 삭제
-        userRepository.delete(savedUser);
+        userRepository.delete(savedUserOpt.get());
 
         // 삭제된 유저 정보 확인
-        User deletedUser = userRepository.findByOneId(savedUser.getUuid());
-        assertNull(deletedUser);
+        Optional<User> deleteUserOpt = userRepository.findByOneId(user.getUuid());
+        assertFalse(deleteUserOpt.isPresent());
 
     }
 
@@ -91,11 +96,52 @@ class UserRepositoryTest {
         userRepository.save(user2);
 
         // 모든 유저 정보 조회
-        List<User> userList = userRepository.findAll();
+        Optional<List<User>> userList = userRepository.findAll();
+
+        Optional<List<User>> findUserOpt = userRepository.findAll();
+        assertNotNull(findUserOpt.isPresent());
+
+        List<User> findAllUser = findUserOpt.get();
 
         // 조회된 유저 내용 검증
-        assertTrue(userList.contains(user1));
-        assertTrue(userList.contains(user2));
+        assertTrue(findAllUser.contains(user1));
+        assertTrue(findAllUser.contains(user2));
 
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void update() {
+        // 새로운 유저 정보 생성
+        User user = User.builder()
+                .name("Beong ho")
+                .nickname("PBH")
+                .phone("010-1234-5678")
+                .uuid("abcd1234")
+                .build();
+
+        // 유저 정보 저장
+        userRepository.save(user);
+
+        // 유저 정보 조회
+        Optional<User> retrievedUser = userRepository.findByOneId(user.getUuid());
+
+        // 유저 정보 수정
+        User updatedUser = User.builder()
+                .id(retrievedUser.get().getId())
+                .name("Updated Name")
+                .nickname(user.getNickname())
+                .phone(user.getPhone())
+                .uuid(user.getUuid())
+                .createdAt(LocalDateTime.now())
+                .build();
+        userRepository.update(updatedUser);
+
+
+
+        // 수정된 유저 정보 검증
+        assertTrue(retrievedUser.isPresent());
+        assertEquals("Updated Name", retrievedUser.get().getName());
     }
 }
