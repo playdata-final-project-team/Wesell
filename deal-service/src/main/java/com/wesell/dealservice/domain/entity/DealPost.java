@@ -15,13 +15,12 @@ public class DealPost {
     @Column(name = "p_id")
     private Long id;
 
-    @Column(name = "uuid", nullable = false)
-    private String uuid;
-
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "c_id")
     private Category category;
+
+    @Column(name = "uuid", nullable = false)
+    private String uuid;
 
     @Column(name = "p_title", nullable = false)
     private String title;
@@ -35,12 +34,13 @@ public class DealPost {
     @Column(name = "p_detail", nullable = false)
     private String detail;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "p_status", nullable = false)
     private SaleStatus status;
 
     @Builder
     public DealPost(String uuid, Category category, String title, Long price,
-                    String link, String detail, SaleStatus status) {
+                    String link, String detail) {
         this.uuid = uuid;
         this.category = category;
         this.title = title;

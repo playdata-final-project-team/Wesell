@@ -3,7 +3,9 @@ package com.wesell.dealservice.service;
 import com.wesell.dealservice.domain.dto.request.CreateDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
+import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
+import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +17,19 @@ import org.springframework.stereotype.Service;
 public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
-    public void createDealPost(CreateDealPostRequestDto requestCreatePostDto) {
-        DealPost post = requestCreatePostDto.toEntity();
+    public void createDealPost(CreateDealPostRequestDto requestDto) {
+        Category category = categoryRepository.findById(requestDto.getId()).get();
+        DealPost post = DealPost.builder()
+                .uuid(requestDto.getUuid())
+                .category(category)
+                .title(requestDto.getTitle())
+                .price(requestDto.getPrice())
+                .link(requestDto.getLink())
+                .detail(requestDto.getDetail())
+                .build();
         dealRepository.save(post);
     }
 

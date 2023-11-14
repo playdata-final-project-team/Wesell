@@ -1,6 +1,5 @@
 package com.wesell.dealservice.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
@@ -16,15 +15,15 @@ public class Category {
     @Column(name = "c_id")
     Long id;
 
-    @Column(name = "c_value", nullable = false)
+    @Column(name = "c_value", nullable = false, unique = true)
     String value;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @Transient
     private List<DealPost> products = new ArrayList<>();
 
     @Builder
-    public Category(Long id, String value) {
+    public Category(String value) {
         this.value = value;
     }
 
