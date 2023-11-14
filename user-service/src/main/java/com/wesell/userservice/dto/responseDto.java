@@ -3,7 +3,6 @@ package com.wesell.userservice.dto;
 import com.wesell.userservice.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
