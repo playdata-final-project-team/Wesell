@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -37,6 +36,7 @@ public class UserController {
         }
     }
 
+
     @DeleteMapping("user/{uuid}")
     public ResponseEntity<String> deleteUserEntity(@PathVariable String uuid) {
         try {
@@ -44,6 +44,16 @@ public class UserController {
             return ResponseEntity.ok("성공적으로 삭제되었습니다.");
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+    @PostMapping("/api/signup")
+    public ResponseEntity<String> signup(@RequestBody RequestSignupDTO requestSignupDTO) {
+        try {
+            userService.save(requestSignupDTO);
+            return new ResponseEntity<>("Signup successful", HttpStatus.OK);
+        } catch (Exception e) {
+            // 회원가입 실패 시 예외 처리
+            return new ResponseEntity<>("Signup failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+
         }
     }
 

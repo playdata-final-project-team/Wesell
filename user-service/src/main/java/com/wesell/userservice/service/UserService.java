@@ -5,6 +5,7 @@ import com.wesell.userservice.dto.responseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.domain.entity.User;
 import com.wesell.userservice.domain.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,21 @@ public class UserService {
             userRepository.delete(userOptional.get());
         else
             throw new UserNotFoundException("존재하지 않는 회원입니다.");
+
+    public void save(RequestSignupDTO requestSignupDTO){
+        User userEntity = UserService.convertToentity(requestSignupDTO);
+        userRepository.save(userEntity);
+    }
+
+    public static User convertToentity(RequestSignupDTO userdto){
+        return User.builder()
+                .name(userdto.getName())
+                .nickname(userdto.getNickname())
+                .phone(userdto.getPhone())
+                .agree(userdto.isAgree())
+                .uuid(userdto.getUuid())
+                .build();
+
     }
 
 }
