@@ -1,6 +1,6 @@
 package com.wesell.userservice.controller;
 
-import com.wesell.userservice.dto.RequestSignupDTO;
+import com.wesell.userservice.dto.SignupRequestDto;
 import com.wesell.userservice.dto.responseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.service.UserService;
@@ -36,13 +36,23 @@ public class UserController {
         }
     }
     @PostMapping("/api/signup")
-    public ResponseEntity<String> signup(@RequestBody RequestSignupDTO requestSignupDTO) {
+    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDTO) {
         try {
-            userService.save(requestSignupDTO);
+            userService.save(signupRequestDTO);
             return new ResponseEntity<>("Signup successful", HttpStatus.OK);
         } catch (Exception e) {
             // 회원가입 실패 시 예외 처리
             return new ResponseEntity<>("Signup failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping("/{uuid}")
+    public ResponseEntity<String> updateUser(@PathVariable String uuid, @RequestBody SignupRequestDto signupRequestDTO) {
+        try {
+            userService.updateUser(uuid, signupRequestDTO);
+
+            return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("User update failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
