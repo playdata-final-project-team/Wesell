@@ -23,9 +23,20 @@ public class DealController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("post")
+    public ResponseEntity<?> getPostInfo(@Valid @RequestParam("id") Long postId) {
+        return new ResponseEntity<>(dealService.getPostInfo(postId), HttpStatus.OK);
+    }
+
     @PutMapping("edit")
     public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto, @RequestParam("id") Long postId) {
         return new ResponseEntity<>(dealService.editPost(requestDto, postId),HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete")
+    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long postId) {
+        dealService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

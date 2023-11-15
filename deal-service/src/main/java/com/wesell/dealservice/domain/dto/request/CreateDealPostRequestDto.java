@@ -3,6 +3,8 @@ package com.wesell.dealservice.domain.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import java.time.LocalDate;
+
 
 @Data
 @NoArgsConstructor
@@ -25,5 +27,7 @@ public class CreateDealPostRequestDto {
 
     @NotBlank
     private String detail;
+
+    private LocalDate createdAt;
 
 }
