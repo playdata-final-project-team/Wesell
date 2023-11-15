@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,16 +27,25 @@ public class UserService {
         return responseDto.of(user);
     }
 
-    public List<responseDto> findUsers() throws UserNotFoundException {
-        Optional<List<User>> usersOptional = Optional.ofNullable(userRepository.findAll());
+    public List<responseDto> findUsers() throws UserNotFoundException { // 유저 전체 조회
+        Optional<List<User>> usersOptional = userRepository.findAll();
         List<User> userList = usersOptional.orElseThrow(() ->
                 new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
         return responseDto.of(userList);
     }
 
     @Transactional
-    public void save(SignupRequestDto signupRequestDTO){
-        User userEntity = UserService.convertToentity(signupRequestDTO);
+    public void deleteUser(String uuid) throws UserNotFoundException {   // 유저 한 명 삭제
+        Optional<User> userOptional = userRepository.findByOneId(uuid);
+
+        if(userOptional.isPresent())
+            userRepository.delete(userOptional.get());
+        else
+            throw new UserNotFoundException("존재하지 않는 회원입니다.");
+    }
+
+    public void save(RequestSignupDTO requestSignupDTO){
+        User userEntity = UserService.convertToentity(requestSignupDTO);
         userRepository.save(userEntity);
     }
 
@@ -47,6 +57,7 @@ public class UserService {
                 .agree(userdto.isAgree())
                 .uuid(userdto.getUuid())
                 .build();
+
     }
 
     @Transactional

@@ -35,6 +35,16 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+
+    @DeleteMapping("user/{uuid}")
+    public ResponseEntity<String> deleteUserEntity(@PathVariable String uuid) {
+        try {
+            userService.deleteUser(uuid);
+            return ResponseEntity.ok("성공적으로 삭제되었습니다.");
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
     @PostMapping("/api/signup")
     public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDTO) {
         try {
@@ -43,6 +53,7 @@ public class UserController {
         } catch (Exception e) {
             // 회원가입 실패 시 예외 처리
             return new ResponseEntity<>("Signup failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+
         }
     }
     @PutMapping("/{uuid}")
