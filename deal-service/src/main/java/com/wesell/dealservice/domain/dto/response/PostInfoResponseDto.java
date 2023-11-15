@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostInfoResponseDto {
+
     private String title;
     private LocalDate createdAt;
     private Long price;

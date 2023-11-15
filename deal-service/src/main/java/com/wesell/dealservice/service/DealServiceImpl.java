@@ -22,6 +22,7 @@ public class DealServiceImpl implements DealService {
     private final DealRepository dealRepository;
     private final CategoryRepository categoryRepository;
 
+    // 거래 글 생성
     @Override
     public void createDealPost(CreateDealPostRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
@@ -37,6 +38,7 @@ public class DealServiceImpl implements DealService {
         dealRepository.save(post);
     }
 
+    // 거래 글 수정
     @Override
     public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
         DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
@@ -47,11 +49,13 @@ public class DealServiceImpl implements DealService {
         return new EditPostResponseDto(editPost);
     }
 
+    // 거래 글 삭제
     @Override
     public void deletePost(Long postId) {
         dealRepository.deleteById(postId);
     }
 
+    //거래 글 상세 정보
     @Override
     public PostInfoResponseDto getPostInfo(Long postId) {
         DealPost foundPost = dealRepository.findDealPostById(postId);
