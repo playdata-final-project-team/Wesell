@@ -17,7 +17,6 @@ public class TokenProvider {
 
     private final RefreshTokenProvider refreshTokenProvider;
     private final AccessTokenProvider accessTokenProvider;
-    private final TokenInfoService tokenInfoService;
     private final TokenProperties tokenProperties;
 
     /**
