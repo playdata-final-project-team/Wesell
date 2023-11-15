@@ -1,8 +1,9 @@
-package com.wesell.authenticationserver.service;
+package com.wesell.authenticationserver.service.token;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
-import com.wesell.authenticationserver.domain.jwt.TokenProperties;
+import com.wesell.authenticationserver.domain.token.TokenProperties;
 import com.wesell.authenticationserver.dto.GeneratedTokenDto;
+import com.wesell.authenticationserver.service.TokenInfoService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
-package com.wesell.authenticationserver.service;
+package com.wesell.authenticationserver.service.token;
 
-import com.wesell.authenticationserver.domain.jwt.TokenProperties;
+import com.wesell.authenticationserver.domain.token.TokenProperties;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
