@@ -1,9 +1,7 @@
 package com.wesell.dealservice.controller;
 
 import com.wesell.dealservice.domain.dto.request.CreateCategoryRequestDto;
-import com.wesell.dealservice.domain.dto.request.CreateDealPostRequestDto;
 import com.wesell.dealservice.service.CategoryService;
-import com.wesell.dealservice.service.DealServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
