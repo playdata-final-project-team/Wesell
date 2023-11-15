@@ -4,15 +4,16 @@ import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.domain.token.TokenProperties;
 import com.wesell.authenticationserver.dto.GeneratedTokenDto;
+import com.wesell.authenticationserver.dto.LoginSuccessDto;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
 import com.wesell.authenticationserver.dto.request.LoginUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomConverter;
+import com.wesell.authenticationserver.global.util.CustomCookie;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
 import com.wesell.authenticationserver.service.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,20 +54,28 @@ public class AuthUserService {
 //        userServiceFeignClient.registerUserDetailInfo(feignDto);
     }
 
-    public void login(LoginUserRequestDto dto){
-        // 이메일로 등록된 회원인지 확인
+    /**
+     * 로그인 기능
+     * @param dto
+     * @return
+     */
+    public LoginSuccessDto login(LoginUserRequestDto dto){
+
+        log.debug("로그인 서비스 시작");
+
+        log.debug("이메일로 회원 조회");
         AuthUser authUser = authUserRepository.findByEmail(dto.getEmail())
                 .orElseThrow(()-> new RuntimeException("가입되지 않은 이메일입니다."));
 
-        // 비밀번호 일치 여부 확인
+        log.debug("비밀번호 일치 여부 확인");
         boolean isCorrect = passwordEncoder.matches(dto.getPassword(), authUser.getPassword());
         
         if(isCorrect){
             GeneratedTokenDto generatedTokenDto = tokenProvider.generateToken(authUser);
 
             tokenInfoService.saveTokenInfo(generatedTokenDto);
-            
-            // 쿠키에 담는 로직 구현! 및 DTO 관계 다시 생각해보기
+
+            return new LoginSuccessDto(generatedTokenDto);
         }else{
             throw new RuntimeException("비밀번호를 다시 입력 바랍니다.");
         }
