@@ -3,6 +3,7 @@ package com.wesell.dealservice.service;
 import com.wesell.dealservice.domain.dto.request.CreateDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
+import com.wesell.dealservice.domain.dto.response.PostInfoResponseDto;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
@@ -46,6 +47,12 @@ public class DealServiceImpl implements DealService {
     @Override
     public void deletePost(Long postId) {
         dealRepository.deleteById(postId);
+    }
+
+    @Override
+    public PostInfoResponseDto getPostInfo(Long postId) {
+        DealPost foundPost = dealRepository.findDealPostById(postId);
+        return new PostInfoResponseDto(foundPost);
     }
 
 }

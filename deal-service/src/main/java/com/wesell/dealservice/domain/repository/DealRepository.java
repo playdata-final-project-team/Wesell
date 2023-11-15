@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DealRepository extends JpaRepository<DealPost, Long> {
     DealPost findDealPostByUuidAndId(String uuid, Long id);
+    DealPost findDealPostById(Long id);
 }
