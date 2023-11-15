@@ -28,4 +28,9 @@ public class DealController {
         return new ResponseEntity<>(dealService.editPost(requestDto, postId),HttpStatus.OK);
     }
 
+    @DeleteMapping("delete")
+    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long postId) {
+        dealService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

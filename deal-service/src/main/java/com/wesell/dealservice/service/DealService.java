@@ -7,4 +7,5 @@ import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
 public interface DealService {
     void createDealPost(CreateDealPostRequestDto requestCreatePostDto);
     EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId);
+    void deletePost(Long postId);
 }

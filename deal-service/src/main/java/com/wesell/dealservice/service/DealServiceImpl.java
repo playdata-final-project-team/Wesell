@@ -43,4 +43,9 @@ public class DealServiceImpl implements DealService {
         return new EditPostResponseDto(editPost);
     }
 
+    @Override
+    public void deletePost(Long postId) {
+        dealRepository.deleteById(postId);
+    }
+
 }
