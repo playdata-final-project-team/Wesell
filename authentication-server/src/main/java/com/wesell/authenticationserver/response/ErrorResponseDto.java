@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.error;
+package com.wesell.authenticationserver.response;
 
 import lombok.*;
 
