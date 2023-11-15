@@ -8,6 +8,7 @@ import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
+import com.wesell.dealservice.feignClient.UserFeignClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
     private final CategoryRepository categoryRepository;
+    private final UserFeignClient userFeignClient;
 
     // 거래 글 생성
     @Override
@@ -58,7 +60,8 @@ public class DealServiceImpl implements DealService {
     @Override
     public PostInfoResponseDto getPostInfo(Long postId) {
         DealPost foundPost = dealRepository.findDealPostById(postId);
-        return new PostInfoResponseDto(foundPost);
+        String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
+        return new PostInfoResponseDto(foundPost, nickname);
     }
 
 }

@@ -16,8 +16,9 @@ public class PostInfoResponseDto {
     private Long price;
     private String detail;
     private String link;
+    private String nickname;
 
-    public PostInfoResponseDto (DealPost post) {
+    public PostInfoResponseDto (DealPost post, String nickname) {
         this.title = post.getTitle();
         this.createdAt = post.getCreatedAt();
         this.price = post.getPrice();
