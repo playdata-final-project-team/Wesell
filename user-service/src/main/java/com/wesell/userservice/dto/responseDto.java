@@ -9,13 +9,11 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public class responseDto {
-
     private Long id;
     private String name;
     private String nickname;
     private String phone;
     private String uuid;
-
 
     public static responseDto of(User user) {
         return new responseDto(
@@ -38,7 +36,5 @@ public class responseDto {
                 ))
                 .collect(Collectors.toList());
     }
-
-
 
 }
