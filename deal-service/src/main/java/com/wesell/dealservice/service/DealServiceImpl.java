@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class DealServiceImpl implements DealService {
                 .price(requestDto.getPrice())
                 .link(requestDto.getLink())
                 .detail(requestDto.getDetail())
-                .createdAt(LocalDate.from(LocalDate.now().atStartOfDay()))
+                .createdAt(LocalDate.now())
                 .build();
         dealRepository.save(post);
     }
