@@ -11,6 +11,8 @@ import com.wesell.dealservice.domain.repository.DealRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+
 
 @Service
 @Transactional
@@ -30,6 +32,7 @@ public class DealServiceImpl implements DealService {
                 .price(requestDto.getPrice())
                 .link(requestDto.getLink())
                 .detail(requestDto.getDetail())
+                .createdAt(LocalDate.from(LocalDate.now().atStartOfDay()))
                 .build();
         dealRepository.save(post);
     }

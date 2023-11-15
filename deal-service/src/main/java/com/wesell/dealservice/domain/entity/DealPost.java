@@ -4,8 +4,8 @@ import com.wesell.dealservice.domain.SaleStatus;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
 
-import java.time.LocalDateTime;
 
 @Entity @Getter
 @Table(name = "post")
@@ -41,11 +41,11 @@ public class DealPost {
     private SaleStatus status;
 
     @Column(name = "p_createTime")
-    LocalDateTime createdAt;
+    LocalDate createdAt;
 
     @Builder
     public DealPost(String uuid, Category category, String title, Long price,
-                    String link, String detail, LocalDateTime createdAt) {
+                    String link, String detail, LocalDate createdAt) {
         this.uuid = uuid;
         this.category = category;
         this.title = title;
