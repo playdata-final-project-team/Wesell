@@ -28,4 +28,12 @@ public class AuthUser {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    private boolean isDelete; // 삭제 여부
+
+    private boolean isForced; // 강제 탈퇴 여부
+
+    public void changeRole(Role role){
+        this.role = role;
+    }
 }
