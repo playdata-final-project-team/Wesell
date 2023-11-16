@@ -1,6 +1,5 @@
 package com.wesell.userservice.controller;
 
-import com.wesell.userservice.dto.SignupRequestDto;
 import com.wesell.userservice.dto.responseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.service.UserService;
@@ -67,4 +66,9 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users/{uuid}/nickname")
+    public ResponseEntity<?> getNicknameByUuid(@PathVariable String uuid){
+        String nickname = userService.getNicknameByUuid(uuid);
+        return ResponseEntity.ok(nickname);
+    }
 }
