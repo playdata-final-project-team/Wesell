@@ -1,7 +1,7 @@
 package com.wesell.userservice.controller;
 
-import com.wesell.userservice.dto.SignupRequestDto;
-import com.wesell.userservice.dto.responseDto;
+import com.wesell.userservice.dto.request.SignupRequestDto;
+import com.wesell.userservice.dto.response.ResponseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("user")
-    public ResponseEntity<responseDto> findUserResponseEntity(@RequestParam("uuid") String uuid) {
+    public ResponseEntity<ResponseDto> findUserResponseEntity(@RequestParam("uuid") String uuid) {
 
         try {
             return ResponseEntity.ok(userService.findUser(uuid));
@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("users")
-    public ResponseEntity<List<responseDto>> findUsersResponseEntity() {
+    public ResponseEntity<List<ResponseDto>> findUsersResponseEntity() {
 
         try {
             return ResponseEntity.ok(userService.findUsers());

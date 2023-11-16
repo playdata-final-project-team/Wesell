@@ -42,5 +42,9 @@ public class User {
     @Column(name = "u_uuid", nullable = false, unique = true)
     private String uuid;
 
+    public User changeName(String name){
+        this.name = name;
+        return this;
+    }
 
 }

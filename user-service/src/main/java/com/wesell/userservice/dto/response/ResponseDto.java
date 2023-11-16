@@ -1,4 +1,4 @@
-package com.wesell.userservice.dto;
+package com.wesell.userservice.dto.response;
 
 import com.wesell.userservice.domain.entity.User;
 import lombok.AllArgsConstructor;
@@ -8,15 +8,15 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public class responseDto {
+public class ResponseDto {
     private Long id;
     private String name;
     private String nickname;
     private String phone;
     private String uuid;
 
-    public static responseDto of(User user) {
-        return new responseDto(
+    public static ResponseDto of(User user) {
+        return new ResponseDto(
                 user.getId(),
                 user.getName(),
                 user.getNickname(),
@@ -25,9 +25,9 @@ public class responseDto {
         );
     }
 
-    public static List<responseDto> of(List<User> userList) {
+    public static List<ResponseDto> of(List<User> userList) {
         return userList.stream()
-                .map(user -> new responseDto(
+                .map(user -> new ResponseDto(
                         user.getId(),
                         user.getName(),
                         user.getNickname(),
