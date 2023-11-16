@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequiredArgsConstructor
 @Log4j2
@@ -60,11 +62,24 @@ public class AuthController {
         log.debug("AuthController - 쿠키 담기");
         String accessToken = loginSuccessDto.getGeneratedTokenDto().getAccessToken();
 
-        ResponseCookie cookie = cookieProvider.createTokenCookie(accessToken);
+        ResponseCookie accessTokenCookie = cookieProvider.createTokenCookie(accessToken);
+
+        ResponseCookie savedEmailCookie;
+
+        if(requestDto.isSavedEmail()) {
+
+            savedEmailCookie = cookieProvider.createTokenCookie(requestDto.getEmail());
+
+        }else{
+
+            savedEmailCookie = cookieProvider.deleteSavedEmailCookie();
+
+        }
 
         return ResponseEntity
                 .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,cookie.toString())
+                .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE,savedEmailCookie.toString())
                 .body(null);
     }
 
