@@ -36,14 +36,10 @@ public class User {
     private LocalDateTime createdAt;
 
     @ColumnDefault(value = "false")
-    @Column(name = "u_isforced", nullable = false)
-    private boolean isforced;
-
-    @ColumnDefault(value = "false")
     @Column(name = "u_agree", nullable = false)
     private boolean agree;
 
-    @Column(name = "u_uuid", nullable = false)
+    @Column(name = "u_uuid", nullable = false, unique = true)
     private String uuid;
 
 

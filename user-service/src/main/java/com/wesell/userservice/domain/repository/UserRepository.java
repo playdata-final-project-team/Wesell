@@ -13,7 +13,7 @@ public class UserRepository {
 
     private final EntityManager em;
 
-    public void save(User user) {   // 유저 정보 저장
+    public void save(User user) {  // 유저 정보 저장
         em.persist(user);
     }
 

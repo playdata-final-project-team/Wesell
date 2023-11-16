@@ -9,6 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,26 +44,13 @@ public class UserService {
             throw new UserNotFoundException("존재하지 않는 회원입니다.");
     }
 
-        public void save (RequestSignupDTO requestSignupDTO){
-            User userEntity = UserService.convertToentity(requestSignupDTO);
-            userRepository.save(userEntity);
-        }
-
-        public static User convertToentity (RequestSignupDTO userdto){
-            return User.builder()
-                    .name(userdto.getName())
-                    .nickname(userdto.getNickname())
-                    .phone(userdto.getPhone())
-                    .agree(userdto.isAgree())
-                    .uuid(userdto.getUuid())
-                    .build();
-
-
-        }
-
+    @Transactional//db 조회 빼고 다  넣기
+    public void save (SignupRequestDto requestSignupDTO){
+        User userEntity = UserService.convertToentity(requestSignupDTO);
+        userRepository.save(userEntity);
     }
 
-    public static User convertToentity(SignupRequestDto userdto){
+    public static User convertToentity(SignupRequestDto userdto) {
         return User.builder()
                 .name(userdto.getName())
                 .nickname(userdto.getNickname())
@@ -69,8 +58,8 @@ public class UserService {
                 .agree(userdto.isAgree())
                 .uuid(userdto.getUuid())
                 .build();
-
-
+    }
+    
     public String getNicknameByUuid(String uuid) {
         return userRepository.findNicknameByUuid(uuid);
     }
