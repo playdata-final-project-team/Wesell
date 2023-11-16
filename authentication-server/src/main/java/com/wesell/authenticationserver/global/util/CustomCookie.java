@@ -21,9 +21,28 @@ public class CustomCookie {
                 .build();
     }
 
+    // 로그인 시 이메일 저장 기능 쿠키 생성.
+    public ResponseCookie createSavedEmailCookie(String email){
+
+        return ResponseCookie.from("savedEmail",email)
+                .path("/")
+                .httpOnly(true)
+                .maxAge(60 * 60 *24)
+                .build();
+
+    }
+
     // 쿠키 무효화
     public ResponseCookie deleteTokenCookie(){
         return ResponseCookie.from("access-token")
+                .path("/")
+                .httpOnly(true)
+                .maxAge(0)
+                .build();
+    }
+
+    public ResponseCookie deleteSavedEmailCookie(){
+        return ResponseCookie.from("savedEmail")
                 .path("/")
                 .httpOnly(true)
                 .maxAge(0)
