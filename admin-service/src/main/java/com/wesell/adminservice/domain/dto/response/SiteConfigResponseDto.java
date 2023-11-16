@@ -1,11 +1,12 @@
-package com.wesell.adminservice.domain.dto;
+package com.wesell.adminservice.domain.dto.response;
 
 import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class SiteConfigRequestDto {
+@AllArgsConstructor
+public class SiteConfigResponseDto {
 
     private String jsVersion;
     private String cssVersion;

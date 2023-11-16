@@ -1,8 +1,9 @@
 package com.wesell.adminservice.controller;
 
-import com.wesell.adminservice.domain.dto.SiteConfigRequestDto;
-import com.wesell.adminservice.domain.dto.SiteConfigResponseDto;
-import com.wesell.adminservice.domain.dto.UserListResponseDto;
+import com.wesell.adminservice.domain.dto.request.ChangeRoleRequestDto;
+import com.wesell.adminservice.domain.dto.request.SiteConfigRequestDto;
+import com.wesell.adminservice.domain.dto.response.SiteConfigResponseDto;
+import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
 import com.wesell.adminservice.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,5 +51,15 @@ public class AdminController {
         SiteConfigRequestDto requestDto = adminService.mapToRequestAdminDto(versions);
         SiteConfigResponseDto savedSiteConfig = adminService.saveSiteConfig(requestDto);
         return new ResponseEntity<>(savedSiteConfig, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{uuid}/change-role")
+    public ResponseEntity<String> changeUserRole(@PathVariable String uuid, @RequestBody ChangeRoleRequestDto changeRoleRequestDto) {
+        try {
+            adminService.changeUserRole(uuid, changeRoleRequestDto.getRole());
+            return new ResponseEntity<>("User role changed successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to change user role: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
