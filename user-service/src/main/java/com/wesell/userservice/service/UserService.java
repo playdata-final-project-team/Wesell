@@ -8,8 +8,6 @@ import com.wesell.userservice.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -37,25 +35,31 @@ public class UserService {
     public void deleteUser(String uuid) throws UserNotFoundException {   // 유저 한 명 삭제
         Optional<User> userOptional = userRepository.findByOneId(uuid);
 
-        if(userOptional.isPresent())
+        if (userOptional.isPresent())
             userRepository.delete(userOptional.get());
         else
             throw new UserNotFoundException("존재하지 않는 회원입니다.");
 
-    public void save(RequestSignupDTO requestSignupDTO){
-        User userEntity = UserService.convertToentity(requestSignupDTO);
-        userRepository.save(userEntity);
+        public void save (RequestSignupDTO requestSignupDTO){
+            User userEntity = UserService.convertToentity(requestSignupDTO);
+            userRepository.save(userEntity);
+        }
+
+        public static User convertToentity (RequestSignupDTO userdto){
+            return User.builder()
+                    .name(userdto.getName())
+                    .nickname(userdto.getNickname())
+                    .phone(userdto.getPhone())
+                    .agree(userdto.isAgree())
+                    .uuid(userdto.getUuid())
+                    .build();
+
+        }
+
     }
 
-    public static User convertToentity(RequestSignupDTO userdto){
-        return User.builder()
-                .name(userdto.getName())
-                .nickname(userdto.getNickname())
-                .phone(userdto.getPhone())
-                .agree(userdto.isAgree())
-                .uuid(userdto.getUuid())
-                .build();
-
+    public String getNicknameByUuid(String uuid) {
+        return userRepository.findNicknameByUuid(uuid);
     }
 
 }
