@@ -21,6 +21,10 @@ public class CustomCookie {
                 .build();
     }
 
+    public ResponseCookie createSaveEmailCookie(String email){
+
+    }
+
     // 쿠키 무효화
     public ResponseCookie deleteTokenCookie(){
         return ResponseCookie.from("access-token")
