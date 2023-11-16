@@ -44,18 +44,25 @@ public class UserController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-            @PostMapping("/api/signup")
-            public ResponseEntity<String> signup (@RequestBody RequestSignupDTO requestSignupDTO){
-                try {
-                    userService.save(requestSignupDTO);
-                    return new ResponseEntity<>("Signup successful", HttpStatus.OK);
-                } catch (Exception e) {
-                    // 회원가입 실패 시 예외 처리
-                    return new ResponseEntity<>("Signup failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    @PostMapping("/api/signup")
+    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDTO) {
+        try {
+            userService.save(signupRequestDTO);
+            return new ResponseEntity<>("Signup successful", HttpStatus.OK);
+        } catch (Exception e) {
+            // 회원가입 실패 시 예외 처리
+            return new ResponseEntity<>("Signup failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 
-                }
-            }
+        }
+    }
+    @PutMapping("/{uuid}")
+    public ResponseEntity<String> updateUser(@PathVariable String uuid, @RequestBody SignupRequestDto signupRequestDTO) {
+        try {
+            userService.updateUser(uuid, signupRequestDTO);
 
+            return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("User update failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

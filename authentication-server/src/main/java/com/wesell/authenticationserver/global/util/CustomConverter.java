@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 // 기능 : dto <-> entity || dto <-> dto(OpenFeign 시)
 @Component
-public class Converter {
+public class CustomConverter {
 
     /**
      * dto -> entity
