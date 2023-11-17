@@ -3,11 +3,11 @@ package com.wesell.adminservice;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan("com.wesell.adminservice.feignClient")
+@EnableFeignClients(basePackages = "com.wesell.adminservice.feignClient")
 public class AdminServiceApplication {
 
 	public static void main(String[] args) {
