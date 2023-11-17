@@ -1,8 +1,10 @@
 package com.wesell.dealservice.service;
 
+import com.wesell.dealservice.domain.SaleStatus;
 import com.wesell.dealservice.dto.request.CreateDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.dto.response.EditPostResponseDto;
+import com.wesell.dealservice.dto.response.MainPagePostResponseDto;
 import com.wesell.dealservice.dto.response.MyPostListResponseDto;
 import com.wesell.dealservice.dto.response.PostInfoResponseDto;
 import com.wesell.dealservice.domain.entity.Category;
@@ -72,6 +74,12 @@ public class DealServiceImpl implements DealService {
     public List<MyPostListResponseDto> getMyPostList(String uuid) {
         List<DealPost> allByUuid = dealRepository.findAllByUuid(uuid);
         return allByUuid.stream().map(MyPostListResponseDto::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MainPagePostResponseDto> getMainPageInfo() {
+        List<DealPost> dealPosts = dealRepository.findAllByStatus(SaleStatus.IN_PROGRESS);
+        return dealPosts.stream().map(MainPagePostResponseDto::new).collect(Collectors.toList());
     }
 
 }

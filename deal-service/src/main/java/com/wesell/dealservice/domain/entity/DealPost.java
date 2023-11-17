@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
-
 @Entity @Getter
 @Table(name = "post")
 @AllArgsConstructor
