@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
-
 @Entity @Getter
 @Table(name = "post")
 @AllArgsConstructor
@@ -65,6 +64,10 @@ public class DealPost {
 
     public void editCategory(Category category) {
         this.category = category;
+    }
+
+    public void changeStatus() {
+        this.status = SaleStatus.COMPLETED;
     }
 
 }
