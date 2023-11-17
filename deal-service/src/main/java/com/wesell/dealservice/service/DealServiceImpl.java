@@ -82,4 +82,10 @@ public class DealServiceImpl implements DealService {
         return dealPosts.stream().map(MainPagePostResponseDto::new).collect(Collectors.toList());
     }
 
+    @Override
+    public void changePostStatus(Long id) {
+        DealPost post = dealRepository.findDealPostById(id);
+        post.changeStatus();
+    }
+
 }

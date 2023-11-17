@@ -14,6 +14,6 @@ public interface DealService {
     void deletePost(Long postId);
     PostInfoResponseDto getPostInfo(Long postId);
     List<MyPostListResponseDto> getMyPostList(String uuid);
-
     List<MainPagePostResponseDto> getMainPageInfo();
+    void changePostStatus(Long id);
 }

@@ -66,4 +66,8 @@ public class DealPost {
         this.category = category;
     }
 
+    public void changeStatus() {
+        this.status = SaleStatus.COMPLETED;
+    }
+
 }

@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +34,12 @@ public class DealController {
     @PutMapping("edit")
     public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto, @RequestParam("id") Long postId) {
         return new ResponseEntity<>(dealService.editPost(requestDto, postId),HttpStatus.OK);
+    }
+
+    @PutMapping("complete")
+    public ResponseEntity<?> changePostStatus(@Valid @RequestParam("id") Long postId) {
+        dealService.changePostStatus(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("delete")
