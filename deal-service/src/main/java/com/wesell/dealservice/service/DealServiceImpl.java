@@ -1,9 +1,9 @@
 package com.wesell.dealservice.service;
 
-import com.wesell.dealservice.domain.dto.request.CreateDealPostRequestDto;
-import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
-import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
-import com.wesell.dealservice.domain.dto.response.PostInfoResponseDto;
+import com.wesell.dealservice.dto.request.CreateDealPostRequestDto;
+import com.wesell.dealservice.dto.request.EditPostRequestDto;
+import com.wesell.dealservice.dto.response.EditPostResponseDto;
+import com.wesell.dealservice.dto.response.PostInfoResponseDto;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
