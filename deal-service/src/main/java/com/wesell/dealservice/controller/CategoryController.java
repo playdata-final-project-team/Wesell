@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("category")
+@RequestMapping("deal-service")
 @CrossOrigin("http://127.0.0.1:5500")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("post")
+    @PostMapping("category")
     public ResponseEntity<?> createDealPost(@Valid @RequestBody CreateCategoryRequestDto requestDto) {
         categoryService.createCategory(requestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);

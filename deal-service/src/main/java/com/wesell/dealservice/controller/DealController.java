@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("deal")
-@CrossOrigin("http://127.0.0.1:5500")
+@RequestMapping("deal-service")
 public class DealController {
 
     private final DealServiceImpl dealService;
@@ -37,6 +36,11 @@ public class DealController {
     public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long postId) {
         dealService.deletePost(postId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("list")
+    public ResponseEntity<?> getMyPostInfo(@RequestParam("uuid") String uuid) {
+        return new ResponseEntity<>(dealService.getMyPostList(uuid),HttpStatus.OK);
     }
 
 }

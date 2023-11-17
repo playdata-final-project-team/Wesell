@@ -3,6 +3,7 @@ package com.wesell.dealservice.service;
 import com.wesell.dealservice.dto.request.CreateDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.dto.response.EditPostResponseDto;
+import com.wesell.dealservice.dto.response.MyPostListResponseDto;
 import com.wesell.dealservice.dto.response.PostInfoResponseDto;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
@@ -13,6 +14,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -62,6 +65,13 @@ public class DealServiceImpl implements DealService {
         DealPost foundPost = dealRepository.findDealPostById(postId);
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         return new PostInfoResponseDto(foundPost, nickname);
+    }
+
+    // 판매 내역 리스트 정보
+    @Override
+    public List<MyPostListResponseDto> getMyPostList(String uuid) {
+        List<DealPost> allByUuid = dealRepository.findAllByUuid(uuid);
+        return allByUuid.stream().map(MyPostListResponseDto::new).collect(Collectors.toList());
     }
 
 }
