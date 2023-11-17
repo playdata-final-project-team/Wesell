@@ -2,15 +2,17 @@ package com.wesell.adminservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wesell.adminservice.domain.dto.UserListResponseDto;
+import com.wesell.adminservice.domain.dto.request.SiteConfigRequestDto;
+import com.wesell.adminservice.domain.dto.response.SiteConfigResponseDto;
+import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
 import com.wesell.adminservice.domain.entity.SiteConfig;
-import com.wesell.adminservice.domain.dto.SiteConfigRequestDto;
-import com.wesell.adminservice.domain.dto.SiteConfigResponseDto;
 import com.wesell.adminservice.domain.repository.AdminRepository;
 import com.wesell.adminservice.feignClient.UserFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -54,13 +56,8 @@ public class AdminService {
         return siteConfigOptional.map(this::siteConfigToResponseDto).orElse(new SiteConfigResponseDto());
     }
 
-    public UserListResponseDto getUserList(){
-        UserListResponseDto responseDto = userFeignClient.getUserList();
-        return UserListResponseDto.builder()
-                .id(responseDto.getId())
-                .name(responseDto.getName())
-                .nickname(responseDto.getNickname())
-                .build();
+    public ResponseEntity<List<UserListResponseDto>> getUserList(){
+        return userFeignClient.getUserList();
     }
 
         public SiteConfigRequestDto mapToRequestAdminDto(Map<String, String> versions) {
