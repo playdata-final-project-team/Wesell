@@ -1,6 +1,6 @@
 package com.wesell.dealservice.service;
 
-import com.wesell.dealservice.domain.dto.request.CreateCategoryRequestDto;
+import com.wesell.dealservice.dto.request.CreateCategoryRequestDto;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import jakarta.transaction.Transactional;

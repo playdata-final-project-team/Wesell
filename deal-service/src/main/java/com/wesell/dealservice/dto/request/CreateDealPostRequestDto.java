@@ -1,4 +1,4 @@
-package com.wesell.dealservice.domain.dto.request;
+package com.wesell.dealservice.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

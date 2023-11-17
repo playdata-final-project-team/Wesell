@@ -1,7 +1,7 @@
 package com.wesell.dealservice.controller;
 
-import com.wesell.dealservice.domain.dto.request.CreateDealPostRequestDto;
-import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
+import com.wesell.dealservice.dto.request.CreateDealPostRequestDto;
+import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.service.DealServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
