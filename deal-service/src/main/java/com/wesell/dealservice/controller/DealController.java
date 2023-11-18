@@ -61,7 +61,7 @@ public class DealController {
      * @param uuid & postId
      * @return 게시글 논리 삭제
      */
-    @DeleteMapping("delete")
+    @PutMapping("delete")
     public ResponseEntity<?> deletePost(@Valid @RequestParam("uuid") String uuid,  @RequestParam("id") Long postId) {
         dealService.deletePost(uuid, postId);
         return new ResponseEntity<>(HttpStatus.OK);

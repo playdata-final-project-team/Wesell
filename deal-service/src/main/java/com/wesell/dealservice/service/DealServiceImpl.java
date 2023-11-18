@@ -63,7 +63,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public PostInfoResponseDto getPostInfo(Long postId) {
-        DealPost foundPost = dealRepository.findDealPostByIdAndIsDeleted(postId, false);
+        DealPost foundPost = dealRepository.findDealPostByIdAndStatusAndIsDeleted(postId, SaleStatus.IN_PROGRESS,  false);
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         return new PostInfoResponseDto(foundPost, nickname);
     }
@@ -89,7 +89,7 @@ public class DealServiceImpl implements DealService {
     }
 
     public void checkValidationByUuid(String uuid) {
-        DealPost post = dealRepository.findDealPostByUuid(uuid);
+        DealPost post = dealRepository.findFirstByUuid(uuid);
         if(!uuid.equals(post.getUuid())) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
