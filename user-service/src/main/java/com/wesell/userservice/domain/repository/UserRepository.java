@@ -2,7 +2,6 @@ package com.wesell.userservice.domain.repository;
 
 import com.wesell.userservice.domain.entity.User;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -14,8 +13,7 @@ public class UserRepository {
 
     private final EntityManager em;
 
-
-    public void save(User user) {   // 유저 정보 저장
+    public void save(User user) {  // 유저 정보 저장
         em.persist(user);
     }
 
@@ -27,7 +25,7 @@ public class UserRepository {
         em.remove(user);
     }
 
-    public Optional<User> findByOneId(String uuid) {  // 유저 id로 유저 한명 조회
+    public Optional<User> findByOneId(String uuid) {  // 유저 uuid로 유저 한명 조회
         User user = em.createQuery("select u from User u where u.uuid = :uuid", User.class)
                 .setParameter("uuid", uuid)
                 .getSingleResult();
@@ -40,4 +38,10 @@ public class UserRepository {
         return Optional.ofNullable(user);
     }
 
+    public String findNicknameByUuid(String uuid) {
+        User user = em.createQuery("select u.nickname from User u where u.uuid = :uuid", User.class)
+                .setParameter("uuid", uuid)
+                .getSingleResult();
+        return user.getNickname();
+    }
 }

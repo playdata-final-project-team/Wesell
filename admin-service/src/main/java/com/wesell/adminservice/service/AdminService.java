@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -60,13 +61,8 @@ public class AdminService {
         return siteConfigOptional.map(this::siteConfigToResponseDto).orElse(new SiteConfigResponseDto());
     }
 
-    public UserListResponseDto getUserList(){
-        UserListResponseDto responseDto = userFeignClient.getUserList();
-        return UserListResponseDto.builder()
-                .id(responseDto.getId())
-                .name(responseDto.getName())
-                .nickname(responseDto.getNickname())
-                .build();
+    public ResponseEntity<List<UserListResponseDto>> getUserList(){
+        return userFeignClient.getUserList();
     }
 
         public SiteConfigRequestDto mapToRequestAdminDto(Map<String, String> versions) {

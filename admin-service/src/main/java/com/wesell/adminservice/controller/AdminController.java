@@ -9,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("admin")
+@RequestMapping("admin-service")
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -32,10 +32,9 @@ public class AdminController {
         return new ResponseEntity<>(currentSiteConfig, HttpStatus.OK);
     }
 
-    @GetMapping("get/user-list")
-    public ResponseEntity<UserListResponseDto> getUserList() {
-        UserListResponseDto userListResponseDto = adminService.getUserList();
-        return new ResponseEntity<>(userListResponseDto, HttpStatus.OK);
+    @GetMapping("get/users")
+    public ResponseEntity<List<UserListResponseDto>> getUserList() {
+        return adminService.getUserList();
     }
 
     @GetMapping("version")

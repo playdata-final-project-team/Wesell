@@ -22,9 +22,4 @@ public class Category {
     @Transient
     private List<DealPost> products = new ArrayList<>();
 
-    @Builder
-    public Category(String value) {
-        this.value = value;
-    }
-
 }
