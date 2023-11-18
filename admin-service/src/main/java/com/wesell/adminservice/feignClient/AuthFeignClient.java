@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name="AUTHENTICATION-SERVER", path = "authentication-server")
+@FeignClient(name="AUTHENTICATION-SERVER", path = "admin-auth-server")
 public interface AuthFeignClient {
 
-    @PutMapping("admin-auth-server/change-role/{uuid}")
+    @PutMapping("change-role/{uuid}")
     ResponseEntity<String> changeUserRole (@PathVariable String uuid, @RequestBody ChangeRoleRequestDto changeRoleRequestDto);
 }
