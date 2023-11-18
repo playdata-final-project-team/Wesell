@@ -8,6 +8,7 @@ import java.util.List;
 public interface DealRepository extends JpaRepository<DealPost, Long> {
     DealPost findDealPostByUuidAndId(String uuid, Long id);
     DealPost findDealPostById(Long id);
+    DealPost findDealPostByUuid(String uuid);
     List<DealPost> findAllByUuid(String uuid);
     List<DealPost> findAllByStatus(SaleStatus status);
 }

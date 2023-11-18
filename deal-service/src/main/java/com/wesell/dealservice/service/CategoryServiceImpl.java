@@ -4,6 +4,8 @@ import com.wesell.dealservice.dto.request.CreateCategoryRequestDto;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.dto.response.MainPageCategoryResponseDto;
+import com.wesell.dealservice.error.ErrorCode;
+import com.wesell.dealservice.error.exception.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,11 @@ public class CategoryServiceImpl implements CategoryService{
     //카테고리 생성
     @Override
     public void createCategory(CreateCategoryRequestDto requestDto) {
+
+        if(categoryRepository.findAll().contains(requestDto.getValue())) {
+            throw new CustomException(ErrorCode.DUPLICATED_REQUEST);
+        }
+
         Category category = requestDto.toEntity();
         categoryRepository.save(category);
     }

@@ -37,14 +37,14 @@ public class DealController {
     }
 
     @PutMapping("complete")
-    public ResponseEntity<?> changePostStatus(@Valid @RequestParam("id") Long postId) {
-        dealService.changePostStatus(postId);
+    public ResponseEntity<?> changePostStatus(@Valid @RequestParam("uuid") String uuid, @RequestParam("id") Long postId) {
+        dealService.changePostStatus(uuid, postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long postId) {
-        dealService.deletePost(postId);
+    public ResponseEntity<?> deletePost(@Valid @RequestParam("uuid") String uuid,  @RequestParam("id") Long postId) {
+        dealService.deletePost(uuid, postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

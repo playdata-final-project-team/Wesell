@@ -3,14 +3,13 @@ package com.wesell.dealservice.service;
 import com.wesell.dealservice.domain.SaleStatus;
 import com.wesell.dealservice.dto.request.CreateDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
-import com.wesell.dealservice.dto.response.EditPostResponseDto;
-import com.wesell.dealservice.dto.response.MainPagePostResponseDto;
-import com.wesell.dealservice.dto.response.MyPostListResponseDto;
-import com.wesell.dealservice.dto.response.PostInfoResponseDto;
+import com.wesell.dealservice.dto.response.*;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
+import com.wesell.dealservice.error.ErrorCode;
+import com.wesell.dealservice.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.UserFeignClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +46,8 @@ public class DealServiceImpl implements DealService {
     // 거래 글 수정
     @Override
     public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
+        checkValidationByUuid(requestDto.getUuid());
+
         DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
@@ -57,7 +58,8 @@ public class DealServiceImpl implements DealService {
 
     // 거래 글 삭제
     @Override
-    public void deletePost(Long postId) {
+    public void deletePost(String uuid, Long postId) {
+        checkValidationByUuid(uuid);
         dealRepository.deleteById(postId);
     }
 
@@ -72,6 +74,7 @@ public class DealServiceImpl implements DealService {
     // 판매 내역 리스트 정보
     @Override
     public List<MyPostListResponseDto> getMyPostList(String uuid) {
+        checkValidationByUuid(uuid);
         List<DealPost> allByUuid = dealRepository.findAllByUuid(uuid);
         return allByUuid.stream().map(MyPostListResponseDto::new).collect(Collectors.toList());
     }
@@ -83,9 +86,17 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public void changePostStatus(Long id) {
+    public void changePostStatus(String uuid, Long id) {
+        checkValidationByUuid(uuid);
         DealPost post = dealRepository.findDealPostById(id);
         post.changeStatus();
+    }
+
+    public void checkValidationByUuid(String uuid) {
+        DealPost post = dealRepository.findDealPostByUuid(uuid);
+        if(!uuid.equals(post.getUuid())) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST);
+        }
     }
 
 }
