@@ -9,5 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ChangeRoleRequestDto {
+
+    private String uuid;
     private Role role;
 }
