@@ -2,7 +2,7 @@ package com.wesell.dealservice.controller;
 
 import com.wesell.dealservice.dto.request.CreateDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
-import com.wesell.dealservice.service.CategoryServiceImpl;
+import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class DealController {
 
     private final DealServiceImpl dealService;
-    private final CategoryServiceImpl categoryService;
+    private final MainPageFacadeService facadeService;
 
     @PostMapping("post")
     public ResponseEntity<?> createDealPost(@Valid @RequestBody CreateDealPostRequestDto registerDto) {
@@ -55,11 +55,7 @@ public class DealController {
 
     @GetMapping("main")
     public ResponseEntity<?> getMainInfo() {
-        Map<String, Object> mainInfo = new HashMap<>();
-        mainInfo.put("categoryInfo", categoryService.getCategoryList());
-        mainInfo.put("dealInfo", dealService.getDealPostLists());
-
-        return new ResponseEntity<>(mainInfo, HttpStatus.OK);
+        return new ResponseEntity<>(facadeService.getFacadeDto(), HttpStatus.OK);
     }
 
 }
