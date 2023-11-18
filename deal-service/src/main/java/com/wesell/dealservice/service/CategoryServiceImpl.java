@@ -17,14 +17,16 @@ public class CategoryServiceImpl implements CategoryService{
 
     private final CategoryRepository categoryRepository;
 
+    //카테고리 생성
     @Override
     public void createCategory(CreateCategoryRequestDto requestDto) {
         Category category = requestDto.toEntity();
         categoryRepository.save(category);
     }
 
+    //카테고리 리스트
     @Override
-    public List<MainPageCategoryResponseDto> getMainPageInfo() {
+    public List<MainPageCategoryResponseDto> getCategoryList() {
         List<Category> categories = categoryRepository.findAll();
         return categories.stream().map(MainPageCategoryResponseDto::new).collect(Collectors.toList());
     }

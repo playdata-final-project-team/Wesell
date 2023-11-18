@@ -56,8 +56,8 @@ public class DealController {
     @GetMapping("main")
     public ResponseEntity<?> getMainInfo() {
         Map<String, Object> mainInfo = new HashMap<>();
-        mainInfo.put("categoryInfo", categoryService.getMainPageInfo());
-        mainInfo.put("dealInfo", dealService.getMainPageInfo());
+        mainInfo.put("categoryInfo", categoryService.getCategoryList());
+        mainInfo.put("dealInfo", dealService.getDealPostLists());
 
         return new ResponseEntity<>(mainInfo, HttpStatus.OK);
     }

@@ -77,7 +77,7 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public List<MainPagePostResponseDto> getMainPageInfo() {
+    public List<MainPagePostResponseDto> getDealPostLists() {
         List<DealPost> dealPosts = dealRepository.findAllByStatus(SaleStatus.IN_PROGRESS);
         return dealPosts.stream().map(MainPagePostResponseDto::new).collect(Collectors.toList());
     }
