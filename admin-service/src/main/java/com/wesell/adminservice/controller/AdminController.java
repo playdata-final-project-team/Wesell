@@ -2,6 +2,7 @@ package com.wesell.adminservice.controller;
 
 import com.wesell.adminservice.domain.dto.request.ChangeRoleRequestDto;
 import com.wesell.adminservice.domain.dto.request.SiteConfigRequestDto;
+import com.wesell.adminservice.domain.dto.response.PostListResponseDto;
 import com.wesell.adminservice.domain.dto.response.SiteConfigResponseDto;
 import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
 import com.wesell.adminservice.service.AdminService;
@@ -60,5 +61,10 @@ public class AdminController {
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to change user role: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("get/post")
+    public ResponseEntity<List<PostListResponseDto>> getPostList(@RequestParam("uuid") String uuid){
+        return adminService.getPostList(uuid);
     }
 }
