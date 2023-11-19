@@ -1,7 +1,9 @@
 package com.wesell.adminservice.controller;
 
+import com.wesell.adminservice.domain.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.adminservice.domain.dto.request.ChangeRoleRequestDto;
 import com.wesell.adminservice.domain.dto.request.SiteConfigRequestDto;
+import com.wesell.adminservice.domain.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.adminservice.domain.dto.response.PostListResponseDto;
 import com.wesell.adminservice.domain.dto.response.SiteConfigResponseDto;
 import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
@@ -66,5 +68,17 @@ public class AdminController {
     @GetMapping("get/post")
     public ResponseEntity<List<PostListResponseDto>> getPostList(@RequestParam("uuid") String uuid){
         return adminService.getPostList(uuid);
+    }
+
+    @PatchMapping("updateIsForced")
+    public ResponseEntity<AdminAuthIsForcedResponseDto> updateIsForced(@RequestBody AdminAuthIsForcedRequestDto requestDto) {
+        AdminAuthIsForcedResponseDto responseDto = adminService.updateIsForced(requestDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    @PutMapping("deletePost")
+    public ResponseEntity<?> deletePost(@RequestParam("uuid") String uuid, @RequestParam("id") Long postId) {
+        adminService.deletePost(uuid, postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
