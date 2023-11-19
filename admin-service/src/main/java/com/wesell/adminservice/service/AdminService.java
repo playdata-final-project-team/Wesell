@@ -2,14 +2,18 @@ package com.wesell.adminservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wesell.adminservice.domain.dto.request.SiteConfigRequestDto;
-import com.wesell.adminservice.domain.dto.response.SiteConfigResponseDto;
+import com.wesell.adminservice.domain.dto.request.ChangeRoleRequestDto;
 import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
 import com.wesell.adminservice.domain.entity.SiteConfig;
+import com.wesell.adminservice.domain.dto.request.SiteConfigRequestDto;
+import com.wesell.adminservice.domain.dto.response.SiteConfigResponseDto;
+import com.wesell.adminservice.domain.enum_.Role;
 import com.wesell.adminservice.domain.repository.AdminRepository;
+import com.wesell.adminservice.feignClient.AuthFeignClient;
 import com.wesell.adminservice.feignClient.UserFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -24,6 +28,7 @@ public class AdminService {
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
     private final UserFeignClient userFeignClient;
+    private final AuthFeignClient authFeignClient;
 
     public SiteConfigResponseDto saveSiteConfig(SiteConfigRequestDto siteConfigRequestDto) {
         SiteConfig siteConfig = new SiteConfig(convertDtoToJson(siteConfigRequestDto));
@@ -63,5 +68,18 @@ public class AdminService {
         public SiteConfigRequestDto mapToRequestAdminDto(Map<String, String> versions) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(versions, SiteConfigRequestDto.class);
+    }
+
+    public void changeUserRole(String uuid, Role role) {
+        ChangeRoleRequestDto requestDto = new ChangeRoleRequestDto();
+        requestDto.setRole(role);
+
+        ResponseEntity<String> response = authFeignClient.changeUserRole(uuid, requestDto);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println("User role changed successfully");
+        } else {
+            System.out.println("Failed to change user role: " + response.getBody());
+        }
     }
 }
