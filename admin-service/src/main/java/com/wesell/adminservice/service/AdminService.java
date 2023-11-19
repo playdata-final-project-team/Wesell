@@ -2,7 +2,9 @@ package com.wesell.adminservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wesell.adminservice.domain.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.adminservice.domain.dto.request.ChangeRoleRequestDto;
+import com.wesell.adminservice.domain.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.adminservice.domain.dto.response.PostListResponseDto;
 import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
 import com.wesell.adminservice.domain.entity.SiteConfig;
@@ -88,5 +90,13 @@ public class AdminService {
 
     public ResponseEntity<List<PostListResponseDto>> getPostList(String uuid) {
         return dealFeignClient.getPostList(uuid);
+    }
+
+    public AdminAuthIsForcedResponseDto updateIsForced(AdminAuthIsForcedRequestDto requestDto) {
+        return authFeignClient.updateIsForced(requestDto).getBody();
+    }
+
+    public void deletePost(String uuid, Long postId) {
+        dealFeignClient.deletePost(uuid, postId);
     }
 }
