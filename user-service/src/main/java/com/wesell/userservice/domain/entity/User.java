@@ -42,9 +42,14 @@ public class User {
     @Column(name = "u_uuid", nullable = false, unique = true)
     private String uuid;
 
-    public User changeName(String name){
+    public User changeUserInfo(String name) {
         this.name = name;
+        updateCreatedAt();
         return this;
+    }
+
+    public void updateCreatedAt() {
+        this.createdAt = LocalDateTime.now();
     }
 
 }
