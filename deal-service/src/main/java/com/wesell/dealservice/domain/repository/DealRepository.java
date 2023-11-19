@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface DealRepository extends JpaRepository<DealPost, Long> {
+    DealPost findFirstByUuid(String uuid);
     DealPost findDealPostByUuidAndId(String uuid, Long id);
-    DealPost findDealPostById(Long id);
-    List<DealPost> findAllByUuid(String uuid);
-    List<DealPost> findAllByStatus(SaleStatus status);
+    DealPost findDealPostByIdAndIsDeleted(Long id, Boolean isDeleted);
+    DealPost findDealPostByIdAndStatusAndIsDeleted(Long id, SaleStatus status, Boolean isDeleted);
+    List<DealPost> findAllByUuidAndIsDeleted(String uuid, Boolean isDeleted);
+    List<DealPost> findAllByStatusAndIsDeleted(SaleStatus status, Boolean isDeleted);
 }
