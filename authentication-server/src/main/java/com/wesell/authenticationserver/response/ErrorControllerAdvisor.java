@@ -14,7 +14,7 @@ public class ErrorControllerAdvisor {
      * @return ResponseEntity<String>
      */
     @ExceptionHandler(BindException.class)
-    protected ResponseEntity<String> handlerException(BindException e){
+    protected ResponseEntity<String> handlerBindException(BindException e){
 
         StringBuilder errorMessage = new StringBuilder("필수 입력 항목을 전부 입력해주세요! : \n");
 
@@ -26,6 +26,14 @@ public class ErrorControllerAdvisor {
         }
 
         return ResponseEntity.status(400).body(errorMessage.toString());
+    }
 
+    /**
+     * Custom 예외 처리
+     * @return
+     */
+    @ExceptionHandler(CustomException.class)
+    protected ErrorResponseDto handlerCustomException(CustomException e){
+        return ErrorResponseDto.of(e);
     }
 }
