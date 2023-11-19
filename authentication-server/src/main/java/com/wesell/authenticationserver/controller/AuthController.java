@@ -1,13 +1,11 @@
 package com.wesell.authenticationserver.controller;
 
-import com.wesell.authenticationserver.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.dto.LoginSuccessDto;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
 import com.wesell.authenticationserver.dto.request.LoginUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomCookie;
 import com.wesell.authenticationserver.response.SuccessCode;
 import com.wesell.authenticationserver.service.AuthUserService;
-import com.wesell.authenticationserver.service.token.TokenProvider;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.core.HttpHeaders;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
 @RequiredArgsConstructor
 @Log4j2
@@ -29,8 +25,7 @@ import java.util.Optional;
 public class AuthController {
 
     private final AuthUserService authUserService;
-    private final CustomCookie cookieProvider;
-    private final TokenProvider tokenProvider;
+    private final CustomCookie cookieUtil;
 
     // 헬스 체크
     @GetMapping("health-check")
@@ -62,17 +57,17 @@ public class AuthController {
         log.debug("AuthController - 쿠키 담기");
         String accessToken = loginSuccessDto.getGeneratedTokenDto().getAccessToken();
 
-        ResponseCookie accessTokenCookie = cookieProvider.createTokenCookie(accessToken);
+        ResponseCookie accessTokenCookie = cookieUtil.createTokenCookie(accessToken);
 
         ResponseCookie savedEmailCookie;
 
         if(requestDto.isSavedEmail()) {
 
-            savedEmailCookie = cookieProvider.createTokenCookie(requestDto.getEmail());
+            savedEmailCookie = cookieUtil.createSavedEmailCookie(requestDto.getEmail());
 
         }else{
 
-            savedEmailCookie = cookieProvider.deleteSavedEmailCookie();
+            savedEmailCookie = cookieUtil.deleteSavedEmailCookie();
 
         }
 
@@ -83,19 +78,4 @@ public class AuthController {
                 .body(null);
     }
 
-    /*===================================== TEST ======================================*/
-//    @PostMapping("token-test")
-//    public ResponseEntity<GeneratedTokenDto> createTokenTest(@RequestBody LoginUserRequestDto dto){
-//        log.debug("Test - 로그인 상황 성공");
-//
-//        String email = dto.getEmail();
-//
-//        AuthUser user = authUserService.getOneByEmail(email);
-//
-//        GeneratedTokenDto generatedTokenDto = tokenProvider.generateToken(user);
-//
-//
-//
-//        return ResponseEntity.ok().body(generatedTokenDto);
-//    }
 }
