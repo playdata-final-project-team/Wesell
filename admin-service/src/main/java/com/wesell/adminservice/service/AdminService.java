@@ -2,12 +2,14 @@ package com.wesell.adminservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wesell.adminservice.domain.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.adminservice.domain.dto.request.ChangeRoleRequestDto;
+import com.wesell.adminservice.domain.dto.request.SiteConfigRequestDto;
+import com.wesell.adminservice.domain.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.adminservice.domain.dto.response.PostListResponseDto;
+import com.wesell.adminservice.domain.dto.response.SiteConfigResponseDto;
 import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
 import com.wesell.adminservice.domain.entity.SiteConfig;
-import com.wesell.adminservice.domain.dto.request.SiteConfigRequestDto;
-import com.wesell.adminservice.domain.dto.response.SiteConfigResponseDto;
 import com.wesell.adminservice.domain.enum_.Role;
 import com.wesell.adminservice.domain.repository.AdminRepository;
 import com.wesell.adminservice.feignClient.AuthFeignClient;
@@ -18,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -88,5 +91,9 @@ public class AdminService {
 
     public ResponseEntity<List<PostListResponseDto>> getPostList(String uuid) {
         return dealFeignClient.getPostList(uuid);
+    }
+
+    public AdminAuthIsForcedResponseDto updateIsForced(AdminAuthIsForcedRequestDto requestDto) {
+        return authFeignClient.updateIsForced(requestDto).getBody();
     }
 }

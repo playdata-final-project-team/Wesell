@@ -7,9 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SiteConfigRequestDto {
-
-    private String jsVersion;
-    private String cssVersion;
-    private String title;
+public class AdminAuthIsForcedRequestDto {
+    private String uuid;
 }

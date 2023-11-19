@@ -1,6 +1,8 @@
 package com.wesell.authenticationserver.controller;
 
+import com.wesell.authenticationserver.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.authenticationserver.dto.request.AdminAuthRoleRequestDto;
+import com.wesell.authenticationserver.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.authenticationserver.service.AdminAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,12 @@ public class AdminAuthController {
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to change user role: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PatchMapping("updateIsForced")
+    public ResponseEntity<AdminAuthIsForcedResponseDto> updateIsForced(@RequestBody AdminAuthIsForcedRequestDto requestDto) {
+        AdminAuthIsForcedResponseDto responseDto = adminAuthService.updateIsForced(requestDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 }
 
