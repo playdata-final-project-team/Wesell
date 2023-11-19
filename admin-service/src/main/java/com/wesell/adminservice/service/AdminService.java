@@ -96,4 +96,8 @@ public class AdminService {
     public AdminAuthIsForcedResponseDto updateIsForced(AdminAuthIsForcedRequestDto requestDto) {
         return authFeignClient.updateIsForced(requestDto).getBody();
     }
+
+    public void deletePost(String uuid, Long postId) {
+        dealFeignClient.deletePost(uuid, postId);
+    }
 }

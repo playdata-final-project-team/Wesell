@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,5 +74,11 @@ public class AdminController {
     public ResponseEntity<AdminAuthIsForcedResponseDto> updateIsForced(@RequestBody AdminAuthIsForcedRequestDto requestDto) {
         AdminAuthIsForcedResponseDto responseDto = adminService.updateIsForced(requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+  
+    @PutMapping("deletePost")
+    public ResponseEntity<?> deletePost(@RequestParam("uuid") String uuid, @RequestParam("id") Long postId) {
+        adminService.deletePost(uuid, postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
