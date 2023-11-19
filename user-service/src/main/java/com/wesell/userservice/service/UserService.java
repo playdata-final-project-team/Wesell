@@ -1,7 +1,7 @@
 package com.wesell.userservice.service;
 
 import com.wesell.userservice.dto.request.SignupRequestDto;
-import com.wesell.userservice.dto.response.ResponseDto;
+import com.wesell.userservice.dto.response.SelectResponseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.domain.entity.User;
 import com.wesell.userservice.domain.repository.UserRepository;
@@ -19,18 +19,18 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public ResponseDto findUser(String uuid) throws UserNotFoundException { // uuid로 유저 조회
+    public SelectResponseDto findUser(String uuid) throws UserNotFoundException { // uuid로 유저 조회
         Optional<User> userOptional = userRepository.findByOneId(uuid);
         User user = userOptional.orElseThrow(() ->
                 new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
-        return ResponseDto.of(user);
+        return SelectResponseDto.of(user);
     }
 
-    public List<ResponseDto> findUsers() throws UserNotFoundException { // 유저 전체 조회
+    public List<SelectResponseDto> findUsers() throws UserNotFoundException { // 유저 전체 조회
         Optional<List<User>> usersOptional = userRepository.findAll();
         List<User> userList = usersOptional.orElseThrow(() ->
                 new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
-        return ResponseDto.of(userList);
+        return SelectResponseDto.of(userList);
     }
 
     @Transactional

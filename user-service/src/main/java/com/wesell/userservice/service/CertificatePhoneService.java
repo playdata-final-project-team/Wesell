@@ -22,7 +22,7 @@ public class CertificatePhoneService {
 
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("to", phoneNumber);
-        params.put("from", "01025246373");
+        params.put("from", "phoneNumber");
         params.put("type", "SMS");
         params.put("text", " + 작성할내용 " + "["+numStr+"]" + "내용 ");
         params.put("app_version", "test app 1.2"); // application name and version
