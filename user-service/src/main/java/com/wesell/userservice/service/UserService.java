@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -45,11 +46,11 @@ public class UserService {
 
     @Transactional//db 조회 빼고 다  넣기
     public void save(SignupRequestDto signupRequestDto) {
-        User userEntity = UserService.convertToentity(signupRequestDto);
+        User userEntity = UserService.convertToEntity(signupRequestDto);
         userRepository.save(userEntity);
     }
 
-    public static User convertToentity(SignupRequestDto userdto) {
+    public static User convertToEntity(SignupRequestDto userdto) {
         return User.builder()
                 .name(userdto.getName())
                 .nickname(userdto.getNickname())
@@ -68,8 +69,8 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByOneId(uuid);
 
         if (optionalUser.isPresent()) {
-            User updateduser = optionalUser.get();
-            User user = updateduser.changeName(signupRequestDTO.getName());
+            User updatedUser = optionalUser.get();
+            User user = updatedUser.changeUserInfo(signupRequestDTO.getName());
             userRepository.update(user);
         } else {
             throw new EntityNotFoundException("User not found with uuid: " + uuid);
@@ -79,12 +80,13 @@ public class UserService {
     public MypageResponseDto getMyPageDetails(String uuid) {
         Optional<User> userOptional = userRepository.findByOneId(uuid);
 
-        return userOptional.map(user -> MypageResponseDto.builder()
-                        .name(user.getName())
-                        .nickname(user.getNickname())
-                        .phone(user.getPhone())
-                        .build())
-                .orElse(new MypageResponseDto());
+        return userOptional.map(user ->
+                        MypageResponseDto.builder()
+                                .name(user.getName())
+                                .nickname(user.getNickname())
+                                .phone(user.getPhone())
+                                .build())
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 }
 
