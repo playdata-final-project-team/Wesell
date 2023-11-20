@@ -1,6 +1,5 @@
 package com.wesell.authenticationserver.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
@@ -9,7 +8,8 @@ public class CustomException extends RuntimeException{
     ErrorCode errorCode;
 
     public CustomException(ErrorCode errorCode){
-        this(errorCode,"");
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
     public CustomException(ErrorCode errorCode, String detailMessage){
