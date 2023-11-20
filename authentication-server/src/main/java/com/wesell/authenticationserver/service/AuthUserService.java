@@ -15,9 +15,11 @@ import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
 import com.wesell.authenticationserver.service.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -60,8 +62,6 @@ public class AuthUserService {
 
     /**
      * 로그인 기능
-     * @param dto
-     * @return
      */
     public LoginSuccessDto login(LoginUserRequestDto requestDto){
 
@@ -69,7 +69,7 @@ public class AuthUserService {
 
         log.debug("이메일로 회원 조회");
         AuthUser authUser = authUserRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_SIGNUP_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_SIGNUP_USER,"가입하지 않은 회원입니다."));
 
         log.debug("비밀번호 일치 여부 확인");
         if(!passwordEncoder.matches(requestDto.getPassword(), authUser.getPassword())){
@@ -84,9 +84,37 @@ public class AuthUserService {
         return new LoginSuccessDto(customConverter.toDto(tokenInfo));
     }
 
-    public AuthUser getOneByUuid(String uuid){
-        return authUserRepository.findByUuid(uuid).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
-        );
+    // 로그아웃
+    public void logout(String accessToken){
+        String uuid = tokenProvider.getUuidByToken(accessToken);
+        tokenInfoService.removeTokenInfo(uuid);
+    }
+
+    /**
+     * refresh jwt 기능
+     */
+    public LoginSuccessDto refreshToken(String accessToken){
+
+        log.debug("access-token 검증");
+        Optional<TokenInfo> optTokenInfo = tokenInfoService.getOneByAccessToken(accessToken);
+        GeneratedTokenDto generatedTokenDto = null;
+        if(optTokenInfo.isPresent()){
+
+            //refresh token 검증
+            String refreshToken = optTokenInfo.get().getRefreshToken();
+            log.error(refreshToken);
+            if(!tokenProvider.validRefreshToken(refreshToken)) {
+                throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+            }
+
+            String uuid = optTokenInfo.get().getUuid();
+            AuthUser authUser = authUserRepository.findByUuid(uuid)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_SIGNUP_USER));
+            String newAccessToken = tokenProvider.generateJwt(authUser);
+            generatedTokenDto = customConverter.toDto(tokenInfoService
+                    .saveOrUpdate(null,uuid,null,newAccessToken));
+
+        }
+        return new LoginSuccessDto(generatedTokenDto);
     }
 }

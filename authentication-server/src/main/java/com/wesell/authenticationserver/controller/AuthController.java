@@ -12,11 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,6 +55,7 @@ public class AuthController {
 
         ResponseCookie accessTokenCookie = cookieUtil.createTokenCookie(accessToken);
 
+        log.debug("AuthController - 이메일 저장 기능");
         ResponseCookie savedEmailCookie;
 
         if(requestDto.isSavedEmail()) {
@@ -76,6 +73,35 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
                 .header(HttpHeaders.SET_COOKIE,savedEmailCookie.toString())
                 .body(null);
+    }
+
+    // 만료된 토큰 갱신
+    @PostMapping("refresh")
+    public ResponseEntity<Void> refresh(@CookieValue(name = "access-token") String accessToken){
+
+        LoginSuccessDto loginSuccessDto = authUserService.refreshToken(accessToken);
+        String newAccessToken = loginSuccessDto.getGeneratedTokenDto().getAccessToken();
+        ResponseCookie tokenCookie = cookieUtil.createTokenCookie(newAccessToken);
+
+        return ResponseEntity
+                .status(SuccessCode.OK.getStatus())
+                .header(HttpHeaders.SET_COOKIE,tokenCookie.toString())
+                .body(null);
+    }
+
+    // 로그아웃
+    @PostMapping("logout")
+    public ResponseEntity<?> logout(@CookieValue(name = "access-token") String accessToken){
+
+        authUserService.logout(accessToken);
+
+        ResponseCookie deleteAccessToken = cookieUtil.deleteTokenCookie();
+
+        return ResponseEntity
+                .status(SuccessCode.OK.getStatus())
+                .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
+                .body(null);
+
     }
 
 }
