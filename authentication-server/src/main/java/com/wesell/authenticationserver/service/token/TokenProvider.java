@@ -3,13 +3,8 @@ package com.wesell.authenticationserver.service.token;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.token.TokenProperties;
 import com.wesell.authenticationserver.dto.GeneratedTokenDto;
-import com.wesell.authenticationserver.service.AuthUserService;
-import com.wesell.authenticationserver.service.TokenInfoService;
-import com.wesell.authenticationserver.service.UserDetailsImpl;
 import com.wesell.authenticationserver.service.UserDetailsServiceImpl;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,8 +17,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenProvider {
 
-    private final RefreshTokenProvider refreshTokenProvider;
-    private final AccessTokenProvider accessTokenProvider;
     private final TokenProperties tokenProperties;
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -43,8 +36,8 @@ public class TokenProvider {
         Date refreshTokenExpiry = createExpiry(now,tokenProperties.getRefreshExpiredTime());
 
         // 토큰 생성
-        String accessToken = accessTokenProvider.createToken(authUser,now, accessTokenExpiry);
-        String refreshToken = refreshTokenProvider.createToken(now,refreshTokenExpiry);
+        String accessToken = createAccessToken(authUser,now, accessTokenExpiry);
+        String refreshToken = createRefreshToken(now,refreshTokenExpiry);
         String uuid = authUser.getUuid();
 
         return new GeneratedTokenDto(refreshToken,accessToken,uuid);
@@ -57,10 +50,35 @@ public class TokenProvider {
 
         Date accessTokenExpiry = createExpiry(now, tokenProperties.getAccessExpiredTime());
 
-        return accessTokenProvider.createToken(authUser,now,accessTokenExpiry);
+        return createAccessToken(authUser,now,accessTokenExpiry);
     }
 
-    
+    // JwtToken -  클라이언트 측에 전달하는 Token 개인정보 O(서명으로 인증)
+    private String createAccessToken(AuthUser authUser, Date now, Date expiration ){
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE,Header.JWT_TYPE)
+                .setHeaderParam("alg","HS256")
+                .setSubject(authUser.getUuid())
+                .claim("role",authUser.getRole())
+                .setIssuer(tokenProperties.getIssuer())
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS256, tokenProperties.getSecretKey())
+                .compact();
+    }
+
+    // RefreshToken - 재발급 전용, 개인 정보가 담길 필요 X
+    private String createRefreshToken(Date now, Date expiration){
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE,Header.JWT_TYPE)
+                .setHeaderParam("alg","HS256")
+                .setIssuer(tokenProperties.getIssuer())
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS256, tokenProperties.getSecretKey())
+                .compact();
+    }
+
     // JWT 유효성 검증 메서드
     public String validJwtToken(String token) {
         try {
