@@ -28,7 +28,7 @@ public class DealServiceImpl implements DealService {
     private final UserFeignClient userFeignClient;
 
     @Override
-    public void createDealPost(CreateDealPostRequestDto requestDto) {
+    public Long createDealPost(CreateDealPostRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())
@@ -40,6 +40,8 @@ public class DealServiceImpl implements DealService {
                 .createdAt(LocalDate.now())
                 .build();
         dealRepository.save(post);
+
+        return post.getId();
     }
 
     @Override

@@ -21,12 +21,11 @@ public class DealController {
 
     /**
      * @param requestDto 요청
-     * @return 게시글 저장
+     * @return 게시글 id 값
      */
     @PostMapping("post")
     public ResponseEntity<?> createDealPost(@Valid @RequestBody CreateDealPostRequestDto requestDto) {
-        dealService.createDealPost(requestDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(dealService.createDealPost(requestDto), HttpStatus.CREATED);
     }
 
     /**
