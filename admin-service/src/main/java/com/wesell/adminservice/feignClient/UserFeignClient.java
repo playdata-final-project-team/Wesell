@@ -1,12 +1,15 @@
 package com.wesell.adminservice.feignClient;
 
-import com.wesell.adminservice.domain.dto.UserListResponseDto;
+import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name="USER-SERVICE", path = "user-service")
+import java.util.List;
+
+@FeignClient(name="USER-SERVICE")
 public interface UserFeignClient {
 
-    @GetMapping("user-list")
-    UserListResponseDto getUserList();
+    @GetMapping("users")
+    ResponseEntity<List<UserListResponseDto>> getUserList();
 }

@@ -36,5 +36,4 @@ public class ResponseDto {
                 ))
                 .collect(Collectors.toList());
     }
-
 }

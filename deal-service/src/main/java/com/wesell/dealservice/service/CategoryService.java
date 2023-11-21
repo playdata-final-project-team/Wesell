@@ -6,7 +6,5 @@ import java.util.List;
 
 public interface CategoryService {
     void createCategory(CreateCategoryRequestDto requestDto);
-
-    List<MainPageCategoryResponseDto> getMainPageInfo();
-
+    List<MainPageCategoryResponseDto> getCategoryList();
 }

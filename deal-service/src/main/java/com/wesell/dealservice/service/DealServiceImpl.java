@@ -3,14 +3,13 @@ package com.wesell.dealservice.service;
 import com.wesell.dealservice.domain.SaleStatus;
 import com.wesell.dealservice.dto.request.CreateDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
-import com.wesell.dealservice.dto.response.EditPostResponseDto;
-import com.wesell.dealservice.dto.response.MainPagePostResponseDto;
-import com.wesell.dealservice.dto.response.MyPostListResponseDto;
-import com.wesell.dealservice.dto.response.PostInfoResponseDto;
+import com.wesell.dealservice.dto.response.*;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
+import com.wesell.dealservice.error.ErrorCode;
+import com.wesell.dealservice.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.UserFeignClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ public class DealServiceImpl implements DealService {
     private final CategoryRepository categoryRepository;
     private final UserFeignClient userFeignClient;
 
-    // 거래 글 생성
     @Override
     public void createDealPost(CreateDealPostRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
@@ -44,9 +42,10 @@ public class DealServiceImpl implements DealService {
         dealRepository.save(post);
     }
 
-    // 거래 글 수정
     @Override
     public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
+        checkValidationByUuid(requestDto.getUuid());
+
         DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
@@ -55,37 +54,45 @@ public class DealServiceImpl implements DealService {
         return new EditPostResponseDto(editPost);
     }
 
-    // 거래 글 삭제
     @Override
-    public void deletePost(Long postId) {
-        dealRepository.deleteById(postId);
+    public void deletePost(String uuid, Long postId) {
+        checkValidationByUuid(uuid);
+        DealPost post = dealRepository.findDealPostByUuidAndId(uuid, postId);
+        post.deleteMyPost();
     }
 
-    //거래 글 상세 정보
     @Override
     public PostInfoResponseDto getPostInfo(Long postId) {
-        DealPost foundPost = dealRepository.findDealPostById(postId);
+        DealPost foundPost = dealRepository.findDealPostByIdAndStatusAndIsDeleted(postId, SaleStatus.IN_PROGRESS,  false);
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         return new PostInfoResponseDto(foundPost, nickname);
     }
 
-    // 판매 내역 리스트 정보
     @Override
     public List<MyPostListResponseDto> getMyPostList(String uuid) {
-        List<DealPost> allByUuid = dealRepository.findAllByUuid(uuid);
+        checkValidationByUuid(uuid);
+        List<DealPost> allByUuid = dealRepository.findAllByUuidAndIsDeleted(uuid, false);
         return allByUuid.stream().map(MyPostListResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<MainPagePostResponseDto> getMainPageInfo() {
-        List<DealPost> dealPosts = dealRepository.findAllByStatus(SaleStatus.IN_PROGRESS);
+    public List<MainPagePostResponseDto> getDealPostLists() {
+        List<DealPost> dealPosts = dealRepository.findAllByStatusAndIsDeleted(SaleStatus.IN_PROGRESS, false);
         return dealPosts.stream().map(MainPagePostResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
-    public void changePostStatus(Long id) {
-        DealPost post = dealRepository.findDealPostById(id);
+    public void changePostStatus(String uuid, Long id) {
+        checkValidationByUuid(uuid);
+        DealPost post = dealRepository.findDealPostByIdAndIsDeleted(id, false);
         post.changeStatus();
+    }
+
+    public void checkValidationByUuid(String uuid) {
+        DealPost post = dealRepository.findFirstByUuid(uuid);
+        if(!uuid.equals(post.getUuid())) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST);
+        }
     }
 
 }

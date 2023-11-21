@@ -1,6 +1,7 @@
 package com.wesell.userservice.service;
 
 import com.wesell.userservice.dto.request.SignupRequestDto;
+import com.wesell.userservice.dto.response.MypageResponseDto;
 import com.wesell.userservice.dto.response.ResponseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.domain.entity.User;
@@ -9,8 +10,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -44,12 +45,12 @@ public class UserService {
     }
 
     @Transactional//db 조회 빼고 다  넣기
-    public void save (SignupRequestDto requestSignupDTO){
-        User userEntity = UserService.convertToentity(requestSignupDTO);
+    public void save(SignupRequestDto signupRequestDto) {
+        User userEntity = UserService.convertToEntity(signupRequestDto);
         userRepository.save(userEntity);
     }
 
-    public static User convertToentity(SignupRequestDto userdto) {
+    public static User convertToEntity(SignupRequestDto userdto) {
         return User.builder()
                 .name(userdto.getName())
                 .nickname(userdto.getNickname())
@@ -58,7 +59,7 @@ public class UserService {
                 .uuid(userdto.getUuid())
                 .build();
     }
-    
+
     public String getNicknameByUuid(String uuid) {
         return userRepository.findNicknameByUuid(uuid);
     }
@@ -68,21 +69,24 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByOneId(uuid);
 
         if (optionalUser.isPresent()) {
-            User updateduser = optionalUser.get();
-//            User user = User.builder()
-//                    .id(updateduser.getId())
-//                    .name(signupRequestDTO.getName())
-//                    .nickname(signupRequestDTO.getNickname())
-//                    .phone(signupRequestDTO.getPhone())
-//                    .agree(signupRequestDTO.isAgree())
-//                    .createdAt(LocalDateTime.now())
-//                    .build();
-            User user = updateduser.changeName(signupRequestDTO.getName());
+            User updatedUser = optionalUser.get();
+            User user = updatedUser.changeUserInfo(signupRequestDTO.getName());
             userRepository.update(user);
         } else {
             throw new EntityNotFoundException("User not found with uuid: " + uuid);
         }
     }
 
+    public MypageResponseDto getMyPageDetails(String uuid) {
+        Optional<User> userOptional = userRepository.findByOneId(uuid);
+
+        return userOptional.map(user ->
+                        MypageResponseDto.builder()
+                                .name(user.getName())
+                                .nickname(user.getNickname())
+                                .phone(user.getPhone())
+                                .build())
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+    }
 }
 
