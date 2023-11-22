@@ -1,4 +1,4 @@
-package com.wesell.userservice.config;
+package com.wesell.userservice.global.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -19,7 +19,7 @@ public class SwaggerConfig {
     private Info apiInfo(){
         return new Info()
                 .title("Springdoc 테스트")
-                .description("Springdoc를 사용한 Swagger UI 테스트")
+                .description("User-service server API 테스트")
                 .version("1.0.0");
     }
 

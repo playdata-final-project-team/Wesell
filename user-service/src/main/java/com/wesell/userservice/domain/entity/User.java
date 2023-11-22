@@ -28,7 +28,7 @@ public class User {
     @Column(name = "u_nickname", length = 15, nullable = false)
     private String nickname;
 
-    @Column(name = "u_phone", nullable = false)
+    @Column(name = "u_phone", nullable = false, unique = true)
     private String phone;
 
     @CreationTimestamp
