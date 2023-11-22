@@ -33,28 +33,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         // 로그인 요청은 쿠키가 없기 때문에, 이는 권한 확인을 할 필요가 없다.
-        if(req.getRequestURI().contains("/login")) { return; }
+        if(req.getCookies() != null) {
+            Optional<Cookie> cookie = cookieUtil.getJwt(req.getCookies());
 
-        Optional<Cookie> cookie = cookieUtil.getJwt(req.getCookies());
+            if (cookie.isPresent()) {
+                String accessToken = cookie.get().getValue();
 
-        if(cookie.isPresent()) {
-            String accessToken = cookie.get().getValue();
+                String validResult = tokenProvider.validJwtToken(accessToken);
 
-            String validResult = tokenProvider.validJwtToken(accessToken);
+                if ("pass".equals(validResult)) { // 유효한 jwt -> 시큐리티 컨텍스트 홀더에 인증 정보 저장
 
-            if ("pass".equals(validResult)) { // 유효한 jwt -> 시큐리티 컨텍스트 홀더에 인증 정보 저장
+                    Authentication authentication = tokenProvider.getAuthentication(accessToken);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                Authentication authentication = tokenProvider.getAuthentication(accessToken);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else if ("expire".equals(validResult)) { // jwt 만료 일을 넘긴 경우 -> 예외 발생하여 client 측에 jwt 재발급 요청 보내도록 조치
 
-            } else if ("expire".equals(validResult)) { // jwt 만료 일을 넘긴 경우 -> 예외 발생하여 client 측에 jwt 재발급 요청 보내도록 조치
+                    throw new CustomException(ErrorCode.EXPIRED_JWT_TOKEN);
 
-                throw new CustomException(ErrorCode.EXPIRED_JWT_TOKEN);
+                } else { //유효하지 않은 jwt -> 예외 발생하여 client  측에서 재로그인 요청보내도록 조치.
 
-            } else { //유효하지 않은 jwt -> 예외 발생하여 client  측에서 재로그인 요청보내도록 조치.
+                    throw new CustomException(ErrorCode.INVALID_JWT_TOKEN);
 
-                throw new CustomException(ErrorCode.INVALID_JWT_TOKEN);
-
+                }
             }
         }
 
