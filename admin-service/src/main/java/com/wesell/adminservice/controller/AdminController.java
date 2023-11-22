@@ -67,7 +67,7 @@ public class AdminController {
         AdminAuthIsForcedResponseDto responseDto = adminService.updateIsForced(requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
-
+  
     @PutMapping("deletePost")
     public ResponseEntity<?> deletePost(@RequestParam("uuid") String uuid, @RequestParam("id") Long postId) {
         adminService.deletePost(uuid, postId);

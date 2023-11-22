@@ -2,16 +2,15 @@ package com.wesell.adminservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.wesell.adminservice.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.adminservice.dto.request.ChangeRoleRequestDto;
 import com.wesell.adminservice.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.adminservice.dto.response.PostListResponseDto;
 import com.wesell.adminservice.dto.response.UserListResponseDto;
-//import com.wesell.adminservice.domain.entity.SiteConfig;
 import com.wesell.adminservice.dto.request.SiteConfigRequestDto;
 import com.wesell.adminservice.dto.response.SiteConfigResponseDto;
 import com.wesell.adminservice.domain.enum_.Role;
-//import com.wesell.adminservice.domain.repository.AdminRepository;
 import com.wesell.adminservice.feignClient.AuthFeignClient;
 import com.wesell.adminservice.feignClient.DealFeignClient;
 import com.wesell.adminservice.feignClient.UserFeignClient;
@@ -29,8 +28,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminService {
 
-    private final ModelMapper modelMapper;
-    private final ObjectMapper objectMapper;
     private final UserFeignClient userFeignClient;
     private final AuthFeignClient authFeignClient;
     private final DealFeignClient dealFeignClient;

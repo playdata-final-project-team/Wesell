@@ -78,7 +78,7 @@ public class UserController {
     }
 
     @GetMapping("/mypage/{uuid}")
-    public MypageResponseDto getMypageDetails(@PathVariable String uuid){
+    public MypageResponseDto getMyPageDetails(@PathVariable String uuid){
         return userService.getMyPageDetails(uuid);
     }
 }
