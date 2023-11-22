@@ -1,6 +1,6 @@
 package com.wesell.adminservice.feignClient;
 
-import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
+import com.wesell.adminservice.dto.response.UserListResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

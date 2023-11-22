@@ -1,4 +1,4 @@
-package com.wesell.adminservice.domain.dto.request;
+package com.wesell.adminservice.dto.request;
 
 import com.wesell.adminservice.domain.enum_.Role;
 import lombok.Getter;

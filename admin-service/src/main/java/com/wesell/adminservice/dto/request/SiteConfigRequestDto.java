@@ -1,4 +1,4 @@
-package com.wesell.adminservice.domain.dto.request;
+package com.wesell.adminservice.dto.request;
 
 import lombok.*;
 

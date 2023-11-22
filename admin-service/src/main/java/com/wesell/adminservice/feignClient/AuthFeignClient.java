@@ -1,8 +1,8 @@
 package com.wesell.adminservice.feignClient;
 
-import com.wesell.adminservice.domain.dto.request.AdminAuthIsForcedRequestDto;
-import com.wesell.adminservice.domain.dto.request.ChangeRoleRequestDto;
-import com.wesell.adminservice.domain.dto.response.AdminAuthIsForcedResponseDto;
+import com.wesell.adminservice.dto.request.AdminAuthIsForcedRequestDto;
+import com.wesell.adminservice.dto.request.ChangeRoleRequestDto;
+import com.wesell.adminservice.dto.response.AdminAuthIsForcedResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
