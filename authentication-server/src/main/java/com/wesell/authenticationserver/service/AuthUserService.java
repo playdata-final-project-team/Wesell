@@ -5,6 +5,7 @@ import com.wesell.authenticationserver.domain.entity.TokenInfo;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.dto.LoginSuccessDto;
+import com.wesell.authenticationserver.dto.feign.AuthUserListFeignResponseDto;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
 import com.wesell.authenticationserver.dto.request.LoginUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomConverter;
@@ -18,8 +19,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -116,5 +117,11 @@ public class AuthUserService {
 
         }
         return new LoginSuccessDto(generatedTokenDto);
+    }
+
+    /*====================== Feign =======================*/
+    public List<AuthUserListFeignResponseDto> getAllForFeign(){
+        List<AuthUser> authUserList = authUserRepository.findAll();
+        return customConverter.toFeignDto(authUserList);
     }
 }
