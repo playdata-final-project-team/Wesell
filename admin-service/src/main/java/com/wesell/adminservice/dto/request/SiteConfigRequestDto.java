@@ -1,8 +1,6 @@
-package com.wesell.adminservice.domain.dto.request;
+package com.wesell.adminservice.dto.request;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter

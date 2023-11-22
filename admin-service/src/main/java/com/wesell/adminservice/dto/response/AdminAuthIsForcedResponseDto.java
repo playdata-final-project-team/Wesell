@@ -1,4 +1,4 @@
-package com.wesell.adminservice.domain.dto.response;
+package com.wesell.adminservice.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

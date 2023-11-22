@@ -1,12 +1,12 @@
 package com.wesell.adminservice.controller;
 
-import com.wesell.adminservice.domain.dto.request.AdminAuthIsForcedRequestDto;
-import com.wesell.adminservice.domain.dto.request.ChangeRoleRequestDto;
-import com.wesell.adminservice.domain.dto.request.SiteConfigRequestDto;
-import com.wesell.adminservice.domain.dto.response.AdminAuthIsForcedResponseDto;
-import com.wesell.adminservice.domain.dto.response.PostListResponseDto;
-import com.wesell.adminservice.domain.dto.response.SiteConfigResponseDto;
-import com.wesell.adminservice.domain.dto.response.UserListResponseDto;
+import com.wesell.adminservice.dto.request.AdminAuthIsForcedRequestDto;
+import com.wesell.adminservice.dto.request.ChangeRoleRequestDto;
+import com.wesell.adminservice.dto.request.SiteConfigRequestDto;
+import com.wesell.adminservice.dto.response.AdminAuthIsForcedResponseDto;
+import com.wesell.adminservice.dto.response.PostListResponseDto;
+import com.wesell.adminservice.dto.response.SiteConfigResponseDto;
+import com.wesell.adminservice.dto.response.UserListResponseDto;
 import com.wesell.adminservice.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,22 +17,15 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("admin-service")
 @RequiredArgsConstructor
 public class AdminController {
 
     private final AdminService adminService;
 
-    @PostMapping("set/config")
-    public ResponseEntity<SiteConfigResponseDto> saveSiteConfig(@RequestBody SiteConfigRequestDto siteConfigRequestDto) {
-        SiteConfigResponseDto savedSiteConfig = adminService.saveSiteConfig(siteConfigRequestDto);
-        return new ResponseEntity<>(savedSiteConfig, HttpStatus.CREATED);
-    }
-
-    @GetMapping("get/config")
-    public ResponseEntity<SiteConfigResponseDto> getSiteConfig() {
-        SiteConfigResponseDto currentSiteConfig = adminService.getSiteConfig();
-        return new ResponseEntity<>(currentSiteConfig, HttpStatus.OK);
+    @GetMapping("get-version")
+    public ResponseEntity<Map<String, String>> getVersions() {
+        Map<String, String> currentVersions = adminService.getVersions();
+        return new ResponseEntity<>(currentVersions, HttpStatus.OK);
     }
 
     @GetMapping("get/users")
@@ -41,7 +34,7 @@ public class AdminController {
     }
 
     @GetMapping("version")
-    public ResponseEntity<SiteConfigResponseDto> getVersionAndSave(
+    public ResponseEntity<Map<String, String>> getVersionAndSave(
             @RequestParam(name = "jsVersion", defaultValue = "1.0") String jsVersion,
             @RequestParam(name = "cssVersion", defaultValue = "1.0") String cssVersion,
             @RequestParam(name = "title", defaultValue = "Default Title") String title) {
@@ -50,9 +43,8 @@ public class AdminController {
         versions.put("jsVersion", jsVersion);
         versions.put("cssVersion", cssVersion);
         versions.put("title", title);
-        SiteConfigRequestDto requestDto = adminService.mapToRequestAdminDto(versions);
-        SiteConfigResponseDto savedSiteConfig = adminService.saveSiteConfig(requestDto);
-        return new ResponseEntity<>(savedSiteConfig, HttpStatus.CREATED);
+        adminService.setVersions(versions);
+        return new ResponseEntity<>(versions, HttpStatus.OK);
     }
 
     @PutMapping("/{uuid}/change-role")

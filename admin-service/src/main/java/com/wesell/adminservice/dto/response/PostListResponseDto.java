@@ -1,4 +1,4 @@
-package com.wesell.adminservice.domain.dto.response;
+package com.wesell.adminservice.dto.response;
 
 import com.wesell.adminservice.domain.enum_.SaleStatus;
 

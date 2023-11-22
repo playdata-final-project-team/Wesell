@@ -1,9 +1,6 @@
-package com.wesell.adminservice.domain.dto.response;
+package com.wesell.adminservice.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -14,4 +11,7 @@ public class SiteConfigResponseDto {
     private String jsVersion;
     private String cssVersion;
     private String title;
+
+    public SiteConfigResponseDto(String s) {
+    }
 }
