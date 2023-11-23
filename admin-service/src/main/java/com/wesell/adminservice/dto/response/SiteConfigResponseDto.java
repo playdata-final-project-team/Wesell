@@ -1,4 +1,4 @@
-package com.wesell.adminservice.domain.dto;
+package com.wesell.adminservice.dto.response;
 
 import lombok.*;
 
@@ -11,4 +11,7 @@ public class SiteConfigResponseDto {
     private String jsVersion;
     private String cssVersion;
     private String title;
+
+    public SiteConfigResponseDto(String s) {
+    }
 }

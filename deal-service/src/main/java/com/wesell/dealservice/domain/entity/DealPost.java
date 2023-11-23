@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
-
 @Entity @Getter
 @Table(name = "post")
 @AllArgsConstructor
@@ -43,9 +42,12 @@ public class DealPost {
     @Column(name = "p_createTime")
     LocalDate createdAt;
 
+    @Column(name = "isDeleted", nullable = false)
+    Boolean isDeleted;
+
     @Builder
     public DealPost(String uuid, Category category, String title, Long price,
-                    String link, String detail, LocalDate createdAt) {
+                    String link, String detail, LocalDate createdAt, Boolean isDeleted) {
         this.uuid = uuid;
         this.category = category;
         this.title = title;
@@ -54,6 +56,7 @@ public class DealPost {
         this.detail = detail;
         this.status = SaleStatus.IN_PROGRESS;
         this.createdAt = createdAt;
+        this.isDeleted = false;
     }
 
     public void editPost(EditPostRequestDto dto) {
@@ -65,6 +68,14 @@ public class DealPost {
 
     public void editCategory(Category category) {
         this.category = category;
+    }
+
+    public void changeStatus() {
+        this.status = SaleStatus.COMPLETED;
+    }
+
+    public void deleteMyPost() {
+        this.isDeleted = true;
     }
 
 }

@@ -1,30 +1,27 @@
 package com.wesell.userservice.controller;
 
-import com.wesell.userservice.service.CertificatePhoneService;
+import com.wesell.userservice.global.util.SmsUtil;
 import lombok.RequiredArgsConstructor;
+import net.nurigo.sdk.message.model.Message;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Random;
 
 @RestController
+@RequestMapping("user-service")
 @RequiredArgsConstructor
 public class CertificatePhoneController {
 
-    private final CertificatePhoneService certificatePhoneService;
 
-    @RequestMapping("/sendSMS1.do")
-    public ResponseEntity<String> sendSMS(String phoneNumber) {
-        Random rand  = new Random();
-        String numStr = "";
-        for(int i=0; i<4; i++) {
-            String ran = Integer.toString(rand.nextInt(10));
-            numStr += ran;
-        }
+    private final SmsUtil smsUtil;
 
-        certificatePhoneService.certifiedPhoneNumber(phoneNumber, numStr);
+    @PostMapping("/phone/validate")
+    public ResponseEntity<?> sendSMS(@RequestBody String phoneNumber) {
 
-        return ResponseEntity.ok(numStr);
+        String numStr = smsUtil.createCode();
+        System.out.println(phoneNumber);
+        smsUtil.sendOne(phoneNumber,numStr);
+
+        return ResponseEntity.ok(new Message());
     }
 }

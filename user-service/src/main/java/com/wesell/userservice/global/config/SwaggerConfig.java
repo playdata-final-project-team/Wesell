@@ -1,4 +1,4 @@
-package com.wesell.userservice.config;
+package com.wesell.userservice.global.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

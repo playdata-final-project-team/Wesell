@@ -1,15 +1,17 @@
 package com.wesell.authenticationserver.service;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
+import com.wesell.authenticationserver.domain.entity.TokenInfo;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
-import com.wesell.authenticationserver.domain.token.TokenProperties;
 import com.wesell.authenticationserver.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.dto.LoginSuccessDto;
+import com.wesell.authenticationserver.dto.feign.AuthUserListFeignResponseDto;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
 import com.wesell.authenticationserver.dto.request.LoginUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomConverter;
-import com.wesell.authenticationserver.global.util.CustomCookie;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
+import com.wesell.authenticationserver.response.CustomException;
+import com.wesell.authenticationserver.response.ErrorCode;
 import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
 import com.wesell.authenticationserver.service.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +19,12 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
+/**
+ * 회원 인증 인가 정보 관련 기능
+ */
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -59,32 +65,36 @@ public class AuthUserService {
      * @param dto
      * @return
      */
-    public LoginSuccessDto login(LoginUserRequestDto dto){
+    public LoginSuccessDto login(LoginUserRequestDto requestDto){
 
         log.debug("로그인 서비스 시작");
 
         log.debug("이메일로 회원 조회");
-        AuthUser authUser = authUserRepository.findByEmail(dto.getEmail())
-                .orElseThrow(()-> new RuntimeException("가입되지 않은 이메일입니다."));
+        AuthUser authUser = authUserRepository.findByEmail(requestDto.getEmail())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_SIGNUP_USER));
 
         log.debug("비밀번호 일치 여부 확인");
-        boolean isCorrect = passwordEncoder.matches(dto.getPassword(), authUser.getPassword());
-        
-        if(isCorrect){
-            GeneratedTokenDto generatedTokenDto = tokenProvider.generateToken(authUser);
-
-            tokenInfoService.saveTokenInfo(generatedTokenDto);
-
-            return new LoginSuccessDto(generatedTokenDto);
-        }else{
-            throw new RuntimeException("비밀번호를 다시 입력 바랍니다.");
+        if(!passwordEncoder.matches(requestDto.getPassword(), authUser.getPassword())){
+            throw new CustomException(ErrorCode.MISMATCH_PASSWORD);
         }
+
+        GeneratedTokenDto generatedTokenDto = tokenProvider.generateTokens(authUser);
+
+        TokenInfo tokenInfo = tokenInfoService.saveOrUpdate(generatedTokenDto, generatedTokenDto.getUuid(),
+                null,null);
+
+        return new LoginSuccessDto(customConverter.toDto(tokenInfo));
     }
 
-
-    public AuthUser getOneByEmail(String email){
-        return authUserRepository.findByEmail(email).orElseThrow(
-                ()-> new RuntimeException("가입된 이메일이 아닙니다.")
+    public AuthUser getOneByUuid(String uuid){
+        return authUserRepository.findByUuid(uuid).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
         );
+    }
+
+    /*====================== Feign =======================*/
+    public List<AuthUserListFeignResponseDto> getAllForFeign(){
+        List<AuthUser> authUserList = authUserRepository.findAll();
+        return customConverter.toFeignDto(authUserList);
     }
 }

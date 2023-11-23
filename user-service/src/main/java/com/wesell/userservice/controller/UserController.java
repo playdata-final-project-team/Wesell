@@ -1,7 +1,8 @@
 package com.wesell.userservice.controller;
 
 import com.wesell.userservice.dto.request.SignupRequestDto;
-import com.wesell.userservice.dto.response.SelectResponseDto;
+import com.wesell.userservice.dto.response.MypageResponseDto;
+import com.wesell.userservice.dto.response.ResponseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("user")
-    public ResponseEntity<SelectResponseDto> findUserResponseEntity(@RequestParam("uuid") String uuid) {
+    public ResponseEntity<ResponseDto> findUserResponseEntity(@RequestParam("uuid") String uuid) {
 
         try {
             return ResponseEntity.ok(userService.findUser(uuid));
@@ -27,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("users")
-    public ResponseEntity<List<SelectResponseDto>> findUsersResponseEntity() {
+    public ResponseEntity<List<ResponseDto>> findUsersResponseEntity() {
 
         try {
             return ResponseEntity.ok(userService.findUsers());
@@ -36,36 +37,34 @@ public class UserController {
         }
     }
 
-
     @DeleteMapping("user/{uuid}")
     public ResponseEntity<String> deleteUserEntity(@PathVariable String uuid) {
+
         try {
             userService.deleteUser(uuid);
             return ResponseEntity.ok("성공적으로 삭제되었습니다.");
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
         }
     }
 
     @PostMapping("/api/signup")
-    public ResponseEntity<String> signup (@RequestBody SignupRequestDto signupRequestDTO){
+    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDTO) {
+
         try {
             userService.save(signupRequestDTO);
             return new ResponseEntity<>("Signup successful", HttpStatus.OK);
         } catch (Exception e) {
             // 회원가입 실패 시 예외 처리
             return new ResponseEntity<>("Signup failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-
         }
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<String> updateUser (@PathVariable String uuid, @RequestBody SignupRequestDto
-            signupRequestDTO){
+    public ResponseEntity<String> updateUser(@PathVariable String uuid, @RequestBody SignupRequestDto signupRequestDTO) {
+
         try {
             userService.updateUser(uuid, signupRequestDTO);
-
             return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("User update failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -73,8 +72,13 @@ public class UserController {
     }
 
     @GetMapping("/users/{uuid}/nickname")
-    public ResponseEntity<?> getNicknameByUuid (@PathVariable String uuid){
+    public ResponseEntity<?> getNicknameByUuid(@PathVariable String uuid) {
         String nickname = userService.getNicknameByUuid(uuid);
         return ResponseEntity.ok(nickname);
+    }
+
+    @GetMapping("/mypage/{uuid}")
+    public MypageResponseDto getMyPageDetails(@PathVariable String uuid){
+        return userService.getMyPageDetails(uuid);
     }
 }

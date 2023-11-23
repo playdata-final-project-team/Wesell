@@ -8,15 +8,15 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public class SelectResponseDto {
+public class ResponseDto {
     private Long id;
     private String name;
     private String nickname;
     private String phone;
     private String uuid;
 
-    public static SelectResponseDto of(User user) {
-        return new SelectResponseDto(
+    public static ResponseDto of(User user) {
+        return new ResponseDto(
                 user.getId(),
                 user.getName(),
                 user.getNickname(),
@@ -25,9 +25,9 @@ public class SelectResponseDto {
         );
     }
 
-    public static List<SelectResponseDto> of(List<User> userList) {
+    public static List<ResponseDto> of(List<User> userList) {
         return userList.stream()
-                .map(user -> new SelectResponseDto(
+                .map(user -> new ResponseDto(
                         user.getId(),
                         user.getName(),
                         user.getNickname(),
@@ -36,5 +36,4 @@ public class SelectResponseDto {
                 ))
                 .collect(Collectors.toList());
     }
-
 }

@@ -8,32 +8,46 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
+/**
+ * 토큰 정보 관련 기능
+ */
 @Service
 @RequiredArgsConstructor
 public class TokenInfoService {
 
     private final TokenInfoRepository tokenInfoRepository;
 
-    // 토큰 정보 저장
+    /**
+     * 토큰 정보 저장 및 갱신
+     * dto 별도의 값들을 따로 받는 이유,
+     * GeneratedTokenDto 으로 종속되어 기능 확장에 제한이 걸림
+     */
     @Transactional
-    public void saveTokenInfo(GeneratedTokenDto dto){
+    public TokenInfo saveOrUpdate(GeneratedTokenDto dto, String uuid, String newRefreshToken, String newAccessToken){
+        Optional<TokenInfo> optTokenInfo = tokenInfoRepository.findById(uuid);
 
-        TokenInfo tokenInfo = new TokenInfo();
-        tokenInfo.setUuid(dto.getUuid());
-        tokenInfo.setAccessToken(dto.getAccessToken());
-        tokenInfo.setRefreshToken(dto.getRefreshToken());
+        if(optTokenInfo.isPresent() && newRefreshToken != null){ // refresh-token 수정
 
-        tokenInfoRepository.saveAndFlush(tokenInfo);
-    }
+            TokenInfo tokenInfo = optTokenInfo.get();
+            tokenInfo.updateRefreshToken(newRefreshToken);
+            return tokenInfoRepository.save(tokenInfo);
 
-    // 토큰 정보 수정
-    @Transactional
-    public void updateTokenInfo(String uuid, String accessToken){
-        TokenInfo tokenInfo = tokenInfoRepository.findById(uuid)
-                // 커스텀 예외 구현 예정
-                .orElseThrow(() -> new RuntimeException(("TokenInfo가 존재 하지 않습니다.")));
-        tokenInfo.setAccessToken(accessToken);
-        tokenInfoRepository.saveAndFlush(tokenInfo);
+        }else if(optTokenInfo.isPresent() && newAccessToken != null){ // access-token 수정
+
+            TokenInfo tokenInfo = optTokenInfo.get();
+            tokenInfo.updateAccessToken(newAccessToken);
+            return tokenInfoRepository.save(tokenInfo);
+
+        }else{ // 새롭게 저장
+
+            TokenInfo tokenInfo = new TokenInfo(
+                    dto.getUuid(),
+                    dto.getRefreshToken(),
+                    dto.getAccessToken()
+            );
+            return tokenInfoRepository.save(tokenInfo);
+
+        }
     }
 
     // 토큰 정보 삭제
@@ -56,5 +70,4 @@ public class TokenInfoService {
     public Optional<TokenInfo> getOneByRefreshToken(String refreshToken){
         return tokenInfoRepository.findByRefreshToken(refreshToken);
     }
-
 }

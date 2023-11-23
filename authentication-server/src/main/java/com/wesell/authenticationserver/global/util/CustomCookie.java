@@ -1,9 +1,10 @@
 package com.wesell.authenticationserver.global.util;
 
+import com.wesell.authenticationserver.response.CustomException;
+import com.wesell.authenticationserver.response.ErrorCode;
 import jakarta.servlet.http.Cookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -55,7 +56,7 @@ public class CustomCookie {
         Optional<Cookie> cookie = Arrays.stream(cookies)
                 .filter(c -> "access-token".equals(c.getName())).findFirst();
 
-        return cookie.orElseThrow(() -> new RuntimeException("권한이 없는 접근입니다.")).getValue();
+        return cookie.orElseThrow(() -> new CustomException(ErrorCode.INVALID_JWT_TOKEN)).getValue();
 
     }
 
