@@ -1,13 +1,11 @@
 package com.wesell.authenticationserver.service;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
-import com.wesell.authenticationserver.domain.entity.TokenInfo;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.dto.GeneratedTokenDto;
-import com.wesell.authenticationserver.dto.LoginSuccessDto;
 import com.wesell.authenticationserver.dto.feign.AuthUserListFeignResponseDto;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
-import com.wesell.authenticationserver.dto.request.LoginUserRequestDto;
+import com.wesell.authenticationserver.dto.request.SignInUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomConverter;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.response.CustomException;
@@ -16,10 +14,9 @@ import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
 import com.wesell.authenticationserver.service.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +30,6 @@ public class AuthUserService {
 
     private final UserServiceFeignClient userServiceFeignClient;
     private final TokenProvider tokenProvider;
-    private final TokenInfoService tokenInfoService;
     private final AuthUserRepository authUserRepository;
     private final CustomPasswordEncoder passwordEncoder;
     private final CustomConverter customConverter;
@@ -64,7 +60,7 @@ public class AuthUserService {
     /**
      * 로그인 기능
      */
-    public LoginSuccessDto login(LoginUserRequestDto requestDto){
+    public GeneratedTokenDto login(SignInUserRequestDto requestDto){
 
         log.debug("로그인 서비스 시작");
 
@@ -77,46 +73,24 @@ public class AuthUserService {
             throw new CustomException(ErrorCode.MISMATCH_PASSWORD);
         }
 
-        GeneratedTokenDto generatedTokenDto = tokenProvider.generateTokens(authUser);
-
-        TokenInfo tokenInfo = tokenInfoService.saveOrUpdate(generatedTokenDto, generatedTokenDto.getUuid(),
-                null,null);
-
-        return new LoginSuccessDto(customConverter.toDto(tokenInfo));
+        log.debug("토큰 발급");
+        return tokenProvider.generateTokens(authUser);
     }
 
     // 로그아웃
     public void logout(String accessToken){
-        String uuid = tokenProvider.getUuidByToken(accessToken);
-        tokenInfoService.removeTokenInfo(uuid);
+
     }
 
     /**
      * refresh jwt 기능
      */
-    public LoginSuccessDto refreshToken(String accessToken){
+    public GeneratedTokenDto refreshToken(String accessToken){
 
-        log.debug("access-token 검증");
-        Optional<TokenInfo> optTokenInfo = tokenInfoService.getOneByAccessToken(accessToken);
-        GeneratedTokenDto generatedTokenDto = null;
-        if(optTokenInfo.isPresent()){
+        log.debug("access-token 으로 refresh-token 조회");
 
-            //refresh token 검증
-            String refreshToken = optTokenInfo.get().getRefreshToken();
-            log.error(refreshToken);
-            if(!tokenProvider.validRefreshToken(refreshToken)) {
-                throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
-            }
-
-            String uuid = optTokenInfo.get().getUuid();
-            AuthUser authUser = authUserRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_SIGNUP_USER));
-            String newAccessToken = tokenProvider.generateJwt(authUser);
-            generatedTokenDto = customConverter.toDto(tokenInfoService
-                    .saveOrUpdate(null,uuid,null,newAccessToken));
-
-        }
-        return new LoginSuccessDto(generatedTokenDto);
+        //refresh token 검증
+        return null;
     }
 
     /*====================== Feign =======================*/

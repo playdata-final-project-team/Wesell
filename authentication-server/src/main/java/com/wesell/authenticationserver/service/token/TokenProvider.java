@@ -36,42 +36,23 @@ public class TokenProvider {
         Date refreshTokenExpiry = createExpiry(now,tokenProperties.getRefreshExpiredTime());
 
         // 토큰 생성
-        String accessToken = createAccessToken(authUser,now, accessTokenExpiry);
-        String refreshToken = createRefreshToken(now,refreshTokenExpiry);
-        String uuid = authUser.getUuid();
+        String accessToken = createToken(authUser,now, accessTokenExpiry);
+        String refreshToken = createToken(authUser,now,refreshTokenExpiry);
 
-        return new GeneratedTokenDto(refreshToken,accessToken,uuid);
+        return new GeneratedTokenDto(authUser.getUuid(),accessToken,refreshToken);
+
     }
 
     // 토큰 재발급 기능
-    public String generateJwt(AuthUser authUser){
 
-        Date now = new Date();
-
-        Date accessTokenExpiry = createExpiry(now, tokenProperties.getAccessExpiredTime());
-
-        return createAccessToken(authUser,now,accessTokenExpiry);
-    }
 
     // JwtToken -  클라이언트 측에 전달하는 Token 개인정보 O(서명으로 인증)
-    private String createAccessToken(AuthUser authUser, Date now, Date expiration ){
+    private String createToken(AuthUser authUser, Date now, Date expiration ){
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE,Header.JWT_TYPE)
                 .setHeaderParam("alg","HS256")
                 .setSubject(authUser.getUuid())
                 .claim("role",authUser.getRole())
-                .setIssuer(tokenProperties.getIssuer())
-                .setIssuedAt(now)
-                .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, tokenProperties.getSecretKey())
-                .compact();
-    }
-
-    // RefreshToken - 재발급 전용, 개인 정보가 담길 필요 X
-    private String createRefreshToken(Date now, Date expiration){
-        return Jwts.builder()
-                .setHeaderParam(Header.TYPE,Header.JWT_TYPE)
-                .setHeaderParam("alg","HS256")
                 .setIssuer(tokenProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(expiration)
@@ -117,7 +98,6 @@ public class TokenProvider {
     }
 
     public String getUuidByToken(String token){
-
         Claims claims = getClaims(token);
         return claims.getSubject();
 

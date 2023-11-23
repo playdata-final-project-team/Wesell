@@ -1,11 +1,12 @@
 package com.wesell.authenticationserver.controller;
 
-import com.wesell.authenticationserver.dto.LoginSuccessDto;
+import com.wesell.authenticationserver.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
-import com.wesell.authenticationserver.dto.request.LoginUserRequestDto;
+import com.wesell.authenticationserver.dto.request.SignInUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomCookie;
 import com.wesell.authenticationserver.response.SuccessCode;
 import com.wesell.authenticationserver.service.AuthUserService;
+import io.jsonwebtoken.Jwts;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.core.HttpHeaders;
 import lombok.RequiredArgsConstructor;
@@ -43,49 +44,40 @@ public class AuthController {
     }
 
     // 로그인
-    @PostMapping("login")
-    public ResponseEntity<Void> login(@Valid @RequestBody LoginUserRequestDto requestDto){
+    @PostMapping("sign-in")
+    public ResponseEntity<String> login(@Valid @RequestBody SignInUserRequestDto requestDto){
 
         log.debug("AuthController - 로그인");
 
-        LoginSuccessDto loginSuccessDto = authUserService.login(requestDto);
-        
-        log.debug("AuthController - 쿠키 담기");
-        String accessToken = loginSuccessDto.getGeneratedTokenDto().getAccessToken();
+        GeneratedTokenDto generatedTokenDto = authUserService.login(requestDto);
 
-        ResponseCookie accessTokenCookie = cookieUtil.createTokenCookie(accessToken);
+        log.debug("AuthController - 액세스 토큰 쿠키 생성");
+        ResponseCookie accessTokenCookie = cookieUtil.createTokenCookie(generatedTokenDto.getAccessToken());
 
         log.debug("AuthController - 이메일 저장 기능");
         ResponseCookie savedEmailCookie;
 
         if(requestDto.isSavedEmail()) {
-
             savedEmailCookie = cookieUtil.createSavedEmailCookie(requestDto.getEmail());
-
         }else{
-
             savedEmailCookie = cookieUtil.deleteSavedEmailCookie();
-
         }
 
         return ResponseEntity
                 .status(SuccessCode.OK.getStatus())
+                .header(HttpHeaders.AUTHORIZATION,"Bearer"+generatedTokenDto.getRefreshToken())
                 .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
                 .header(HttpHeaders.SET_COOKIE,savedEmailCookie.toString())
-                .body(null);
+                .body(generatedTokenDto.getUuid());
     }
 
     // 만료된 토큰 갱신
     @PostMapping("refresh")
     public ResponseEntity<Void> refresh(@CookieValue(name = "access-token") String accessToken){
 
-        LoginSuccessDto loginSuccessDto = authUserService.refreshToken(accessToken);
-        String newAccessToken = loginSuccessDto.getGeneratedTokenDto().getAccessToken();
-        ResponseCookie tokenCookie = cookieUtil.createTokenCookie(newAccessToken);
 
         return ResponseEntity
                 .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,tokenCookie.toString())
                 .body(null);
     }
 
