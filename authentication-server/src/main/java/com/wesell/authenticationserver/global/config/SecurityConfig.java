@@ -1,8 +1,5 @@
 package com.wesell.authenticationserver.global.config;
 
-import com.wesell.authenticationserver.filter.JwtAuthenticationFilter;
-import com.wesell.authenticationserver.global.util.CustomCookie;
-import com.wesell.authenticationserver.service.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,15 +10,10 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-    private final TokenProvider tokenProvider;
-    private final CustomCookie cookieUtil;
-
     /**
      * 인증 인가 과정을 거치지 않도록 처리한 설정 - swagger
      * @return WebSecurityCustomizer
@@ -58,10 +50,7 @@ public class SecurityConfig {
                 // X-Frame-Options 헤더 비활성화 - 보안 측면(디도스 방지)
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
-                )
-
-                .addFilterBefore(new JwtAuthenticationFilter(cookieUtil,tokenProvider),
-                        UsernamePasswordAuthenticationFilter.class);
+                );
 
         return http.build();
     }

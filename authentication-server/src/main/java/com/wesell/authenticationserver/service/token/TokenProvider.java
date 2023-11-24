@@ -3,12 +3,8 @@ package com.wesell.authenticationserver.service.token;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.token.TokenProperties;
 import com.wesell.authenticationserver.dto.GeneratedTokenDto;
-import com.wesell.authenticationserver.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Date;
@@ -18,7 +14,7 @@ import java.util.Date;
 public class TokenProvider {
 
     private final TokenProperties tokenProperties;
-    private final UserDetailsServiceImpl userDetailsService;
+    static final String X_AUTH_TOKEN = "Bearer";
 
     /**
      * 토큰 발급 기능
@@ -39,11 +35,42 @@ public class TokenProvider {
         String accessToken = createToken(authUser,now, accessTokenExpiry);
         String refreshToken = createToken(authUser,now,refreshTokenExpiry);
 
-        return new GeneratedTokenDto(authUser.getUuid(),accessToken,refreshToken);
+        return new GeneratedTokenDto(authUser.getUuid(),authUser.getRole().toString(),accessToken,refreshToken);
 
     }
 
-    // 토큰 재발급 기능
+    public String generatedAccessToken(AuthUser authUser){
+        Date now = new Date();
+        Date accessTokenExpiry = createExpiry(now, tokenProperties.getAccessExpiredTime());
+        return createToken(authUser,now,accessTokenExpiry);
+    }
+
+    public String findUuidByRefreshToken(String refreshToken){
+        return getClaims(refreshToken).getSubject();
+    }
+
+    // refresh-token 검증
+    public boolean validateToken(String refreshToken, String accessToken){
+        
+        String rawToken = resolveToken(refreshToken);
+
+        try {
+            Claims refTokenClaims = getClaims(rawToken);
+            Claims accTokenClaims = getClaims(accessToken);
+
+            boolean isNotExpired = refTokenClaims.getExpiration().after(new Date());
+            boolean isEquals = refTokenClaims.getSubject().equals(accTokenClaims.getSubject());
+
+            return isEquals && isNotExpired;
+        }catch(Exception e){
+            return false;
+        }
+        
+    }
+
+    private String resolveToken(String bearerToken){
+        return bearerToken.substring(X_AUTH_TOKEN.length()).trim();
+    }
 
 
     // JwtToken -  클라이언트 측에 전달하는 Token 개인정보 O(서명으로 인증)
@@ -60,57 +87,12 @@ public class TokenProvider {
                 .compact();
     }
 
-    // JWT 유효성 검증 메서드
-    public String validJwtToken(String token) {
-        try {
-            Jwts.parser()
-                    .setSigningKey(tokenProperties.getSecretKey())
-                    .requireIssuer(tokenProperties.getIssuer())
-                    .parseClaimsJws(token);
-            return "pass";
-        }catch(ExpiredJwtException exe){
-            return "expired";
-        }catch (Exception e){
-            return "fail";
-        }
-    }
-
-    // refresh-token 검증 메서드
-    public boolean validRefreshToken(String token){
-        try {
-            Jwts.parser()
-                    .setSigningKey(tokenProperties.getSecretKey())
-                    .requireIssuer(tokenProperties.getIssuer())
-                    .parseClaimsJws(token);
-            return true;
-        }catch(Exception e){
-            return false;
-        }
-    }
-
-    // 토큰 기반으로 인증 정보를 가져오는 메서드
-    public Authentication getAuthentication(String token){
-
-        String uuid = getUuidByToken(token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(uuid);
-        return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
-
-    }
-
-    public String getUuidByToken(String token){
-        Claims claims = getClaims(token);
-        return claims.getSubject();
-
-    }
-
     private Claims getClaims(String token){
-
         return Jwts.parser()
                 .setSigningKey(tokenProperties.getSecretKey())
                 .requireIssuer(tokenProperties.getIssuer())
                 .parseClaimsJws(token)
                 .getBody();
-
     }
 
     // 토큰 발급 기능 - 만료일 계산
