@@ -1,22 +1,21 @@
 package com.wesell.authenticationserver.controller;
 
-import com.wesell.authenticationserver.dto.LoginSuccessDto;
+import com.wesell.authenticationserver.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
-import com.wesell.authenticationserver.dto.request.LoginUserRequestDto;
+import com.wesell.authenticationserver.dto.request.SignInUserRequestDto;
+import com.wesell.authenticationserver.dto.response.SignInSuccessResponseDto;
 import com.wesell.authenticationserver.global.util.CustomCookie;
+import com.wesell.authenticationserver.response.CustomException;
+import com.wesell.authenticationserver.response.ErrorCode;
 import com.wesell.authenticationserver.response.SuccessCode;
 import com.wesell.authenticationserver.service.AuthUserService;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.core.HttpHeaders;
+import org.springframework.http.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,35 +46,64 @@ public class AuthController {
     }
 
     // 로그인
-    @PostMapping("login")
-    public ResponseEntity<Void> login(@Valid @RequestBody LoginUserRequestDto requestDto){
+    @PostMapping("sign-in")
+    public ResponseEntity<?> login(@Valid @RequestBody SignInUserRequestDto requestDto){
 
         log.debug("AuthController - 로그인");
 
-        LoginSuccessDto loginSuccessDto = authUserService.login(requestDto);
-        
-        log.debug("AuthController - 쿠키 담기");
-        String accessToken = loginSuccessDto.getGeneratedTokenDto().getAccessToken();
+        GeneratedTokenDto generatedTokenDto = authUserService.login(requestDto);
 
-        ResponseCookie accessTokenCookie = cookieUtil.createTokenCookie(accessToken);
+        log.debug("AuthController - 액세스 토큰 쿠키 생성");
+        ResponseCookie accessTokenCookie = cookieUtil.createTokenCookie(generatedTokenDto.getAccessToken());
 
+        log.debug("AuthController - 이메일 저장 기능");
         ResponseCookie savedEmailCookie;
-
         if(requestDto.isSavedEmail()) {
-
             savedEmailCookie = cookieUtil.createSavedEmailCookie(requestDto.getEmail());
-
         }else{
-
             savedEmailCookie = cookieUtil.deleteSavedEmailCookie();
-
         }
 
         return ResponseEntity
                 .status(SuccessCode.OK.getStatus())
+                .header(HttpHeaders.AUTHORIZATION,"Bearer "+generatedTokenDto.getRefreshToken())
                 .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
                 .header(HttpHeaders.SET_COOKIE,savedEmailCookie.toString())
+                .body(new SignInSuccessResponseDto(generatedTokenDto.getUuid(), generatedTokenDto.getRole()));
+    }
+
+    // 만료된 토큰 갱신
+    @PostMapping("refresh")
+    public ResponseEntity<Void> refresh(
+            @CookieValue(name = "access-token") String accessToken,
+            @RequestHeader(value = "Authorization") String refreshToken
+            ){
+        log.debug("AuthController - 토큰 갱신");
+        String newToken = authUserService.refreshToken(refreshToken,accessToken);
+        ResponseCookie newTokenCookie = cookieUtil.createTokenCookie(newToken);
+
+        if(newTokenCookie.getValue().isEmpty()) {
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        return ResponseEntity
+                .status(SuccessCode.OK.getStatus())
+                .header(HttpHeaders.SET_COOKIE,newTokenCookie.toString())
                 .body(null);
+
+    }
+
+    // 로그아웃
+    @PostMapping("logout")
+    public ResponseEntity<Void> logout(){
+
+        ResponseCookie deleteAccessToken = cookieUtil.deleteTokenCookie();
+
+        return ResponseEntity
+                .status(SuccessCode.OK.getStatus())
+                .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
+                .body(null);
+
     }
 
 }

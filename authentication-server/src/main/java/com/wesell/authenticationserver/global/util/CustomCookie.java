@@ -51,12 +51,10 @@ public class CustomCookie {
     }
 
     // 토큰 조회
-    public String getJwt(Cookie[] cookies){
+    public Optional<Cookie> getJwt(Cookie[] cookies){
 
-        Optional<Cookie> cookie = Arrays.stream(cookies)
+        return Arrays.stream(cookies)
                 .filter(c -> "access-token".equals(c.getName())).findFirst();
-
-        return cookie.orElseThrow(() -> new CustomException(ErrorCode.INVALID_JWT_TOKEN)).getValue();
 
     }
 

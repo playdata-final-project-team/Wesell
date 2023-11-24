@@ -1,13 +1,11 @@
 package com.wesell.authenticationserver.service;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
-import com.wesell.authenticationserver.domain.entity.TokenInfo;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.dto.GeneratedTokenDto;
-import com.wesell.authenticationserver.dto.LoginSuccessDto;
 import com.wesell.authenticationserver.dto.feign.AuthUserListFeignResponseDto;
 import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
-import com.wesell.authenticationserver.dto.request.LoginUserRequestDto;
+import com.wesell.authenticationserver.dto.request.SignInUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomConverter;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.response.CustomException;
@@ -32,7 +30,6 @@ public class AuthUserService {
 
     private final UserServiceFeignClient userServiceFeignClient;
     private final TokenProvider tokenProvider;
-    private final TokenInfoService tokenInfoService;
     private final AuthUserRepository authUserRepository;
     private final CustomPasswordEncoder passwordEncoder;
     private final CustomConverter customConverter;
@@ -62,34 +59,49 @@ public class AuthUserService {
 
     /**
      * 로그인 기능
-     * @param dto
-     * @return
      */
-    public LoginSuccessDto login(LoginUserRequestDto requestDto){
+    public GeneratedTokenDto login(SignInUserRequestDto requestDto){
 
         log.debug("로그인 서비스 시작");
 
         log.debug("이메일로 회원 조회");
         AuthUser authUser = authUserRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_SIGNUP_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_SIGNUP_USER,"가입하지 않은 회원입니다."));
 
         log.debug("비밀번호 일치 여부 확인");
         if(!passwordEncoder.matches(requestDto.getPassword(), authUser.getPassword())){
             throw new CustomException(ErrorCode.MISMATCH_PASSWORD);
         }
 
-        GeneratedTokenDto generatedTokenDto = tokenProvider.generateTokens(authUser);
-
-        TokenInfo tokenInfo = tokenInfoService.saveOrUpdate(generatedTokenDto, generatedTokenDto.getUuid(),
-                null,null);
-
-        return new LoginSuccessDto(customConverter.toDto(tokenInfo));
+        log.debug("토큰 발급");
+        return tokenProvider.generateTokens(authUser);
     }
 
-    public AuthUser getOneByUuid(String uuid){
-        return authUserRepository.findByUuid(uuid).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
-        );
+    // 로그아웃
+    public void logout(String accessToken){
+
+    }
+
+    /**
+     * refresh jwt 기능
+     */
+    public String refreshToken(String refreshToken, String accessToken){
+
+        log.debug("토큰 재발급 서비스 시작");
+
+        log.debug("refresh-token 검증");
+        if(tokenProvider.validateToken(refreshToken, accessToken)){
+
+            String uuid = tokenProvider.findUuidByRefreshToken(refreshToken);
+
+            AuthUser authUser = authUserRepository.findByUuid(uuid).orElseThrow(
+                    () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
+            );
+
+            return tokenProvider.generatedAccessToken(authUser);
+        }
+            return "";
+
     }
 
     /*====================== Feign =======================*/

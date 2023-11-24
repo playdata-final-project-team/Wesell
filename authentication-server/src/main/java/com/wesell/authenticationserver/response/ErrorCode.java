@@ -26,8 +26,9 @@ public enum ErrorCode {
     /**
      * token
      */
-    INVALID_JWT_TOKEN(HttpStatus.BAD_REQUEST,"T001","유효 하지 않은 JWT token 입니다."),
-    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST,"T001","유효 하지 않은 Refresh token 입니다.");
+    INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED,"T001","유효 하지 않은 JWT token 입니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED,"T002","유효 하지 않은 Refresh token 입니다."),
+    EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED,"T003","JWT 만료 기한이 지났습니다.");
 
 
     private final HttpStatus status; // 상태코드(숫자)
