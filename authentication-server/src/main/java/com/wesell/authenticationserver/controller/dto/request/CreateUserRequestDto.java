@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.dto.request;
+package com.wesell.authenticationserver.controller.dto.request;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

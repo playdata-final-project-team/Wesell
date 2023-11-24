@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.dto.request;
+package com.wesell.authenticationserver.service.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminAuthIsForcedRequestDto {
-    private String uuid;
+public class AdminAuthIsForcedResponseDto {
+    private String message;
 }

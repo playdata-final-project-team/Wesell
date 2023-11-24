@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.dto.feign;
+package com.wesell.authenticationserver.service.dto.feign;
 
 import lombok.*;
 

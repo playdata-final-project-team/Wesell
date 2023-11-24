@@ -2,7 +2,7 @@ package com.wesell.authenticationserver.service.token;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.token.TokenProperties;
-import com.wesell.authenticationserver.dto.GeneratedTokenDto;
+import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -2,10 +2,10 @@ package com.wesell.authenticationserver.service;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
-import com.wesell.authenticationserver.dto.GeneratedTokenDto;
-import com.wesell.authenticationserver.dto.feign.AuthUserListFeignResponseDto;
-import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
-import com.wesell.authenticationserver.dto.request.SignInUserRequestDto;
+import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
+import com.wesell.authenticationserver.service.dto.feign.AuthUserListFeignResponseDto;
+import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestDto;
+import com.wesell.authenticationserver.controller.dto.request.SignInUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomConverter;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.response.CustomException;

@@ -1,8 +1,8 @@
 package com.wesell.authenticationserver.controller;
 
-import com.wesell.authenticationserver.dto.request.AdminAuthIsForcedRequestDto;
-import com.wesell.authenticationserver.dto.request.AdminAuthRoleRequestDto;
-import com.wesell.authenticationserver.dto.response.AdminAuthIsForcedResponseDto;
+import com.wesell.authenticationserver.controller.dto.request.AdminAuthIsForcedRequestDto;
+import com.wesell.authenticationserver.controller.dto.request.AdminAuthRoleRequestDto;
+import com.wesell.authenticationserver.service.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.authenticationserver.service.AdminAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

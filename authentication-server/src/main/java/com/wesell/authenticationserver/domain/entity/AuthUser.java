@@ -36,4 +36,8 @@ public class AuthUser {
     public void changeRole(Role role){
         this.role = role;
     }
+
+    public void changeIsForced(){
+        isForced = !isForced;
+    }
 }

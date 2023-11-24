@@ -1,6 +1,6 @@
 package com.wesell.authenticationserver.controller;
 
-import com.wesell.authenticationserver.dto.feign.AuthUserListFeignResponseDto;
+import com.wesell.authenticationserver.service.dto.feign.AuthUserListFeignResponseDto;
 import com.wesell.authenticationserver.service.AuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
