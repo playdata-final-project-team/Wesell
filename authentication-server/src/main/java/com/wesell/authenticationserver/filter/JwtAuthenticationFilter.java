@@ -1,9 +1,11 @@
 package com.wesell.authenticationserver.filter;
 
-import com.wesell.authenticationserver.global.util.CustomCookie;
+import com.wesell.authenticationserver.domain.token.TokenProperties;
 import com.wesell.authenticationserver.response.CustomException;
 import com.wesell.authenticationserver.response.ErrorCode;
-import com.wesell.authenticationserver.service.token.TokenProvider;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -11,11 +13,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Component
@@ -23,8 +30,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final CustomCookie cookieUtil;
-    private final TokenProvider tokenProvider;
+    private final TokenProperties tokenProperties;
+    private final UserDetailsServiceImpl userDetailsService;
+    private boolean isLogout = false;
 
     @Override
     protected void doFilterInternal(HttpServletRequest req,
@@ -32,33 +40,55 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain chain)
             throws ServletException, IOException {
 
-        // 로그인 요청은 쿠키가 없기 때문에, 이는 권한 확인을 할 필요가 없다.
-        if(req.getCookies() != null) {
-            Optional<Cookie> cookie = cookieUtil.getJwt(req.getCookies());
+        if(req.getRequestURI().contains("/logout")){
+            isLogout = true;
+        }
 
-            if (cookie.isPresent()) {
-                String accessToken = cookie.get().getValue();
+        Cookie[] cookies = req.getCookies();
 
-                String validResult = tokenProvider.validJwtToken(accessToken);
+        if(cookies != null) { // 회원가입 또는 로그인 주기가 긴 회원
 
-                if ("pass".equals(validResult)) { // 유효한 jwt -> 시큐리티 컨텍스트 홀더에 인증 정보 저장
+            Optional<Cookie> accessCookie = Arrays.stream(cookies)
+                    .filter(c -> "access-token".equals(c.getName())).findFirst();
 
-                    Authentication authentication = tokenProvider.getAuthentication(accessToken);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+            if(accessCookie.isPresent() && req.getHeader(HttpHeaders.AUTHORIZATION) == null) {
 
-                } else if ("expire".equals(validResult)) { // jwt 만료 일을 넘긴 경우 -> 예외 발생하여 client 측에 jwt 재발급 요청 보내도록 조치
+                String accessToken = accessCookie.get().getValue();
 
+                try {
+
+                    Claims claims = Jwts.parser()
+                            .setSigningKey(tokenProperties.getSecretKey())
+                            .requireIssuer(tokenProperties.getIssuer())
+                            .parseClaimsJws(accessToken)
+                            .getBody();
+
+                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+                    if(authentication == null || !authentication.isAuthenticated()) {
+                        // 유효한 jwt -> 시큐리티 컨텍스트 홀더에 인증 정보 저장
+                        String uuid = claims.getSubject();
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(uuid);
+                        authentication = new UsernamePasswordAuthenticationToken(userDetails, "",
+                                userDetails.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+
+                }catch(ExpiredJwtException exception){
                     throw new CustomException(ErrorCode.EXPIRED_JWT_TOKEN);
-
-                } else { //유효하지 않은 jwt -> 예외 발생하여 client  측에서 재로그인 요청보내도록 조치.
-
+                }catch(Exception e){
                     throw new CustomException(ErrorCode.INVALID_JWT_TOKEN);
-
                 }
+
             }
         }
 
         chain.doFilter(req,resp);
 
+        // 로그아웃 성공 시 & refresh-token이 만료된 경우 authentication 삭제 로직 구현
+        if(isLogout && resp.getStatus() == HttpStatus.OK.value()
+                || resp.getStatus() == HttpStatus.UNAUTHORIZED.value()){
+            SecurityContextHolder.clearContext();
+        }
     }
 }

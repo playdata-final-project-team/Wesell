@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.service;
+package com.wesell.authenticationserver.filter;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;

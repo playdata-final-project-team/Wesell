@@ -85,12 +85,23 @@ public class AuthUserService {
     /**
      * refresh jwt 기능
      */
-    public GeneratedTokenDto refreshToken(String accessToken){
+    public String refreshToken(String refreshToken, String accessToken){
 
-        log.debug("access-token 으로 refresh-token 조회");
+        log.debug("토큰 재발급 서비스 시작");
 
-        //refresh token 검증
-        return null;
+        log.debug("refresh-token 검증");
+        if(tokenProvider.validateToken(refreshToken, accessToken)){
+
+            String uuid = tokenProvider.findUuidByRefreshToken(refreshToken);
+
+            AuthUser authUser = authUserRepository.findByUuid(uuid).orElseThrow(
+                    () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
+            );
+
+            return tokenProvider.generatedAccessToken(authUser);
+        }
+            return "";
+
     }
 
     /*====================== Feign =======================*/
