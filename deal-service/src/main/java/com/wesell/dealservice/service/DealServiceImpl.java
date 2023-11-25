@@ -1,7 +1,7 @@
 package com.wesell.dealservice.service;
 
 import com.wesell.dealservice.domain.SaleStatus;
-import com.wesell.dealservice.dto.request.CreateDealPostRequestDto;
+import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.dto.response.*;
 import com.wesell.dealservice.domain.entity.Category;
@@ -29,7 +29,7 @@ public class DealServiceImpl implements DealService {
     private final UserFeignClient userFeignClient;
 
     @Override
-    public Long createDealPost(@Valid CreateDealPostRequestDto requestDto) {
+    public void createDealPost(@Valid UploadDealPostRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())
@@ -41,8 +41,6 @@ public class DealServiceImpl implements DealService {
                 .createdAt(LocalDate.now())
                 .build();
         dealRepository.save(post);
-
-        return post.getId();
     }
 
     @Override

@@ -1,13 +1,18 @@
 package com.wesell.dealservice.controller;
 
+import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
+import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +21,16 @@ public class DealController {
 
     private final DealServiceImpl dealService;
     private final MainPageFacadeService facadeService;
+
+    /**
+     * @param requestDto
+     * @return 판매글 저장
+     */
+    @PostMapping("post")
+    public ResponseEntity<?> uploadDealPost(@Valid @RequestBody UploadDealPostRequestDto requestDto) {
+        dealService.createDealPost(requestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
     /**
      * @param postId 요청
