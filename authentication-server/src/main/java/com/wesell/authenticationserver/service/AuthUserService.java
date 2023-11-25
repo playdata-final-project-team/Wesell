@@ -88,6 +88,8 @@ public class AuthUserService {
     public String refreshToken(String refreshToken, String accessToken){
 
         log.debug("토큰 재발급 서비스 시작");
+        // Bearer 제거
+        refreshToken = tokenProvider.resolveToken(refreshToken);
 
         log.debug("refresh-token 검증");
         if(tokenProvider.validateToken(refreshToken, accessToken)){

@@ -13,7 +13,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -36,5 +36,5 @@ springdoc:
 token:
   access-expired-time: 1
   refresh-expired-time: 24
-  secret-key: test123456789
+  secret-key: testSecret
   issuer: test@wesell.com
