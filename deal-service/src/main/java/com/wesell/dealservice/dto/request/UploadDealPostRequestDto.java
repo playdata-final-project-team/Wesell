@@ -7,9 +7,9 @@ import java.time.LocalDate;
 
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CreateDealPostRequestDto {
+public class UploadDealPostRequestDto {
 
     private String uuid;
 
@@ -29,5 +29,7 @@ public class CreateDealPostRequestDto {
     private String detail;
 
     private LocalDate createdAt;
+
+    private String imageUrl;
 
 }
