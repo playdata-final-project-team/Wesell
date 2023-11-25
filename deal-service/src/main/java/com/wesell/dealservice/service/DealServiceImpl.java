@@ -12,6 +12,7 @@ import com.wesell.dealservice.error.ErrorCode;
 import com.wesell.dealservice.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.UserFeignClient;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public class DealServiceImpl implements DealService {
     private final UserFeignClient userFeignClient;
 
     @Override
-    public Long createDealPost(CreateDealPostRequestDto requestDto) {
+    public Long createDealPost(@Valid CreateDealPostRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())

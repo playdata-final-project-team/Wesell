@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class CreateDealPostRequestDto {
 

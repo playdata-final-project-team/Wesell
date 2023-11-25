@@ -1,6 +1,5 @@
 package com.wesell.dealservice.controller;
 
-import com.wesell.dealservice.dto.request.CreateDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
@@ -17,16 +16,6 @@ public class DealController {
 
     private final DealServiceImpl dealService;
     private final MainPageFacadeService facadeService;
-
-
-    /**
-     * @param requestDto 요청
-     * @return 게시글 id 값
-     */
-    @PostMapping("post")
-    public ResponseEntity<?> createDealPost(@Valid @RequestBody CreateDealPostRequestDto requestDto) {
-        return new ResponseEntity<>(dealService.createDealPost(requestDto), HttpStatus.CREATED);
-    }
 
     /**
      * @param postId 요청
