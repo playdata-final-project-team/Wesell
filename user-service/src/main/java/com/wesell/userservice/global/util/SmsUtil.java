@@ -19,6 +19,7 @@ public class SmsUtil {
     private String apiSecretKey;
 
     private DefaultMessageService messageService;
+    private String storedCode; // 인증번호를 저장할 변수
 
     @PostConstruct
     private void init(){
@@ -34,7 +35,21 @@ public class SmsUtil {
         message.setText("아래의 인증번호를 입력해주세요 \n" + verificationCode);
 
         this.messageService.sendOne(new SingleMessageSendingRequest(message));
+
+        this.storedCode = verificationCode;
     }
+
+    // 인증번호 일치 여부를 판단하는 메서드
+    public boolean isCodeValid(String code) {
+        if (storedCode != null && storedCode.equals(code)) {
+            // 인증번호 일치
+            return true;
+        } else {
+            // 인증번호 불일치
+            return false;
+        }
+    }
+
     // 인증번호 생성
     public String createCode(){
         Random rand  = new Random();

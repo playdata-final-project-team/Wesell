@@ -44,4 +44,11 @@ public class UserRepository {
                 .getSingleResult();
         return user.getNickname();
     }
+
+    public Optional<String> findUuidByPhone(String phone) {
+        String uuid = em.createQuery("select u.uuid from User u where u.phone = :phone", String.class)
+                .setParameter("phone", phone)
+                .getSingleResult();
+        return Optional.ofNullable(uuid);
+    }
 }
