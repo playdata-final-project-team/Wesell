@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("auth-server")
+//@RequestMapping("authentication-server")
 public class AuthController {
 
     private final AuthUserService authUserService;

@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.filter;
+package com.wesell.apigatewayserver.filter;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
