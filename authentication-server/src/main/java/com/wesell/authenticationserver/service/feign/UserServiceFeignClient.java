@@ -1,6 +1,6 @@
 package com.wesell.authenticationserver.service.feign;
 
-import com.wesell.authenticationserver.dto.response.CreateUserFeignResponseDto;
+import com.wesell.authenticationserver.service.dto.response.CreateUserFeignResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

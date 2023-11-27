@@ -3,8 +3,8 @@ package com.wesell.authenticationserver.service;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.enum_.Role;
 import com.wesell.authenticationserver.domain.repository.AdminAuthUserRepository;
-import com.wesell.authenticationserver.dto.request.AdminAuthIsForcedRequestDto;
-import com.wesell.authenticationserver.dto.response.AdminAuthIsForcedResponseDto;
+import com.wesell.authenticationserver.controller.dto.request.AdminAuthIsForcedRequestDto;
+import com.wesell.authenticationserver.service.dto.response.AdminAuthIsForcedResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,18 +29,7 @@ public class AdminAuthService {
         AuthUser authUser = adminAuthUserRepository.findByUuid(requestDto.getUuid());
 
         if (authUser != null) {
-            AuthUser updatedAuthUser = AuthUser.builder()
-                    .id(authUser.getId())
-                    .email(authUser.getEmail())
-                    .password(authUser.getPassword())
-                    .uuid(authUser.getUuid())
-                    .role(authUser.getRole())
-                    .isDelete(authUser.isDelete())
-                    .isForced(true)
-                    .build();
-
-            adminAuthUserRepository.save(updatedAuthUser);
-
+            authUser.changeIsForced();
             return new AdminAuthIsForcedResponseDto(requestDto.getUuid() + " UUID를 가진 사용자가 강제 탈퇴로 표시되었습니다.");
         } else {
             return new AdminAuthIsForcedResponseDto(requestDto.getUuid() + " UUID를 가진 사용자를 찾을 수 없습니다.");

@@ -17,6 +17,7 @@ public class PostInfoResponseDto {
     private String detail;
     private String link;
     private String nickname;
+    private String imageUrl;
 
     public PostInfoResponseDto (DealPost post, String nickname) {
         this.title = post.getTitle();
@@ -24,6 +25,7 @@ public class PostInfoResponseDto {
         this.price = post.getPrice();
         this.detail = post.getDetail();
         this.link = post.getLink();
+        this.imageUrl = post.getImageUrl();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.wesell.dealservice.facade;
 
-import com.wesell.dealservice.dto.FacadeDto;
+import com.wesell.dealservice.dto.facade.MainPageInfoFacadeDto;
 import com.wesell.dealservice.service.CategoryServiceImpl;
 import com.wesell.dealservice.service.DealServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +13,8 @@ public class MainPageFacadeService {
     private final CategoryServiceImpl categoryService;
     private final DealServiceImpl dealService;
 
-    public FacadeDto getFacadeDto() {
-        FacadeDto dto = new FacadeDto();
+    public MainPageInfoFacadeDto getFacadeDto() {
+        MainPageInfoFacadeDto dto = new MainPageInfoFacadeDto();
         dto.setCategoryDto(categoryService.getCategoryList());
         dto.setPostDto(dealService.getDealPostLists());
 

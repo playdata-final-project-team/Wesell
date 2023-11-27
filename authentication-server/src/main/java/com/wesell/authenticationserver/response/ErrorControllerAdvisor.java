@@ -13,8 +13,8 @@ public class ErrorControllerAdvisor {
      * springframework.validation 에러 메시지 처리
      * @return ResponseEntity<String>
      */
-    @ExceptionHandler(BindException.class)
-    protected ResponseEntity<String> handlerBindException(BindException e){
+    @ExceptionHandler(value = BindException.class)
+    protected ResponseEntity<String> handleBindException(BindException e){
 
         StringBuilder errorMessage = new StringBuilder("필수 입력 항목을 전부 입력해주세요! : \n");
 
@@ -32,8 +32,12 @@ public class ErrorControllerAdvisor {
      * Custom 예외 처리
      * @return
      */
-    @ExceptionHandler(CustomException.class)
-    protected ErrorResponseDto handlerCustomException(CustomException e){
-        return ErrorResponseDto.of(e);
+    @ExceptionHandler(value = CustomException.class)
+    protected ResponseEntity<ErrorResponseDto> handleCustomException(CustomException e){
+
+        return ResponseEntity
+                .status(e.getErrorCode().getStatus())
+                .body(ErrorResponseDto.of(e));
+
     }
 }
