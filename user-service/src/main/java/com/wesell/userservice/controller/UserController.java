@@ -1,7 +1,6 @@
 package com.wesell.userservice.controller;
 
 import com.wesell.userservice.dto.request.SignupRequestDto;
-import com.wesell.userservice.dto.response.MypageResponseDto;
 import com.wesell.userservice.dto.response.ResponseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.service.UserService;
@@ -55,7 +54,6 @@ public class UserController {
             userService.save(signupRequestDTO);
             return new ResponseEntity<>("Signup successful", HttpStatus.OK);
         } catch (Exception e) {
-            // 회원가입 실패 시 예외 처리
             return new ResponseEntity<>("Signup failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -71,14 +69,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/{uuid}/nickname")
+    @GetMapping("users/{uuid}/nickname")
     public ResponseEntity<?> getNicknameByUuid(@PathVariable String uuid) {
         String nickname = userService.getNicknameByUuid(uuid);
         return ResponseEntity.ok(nickname);
-    }
-
-    @GetMapping("/mypage/{uuid}")
-    public MypageResponseDto getMyPageDetails(@PathVariable String uuid){
-        return userService.getMyPageDetails(uuid);
     }
 }
