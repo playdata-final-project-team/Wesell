@@ -35,39 +35,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain chain)
             throws ServletException, IOException {
 
-        String accessToken = cookieUtil.getJwt(req.getCookies());
-        
-        String validResult = tokenProvider.validJwtToken(accessToken);
-        
-        if("pass".equals(validResult)){ // 유효한 jwt -> 시큐리티 컨텍스트 홀더에 인증 정보 저장
+        if(req.getCookies() != null) {
+            String accessToken = cookieUtil.getJwt(req.getCookies());
 
-            Authentication authentication = tokenProvider.getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String validResult = tokenProvider.validJwtToken(accessToken);
 
-        }else if("expire".equals(validResult)){ // jwt 만료 일을 넘긴 경우
+            if ("pass".equals(validResult)) { // 유효한 jwt -> 시큐리티 컨텍스트 홀더에 인증 정보 저장
 
-            TokenInfo tokenInfo = tokenInfoService.getOneByAccessToken(accessToken).orElseThrow(
-                    () -> new CustomException(ErrorCode.INVALID_JWT_TOKEN)
+                Authentication authentication = tokenProvider.getAuthentication(accessToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            } else if ("expire".equals(validResult)) { // jwt 만료 일을 넘긴 경우
+
+                TokenInfo tokenInfo = tokenInfoService.getOneByAccessToken(accessToken).orElseThrow(
+                        () -> new CustomException(ErrorCode.INVALID_JWT_TOKEN)
+                        // 로그아웃 후 재로그인 요청.
+                );
+
+                String refreshToken = tokenInfo.getRefreshToken();
+                String uuid = tokenInfo.getUuid();
+
+                if (!tokenProvider.validRefreshToken(refreshToken)) {
+                    throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
                     // 로그아웃 후 재로그인 요청.
-            );
+                }
 
-            String refreshToken = tokenInfo.getRefreshToken();
-            String uuid = tokenInfo.getUuid();
+                String newAccessToken = tokenProvider.generateJwt(authUserService.getOneByUuid(uuid));
 
-            if(!tokenProvider.validRefreshToken(refreshToken)){
-                throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+                TokenInfo tokeninfo = tokenInfoService.saveOrUpdate(null, uuid, null, newAccessToken);
+
+
+            } else { //유효하지 않은 jwt
                 // 로그아웃 후 재로그인 요청.
             }
-
-            String newAccessToken = tokenProvider.generateJwt(authUserService.getOneByUuid(uuid));
-
-            TokenInfo tokeninfo = tokenInfoService.saveOrUpdate(null,uuid,null,newAccessToken);
-
-
-        }else{ //유효하지 않은 jwt
-            // 로그아웃 후 재로그인 요청.
         }
-
         chain.doFilter(req,resp);
     }
 }

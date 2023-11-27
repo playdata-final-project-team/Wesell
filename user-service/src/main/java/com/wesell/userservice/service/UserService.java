@@ -1,5 +1,6 @@
 package com.wesell.userservice.service;
 
+import com.wesell.userservice.dto.feigndto.EmailInfoDto;
 import com.wesell.userservice.dto.request.SignupRequestDto;
 import com.wesell.userservice.dto.response.MypageResponseDto;
 import com.wesell.userservice.dto.response.ResponseDto;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     public ResponseDto findUser(String uuid) throws UserNotFoundException { // uuid로 유저 조회
         Optional<User> userOptional = userRepository.findByOneId(uuid);
@@ -44,7 +46,7 @@ public class UserService {
             throw new UserNotFoundException("존재하지 않는 회원입니다.");
     }
 
-    @Transactional//db 조회 빼고 다  넣기
+    @Transactional
     public void save(SignupRequestDto signupRequestDto) {
         User userEntity = UserService.convertToEntity(signupRequestDto);
         userRepository.save(userEntity);
@@ -80,13 +82,19 @@ public class UserService {
     public MypageResponseDto getMyPageDetails(String uuid) {
         Optional<User> userOptional = userRepository.findByOneId(uuid);
 
-        return userOptional.map(user ->
-                        MypageResponseDto.builder()
-                                .name(user.getName())
-                                .nickname(user.getNickname())
-                                .phone(user.getPhone())
-                                .build())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                EmailInfoDto emailInfoDto = emailService.getEmailInfo(uuid);
+
+                return MypageResponseDto.builder()
+                        .name(user.getName())
+                        .nickname(user.getNickname())
+                        .phone(user.getPhone())
+                        .email(emailInfoDto.getEmail())
+                        .build();
+            } else {
+                throw new NoSuchElementException("User not found");
+        }
     }
 }
 

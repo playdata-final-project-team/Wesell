@@ -12,4 +12,5 @@ public class MypageResponseDto {
     private String name;
     private String nickname;
     private String phone;
+    private String email;
 }

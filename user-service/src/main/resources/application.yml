@@ -20,6 +20,8 @@ spring:
         check_nullability: true
     show_sql: true
 
+
+
 spring.profiles:
     active: db
 
@@ -32,3 +34,4 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
+
