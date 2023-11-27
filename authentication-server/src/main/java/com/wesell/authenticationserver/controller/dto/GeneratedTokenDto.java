@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.dto;
+package com.wesell.authenticationserver.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

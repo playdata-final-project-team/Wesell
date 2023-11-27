@@ -6,6 +6,12 @@ spring:
     name: apigateway-server
   cloud:
     gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            message: Spring Cloud Gateway GlobalFilter Message
+            showPreLogger: true
+            showPostLogger: true
       routes:
         - id: user-service
           uri: lb://USER-SERVICE
@@ -23,13 +29,13 @@ spring:
             - Path=/deal-service/**
 
         - id: authentication-server
-          uri: lb://AUTHENTICATION-SERVER
+          uri: http://localhost:8081/AUTHENTICATION-SERVER
           predicates:
-            - Path=/authentication-server/**
+            - Path=/auth-server/**
+          filters:
+            - AuthorizationCheckFilter
+            - RewritePath=/auth-server/(?<path>.*),/$\{path}
 
-
-    config:
-      enabled=false:
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
@@ -39,3 +45,8 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
+token:
+  access-expired-time: 1
+  refresh-expired-time: 24
+  secret-key: testSecret
+  issuer: test@wesell.com

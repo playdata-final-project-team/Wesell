@@ -1,9 +1,9 @@
 package com.wesell.authenticationserver.controller;
 
-import com.wesell.authenticationserver.dto.GeneratedTokenDto;
-import com.wesell.authenticationserver.dto.request.CreateUserRequestDto;
-import com.wesell.authenticationserver.dto.request.SignInUserRequestDto;
-import com.wesell.authenticationserver.dto.response.SignInSuccessResponseDto;
+import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
+import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestDto;
+import com.wesell.authenticationserver.controller.dto.request.SignInUserRequestDto;
+import com.wesell.authenticationserver.service.dto.response.SignInSuccessResponseDto;
 import com.wesell.authenticationserver.global.util.CustomCookie;
 import com.wesell.authenticationserver.response.CustomException;
 import com.wesell.authenticationserver.response.ErrorCode;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("auth-server")
+//@RequestMapping("authentication-server")
 public class AuthController {
 
     private final AuthUserService authUserService;

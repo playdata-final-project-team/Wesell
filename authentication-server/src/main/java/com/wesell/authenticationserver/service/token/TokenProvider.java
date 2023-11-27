@@ -2,15 +2,18 @@ package com.wesell.authenticationserver.service.token;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.token.TokenProperties;
-import com.wesell.authenticationserver.dto.GeneratedTokenDto;
+import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import java.time.Duration;
+import java.util.Base64;
 import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class TokenProvider {
 
     private final TokenProperties tokenProperties;
@@ -51,11 +54,9 @@ public class TokenProvider {
 
     // refresh-token 검증
     public boolean validateToken(String refreshToken, String accessToken){
-        
-        String rawToken = resolveToken(refreshToken);
 
         try {
-            Claims refTokenClaims = getClaims(rawToken);
+            Claims refTokenClaims = getClaims(refreshToken);
             Claims accTokenClaims = getClaims(accessToken);
 
             boolean isNotExpired = refTokenClaims.getExpiration().after(new Date());
@@ -68,7 +69,7 @@ public class TokenProvider {
         
     }
 
-    private String resolveToken(String bearerToken){
+    public String resolveToken(String bearerToken){
         return bearerToken.substring(X_AUTH_TOKEN.length()).trim();
     }
 

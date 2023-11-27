@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.dto.response;
+package com.wesell.authenticationserver.service.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

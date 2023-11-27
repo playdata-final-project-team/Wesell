@@ -1,35 +1,38 @@
-package com.wesell.authenticationserver.filter;
+package com.wesell.apigatewayserver.filter;
 
-import com.wesell.authenticationserver.domain.entity.AuthUser;
-import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final AuthUserRepository authUserRepository;
+    private String role;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        AuthUser authUser = authUserRepository.findByUuid(username).orElseThrow(
-                () -> new UsernameNotFoundException(username)
-        );
-
         List<GrantedAuthority> authorities =
-                List.of(new SimpleGrantedAuthority(authUser.getRole().toString()));
+                List.of(new SimpleGrantedAuthority(role));
 
         return UserDetailsImpl.builder()
-                .uuid(authUser.getUuid())
+                .uuid(username)
                 .authorities(authorities)
                 .build();
     }
+
+    public void registerRole(String role){
+        this.role = role;
+    }
+
 }
