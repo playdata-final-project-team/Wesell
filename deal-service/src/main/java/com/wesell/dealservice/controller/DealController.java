@@ -4,15 +4,11 @@ import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
-import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
