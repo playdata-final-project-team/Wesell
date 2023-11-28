@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,8 +71,14 @@ public class UserController {
     }
 
     @GetMapping("users/{uuid}/nickname")
-    public ResponseEntity<?> getNicknameByUuid(@PathVariable String uuid) {
-        String nickname = userService.getNicknameByUuid(uuid);
-        return ResponseEntity.ok(nickname);
+    public ResponseEntity<String> getNicknameByUuid(@PathVariable String uuid) {
+        Optional<String> nicknameOptional = userService.getNicknameByUuid(uuid);
+
+        if (nicknameOptional.isPresent()) {
+            return ResponseEntity.ok(nicknameOptional.get());
+        } else {
+            // You can customize the response for the case where the nickname is not found.
+            return ResponseEntity.notFound().build();
+        }
     }
 }

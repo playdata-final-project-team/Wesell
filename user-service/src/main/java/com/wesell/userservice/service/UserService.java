@@ -62,7 +62,7 @@ public class UserService {
                 .build();
     }
 
-    public String getNicknameByUuid(String uuid) {
+    public Optional<String> getNicknameByUuid(String uuid) {
         return userRepository.findNicknameByUuid(uuid);
     }
 
