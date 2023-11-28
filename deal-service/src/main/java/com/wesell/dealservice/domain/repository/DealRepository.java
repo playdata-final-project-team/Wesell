@@ -1,6 +1,7 @@
 package com.wesell.dealservice.domain.repository;
 
 import com.wesell.dealservice.domain.SaleStatus;
+import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
