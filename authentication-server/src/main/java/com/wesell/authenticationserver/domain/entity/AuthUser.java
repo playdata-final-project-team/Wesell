@@ -12,9 +12,8 @@ import lombok.*;
 public class AuthUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "a_id")
-    private Long id;
+    @Column(name="a_uuid", nullable = false, length = 50)
+    private String uuid;
 
     @Column(name = "a_email", nullable = false, unique = true, length = 60)
     private String email;
@@ -22,11 +21,8 @@ public class AuthUser {
     @Column(name= "a_password", length = 100)
     private String password;
 
-    @Column(name="a_uuid", nullable = false, length = 50)
-    private String uuid;
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name= "a_role", nullable = false)
     private Role role;
 
     private boolean isDelete; // 삭제 여부
