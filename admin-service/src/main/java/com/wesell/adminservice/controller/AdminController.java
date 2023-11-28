@@ -2,10 +2,8 @@ package com.wesell.adminservice.controller;
 
 import com.wesell.adminservice.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.adminservice.dto.request.ChangeRoleRequestDto;
-import com.wesell.adminservice.dto.request.SiteConfigRequestDto;
 import com.wesell.adminservice.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.adminservice.dto.response.PostListResponseDto;
-import com.wesell.adminservice.dto.response.SiteConfigResponseDto;
 import com.wesell.adminservice.dto.response.UserListResponseDto;
 import com.wesell.adminservice.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +65,7 @@ public class AdminController {
         AdminAuthIsForcedResponseDto responseDto = adminService.updateIsForced(requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
-  
+
     @PutMapping("deletePost")
     public ResponseEntity<?> deletePost(@RequestParam("uuid") String uuid, @RequestParam("id") Long postId) {
         adminService.deletePost(uuid, postId);
