@@ -1,6 +1,8 @@
 package com.wesell.authenticationserver.service;
 
+import com.wesell.authenticationserver.controller.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
+import com.wesell.authenticationserver.domain.enum_.Role;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.service.dto.feign.AuthUserListFeignResponseDto;
@@ -10,6 +12,7 @@ import com.wesell.authenticationserver.global.util.CustomConverter;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.response.CustomException;
 import com.wesell.authenticationserver.response.ErrorCode;
+import com.wesell.authenticationserver.service.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
 import com.wesell.authenticationserver.service.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -96,7 +99,7 @@ public class AuthUserService {
 
             String uuid = tokenProvider.findUuidByRefreshToken(refreshToken);
 
-            AuthUser authUser = authUserRepository.findByUuid(uuid).orElseThrow(
+            AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
                     () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
             );
 
@@ -104,6 +107,31 @@ public class AuthUserService {
         }
             return "";
 
+    }
+
+    @jakarta.transaction.Transactional
+    public void updateRole(String uuid, Role newRole) {
+        AuthUser user = authUserRepository.findById(uuid).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
+        );
+
+        if (user != null) {
+            user.changeRole(newRole);
+            authUserRepository.save(user);
+        }
+    }
+
+    public AdminAuthIsForcedResponseDto updateIsForced(AdminAuthIsForcedRequestDto requestDto) {
+        AuthUser authUser = authUserRepository.findById(requestDto.getUuid()).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
+        );
+
+        if (authUser != null) {
+            authUser.changeIsForced();
+            return new AdminAuthIsForcedResponseDto(requestDto.getUuid() + " UUID를 가진 사용자가 강제 탈퇴로 표시되었습니다.");
+        } else {
+            return new AdminAuthIsForcedResponseDto(requestDto.getUuid() + " UUID를 가진 사용자를 찾을 수 없습니다.");
+        }
     }
 
     /*====================== Feign =======================*/
