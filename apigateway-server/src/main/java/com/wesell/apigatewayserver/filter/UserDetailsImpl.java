@@ -3,7 +3,7 @@ package com.wesell.apigatewayserver.filter;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
@@ -14,7 +14,7 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
 
     private String uuid;
-    private Collection<GrantedAuthority> authorities;
+    private Collection<GrantedAuthority> authorities = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
