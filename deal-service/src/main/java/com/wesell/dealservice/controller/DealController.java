@@ -1,10 +1,12 @@
 package com.wesell.dealservice.controller;
 
+import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,4 +85,18 @@ public class DealController {
         return new ResponseEntity<>(facadeService.getFacadeDto(), HttpStatus.OK);
     }
 
+    @GetMapping("category")
+    public ResponseEntity<?> findAllByCategory(@RequestParam("category")Category category) {
+        return new ResponseEntity<>(dealService.findByCategory(category), HttpStatus.OK);
+    }
+
+    @GetMapping("title")
+    public ResponseEntity<?> findAllByTitle(@RequestParam("title") String title) {
+        return new ResponseEntity<>(dealService.findByTitle(title), HttpStatus.OK);
+    }
+
+    @GetMapping("search")
+    public ResponseEntity<?> findAllByCategoryAndTitle(@RequestParam("category")Category category, @RequestParam("title") String title) {
+        return new ResponseEntity<>(dealService.findByCategoryAndTitle(category,title), HttpStatus.OK);
+    }
 }

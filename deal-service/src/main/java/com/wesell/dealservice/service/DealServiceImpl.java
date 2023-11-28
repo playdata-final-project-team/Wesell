@@ -89,6 +89,21 @@ public class DealServiceImpl implements DealService {
         post.changeStatus();
     }
 
+    @Override
+    public List<DealPost> findByCategory(Category category) {
+        return dealRepository.findAllByStatusAndCategory(SaleStatus.IN_PROGRESS, category);
+    }
+
+    @Override
+    public List<DealPost> findByTitle(String title) {
+        return dealRepository.findAllByStatusAndTitle(SaleStatus.IN_PROGRESS, title);
+    }
+
+    @Override
+    public List<DealPost> findByCategoryAndTitle(Category category, String title) {
+        return dealRepository.findAllByStatusAndCategoryAndTitle(SaleStatus.IN_PROGRESS, category, title);
+    }
+
     public void checkValidationByUuid(String uuid) {
         DealPost post = dealRepository.findFirstByUuid(uuid);
         if(!uuid.equals(post.getUuid())) {

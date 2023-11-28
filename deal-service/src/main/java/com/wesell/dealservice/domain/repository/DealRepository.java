@@ -13,4 +13,7 @@ public interface DealRepository extends JpaRepository<DealPost, Long> {
     DealPost findDealPostByIdAndStatusAndIsDeleted(Long id, SaleStatus status, Boolean isDeleted);
     List<DealPost> findAllByUuidAndIsDeleted(String uuid, Boolean isDeleted);
     List<DealPost> findAllByStatusAndIsDeleted(SaleStatus status, Boolean isDeleted);
+    List<DealPost> findAllByStatusAndCategory(SaleStatus status, Category category);
+    List<DealPost> findAllByStatusAndTitle(SaleStatus status, String title);
+    List<DealPost> findAllByStatusAndCategoryAndTitle(SaleStatus status, Category category, String title);
 }
