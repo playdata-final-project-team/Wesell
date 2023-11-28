@@ -96,7 +96,7 @@ public class AuthUserService {
 
             String uuid = tokenProvider.findUuidByRefreshToken(refreshToken);
 
-            AuthUser authUser = authUserRepository.findByUuid(uuid).orElseThrow(
+            AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
                     () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
             );
 
