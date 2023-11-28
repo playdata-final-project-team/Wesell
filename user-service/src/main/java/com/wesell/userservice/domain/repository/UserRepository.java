@@ -38,11 +38,11 @@ public class UserRepository {
         return Optional.ofNullable(user);
     }
 
-    public String findNicknameByUuid(String uuid) {
-        User user = em.createQuery("select u.nickname from User u where u.uuid = :uuid", User.class)
+    public Optional<String> findNicknameByUuid(String uuid) {
+        String nickname = em.createQuery("select u.nickname from User u where u.uuid = :uuid", String.class)
                 .setParameter("uuid", uuid)
                 .getSingleResult();
-        return user.getNickname();
+        return Optional.ofNullable(nickname);
     }
 
     public Optional<String> findUuidByPhone(String phone) {
