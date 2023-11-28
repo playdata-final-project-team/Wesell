@@ -18,9 +18,8 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue
-    @Column(name = "u_id")
-    private Long id;
+    @Column(name = "u_uuid")
+    private String uuid;
 
     @Column(name = "u_name", nullable = false)
     private String name;
@@ -39,8 +38,6 @@ public class User {
     @Column(name = "u_agree", nullable = false)
     private boolean agree;
 
-    @Column(name = "u_uuid", nullable = false, unique = true)
-    private String uuid;
 
     public User changeUserInfo(String name) {
         this.name = name;
