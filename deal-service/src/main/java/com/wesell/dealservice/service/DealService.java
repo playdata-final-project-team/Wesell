@@ -11,7 +11,7 @@ import com.wesell.dealservice.dto.response.PostInfoResponseDto;
 import java.util.List;
 
 public interface DealService {
-    void createDealPost(UploadDealPostRequestDto requestCreatePostDto);
+    Long createDealPost(UploadDealPostRequestDto requestCreatePostDto);
     EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId);
     void deletePost(String uuid, Long postId);
     PostInfoResponseDto getPostInfo(Long postId);

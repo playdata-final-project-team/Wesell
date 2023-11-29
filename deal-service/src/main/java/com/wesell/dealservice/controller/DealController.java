@@ -5,12 +5,16 @@ import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
+import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class DealController {
 
     private final DealServiceImpl dealService;
+    private final FileUploadService uploadService;
     private final MainPageFacadeService facadeService;
 
     /**
@@ -26,7 +31,18 @@ public class DealController {
      */
     @PostMapping("post")
     public ResponseEntity<?> uploadDealPost(@Valid @RequestBody UploadDealPostRequestDto requestDto) {
-        dealService.createDealPost(requestDto);
+        return new ResponseEntity<>(dealService.createDealPost(requestDto), HttpStatus.CREATED);
+    }
+
+    /**
+     *
+     * @param postId & file
+     * @return postId와 이미지 url 저장
+     * @throws IOException
+     */
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("postId") Long postId, @RequestParam("file") MultipartFile file) throws IOException {
+        uploadService.saveImageUrl(postId, file);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

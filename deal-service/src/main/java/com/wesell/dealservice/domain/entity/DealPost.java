@@ -35,9 +35,6 @@ public class DealPost {
     @Column(name = "p_detail", nullable = false)
     private String detail;
 
-    @Column(name = "p_image", nullable = false)
-    private String imageUrl;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "p_status", nullable = false)
     private SaleStatus status;
@@ -49,15 +46,14 @@ public class DealPost {
     Boolean isDeleted;
 
     @Builder
-    public DealPost(String uuid, Category category, String title, Long price,
-                    String link, String detail, String imageUrl, LocalDate createdAt, Boolean isDeleted) {
+    public DealPost(String uuid, Category category  , String title, Long price,
+                    String link, String detail, LocalDate createdAt) {
         this.uuid = uuid;
         this.category = category;
         this.title = title;
         this.price = price;
         this.link = link;
         this.detail = detail;
-        this.imageUrl  = imageUrl;
         this.status = SaleStatus.IN_PROGRESS;
         this.createdAt = createdAt;
         this.isDeleted = false;

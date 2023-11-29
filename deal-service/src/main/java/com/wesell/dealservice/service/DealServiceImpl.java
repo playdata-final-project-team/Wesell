@@ -1,6 +1,7 @@
 package com.wesell.dealservice.service;
 
 import com.wesell.dealservice.domain.SaleStatus;
+import com.wesell.dealservice.domain.repository.ImageRepository;
 import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.dto.response.*;
@@ -26,10 +27,13 @@ public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
     private final CategoryRepository categoryRepository;
+    private final ImageRepository imageRepository;
     private final UserFeignClient userFeignClient;
 
+    //todo: 업로드 실패시?
+
     @Override
-    public void createDealPost(@Valid UploadDealPostRequestDto requestDto) {
+    public Long createDealPost(@Valid UploadDealPostRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())
@@ -41,6 +45,8 @@ public class DealServiceImpl implements DealService {
                 .createdAt(LocalDate.now())
                 .build();
         dealRepository.save(post);
+
+        return post.getId();
     }
 
     @Override
@@ -66,7 +72,8 @@ public class DealServiceImpl implements DealService {
     public PostInfoResponseDto getPostInfo(Long postId) {
         DealPost foundPost = dealRepository.findDealPostByIdAndStatusAndIsDeleted(postId, SaleStatus.IN_PROGRESS,  false);
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
-        return new PostInfoResponseDto(foundPost, nickname);
+        String imageUrl = imageRepository.findImageByPostId(foundPost.getId()).getImageUrl();
+        return new PostInfoResponseDto(foundPost, nickname, imageUrl);
     }
 
     @Override
