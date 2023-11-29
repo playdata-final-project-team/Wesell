@@ -19,13 +19,12 @@ public class PostInfoResponseDto {
     private String nickname;
     private String imageUrl;
 
-    public PostInfoResponseDto (DealPost post, String nickname) {
+    public PostInfoResponseDto (DealPost post, String nickname, String imageUrl) {
         this.title = post.getTitle();
         this.createdAt = post.getCreatedAt();
         this.price = post.getPrice();
         this.detail = post.getDetail();
         this.link = post.getLink();
-        this.imageUrl = post.getImageUrl();
     }
 
 }
