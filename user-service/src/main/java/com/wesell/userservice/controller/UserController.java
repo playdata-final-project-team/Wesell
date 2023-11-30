@@ -70,14 +70,15 @@ public class UserController {
         }
     }
 
-    @GetMapping("users/{uuid}/nickname")
+    @GetMapping("user-service/users/{uuid}")
     public ResponseEntity<String> getNicknameByUuid(@PathVariable String uuid) {
         Optional<String> nicknameOptional = userService.getNicknameByUuid(uuid);
 
         if (nicknameOptional.isPresent()) {
+            System.out.println("값: " + nicknameOptional.get());
             return ResponseEntity.ok(nicknameOptional.get());
         } else {
-            // You can customize the response for the case where the nickname is not found.
+            System.out.println("값이 없습니다.");
             return ResponseEntity.notFound().build();
         }
     }
