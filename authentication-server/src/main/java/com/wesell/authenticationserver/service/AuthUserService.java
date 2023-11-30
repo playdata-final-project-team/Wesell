@@ -10,8 +10,8 @@ import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestD
 import com.wesell.authenticationserver.controller.dto.request.SignInUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomConverter;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
-import com.wesell.authenticationserver.response.CustomException;
-import com.wesell.authenticationserver.response.ErrorCode;
+import com.wesell.authenticationserver.controller.response.CustomException;
+import com.wesell.authenticationserver.controller.response.ErrorCode;
 import com.wesell.authenticationserver.service.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
 import com.wesell.authenticationserver.service.token.TokenProvider;
@@ -69,11 +69,11 @@ public class AuthUserService {
 
         log.debug("이메일로 회원 조회");
         AuthUser authUser = authUserRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_SIGNUP_USER,"가입하지 않은 회원입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.SIGN_IN_FAIL,"가입하지 않은 회원입니다."));
 
         log.debug("비밀번호 일치 여부 확인");
         if(!passwordEncoder.matches(requestDto.getPassword(), authUser.getPassword())){
-            throw new CustomException(ErrorCode.MISMATCH_PASSWORD);
+            throw new CustomException(ErrorCode.SIGN_IN_FAIL,"비밀번호가 일치하지 않습니다.");
         }
 
         log.debug("토큰 발급");
@@ -100,7 +100,7 @@ public class AuthUserService {
             String uuid = tokenProvider.findUuidByRefreshToken(refreshToken);
 
             AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
-                    () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
+                    () -> new CustomException(ErrorCode.NOT_FOUND_USER)
             );
 
             return tokenProvider.generatedAccessToken(authUser);
@@ -112,7 +112,7 @@ public class AuthUserService {
     @jakarta.transaction.Transactional
     public void updateRole(String uuid, Role newRole) {
         AuthUser user = authUserRepository.findById(uuid).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
 
         if (user != null) {
@@ -123,7 +123,7 @@ public class AuthUserService {
 
     public AdminAuthIsForcedResponseDto updateIsForced(AdminAuthIsForcedRequestDto requestDto) {
         AuthUser authUser = authUserRepository.findById(requestDto.getUuid()).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_SIGNUP_USER)
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
 
         if (authUser != null) {

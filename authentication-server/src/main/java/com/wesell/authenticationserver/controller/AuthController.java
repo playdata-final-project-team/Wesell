@@ -3,11 +3,12 @@ package com.wesell.authenticationserver.controller;
 import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestDto;
 import com.wesell.authenticationserver.controller.dto.request.SignInUserRequestDto;
+import com.wesell.authenticationserver.controller.response.ResponseDto;
 import com.wesell.authenticationserver.service.dto.response.SignInSuccessResponseDto;
 import com.wesell.authenticationserver.global.util.CustomCookie;
-import com.wesell.authenticationserver.response.CustomException;
-import com.wesell.authenticationserver.response.ErrorCode;
-import com.wesell.authenticationserver.response.SuccessCode;
+import com.wesell.authenticationserver.controller.response.CustomException;
+import com.wesell.authenticationserver.controller.response.ErrorCode;
+import com.wesell.authenticationserver.controller.response.SuccessCode;
 import com.wesell.authenticationserver.service.AuthUserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -28,8 +29,10 @@ public class AuthController {
 
     // 헬스 체크
     @GetMapping("health-check")
-    public ResponseEntity<String> healthCheck(){
-        return ResponseEntity.ok().body("auth-server available");
+    public ResponseEntity<ResponseDto> healthCheck(){
+        return ResponseEntity
+                .status(SuccessCode.OK.getStatus())
+                .body(ResponseDto.of(SuccessCode.OK,"available server"));
     }
 
     // 회원가입
@@ -103,7 +106,6 @@ public class AuthController {
                 .status(SuccessCode.OK.getStatus())
                 .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
                 .body(null);
-
     }
 
 }
