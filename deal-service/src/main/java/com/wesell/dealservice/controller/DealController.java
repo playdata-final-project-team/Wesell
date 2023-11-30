@@ -1,11 +1,13 @@
 package com.wesell.dealservice.controller;
 
+import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
 import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.io.IOException;
 public class DealController {
 
     private final DealServiceImpl dealService;
+    private final FileUploadService uploadService;
     private final MainPageFacadeService facadeService;
 
     /**
@@ -28,7 +31,18 @@ public class DealController {
      */
     @PostMapping("post")
     public ResponseEntity<?> uploadDealPost(@Valid @RequestBody UploadDealPostRequestDto requestDto) {
-        dealService.createDealPost(requestDto);
+        return new ResponseEntity<>(dealService.createDealPost(requestDto), HttpStatus.CREATED);
+    }
+
+    /**
+     *
+     * @param postId & file
+     * @return postId와 이미지 url 저장
+     * @throws IOException
+     */
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("postId") Long postId, @RequestParam("file") MultipartFile file) throws IOException {
+        uploadService.saveImageUrl(postId, file);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -87,4 +101,18 @@ public class DealController {
         return new ResponseEntity<>(facadeService.getFacadeDto(), HttpStatus.OK);
     }
 
+    @GetMapping("category")
+    public ResponseEntity<?> findAllByCategory(@RequestParam("category")Category category) {
+        return new ResponseEntity<>(dealService.findByCategory(category), HttpStatus.OK);
+    }
+
+    @GetMapping("title")
+    public ResponseEntity<?> findAllByTitle(@RequestParam("title") String title) {
+        return new ResponseEntity<>(dealService.findByTitle(title), HttpStatus.OK);
+    }
+
+    @GetMapping("search")
+    public ResponseEntity<?> findAllByCategoryAndTitle(@RequestParam("category")Category category, @RequestParam("title") String title) {
+        return new ResponseEntity<>(dealService.findByCategoryAndTitle(category,title), HttpStatus.OK);
+    }
 }

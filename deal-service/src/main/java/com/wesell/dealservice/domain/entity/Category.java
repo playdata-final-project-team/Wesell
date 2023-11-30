@@ -19,7 +19,7 @@ public class Category {
     String value;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    @Transient
+    @Transient @Builder.Default
     private List<DealPost> products = new ArrayList<>();
 
 }

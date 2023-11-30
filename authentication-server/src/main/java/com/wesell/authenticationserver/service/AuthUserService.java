@@ -1,6 +1,7 @@
 package com.wesell.authenticationserver.service;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
+import com.wesell.authenticationserver.domain.enum_.Role;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.service.dto.feign.AuthUserListFeignResponseDto;
@@ -10,6 +11,7 @@ import com.wesell.authenticationserver.global.util.CustomConverter;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.response.CustomException;
 import com.wesell.authenticationserver.response.ErrorCode;
+import com.wesell.authenticationserver.service.dto.response.AdminAuthResponseDto;
 import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
 import com.wesell.authenticationserver.service.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -104,6 +107,32 @@ public class AuthUserService {
         }
             return "";
 
+    }
+
+    @jakarta.transaction.Transactional
+    public AdminAuthResponseDto updateRole(String uuid, Role newRole) {
+        Optional<AuthUser> optionalUser = authUserRepository.findById(uuid);
+
+        if (optionalUser.isPresent()) {
+            AuthUser user = optionalUser.get();
+            user.changeRole(newRole);
+            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자의 권한이 변경되었습니다.");
+        } else {
+            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");
+        }
+    }
+
+    @jakarta.transaction.Transactional
+    public AdminAuthResponseDto updateIsForced(String uuid) {
+        Optional<AuthUser> optionalUser = authUserRepository.findById(uuid);
+
+        if (optionalUser.isPresent()) {
+            AuthUser authUser = optionalUser.get();
+            authUser.changeIsForced();
+            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자의 강제 탈퇴 여부가 변경되었습니다.");
+        } else {
+            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");
+        }
     }
 
     /*====================== Feign =======================*/

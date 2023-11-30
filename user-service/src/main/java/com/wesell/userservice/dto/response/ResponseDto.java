@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public class ResponseDto {
-    private Long id;
     private String name;
     private String nickname;
     private String phone;
@@ -17,7 +16,6 @@ public class ResponseDto {
 
     public static ResponseDto of(User user) {
         return new ResponseDto(
-                user.getId(),
                 user.getName(),
                 user.getNickname(),
                 user.getPhone(),
@@ -28,7 +26,6 @@ public class ResponseDto {
     public static List<ResponseDto> of(List<User> userList) {
         return userList.stream()
                 .map(user -> new ResponseDto(
-                        user.getId(),
                         user.getName(),
                         user.getNickname(),
                         user.getPhone(),
