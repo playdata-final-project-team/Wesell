@@ -1,6 +1,5 @@
 package com.wesell.adminservice.controller;
 
-import com.wesell.adminservice.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.adminservice.dto.request.ChangeRoleRequestDto;
 import com.wesell.adminservice.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.adminservice.dto.response.PostListResponseDto;
@@ -45,10 +44,10 @@ public class AdminController {
         return new ResponseEntity<>(versions, HttpStatus.OK);
     }
 
-    @PutMapping("/{uuid}/change-role")
-    public ResponseEntity<String> changeUserRole(@PathVariable String uuid, @RequestBody ChangeRoleRequestDto changeRoleRequestDto) {
+    @PutMapping("change-role")
+    public ResponseEntity<String> changeUserRole(@RequestBody ChangeRoleRequestDto requestDto) {
         try {
-            adminService.changeUserRole(uuid, changeRoleRequestDto.getRole());
+            adminService.changeUserRole(requestDto);
             return new ResponseEntity<>("User role changed successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to change user role: " + e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -60,9 +59,9 @@ public class AdminController {
         return adminService.getPostList(uuid);
     }
 
-    @PatchMapping("updateIsForced")
-    public ResponseEntity<AdminAuthIsForcedResponseDto> updateIsForced(@RequestBody AdminAuthIsForcedRequestDto requestDto) {
-        AdminAuthIsForcedResponseDto responseDto = adminService.updateIsForced(requestDto);
+    @PutMapping("updateIsForced/{uuid}")
+    public ResponseEntity<AdminAuthIsForcedResponseDto> updateIsForced(@PathVariable String uuid) {
+        AdminAuthIsForcedResponseDto responseDto = adminService.updateIsForced(uuid);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
