@@ -25,6 +25,8 @@ public class PostInfoResponseDto {
         this.price = post.getPrice();
         this.detail = post.getDetail();
         this.link = post.getLink();
+        this.nickname = nickname;
+        this.imageUrl = imageUrl;
     }
 
 }
