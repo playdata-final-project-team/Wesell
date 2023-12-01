@@ -1,0 +1,8 @@
+.auth-card-save-email-box > input{
+    margin: 5px;
+    cursor: pointer;
+}
+.auth-card-save-email-box > label{
+    margin: 5px;
+    font-weight: 550;
+}
