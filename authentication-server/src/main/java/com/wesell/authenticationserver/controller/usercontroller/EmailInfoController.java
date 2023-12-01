@@ -15,7 +15,7 @@ public class EmailInfoController {
 
     private final EmailService emailService;
 
-    @GetMapping("authentication-server/emailinfo/{uuid}")
+    @GetMapping("auth-server/emailinfo/{uuid}")
     public ResponseEntity<EmailInfoDto> getUserByEmail(@PathVariable String uuid) {
         Optional<EmailInfoDto> emailInfoDto = emailService.getUserByEmail(uuid);
         EmailInfoDto dto = emailInfoDto.orElseThrow(

@@ -34,15 +34,11 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("sign-up")
-    public ResponseEntity<Void> signUp(@Valid @RequestBody CreateUserRequestDto requestDto){
+    public ResponseEntity<String> signUp(@Valid @RequestBody CreateUserRequestDto requestDto){
 
         log.debug("AuthController - 회원가입");
 
-        authUserService.createUser(requestDto);
-
-        return ResponseEntity
-                .status(SuccessCode.USER_CREATED.getStatus())
-                .body(null);
+        return authUserService.createUser(requestDto);
     }
 
     // 로그인
