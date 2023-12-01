@@ -11,4 +11,12 @@ import java.util.Map;
 @Service
 public class VersionService {
     private Map<String, String> versions = new HashMap<>();
+
+    public Map<String, String> setVersions(String jsVersion, String cssVersion, String title, String agree) {
+        versions.put("jsVersion", jsVersion);
+        versions.put("cssVersion", cssVersion);
+        versions.put("title", title);
+        versions.put("agree", agree);
+        return versions;
+    }
 }

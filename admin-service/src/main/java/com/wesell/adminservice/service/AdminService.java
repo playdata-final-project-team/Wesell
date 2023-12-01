@@ -1,7 +1,6 @@
 package com.wesell.adminservice.service;
 
 import com.wesell.adminservice.dto.request.ChangeRoleRequestDto;
-import com.wesell.adminservice.dto.response.AdminAuthIsForcedResponseDto;
 import com.wesell.adminservice.dto.response.AdminUserResponseDto;
 import com.wesell.adminservice.dto.response.PostListResponseDto;
 import com.wesell.adminservice.dto.response.UserListResponseDto;
@@ -12,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +39,7 @@ public class AdminService {
         return dealFeignClient.getPostList(uuid);
     }
 
-    public AdminAuthIsForcedResponseDto updateIsForced(String uuid) {
+    public String updateIsForced(String uuid) {
         return authFeignClient.updateIsForced(uuid).getBody();
     }
 
@@ -51,17 +47,11 @@ public class AdminService {
         dealFeignClient.deletePost(uuid, postId);
     }
 
-    public List<AdminUserResponseDto> searchUsers(Optional<String> name,
-                                                  Optional<String> nickname,
-                                                  Optional<String> phone,
-                                                  Optional<String> uuid) {
+    public List<AdminUserResponseDto> searchUsers(String name,
+                                                  String nickname,
+                                                  String phone,
+                                                  String uuid) {
 
-        // 각 Optional 파라미터가 비어있지 않으면 해당 값을 사용하고, 비어있으면 무시
-        String searchName = name.orElse(null);
-        String searchNickname = nickname.orElse(null);
-        String searchPhone = phone.orElse(null);
-        String searchUuid = uuid.orElse(null);
-
-        return userFeignClient.searchUsers(searchName, searchNickname, searchPhone, searchUuid);
+        return userFeignClient.searchUsers(name, nickname, phone, uuid);
     }
 }
