@@ -17,14 +17,12 @@ public class AdminAuthController {
 
     @PutMapping("change-role")
     public ResponseEntity<AdminAuthResponseDto> changeUserRole(@RequestBody AdminAuthRoleRequestDto requestDto) {
-        AdminAuthResponseDto responseDto = authUserService.updateRole(requestDto.getUuid(), requestDto.getRole());
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return new ResponseEntity<>(authUserService.updateRole(requestDto.getUuid(), requestDto.getRole()), HttpStatus.OK);
     }
 
     @PutMapping("updateIsForced/{uuid}")
     public ResponseEntity<AdminAuthResponseDto> updateIsForced(@PathVariable String uuid) {
-        AdminAuthResponseDto responseDto = authUserService.updateIsForced(uuid);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return new ResponseEntity<>(authUserService.updateIsForced(uuid), HttpStatus.OK);s
     }
 }
 
