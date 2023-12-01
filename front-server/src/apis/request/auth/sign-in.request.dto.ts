@@ -1,5 +1,5 @@
-export default interface SingInRequestDto{
-    email: string;
-    password: string;
-    savedId: boolean;
+export default interface SingInRequestDto {
+  email: string;
+  password: string;
+  savedId: boolean;
 }

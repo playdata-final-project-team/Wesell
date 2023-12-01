@@ -1,103 +1,100 @@
-#auth-wrapper{
-    padding: 50px 0px;
-    min-width: 1440px;
-    /* 추후 헤더 정의 시 해당 내용을 적용하여 calc 하기 */
-    height: calc(100vh);
-    min-height: 960px;
-    background-color: beige;
+#auth-wrapper {
+  padding: 50px 0px;
+  min-width: 1440px;
+  /* 추후 헤더 정의 시 해당 내용을 적용하여 calc 하기 */
+  height: calc(100vh);
+  min-height: 960px;
+  background-color: beige;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.auth-contianer{
-    width: 1200px;
-    height: 100%;
+.auth-contianer {
+  width: 1200px;
+  height: 100%;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    background-color: rgb(255, 255, 255);
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: rgb(255, 255, 255);
 }
 
-.auth-card-bottom-a{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+.auth-card-bottom-a {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.auth-card-find-info-box > a{
-    text-decoration: none;
-    color: rgba(0,0,0,1);
-    font-weight: 550;
+.auth-card-find-info-box > a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 1);
+  font-weight: 550;
 }
 
-.auth-card-bottom-b{
-    display: flex;
-    justify-content: space-evenly;
-
+.auth-card-bottom-b {
+  display: flex;
+  justify-content: space-evenly;
 }
 
-.auth-card-sign-in-btn{
-    cursor: pointer;
+.auth-card-sign-in-btn {
+  cursor: pointer;
 
-    background-color: rgba(10,160,255,0.7);
-    border-radius: 10px;
-    padding: 5px 30px;
-    margin: 5px;
+  background-color: rgba(10, 160, 255, 0.7);
+  border-radius: 10px;
+  padding: 5px 30px;
+  margin: 5px;
 
-    text-align: center;
-    font-weight: 500;
-    color: rgba(255,255,255,0.7);
+  text-align: center;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.auth-card-sign-in-btn:hover{
-    background-color: rgba(10,160,255,0.9);
+.auth-card-sign-in-btn:hover {
+  background-color: rgba(10, 160, 255, 0.9);
 }
 
-.auth-card-sign-in-btn:active{
-    box-shadow: inset 1px 1px 3px 1px rgba(0,0,0,0.3) ;
+.auth-card-sign-in-btn:active {
+  box-shadow: inset 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
 }
 
-.auth-card-social-in-btn{
-    background-image: url(assets/social-login-on.png);
+.auth-card-social-in-btn {
+  background-image: url(assets/social-login-on.png);
 
-    cursor: pointer;
-    border-radius: 10px;
-    /* padding: 16px; */
-    width: 120px;
-    height: 35px;
-    margin: 5px;
-
+  cursor: pointer;
+  border-radius: 10px;
+  /* padding: 16px; */
+  width: 120px;
+  height: 35px;
+  margin: 5px;
 }
 
-.auth-card-social-in-btn:hover{
-    background-image: url(assets/social-login-off.png);
+.auth-card-social-in-btn:hover {
+  background-image: url(assets/social-login-off.png);
 }
 
-.auth-card-social-in-btn:active{
-    box-shadow: inset 1px 1px 3px 1px rgba(0,0,0,0.3) ;
+.auth-card-social-in-btn:active {
+  box-shadow: inset 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
 }
 
-.auth-desc-box{
-    display: flex;
-    justify-content: center;
+.auth-desc-box {
+  display: flex;
+  justify-content: center;
 }
 
-.auth-desc{
-    color: rgba(0,0,0,0.7);
+.auth-desc {
+  color: rgba(0, 0, 0, 0.7);
 
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 140%;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
 }
 
-.auth-desc-link{
-    color: rgba(0,0,0,1);
-    font-weight: 550;
-    cursor: pointer;
+.auth-desc-link {
+  color: rgba(0, 0, 0, 1);
+  font-weight: 550;
+  cursor: pointer;
 }
