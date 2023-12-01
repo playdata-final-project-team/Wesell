@@ -12,10 +12,12 @@ import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.response.CustomException;
 import com.wesell.authenticationserver.response.ErrorCode;
 import com.wesell.authenticationserver.service.dto.response.AdminAuthResponseDto;
+import com.wesell.authenticationserver.service.dto.response.CreateUserFeignResponseDto;
 import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
 import com.wesell.authenticationserver.service.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +43,7 @@ public class AuthUserService {
      * 회원 가입 기능
      */
     @Transactional
-    public void createUser(CreateUserRequestDto createUserRequestDto){
+    public ResponseEntity<String> createUser(CreateUserRequestDto createUserRequestDto){
         log.debug("회원 가입 시작");
 
         log.debug("uuid 생성, 비밀번호 암호화, 회원 인증 정보 엔티티로 convert");
@@ -56,8 +58,8 @@ public class AuthUserService {
 
         // 연동 전 테스트를 위해 주석처리
         log.debug("User-Service Api Call - 회원가입 요청");
-//        CreateUserFeignResponseDto feignDto = converter.toFeignDto(createUserRequestDto);
-//        userServiceFeignClient.registerUserDetailInfo(feignDto);
+        CreateUserFeignResponseDto feignDto = customConverter.toFeignDto(createUserRequestDto);
+        return userServiceFeignClient.registerUserDetailInfo(feignDto);
     }
 
     /**
