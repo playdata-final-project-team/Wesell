@@ -1,4 +1,4 @@
-package com.wesell.userservice.global.util;
+package com.wesell.authenticationserver.global.util;
 
 import jakarta.annotation.PostConstruct;
 import net.nurigo.sdk.NurigoApp;

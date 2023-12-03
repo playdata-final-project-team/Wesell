@@ -96,5 +96,11 @@ public class UserService {
                 throw new NoSuchElementException("User not found");
         }
     }
+
+    public String findIDPWD(String phone) throws UserNotFoundException {
+
+        return userRepository.findUuidByPhone(phone)
+                .orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
+    }
 }
 

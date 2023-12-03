@@ -12,4 +12,6 @@ public interface UserServiceFeignClient {
     @PostMapping("api/sign-up")
     ResponseEntity<String> registerUserDetailInfo(@RequestBody CreateUserFeignResponseDto dto);
 
+    @PostMapping("feign/find/id")
+    String findID(@RequestBody String phoneNumber);
 }
