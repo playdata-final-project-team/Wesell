@@ -43,20 +43,34 @@ function AuthServer() {
 
     // function: sign in response 처리 함수//
     const signInResponse = (responseBody: SignInResponseDto | ResponseDto | null) => {
-      if (responseBody == null) {
-        alert('네트워크 상태를 확인해주세요.'); // comment: back이 안켜진 경우 //
+      if (!responseBody) {
+        alert('네트워크 상태를 확인해주세요.'); // comment: 서버가 안켜진 경우 또는 도메인 주소가 잘못된 경우 //
         return;
       }
 
       const { code } = responseBody;
-      const { message } = responseBody;
+      if (code === 'TSE') alert('서바 내 오류 입니다.');
+      if (code === 'SIF' || code === 'VF') setError(true);
+      if (code !== 'NFU') return;
+    };
 
-      if (code == 'VF') alert(message);
+    // event-handler: 이메일 변경 이벤트 처리 //
+    const onEmailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setError(false);
+      const { value } = event.target;
+      setEmail(value);
+    };
+
+    // event-handler: 비밀번호 변경 이벤트 처리 //
+    const onPasswordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setError(false);
+      const { value } = event.target;
+      setPassword(value);
     };
 
     // event-handler: 로그인 버튼 click 이벤트 처리 //
     const onSignInButtonClickHandler = () => {
-      const requestBody: SignInRequestDto = { email, password, savedId};
+      const requestBody: SignInRequestDto = { email, password, savedId };
       signInRequest(requestBody).then(signInResponse);
     };
 
@@ -78,7 +92,7 @@ function AuthServer() {
 
     // event-handler: 이메일 input key-down 이벤트 처리//
     const onEmailKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== 'Tab') return;
+      if (event.key !== 'Enter') return;
       if (!passwordRef.current) return;
       passwordRef.current.focus();
     };
@@ -91,9 +105,9 @@ function AuthServer() {
 
     // event-handler: 아이디 저장 change 이벤트 처리 //
     const onCheckBoxChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const isChecked = event.target.checked;
-        setSavedId(isChecked);
-    }
+      const isChecked = event.target.checked;
+      setSavedId(isChecked);
+    };
 
     // render: 로그인 컴포넌트 랜더링 //
     return (
@@ -107,7 +121,7 @@ function AuthServer() {
               type="text"
               value={email}
               error={error}
-              setValue={setEmail}
+              onChange={onEmailChangeHandler}
               onKeyDown={onEmailKeyDownHandler}
             />
             <InputBox
@@ -117,7 +131,7 @@ function AuthServer() {
               type={passwordType}
               error={error}
               value={password}
-              setValue={setPassword}
+              onChange={onPasswordChangeHandler}
               onIconClick={onPasswordIconClickHandler}
               onKeyDown={onPasswordKeyDownHandler}
               icon={passwordIcon}
@@ -134,7 +148,13 @@ function AuthServer() {
             )}
             <div className="auth-card-bottom-a">
               <div className="auth-card-save-email-box">
-                <CheckBox id="savedEmail" name="savedEmail" label="이메일 저장" checked={savedId} onChange={onCheckBoxChangeHandler}/>
+                <CheckBox
+                  id="savedEmail"
+                  name="savedEmail"
+                  label="이메일 저장"
+                  checked={savedId}
+                  onChange={onCheckBoxChangeHandler}
+                />
               </div>
               <div className="auth-card-find-info-box">
                 <a href="/">아이디</a>/<a href="/">비밀번호 찾기</a>
@@ -227,12 +247,62 @@ function AuthServer() {
 
     // event-handler: 회원가입 버튼 click 이벤트 처리 //
     const onSignUpButtonClickHandler = () => {
-      console.log("회원가입")
+      console.log('회원가입');
     };
 
     // event-handler: 회원가입 링크 click 이벤트 처리 //
     const onSignInClickHandler = () => {
       setView('sign-in');
+    };
+
+    
+
+    // event-handler: 이름 변경 이벤트 처리 //
+    const onNameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setError(false);
+      const { value } = event.target;
+      setName(value);
+    };
+
+    // event-handler: 닉네임 변경 이벤트 처리 //
+    const onNicknameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setError(false);
+      const { value } = event.target;
+      setNickname(value);
+    };
+
+    // event-handler: 전화번호 변경 이벤트 처리 //
+    const onPhoneChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setError(false);
+      const { value } = event.target;
+      setPhone(value);
+    };
+
+    // event-handler: 이메일 변경 이벤트 처리 //
+    const onEmailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setError(false);
+      const { value } = event.target;
+      setEmail(value);
+    };
+
+    // event-handler: 비밀번호 변경 이벤트 처리 //
+    const onPasswordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setError(false);
+      const { value } = event.target;
+      setPassword(value);
+    };
+
+    // event-handler: 비밀번호 확인 변경 이벤트 처리 //
+    const onPassworCheckChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setError(false);
+      const { value } = event.target;
+      setPasswordCheck(value);
+    };
+
+    // event-handler: 개인정보 제공 동의 change 이벤트 처리 //
+    const onCheckBoxChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      const isChecked = event.target.checked;
+      setAgree(isChecked);
     };
 
     // event-handler: 이름 input key down 이벤트 처리 //
@@ -318,12 +388,6 @@ function AuthServer() {
       }
     };
 
-    // event-handler: 개인정보 제공 동의 change 이벤트 처리 //
-    const onCheckBoxChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-      const isChecked = event.target.checked;
-      setAgree(isChecked);
-    }
-
     // render: 회원가입 컴포넌트 랜더링 //
     return (
       <div className="auth-card">
@@ -336,7 +400,7 @@ function AuthServer() {
               error={error}
               placeholder="이름"
               value={name}
-              setValue={setName}
+              onChange={onNameChangeHandler}
               onKeyDown={onNameKeyDownHandler}
             />
             <div className="nickname-dup-check-box">
@@ -347,7 +411,7 @@ function AuthServer() {
                 error={error}
                 placeholder="닉네임"
                 value={nickname}
-                setValue={setNickname}
+                onChange={onNicknameChangeHandler}
                 onKeyDown={onNicknameKeyDownHandler}
               />
               <ButtonBox label="중복 확인" type="button" onClick={onNicknameClickHandler} />
@@ -360,7 +424,7 @@ function AuthServer() {
                 error={error}
                 placeholder="휴대전화 번호"
                 value={phone}
-                setValue={setPhone}
+                onChange={onPhoneChangeHandler}
                 onKeyDown={onPhoneKeyDownHandler}
               />
               <ButtonBox label="번호 인증" type="button" />
@@ -372,7 +436,7 @@ function AuthServer() {
               type="text"
               value={email}
               error={error}
-              setValue={setEmail}
+              onChange={onEmailChangeHandler}
               onKeyDown={onEmailKeyDownHandler}
             />
             <InputBox
@@ -382,7 +446,7 @@ function AuthServer() {
               type={passwordType}
               error={error}
               value={password}
-              setValue={setPassword}
+              onChange={onPasswordChangeHandler}
               onIconClick={onPasswordIconClickHandler}
               onKeyDown={onPasswordKeyDownHandler}
               icon={passwordIcon}
@@ -394,14 +458,21 @@ function AuthServer() {
               type={passwordCheckType}
               error={error}
               value={passwordCheck}
-              setValue={setPasswordCheck}
+              onChange={onPassworCheckChangeHandler}
               onIconClick={onPasswordCheckIconClickHandler}
               onKeyDown={onPasswordCheckKeyDownHandler}
               icon={passwordCheckIcon}
             />
           </div>
           <div className="auth-card-bottom">
-            <CheckBox id="agree" label="개인정보 동의" name="agree" checked={agree} onChange={onCheckBoxChangeHandler} onKeyDown={onAgreeKeyDownHandler}/>
+            <CheckBox
+              id="agree"
+              label="개인정보 동의"
+              name="agree"
+              checked={agree}
+              onChange={onCheckBoxChangeHandler}
+              onKeyDown={onAgreeKeyDownHandler}
+            />
             <ButtonBox label={'가입하기'} type={'submit'} />
           </div>
           <div className="auth-desc-box">

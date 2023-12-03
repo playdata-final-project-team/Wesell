@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { Dispatch, SetStateAction, forwardRef } from 'react';
+import { forwardRef, ChangeEvent } from 'react';
 import './style.css';
 
 // interface: Input Box 컴포넌트 Props //
@@ -8,7 +8,7 @@ interface Props {
   placeholder: string;
   name: string;
   value: string;
-  setValue: Dispatch<SetStateAction<string>>;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   error: boolean;
 
   icon?: 'eye-light-on-icon' | 'eye-light-off-icon';
@@ -23,13 +23,13 @@ interface Props {
 const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
   /**state: props */
   const { type, name, placeholder, error, value, icon, message } = props;
-  const { setValue, onIconClick, onClick, onKeyDown } = props;
+  const { onChange, onIconClick, onClick, onKeyDown } = props;
 
-  // event-handler: input 값 변경 이벤트 처리 함수 //
-  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setValue(value);
-  };
+  // // event-handler: input 값 변경 이벤트 처리 함수 //
+  // const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = event.target;
+  //   setValue(value);
+  // };
 
   // event-handler: on Key-Down 이벤트 처리 함수 //
   const onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -49,7 +49,7 @@ const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
           placeholder={placeholder}
           value={value}
           onClick={onClick}
-          onChange={onChangeHandler}
+          onChange={onChange}
           onKeyDown={onKeyDownHandler}
           autoComplete="off"
         />
