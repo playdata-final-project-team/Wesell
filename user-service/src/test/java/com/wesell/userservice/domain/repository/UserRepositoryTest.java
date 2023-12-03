@@ -25,7 +25,7 @@ class UserRepositoryTest {
         User user = User.builder()
                 .name("Beong ho")
                 .nickname("PBH")
-                .phone("01012345678")
+                .phone("01025246373")
                 .uuid("abcd1234")
                 .build();
 
