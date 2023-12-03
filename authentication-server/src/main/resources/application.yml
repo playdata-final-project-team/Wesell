@@ -23,6 +23,11 @@ spring:
   profiles:
     active: db
 
+coolsms:
+  api:
+    key: ${coolsms.api.key}
+    secret: ${coolsms.api.secret}
+
 springdoc:
   packages-to-scan: com.wesell.authenticationserver.controller
   default-consumes-media-type: application/json;charset=UTF-8
@@ -38,3 +43,4 @@ token:
   refresh-expired-time: 24
   secret-key: testSecret
   issuer: test@wesell.com
+
