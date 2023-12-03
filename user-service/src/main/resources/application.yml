@@ -33,8 +33,4 @@ springdoc:
     display-request-duration: true
     operations-sorter: alpha
 
-coolsms:
-  api:
-    key: ${coolsms.api.key}
-    secret: ${coolsms.api.secret}
 

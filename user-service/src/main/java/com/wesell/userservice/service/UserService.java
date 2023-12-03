@@ -98,15 +98,9 @@ public class UserService {
     }
 
     public String findIDPWD(String phone) throws UserNotFoundException {
-        Optional<String> userOptional = userRepository.findUuidByPhone(phone);
 
-        if(userOptional.isPresent()) {
-
-            return userOptional.get();
-        }
-        else {
-            throw new UserNotFoundException("회원 정보를 찾을 수 없습니다.");
-        }
+        return userRepository.findUuidByPhone(phone)
+                .orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
     }
 }
 
