@@ -15,15 +15,9 @@ public class FindPWDFeignService {
     private final CustomPasswordEncoder encoder;
 
     public String findUuid(String email) throws UserNotFoundException {
-        Optional<String> optionalUser = findPWDRepository.findUuidByEmail(email);
 
-        if(optionalUser.isPresent()) {
-
-            return optionalUser.get();
-        }
-        else {
-            throw new UserNotFoundException("회원 정보를 찾을 수 없습니다.");
-        }
+        return findPWDRepository.findUuidByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
     }
 
     public void setPassword(String uuid, String pwd, String rePwd) {
