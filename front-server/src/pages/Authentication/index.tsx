@@ -1,5 +1,5 @@
 import InputBox from 'components/InputBox';
-import { useState, useRef, KeyboardEvent, MouseEvent } from 'react';
+import { useState, useRef, KeyboardEvent, ChangeEvent } from 'react';
 import './style.css';
 import CheckBox from 'components/CheckBox';
 import { SignInRequestDto, SignUpRequestDto } from 'apis/request/auth';
@@ -36,7 +36,7 @@ function AuthServer() {
     );
 
     // state: 체크박스 value 상태 //
-    const [checkBox, setCheckBox] = useState<number>(1);
+    const [savedId, setSavedId] = useState<boolean>(false);
 
     // state: 에러 상태 //
     const [error, setError] = useState<boolean>(false);
@@ -56,7 +56,7 @@ function AuthServer() {
 
     // event-handler: 로그인 버튼 click 이벤트 처리 //
     const onSignInButtonClickHandler = () => {
-      const requestBody: SignInRequestDto = { email, password, savedId: false };
+      const requestBody: SignInRequestDto = { email, password, savedId};
       signInRequest(requestBody).then(signInResponse);
     };
 
@@ -88,6 +88,12 @@ function AuthServer() {
       if (event.key !== 'Enter') return;
       onSignInButtonClickHandler();
     };
+
+    // event-handler: 아이디 저장 change 이벤트 처리 //
+    const onCheckBoxChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const isChecked = event.target.checked;
+        setSavedId(isChecked);
+    }
 
     // render: 로그인 컴포넌트 랜더링 //
     return (
@@ -128,7 +134,7 @@ function AuthServer() {
             )}
             <div className="auth-card-bottom-a">
               <div className="auth-card-save-email-box">
-                <CheckBox id="savedEmail" name="savedEmail" label="이메일 저장" value={checkBox} />
+                <CheckBox id="savedEmail" name="savedEmail" label="이메일 저장" checked={savedId} onChange={onCheckBoxChangeHandler}/>
               </div>
               <div className="auth-card-find-info-box">
                 <a href="/">아이디</a>/<a href="/">비밀번호 찾기</a>
@@ -221,16 +227,7 @@ function AuthServer() {
 
     // event-handler: 회원가입 버튼 click 이벤트 처리 //
     const onSignUpButtonClickHandler = () => {
-      const requestBody: SignUpRequestDto = {
-        email,
-        password,
-        name,
-        nickname,
-        phone,
-        passwordCheck,
-        agree,
-      };
-      signUpRequest(requestBody).then(signUpResponse);
+      console.log("회원가입")
     };
 
     // event-handler: 회원가입 링크 click 이벤트 처리 //
@@ -240,42 +237,42 @@ function AuthServer() {
 
     // event-handler: 이름 input key down 이벤트 처리 //
     const onNameKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== 'Tab') return;
+      if (event.key !== 'Enter') return;
       if (!nicknameRef.current) return;
       nicknameRef.current.focus();
     };
 
     // event-handler: 닉네임 input key down 이벤트 처리 //
     const onNicknameKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== 'Tab') return;
+      if (event.key !== 'Enter') return;
       if (!phoneRef.current) return;
       phoneRef.current.focus();
     };
 
     // event-handler: 전화번호 input key down 이벤트 처리 //
     const onPhoneKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== 'Tab') return;
+      if (event.key !== 'Enter') return;
       if (!phoneRef.current) return;
       phoneRef.current.focus();
     };
 
     // event-handler: 이메일 input key-down 이벤트 처리//
     const onEmailKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== 'Tab') return;
+      if (event.key !== 'Enter') return;
       if (!passwordRef.current) return;
       passwordRef.current.focus();
     };
 
     // event-handler: 비밀번호 input key-down 이벤트 처리 //
     const onPasswordKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== 'Tab') return;
+      if (event.key !== 'Enter') return;
       if (!passwordCheckRef.current) return;
       passwordCheckRef.current.focus();
     };
 
     // event-handler: 비밀번호 확인 input key down 이벤트 처리 //
     const onPasswordCheckKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== 'Tab') return;
+      if (event.key !== 'Enter') return;
       if (!agreeRef.current) return;
       agreeRef.current.focus();
     };
@@ -320,6 +317,12 @@ function AuthServer() {
         setPasswordCheckIcon('eye-light-on-icon');
       }
     };
+
+    // event-handler: 개인정보 제공 동의 change 이벤트 처리 //
+    const onCheckBoxChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      const isChecked = event.target.checked;
+      setAgree(isChecked);
+    }
 
     // render: 회원가입 컴포넌트 랜더링 //
     return (
@@ -398,7 +401,7 @@ function AuthServer() {
             />
           </div>
           <div className="auth-card-bottom">
-            <CheckBox id="agree" label="개인정보 동의" name="agree" value={1} />
+            <CheckBox id="agree" label="개인정보 동의" name="agree" checked={agree} onChange={onCheckBoxChangeHandler} onKeyDown={onAgreeKeyDownHandler}/>
             <ButtonBox label={'가입하기'} type={'submit'} />
           </div>
           <div className="auth-desc-box">
@@ -426,7 +429,3 @@ function AuthServer() {
 }
 
 export default AuthServer;
-
-function signUpResponse(value: void): void | PromiseLike<void> {
-  throw new Error('Function not implemented.');
-}

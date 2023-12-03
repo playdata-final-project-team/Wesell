@@ -6,17 +6,26 @@ interface Props {
   name: string;
   label: string;
   id: string;
-  value: number;
+  checked: boolean; 
+  onChange : (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 // component: Check Box 컴포넌트 //
 const CheckBox = (props: Props) => {
-  const { id, label, name, value } = props;
+  const { id, label, name, checked } = props;
+  const {onChange, onKeyDown} = props;
+
+  // event-handler: on Key-Down 이벤트 처리 함수 //
+  const onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!onKeyDown) return;
+    onKeyDown(event);
+  };
 
   // render: Check Box 컴포넌트 렌더링 //
   return (
     <>
-      <input id={id} name={name} type="checkbox" value={value} />
+      <input id={id} name={name} type="checkbox" onChange={onChange} onKeyDown={onKeyDownHandler} checked={checked}/>
       <label htmlFor={id}>{label}</label>
     </>
   );

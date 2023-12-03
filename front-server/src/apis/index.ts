@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { SignInRequestDto, SignUpRequestDto } from './request/auth';
-import { SignInResponseDto } from './response/auth';
+import { SignInResponseDto, SignUpResponseDto } from './response/auth';
 import { ResponseDto } from './response';
 
 const DOMAIN = 'http://localhost:3000';
@@ -38,4 +38,15 @@ export const nicknameDupCheckRequest = async (nickname: string) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const signUpRequest = async (requestBody: SignUpRequestDto) => {};
+export const signUpRequest = async (requestBody: SignUpRequestDto) => {
+  try{
+    const response = await axios.post(SIGN_UP_URL(), requestBody);
+    const responseBody: SignUpResponseDto = response.data;
+    return responseBody;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch(error:any){
+    if(!error.response.data) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+};
