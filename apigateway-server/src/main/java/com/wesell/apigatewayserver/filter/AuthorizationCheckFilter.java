@@ -1,7 +1,6 @@
 package com.wesell.apigatewayserver.filter;
 
 import com.wesell.apigatewayserver.global.TokenValidator;
-import com.wesell.apigatewayserver.global.enum_.Role;
 import com.wesell.apigatewayserver.response.CustomException;
 import com.wesell.apigatewayserver.response.ErrorCode;
 import io.jsonwebtoken.Claims;
@@ -22,9 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Mono;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Log4j2
@@ -47,7 +44,7 @@ public class AuthorizationCheckFilter extends AbstractGatewayFilterFactory<Autho
             MultiValueMap<String,HttpCookie> cookies = req.getCookies();
 
             //pre-filter
-            if(!cookies.isEmpty()){
+            if(!cookies.isEmpty() && cookies.get("access-token") != null){
 
                 List<String> cookieValues = cookies.get("access-token").stream()
                         .filter(c -> "access-token".equals(c.getName())).map(HttpCookie::getValue).toList();

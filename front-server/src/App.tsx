@@ -6,6 +6,7 @@ import UploadBoard from 'pages/board/post/Post';
 import Container from 'layouts/Comtainer';
 import { MAIN_PATH, TEST_PATH, UPLOAD_PATH } from 'constant';
 import { AUTH_PATH } from 'constant';
+import CorsTest from 'pages/Test';
 
 // component: Application 컴포넌트 //
 function App() {
