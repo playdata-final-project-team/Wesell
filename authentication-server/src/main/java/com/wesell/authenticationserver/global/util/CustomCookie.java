@@ -1,7 +1,5 @@
 package com.wesell.authenticationserver.global.util;
 
-import com.wesell.authenticationserver.response.CustomException;
-import com.wesell.authenticationserver.response.ErrorCode;
 import jakarta.servlet.http.Cookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.response;
+package com.wesell.authenticationserver.controller.response;
 
 import lombok.Getter;
 

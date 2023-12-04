@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.response;
+package com.wesell.authenticationserver.controller.response;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -25,7 +25,8 @@ public class ErrorControllerAdvisor {
                     .append("\n");
         }
 
-        return ResponseEntity.status(400).body(errorMessage.toString());
+        return ResponseEntity.status(ErrorCode.VALIDATION_FAIL.getStatus())
+                .body(errorMessage.toString());
     }
 
     /**
@@ -33,11 +34,11 @@ public class ErrorControllerAdvisor {
      * @return
      */
     @ExceptionHandler(value = CustomException.class)
-    protected ResponseEntity<ErrorResponseDto> handleCustomException(CustomException e){
+    protected ResponseEntity<ResponseDto> handleCustomException(CustomException e){
 
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())
-                .body(ErrorResponseDto.of(e));
+                .body(ResponseDto.of(e));
 
     }
 }
