@@ -15,7 +15,7 @@ public class AuthUser {
     @Column(name="a_uuid", nullable = false, length = 50)
     private String uuid;
 
-    @Column(name = "a_email", nullable = false, unique = true, length = 60)
+    @Column(name = "a_email", nullable = false, length = 60)
     private String email;
 
     @Column(name= "a_password", length = 100)
@@ -35,5 +35,9 @@ public class AuthUser {
 
     public void changeIsForced(){
         isForced = !isForced;
+    }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
     }
 }

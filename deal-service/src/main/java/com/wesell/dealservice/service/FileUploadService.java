@@ -2,6 +2,8 @@ package com.wesell.dealservice.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.wesell.dealservice.domain.entity.Image;
+import com.wesell.dealservice.domain.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,17 +16,25 @@ import java.util.UUID;
 public class FileUploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
     private final AmazonS3 amazonS3;
+    private final ImageRepository imageRepository;
 
-    public String upload(MultipartFile multipartFile) throws IOException {
+    public void saveImageUrl(Long postId, MultipartFile file) throws IOException {
+        Image userImage = Image.builder()
+                .postId(postId)
+                .imageUrl(uploadAndGetUrl(file))
+                .build();
+        imageRepository.save(userImage);
+    }
+
+    public String uploadAndGetUrl(MultipartFile multipartFile) throws IOException {
         String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
 
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentLength(multipartFile.getInputStream().available());
-
         amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
 
         return amazonS3.getUrl(bucket, s3FileName).toString();
     }
+
 }

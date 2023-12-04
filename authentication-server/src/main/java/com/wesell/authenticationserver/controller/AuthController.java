@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-//@RequestMapping("authentication-server")
+@RequestMapping("api/v1")
 public class AuthController {
 
     private final AuthUserService authUserService;
@@ -37,15 +37,11 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("sign-up")
-    public ResponseEntity<Void> signUp(@Valid @RequestBody CreateUserRequestDto requestDto){
+    public ResponseEntity<String> signUp(@Valid @RequestBody CreateUserRequestDto requestDto){
 
         log.debug("AuthController - 회원가입");
 
-        authUserService.createUser(requestDto);
-
-        return ResponseEntity
-                .status(SuccessCode.USER_CREATED.getStatus())
-                .body(null);
+        return authUserService.createUser(requestDto);
     }
 
     // 로그인

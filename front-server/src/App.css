@@ -1,0 +1,36 @@
+.icon-button {
+  border-radius: 50% 50%;
+
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.icon {
+  width: 100%;
+  height: 100%;
+
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+.eye-light-off-icon {
+  background-image: url(assets/images/eye-light-off.png);
+}
+
+.eye-light-on-icon {
+  background-image: url(assets/images/eye-light-on.png);
+}
+
+.logo-wesell-icon {
+  background-image: url(assets/images/wesell-logo.png);
+}
