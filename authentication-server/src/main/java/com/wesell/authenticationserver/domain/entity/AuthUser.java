@@ -36,4 +36,8 @@ public class AuthUser {
     public void changeIsForced(){
         isForced = !isForced;
     }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
