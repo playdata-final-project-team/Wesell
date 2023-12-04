@@ -22,7 +22,7 @@ public class AdminAuthController {
 
     @PutMapping("updateIsForced/{uuid}")
     public ResponseEntity<AdminAuthResponseDto> updateIsForced(@PathVariable String uuid) {
-        return new ResponseEntity<>(authUserService.updateIsForced(uuid), HttpStatus.OK);s
+        return new ResponseEntity<>(authUserService.updateIsForced(uuid), HttpStatus.OK);
     }
 }
 

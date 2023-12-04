@@ -5,6 +5,7 @@ import Main from 'pages/Main';
 import Container from 'layouts/Comtainer';
 import { MAIN_PATH, TEST_PATH } from 'constant';
 import { AUTH_PATH } from 'constant';
+import CorsTest from 'pages/Test';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -22,7 +23,7 @@ function App() {
       <Route element={<Container />}>
         <Route path={MAIN_PATH()} element={<Main />} />
         <Route path={AUTH_PATH()} element={<AuthServer />} />
-        <Route path={TEST_PATH()} element={<></>} />
+        <Route path={TEST_PATH()} element={<CorsTest />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
       </Route>
     </Routes>
