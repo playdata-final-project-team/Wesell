@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 
-@FeignClient(name="AUTHENTICATION-SERVER", path = "auth-server")
+@FeignClient(name="AUTHENTICATION-SERVER")
 public interface AuthServerFeignClient {
 
     @GetMapping("feign/auth-list")
