@@ -16,7 +16,8 @@ public enum ErrorCode {
      * posting
      */
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "400", "유효하지 않은 요청입니다."),
-    POST_NOT_FOUND(HttpStatus.NO_CONTENT, "404", "검색 결과가 없습니다.");
+    POST_NOT_FOUND(HttpStatus.NO_CONTENT, "404", "검색 결과가 없습니다."),
+    INVALID_POST(HttpStatus.BAD_REQUEST, "400", "잘못된 게시물입니다.");
 
     private final HttpStatus status;
     private final String code;

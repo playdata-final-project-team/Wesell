@@ -74,6 +74,7 @@ public class DealServiceImpl implements DealService {
     @Override
     public PostInfoResponseDto getPostInfo(Long postId) {
         DealPost foundPost = dealRepository.findDealPostByIdAndStatusAndIsDeleted(postId, SaleStatus.IN_PROGRESS,  false);
+        checkPostValidation(foundPost);
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         String imageUrl = imageRepository.findImageByPostId(foundPost.getId()).getImageUrl();
         return new PostInfoResponseDto(foundPost, nickname, imageUrl);
@@ -126,6 +127,12 @@ public class DealServiceImpl implements DealService {
         DealPost post = dealRepository.findFirstByUuid(uuid);
         if(!uuid.equals(post.getUuid())) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
+        }
+    }
+
+    public void checkPostValidation(DealPost post) {
+        if(post.getIsDeleted() || post.getStatus().equals(SaleStatus.COMPLETED)) {
+            throw new CustomException(ErrorCode.INVALID_POST);
         }
     }
 
