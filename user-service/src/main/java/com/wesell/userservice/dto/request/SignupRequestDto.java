@@ -15,4 +15,5 @@ public class SignupRequestDto {
     private String phone;
     private String uuid;
     private boolean agree;
+    private boolean isforced;
 }

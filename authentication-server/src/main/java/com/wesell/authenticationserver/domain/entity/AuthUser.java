@@ -37,6 +37,10 @@ public class AuthUser {
         isForced = !isForced;
     }
 
+    public void changeIsDelted(){
+        isDelete = !isDelete;
+    }
+
     public void changePassword(String newPassword) {
         this.password = newPassword;
     }

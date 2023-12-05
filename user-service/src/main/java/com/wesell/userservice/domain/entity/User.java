@@ -38,11 +38,18 @@ public class User {
     @Column(name = "u_agree", nullable = false)
     private boolean agree;
 
+    @ColumnDefault(value = "false")
+    @Column(name = "u_isforced", nullable = false)
+    private boolean isforced;
 
     public User changeUserInfo(String name) {
         this.name = name;
         updateCreatedAt();
         return this;
+    }
+
+    public void changeUserisforced(boolean isforced){
+        this.isforced = isforced;
     }
 
     public void updateCreatedAt() {

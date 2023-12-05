@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("user-service")
 public class UserController {
 
     private final UserService userService;
@@ -48,7 +49,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/api/signup")
+    @PostMapping("api/sign-up")
     public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDTO) {
 
         try {
@@ -64,6 +65,16 @@ public class UserController {
 
         try {
             userService.updateUser(uuid, signupRequestDTO);
+            return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("User update failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping("isforced/{uuid}")
+    public ResponseEntity<String> updateisforced(@PathVariable String uuid, @RequestBody SignupRequestDto signupRequestDTO) {
+
+        try {
+            userService.isforced(uuid, signupRequestDTO);
             return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("User update failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);

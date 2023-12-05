@@ -59,6 +59,7 @@ public class UserService {
                 .phone(userdto.getPhone())
                 .agree(userdto.isAgree())
                 .uuid(userdto.getUuid())
+                .isforced(userdto.isIsforced())
                 .build();
     }
 
@@ -74,6 +75,17 @@ public class UserService {
             User updatedUser = optionalUser.get();
             User user = updatedUser.changeUserInfo(signupRequestDTO.getName());
             userRepository.update(user);
+        } else {
+            throw new EntityNotFoundException("User not found with uuid: " + uuid);
+        }
+    }
+    @Transactional
+    public void isforced(String uuid, SignupRequestDto signupRequestDTO) {
+        Optional<User> optionalUser = userRepository.findByOneId(uuid);
+
+        if (optionalUser.isPresent()) {
+            User updatedUser = optionalUser.get();
+            updatedUser.changeUserisforced(signupRequestDTO.isIsforced());
         } else {
             throw new EntityNotFoundException("User not found with uuid: " + uuid);
         }
