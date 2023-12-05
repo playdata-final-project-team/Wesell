@@ -1,4 +1,4 @@
-package com.wesell.dealservice.dto.request;
+package com.wesell.dealservice.domain.dto.request;
 
 import com.wesell.dealservice.domain.entity.Category;
 import jakarta.validation.constraints.NotBlank;

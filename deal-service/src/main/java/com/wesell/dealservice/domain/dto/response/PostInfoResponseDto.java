@@ -1,4 +1,4 @@
-package com.wesell.dealservice.dto.response;
+package com.wesell.dealservice.domain.dto.response;
 
 import com.wesell.dealservice.domain.entity.DealPost;
 import lombok.AllArgsConstructor;

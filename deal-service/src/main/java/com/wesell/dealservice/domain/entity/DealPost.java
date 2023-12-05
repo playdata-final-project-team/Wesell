@@ -1,7 +1,7 @@
 package com.wesell.dealservice.domain.entity;
 
 import com.wesell.dealservice.domain.SaleStatus;
-import com.wesell.dealservice.dto.request.EditPostRequestDto;
+import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;

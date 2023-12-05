@@ -1,7 +1,7 @@
-package com.wesell.dealservice.dto.facade;
+package com.wesell.dealservice.domain.dto.facade;
 
-import com.wesell.dealservice.dto.response.MainPageCategoryResponseDto;
-import com.wesell.dealservice.dto.response.MainPagePostResponseDto;
+import com.wesell.dealservice.domain.dto.response.MainPageCategoryResponseDto;
+import com.wesell.dealservice.domain.dto.response.MainPagePostResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 

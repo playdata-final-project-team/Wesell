@@ -2,12 +2,12 @@ package com.wesell.dealservice.service;
 
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
-import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
-import com.wesell.dealservice.dto.request.EditPostRequestDto;
-import com.wesell.dealservice.dto.response.EditPostResponseDto;
-import com.wesell.dealservice.dto.response.MainPagePostResponseDto;
-import com.wesell.dealservice.dto.response.MyPostListResponseDto;
-import com.wesell.dealservice.dto.response.PostInfoResponseDto;
+import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
+import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
+import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
+import com.wesell.dealservice.domain.dto.response.MainPagePostResponseDto;
+import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
+import com.wesell.dealservice.domain.dto.response.PostInfoResponseDto;
 import java.util.List;
 
 public interface DealService {

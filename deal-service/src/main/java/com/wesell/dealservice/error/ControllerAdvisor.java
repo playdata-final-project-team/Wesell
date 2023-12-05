@@ -1,6 +1,6 @@
 package com.wesell.dealservice.error;
 
-import com.wesell.dealservice.dto.response.ErrorResponseDto;
+import com.wesell.dealservice.domain.dto.response.ErrorResponseDto;
 import com.wesell.dealservice.error.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

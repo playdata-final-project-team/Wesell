@@ -1,8 +1,8 @@
 package com.wesell.dealservice.controller;
 
 import com.wesell.dealservice.domain.entity.Category;
-import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
-import com.wesell.dealservice.dto.request.EditPostRequestDto;
+import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
+import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
 import com.wesell.dealservice.service.FileUploadService;

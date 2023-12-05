@@ -1,6 +1,6 @@
 package com.wesell.dealservice.facade;
 
-import com.wesell.dealservice.dto.facade.MainPageInfoFacadeDto;
+import com.wesell.dealservice.domain.dto.facade.MainPageInfoFacadeDto;
 import com.wesell.dealservice.service.CategoryServiceImpl;
 import com.wesell.dealservice.service.DealServiceImpl;
 import lombok.RequiredArgsConstructor;

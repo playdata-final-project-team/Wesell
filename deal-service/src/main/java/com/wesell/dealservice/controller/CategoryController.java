@@ -1,6 +1,6 @@
 package com.wesell.dealservice.controller;
 
-import com.wesell.dealservice.dto.request.CreateCategoryRequestDto;
+import com.wesell.dealservice.domain.dto.request.CreateCategoryRequestDto;
 import com.wesell.dealservice.service.CategoryServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

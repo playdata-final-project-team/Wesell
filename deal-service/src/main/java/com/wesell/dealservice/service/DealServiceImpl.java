@@ -1,10 +1,13 @@
 package com.wesell.dealservice.service;
 
 import com.wesell.dealservice.domain.SaleStatus;
+import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
+import com.wesell.dealservice.domain.dto.response.MainPagePostResponseDto;
+import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
+import com.wesell.dealservice.domain.dto.response.PostInfoResponseDto;
 import com.wesell.dealservice.domain.repository.ImageRepository;
-import com.wesell.dealservice.dto.request.UploadDealPostRequestDto;
-import com.wesell.dealservice.dto.request.EditPostRequestDto;
-import com.wesell.dealservice.dto.response.*;
+import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
+import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
@@ -19,7 +22,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +56,6 @@ public class DealServiceImpl implements DealService {
     @Override
     public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
         checkValidationByUuid(requestDto.getUuid());
-
         DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();

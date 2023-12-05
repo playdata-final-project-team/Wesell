@@ -1,9 +1,9 @@
 package com.wesell.dealservice.service;
 
-import com.wesell.dealservice.dto.request.CreateCategoryRequestDto;
+import com.wesell.dealservice.domain.dto.request.CreateCategoryRequestDto;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
-import com.wesell.dealservice.dto.response.MainPageCategoryResponseDto;
+import com.wesell.dealservice.domain.dto.response.MainPageCategoryResponseDto;
 import com.wesell.dealservice.error.ErrorCode;
 import com.wesell.dealservice.error.exception.CustomException;
 import jakarta.transaction.Transactional;
