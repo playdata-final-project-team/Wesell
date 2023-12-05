@@ -40,6 +40,8 @@ spring:
           uri: lb://DEAL-SERVICE
           predicates:
             - Path=/deal-service/**
+          filters:
+            - RewritePath=/deal-service/(?<path>.*),/$\{path}
 
         - id: authentication-server
           uri: lb://AUTHENTICATION-SERVER
