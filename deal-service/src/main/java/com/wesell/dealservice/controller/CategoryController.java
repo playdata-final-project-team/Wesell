@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("deal-service")
+@RequestMapping("api/v1")
 //@CrossOrigin("http://127.0.0.1:5500")
 public class CategoryController {
 

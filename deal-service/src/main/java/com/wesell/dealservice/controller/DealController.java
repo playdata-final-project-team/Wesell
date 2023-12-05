@@ -7,18 +7,16 @@ import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
 import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("deal-service")
+@RequestMapping("api/v1")
 public class DealController {
 
     private final DealServiceImpl dealService;
