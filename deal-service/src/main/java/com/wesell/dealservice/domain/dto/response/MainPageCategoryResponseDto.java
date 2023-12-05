@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MainPageCategoryResponseDto {
+    private Long id;
     private String value;
 
     public MainPageCategoryResponseDto(Category category) {
+        this.id = category.getId();
         this.value = category.getValue();
     }
 }
