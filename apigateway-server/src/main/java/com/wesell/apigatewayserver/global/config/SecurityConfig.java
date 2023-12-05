@@ -1,6 +1,5 @@
 package com.wesell.apigatewayserver.global.config;
 
-import com.wesell.apigatewayserver.filter.TokenProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,9 +10,6 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-    private final TokenProperties tokenProperties;
-//    private final UserDetailsServiceImpl userDetailsService;
 
     /**
      * 인증 인가 과정을 거치지 않도록 처리한 설정 - swagger
@@ -44,7 +40,7 @@ public class SecurityConfig {
                 // 권한 확인 설정 - 추후 세부적으로 구분 예정
                 .authorizeExchange(ex -> ex
                         .pathMatchers("/admin-service/*").hasRole("ADMIN")
-                        .pathMatchers("/auth-server/health-check").authenticated()
+                        .pathMatchers("/auth-server/health-check").hasAuthority("USER")
                         .anyExchange().permitAll()
                 );
 

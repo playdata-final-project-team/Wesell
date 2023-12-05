@@ -1,26 +1,18 @@
 package com.wesell.adminservice.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.wesell.adminservice.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.adminservice.dto.request.ChangeRoleRequestDto;
-import com.wesell.adminservice.dto.response.*;
-import com.wesell.adminservice.dto.request.SiteConfigRequestDto;
-import com.wesell.adminservice.domain.enum_.Role;
+import com.wesell.adminservice.dto.response.AdminUserResponseDto;
+import com.wesell.adminservice.dto.response.PostListResponseDto;
+import com.wesell.adminservice.dto.response.UserListResponseDto;
 import com.wesell.adminservice.feignClient.AuthFeignClient;
 import com.wesell.adminservice.feignClient.DealFeignClient;
 import com.wesell.adminservice.feignClient.UserFeignClient;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -34,15 +26,8 @@ public class AdminService {
         return userFeignClient.getUserList(page, size);
     }
 
-        public SiteConfigRequestDto mapToRequestAdminDto(Map<String, String> versions) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(versions, SiteConfigRequestDto.class);
-    }
-
-    public void changeUserRole(String uuid, Role role) {
-        ChangeRoleRequestDto requestDto = new ChangeRoleRequestDto();
-        requestDto.setRole(role);
-        ResponseEntity<String> response = authFeignClient.changeUserRole(uuid, requestDto);
+    public void changeUserRole(ChangeRoleRequestDto requestDto) {
+        ResponseEntity<String> response = authFeignClient.changeUserRole(requestDto);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             System.out.println("User role changed successfully");
@@ -57,8 +42,8 @@ public class AdminService {
         return dealFeignClient.getPostList(uuid, page, size);
     }
 
-    public AdminAuthIsForcedResponseDto updateIsForced(AdminAuthIsForcedRequestDto requestDto) {
-        return authFeignClient.updateIsForced(requestDto).getBody();
+    public String updateIsForced(String uuid) {
+        return authFeignClient.updateIsForced(uuid).getBody();
     }
 
     public void deletePost(String uuid, Long postId) {

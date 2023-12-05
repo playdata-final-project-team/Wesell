@@ -1,7 +1,6 @@
 package com.wesell.userservice.controller;
 
 import com.wesell.userservice.dto.request.SignupRequestDto;
-import com.wesell.userservice.dto.response.MypageResponseDto;
 import com.wesell.userservice.dto.response.ResponseDto;
 import com.wesell.userservice.exception.UserNotFoundException;
 import com.wesell.userservice.service.UserService;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,7 +55,6 @@ public class UserController {
             userService.save(signupRequestDTO);
             return new ResponseEntity<>("Signup successful", HttpStatus.OK);
         } catch (Exception e) {
-            // 회원가입 실패 시 예외 처리
             return new ResponseEntity<>("Signup failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -71,14 +70,16 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/{uuid}/nickname")
-    public ResponseEntity<?> getNicknameByUuid(@PathVariable String uuid) {
-        String nickname = userService.getNicknameByUuid(uuid);
-        return ResponseEntity.ok(nickname);
-    }
+    @GetMapping("user-service/users/{uuid}")
+    public ResponseEntity<String> getNicknameByUuid(@PathVariable String uuid) {
+        Optional<String> nicknameOptional = userService.getNicknameByUuid(uuid);
 
-    @GetMapping("/mypage/{uuid}")
-    public MypageResponseDto getMyPageDetails(@PathVariable String uuid){
-        return userService.getMyPageDetails(uuid);
+        if (nicknameOptional.isPresent()) {
+            System.out.println("값: " + nicknameOptional.get());
+            return ResponseEntity.ok(nicknameOptional.get());
+        } else {
+            System.out.println("값이 없습니다.");
+            return ResponseEntity.notFound().build();
+        }
     }
 }

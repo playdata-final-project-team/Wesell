@@ -57,6 +57,9 @@ dependencies {
 	// OpenFeign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
+	// 문자 발송
+	implementation "net.nurigo:sdk:4.3.0"
+
 	// OAuth 2.0
 
 	// Test 코드

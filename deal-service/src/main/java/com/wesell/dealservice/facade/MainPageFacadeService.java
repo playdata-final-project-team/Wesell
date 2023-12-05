@@ -20,4 +20,5 @@ public class MainPageFacadeService {
 
         return dto;
     }
+
 }

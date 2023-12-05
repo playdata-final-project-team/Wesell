@@ -15,7 +15,4 @@ public class UserListResponseDto {
     private String nickname;
     private String phone;
     private String uuid;
-    private String email;
-    private String role;
-
 }
