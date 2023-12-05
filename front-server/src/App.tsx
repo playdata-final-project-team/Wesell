@@ -2,11 +2,10 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import AuthServer from 'pages/Authentication';
 import Main from 'pages/Main';
-import UploadBoard from 'pages/board/post/Post';
 import Container from 'layouts/Comtainer';
 import { MAIN_PATH, TEST_PATH, UPLOAD_PATH } from 'constant';
 import { AUTH_PATH } from 'constant';
-import CorsTest from 'pages/Test';
+import UploadBoard from 'pages/board/post/Post';
 
 // component: Application 컴포넌트 //
 function App() {

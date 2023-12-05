@@ -1,19 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Post.css';
+import { type } from 'os';
 
 function GetCategory() {
-  const [category, setCategory] = useState({});
+  const [category, setCategory] = useState<category[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8888/deal-service/category').then((response)=> {
-      setCategory(response.data);
+    axios.get('http://localhost:8000/deal-service/api/v1/categories').then((response)=> {
+      console.log(response.data.categories);
+      const categoryArray = Object.values(response.data.categories) as category[];
+      setCategory(categoryArray);
     })
+    .catch((error) => {
+      console.error('Error fetching categories:', error);
+    });
   }, []);
 
-  const categories = (Object.values(category) as Array<{ id: number; displayName: string }>).map((item) => (
-    <option key={item.id} value={item.id}>
-      {item.displayName}
+  console.log(category)
+
+  type category = {
+    id: number;
+    value: string,
+  }
+
+  const categories = category.map((item: category, i) => (
+    <option key={i} value={item.id}>
+      {item.value}
     </option>
   ));
 
@@ -40,7 +53,7 @@ function UploadBoard() {
 
     const HandleSubmit = async(body : string) => {
 
-        const response = await axios.post('http://localhost:8888/deal-service/post', body);
+        const response = await axios.post('http://localhost:8888/api/v1/post', body);
         const postId = response.data.id;
       
         // 2번 API 호출: 이미지 업로드
@@ -49,7 +62,7 @@ function UploadBoard() {
           formData.append('postId', postId);
           formData.append('file', imageFile);
       
-          await axios.post('http://localhost:8888/deal-service/upload', formData, {
+          await axios.post('http://localhost:8888/api/v1/upload', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
