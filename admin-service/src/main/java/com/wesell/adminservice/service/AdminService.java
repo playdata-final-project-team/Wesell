@@ -5,17 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.wesell.adminservice.dto.request.AdminAuthIsForcedRequestDto;
 import com.wesell.adminservice.dto.request.ChangeRoleRequestDto;
-import com.wesell.adminservice.dto.response.AdminAuthIsForcedResponseDto;
-import com.wesell.adminservice.dto.response.PostListResponseDto;
-import com.wesell.adminservice.dto.response.UserListResponseDto;
+import com.wesell.adminservice.dto.response.*;
 import com.wesell.adminservice.dto.request.SiteConfigRequestDto;
-import com.wesell.adminservice.dto.response.SiteConfigResponseDto;
 import com.wesell.adminservice.domain.enum_.Role;
 import com.wesell.adminservice.feignClient.AuthFeignClient;
 import com.wesell.adminservice.feignClient.DealFeignClient;
 import com.wesell.adminservice.feignClient.UserFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,30 +30,8 @@ public class AdminService {
     private final AuthFeignClient authFeignClient;
     private final DealFeignClient dealFeignClient;
 
-    private Map<String, String> versions = new HashMap<>();
-    public void setVersions(Map<String, String> versions) {
-        this.versions = versions;
-    }
-    public Map<String, String> getVersions(){
-        return this.versions;
-    }
-
-    public SiteConfigResponseDto saveSiteConfig(SiteConfigRequestDto siteConfigRequestDto) {
-        return new SiteConfigResponseDto(convertDtoToJson(siteConfigRequestDto));
-    }
-
-    private String convertDtoToJson(SiteConfigRequestDto siteConfigRequestDto) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(siteConfigRequestDto);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "{}";
-        }
-    }
-
-    public ResponseEntity<List<UserListResponseDto>> getUserList(){
-        return userFeignClient.getUserList();
+    public Page<UserListResponseDto> getUserList(int page, int size){
+        return userFeignClient.getUserList(page, size);
     }
 
         public SiteConfigRequestDto mapToRequestAdminDto(Map<String, String> versions) {
@@ -75,8 +51,10 @@ public class AdminService {
         }
     }
 
-    public ResponseEntity<List<PostListResponseDto>> getPostList(String uuid) {
-        return dealFeignClient.getPostList(uuid);
+    public Page<PostListResponseDto> getPostList(String uuid,
+                                                 int page,
+                                                 int size) {
+        return dealFeignClient.getPostList(uuid, page, size);
     }
 
     public AdminAuthIsForcedResponseDto updateIsForced(AdminAuthIsForcedRequestDto requestDto) {
@@ -85,5 +63,15 @@ public class AdminService {
 
     public void deletePost(String uuid, Long postId) {
         dealFeignClient.deletePost(uuid, postId);
+    }
+
+    public Page<AdminUserResponseDto> searchUsers(String name,
+                                                  String nickname,
+                                                  String phone,
+                                                  String uuid,
+                                                  int page,
+                                                  int size) {
+
+        return userFeignClient.searchUsers(name, nickname, phone, uuid, page, size);
     }
 }

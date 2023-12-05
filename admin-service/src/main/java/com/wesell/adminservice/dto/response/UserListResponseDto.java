@@ -1,6 +1,5 @@
 package com.wesell.adminservice.dto.response;
 
-import com.wesell.adminservice.domain.enum_.Role;
 import lombok.*;
 
 @Getter
@@ -10,7 +9,8 @@ import lombok.*;
 @Builder
 public class UserListResponseDto {
 
-//    private Long id;
+    private String role;
+    private String email;
     private String name;
     private String nickname;
     private String phone;
