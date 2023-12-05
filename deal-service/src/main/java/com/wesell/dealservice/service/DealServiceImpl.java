@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 @Service
@@ -92,23 +94,31 @@ public class DealServiceImpl implements DealService {
     @Override
     public void changePostStatus(String uuid, Long id) {
         checkValidationByUuid(uuid);
-        DealPost post = dealRepository.findDealPostByIdAndIsDeleted(id, false);
-        post.changeStatus();
+        dealRepository.findDealPostByIdAndIsDeleted(id, false).changeStatus();
     }
 
     @Override
     public List<DealPost> findByCategory(Category category) {
-        return dealRepository.findAllByStatusAndCategory(SaleStatus.IN_PROGRESS, category);
+        List<DealPost> posts = dealRepository.findAllByStatusAndCategory(SaleStatus.IN_PROGRESS, category);
+        return Optional.of(posts)
+                .filter(post -> !post.isEmpty())
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
     }
 
     @Override
     public List<DealPost> findByTitle(String title) {
-        return dealRepository.findAllByStatusAndTitle(SaleStatus.IN_PROGRESS, title);
+        List<DealPost> posts = dealRepository.findAllByStatusAndTitle(SaleStatus.IN_PROGRESS, title);
+        return Optional.of(posts)
+                .filter(post -> !post.isEmpty())
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
     }
 
     @Override
     public List<DealPost> findByCategoryAndTitle(Category category, String title) {
-        return dealRepository.findAllByStatusAndCategoryAndTitle(SaleStatus.IN_PROGRESS, category, title);
+        List<DealPost> posts = dealRepository.findAllByStatusAndCategoryAndTitle(SaleStatus.IN_PROGRESS, category, title);
+        return Optional.of(posts)
+                .filter(post -> !post.isEmpty())
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
     }
 
     public void checkValidationByUuid(String uuid) {

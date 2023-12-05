@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ControllerAdvisor {
 
     @ExceptionHandler(CustomException.class)
-    protected ResponseEntity<ErrorResponseDto> customExceptionHandler(CustomException e){
+    protected ResponseEntity<ErrorResponseDto> customExceptionHandler(CustomException e) {
         ErrorResponseDto dto = new ErrorResponseDto(e);
         log.error("Error occurred in controller advice: [id={}]", dto.getTrackingId());
         return ResponseEntity.status(e.getErrorCode().getStatus()).body(dto);
     }
-
 
 }

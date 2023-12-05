@@ -22,4 +22,9 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("categories")
+    public ResponseEntity<?> getCategories() {
+        return new ResponseEntity<>(categoryServiceImpl.getCategoryList(), HttpStatus.OK);
+    }
+
 }

@@ -8,14 +8,15 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
     /**
-     * create category
+     * category
      */
     DUPLICATED_REQUEST(HttpStatus.BAD_REQUEST, "400", "이미 존재하는 카테고리입니다."),
 
     /**
-     * create posting
+     * posting
      */
-    INVALID_REQUEST(HttpStatus.BAD_REQUEST, "400", "유효하지 않은 요청입니다.");
+    INVALID_REQUEST(HttpStatus.BAD_REQUEST, "400", "유효하지 않은 요청입니다."),
+    POST_NOT_FOUND(HttpStatus.NO_CONTENT, "404", "검색 결과가 없습니다.");
 
     private final HttpStatus status;
     private final String code;

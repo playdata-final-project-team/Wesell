@@ -23,12 +23,13 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void createCategory(CreateCategoryRequestDto requestDto) {
 
-        if(categoryRepository.findAll().contains(requestDto.getValue())) {
+        if (!categoryRepository.findAll().contains(requestDto.getValue())) {
+            Category category = requestDto.toEntity();
+            categoryRepository.save(category);
+        } else {
             throw new CustomException(ErrorCode.DUPLICATED_REQUEST);
         }
 
-        Category category = requestDto.toEntity();
-        categoryRepository.save(category);
     }
 
     //카테고리 리스트
