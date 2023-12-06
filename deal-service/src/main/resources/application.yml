@@ -36,15 +36,15 @@ springdoc:
 cloud:
   aws:
     s3:
-      bucket: wesell-bucket
+      bucket: ${bucket}
     stack:
       auto: false
     region:
       static: ap-northeast-2
       auto: false
     credentials:
-      access-key: AKIA2RHRRS6GSD3LOV56
-      secret-key: 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
+      access-key: ${access-key}
+      secret-key: ${secret-key}
 
 logging:
   level:
