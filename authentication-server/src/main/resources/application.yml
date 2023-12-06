@@ -21,7 +21,7 @@ spring:
     show_sql: true
 
   profiles:
-    active: db
+    active: db, secret
 
 eureka:
   instance:
@@ -50,6 +50,11 @@ springdoc:
 token:
   access-expired-time: 1
   refresh-expired-time: 24
-  secret-key: testSecret
-  issuer: test@wesell.com
+  secret-key: ${secret-key}
+  issuer: ${issuer}
 
+kakao:
+  auth-url: https://kauth.kakao.com/oauth/token
+  user-api-url: https://kapi.kakao.com/v2/user/me
+  client-id: ${client-id}
+  redirect-url: ${redirect-url}
