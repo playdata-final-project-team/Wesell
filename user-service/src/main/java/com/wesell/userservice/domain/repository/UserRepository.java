@@ -26,10 +26,9 @@ public class UserRepository {
     }
 
     public Optional<User> findByOneId(String uuid) {  // 유저 uuid로 유저 한명 조회
-        User user = em.createQuery("select u from User u where u.uuid = :uuid", User.class)
-                .setParameter("uuid", uuid)
-                .getSingleResult();
-        return Optional.ofNullable(user);
+        return em.createQuery("select u from User u where u.uuid = :uuid", User.class)
+                .setParameter("uuid", uuid).getResultStream().findAny();
+
     }
 
     public Optional<List<User>> findAll() {   // 유저 정보 전체 조회

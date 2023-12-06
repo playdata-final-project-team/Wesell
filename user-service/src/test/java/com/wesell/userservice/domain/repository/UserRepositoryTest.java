@@ -128,7 +128,6 @@ class UserRepositoryTest {
 
         // 유저 정보 수정
         User updatedUser = User.builder()
-                .id(retrievedUser.get().getId())
                 .name("Updated Name")
                 .nickname(user.getNickname())
                 .phone(user.getPhone())

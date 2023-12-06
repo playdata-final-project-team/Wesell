@@ -3,7 +3,7 @@ package com.wesell.userservice.service;
 import com.wesell.userservice.dto.feigndto.AdminFeignResponseDto;
 import com.wesell.userservice.dto.feigndto.AuthUserInfoRequestDto;
 import com.wesell.userservice.dto.response.ResponseDto;
-import com.wesell.userservice.exception.UserNotFoundException;
+import com.wesell.userservice.error.exception.UserNotFoundException;
 import com.wesell.userservice.service.feign.AuthServerFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

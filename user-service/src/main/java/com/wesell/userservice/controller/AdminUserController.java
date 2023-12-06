@@ -4,16 +4,14 @@ import com.wesell.userservice.dto.request.AdminUserRequestDto;
 import com.wesell.userservice.dto.response.AdminUserResponseDto;
 import com.wesell.userservice.service.AdminUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class AdminUserController {
 
     private final AdminUserService userService;

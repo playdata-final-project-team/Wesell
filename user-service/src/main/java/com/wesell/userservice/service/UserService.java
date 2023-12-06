@@ -4,7 +4,7 @@ import com.wesell.userservice.dto.feigndto.EmailInfoDto;
 import com.wesell.userservice.dto.request.SignupRequestDto;
 import com.wesell.userservice.dto.response.MypageResponseDto;
 import com.wesell.userservice.dto.response.ResponseDto;
-import com.wesell.userservice.exception.UserNotFoundException;
+import com.wesell.userservice.error.exception.UserNotFoundException;
 import com.wesell.userservice.domain.entity.User;
 import com.wesell.userservice.domain.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.wesell.userservice.error.exception.ErrorCode.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -22,28 +24,35 @@ public class UserService {
     private final UserRepository userRepository;
     private final EmailService emailService;
 
-    public ResponseDto findUser(String uuid) throws UserNotFoundException { // uuid로 유저 조회
-        Optional<User> userOptional = userRepository.findByOneId(uuid);
-        User user = userOptional.orElseThrow(() ->
-                new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
-        return ResponseDto.of(user);
+    public ResponseDto findUser(String uuid) { // uuid로 유저 조회
+        try {
+            User user = userRepository.findByOneId(uuid).get();
+            return ResponseDto.of(user);
+        }catch (Exception e) {
+            throw new UserNotFoundException(INTER_SERVER_ERROR);
+        }
     }
 
     public List<ResponseDto> findUsers() throws UserNotFoundException { // 유저 전체 조회
-        Optional<List<User>> usersOptional = userRepository.findAll();
-        List<User> userList = usersOptional.orElseThrow(() ->
-                new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
-        return ResponseDto.of(userList);
+        try {
+            List<User> userList = userRepository.findAll().get();
+            return ResponseDto.of(userList);
+        }
+        catch(Exception e) {
+            throw new UserNotFoundException(INTER_SERVER_ERROR);
+        }
+
+
     }
 
     @Transactional
     public void deleteUser(String uuid) throws UserNotFoundException {   // 유저 한 명 삭제
-        Optional<User> userOptional = userRepository.findByOneId(uuid);
 
-        if (userOptional.isPresent())
-            userRepository.delete(userOptional.get());
-        else
-            throw new UserNotFoundException("존재하지 않는 회원입니다.");
+       User user = userRepository.findByOneId(uuid).orElseThrow(
+                () -> new UserNotFoundException(INTER_SERVER_ERROR)
+        );
+
+        userRepository.delete(user);
     }
 
     @Transactional
@@ -62,8 +71,14 @@ public class UserService {
                 .build();
     }
 
-    public Optional<String> getNicknameByUuid(String uuid) {
-        return userRepository.findNicknameByUuid(uuid);
+    public String getNicknameByUuid(String uuid) {
+        try {
+            String nickname = userRepository.findNicknameByUuid(uuid).get();
+            return nickname;
+        }catch (Exception e) {
+            throw new UserNotFoundException(NOT_FOUND_NICKNAME);
+        }
+
     }
 
     @Transactional
@@ -82,25 +97,29 @@ public class UserService {
     public MypageResponseDto getMyPageDetails(String uuid) {
         Optional<User> userOptional = userRepository.findByOneId(uuid);
 
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                EmailInfoDto emailInfoDto = emailService.getEmailInfo(uuid);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            EmailInfoDto emailInfoDto = emailService.getEmailInfo(uuid);
 
-                return MypageResponseDto.builder()
-                        .name(user.getName())
-                        .nickname(user.getNickname())
-                        .phone(user.getPhone())
-                        .email(emailInfoDto.getEmail())
-                        .build();
-            } else {
-                throw new NoSuchElementException("User not found");
+            return MypageResponseDto.builder()
+                    .name(user.getName())
+                    .nickname(user.getNickname())
+                    .phone(user.getPhone())
+                    .email(emailInfoDto.getEmail())
+                    .build();
+        } else {
+            throw new NoSuchElementException("User not found");
         }
     }
 
     public String findIDPWD(String phone) throws UserNotFoundException {
+        try {
+            String userId = userRepository.findUuidByPhone(phone).get();
+            return userId;
+        } catch (Exception e) {
+            throw new UserNotFoundException(NOT_FOUND_PHONE);
+        }
 
-        return userRepository.findUuidByPhone(phone)
-                .orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
     }
 }
 
