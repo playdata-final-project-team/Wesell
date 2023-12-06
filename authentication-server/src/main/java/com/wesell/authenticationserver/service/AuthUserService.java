@@ -110,6 +110,7 @@ public class AuthUserService {
 
     }
 
+    @Transactional
     public AdminAuthResponseDto updateRole(String uuid, Role newRole) {
         Optional<AuthUser> optionalUser = authUserRepository.findById(uuid);
         if (optionalUser.isPresent()) {
@@ -128,6 +129,19 @@ public class AuthUserService {
             AuthUser authUser = optionalUser.get();
             authUser.changeIsForced();
             return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자의 강제 탈퇴 여부가 변경되었습니다.");
+        } else {
+            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");
+        }
+    }
+
+    @Transactional
+    public AdminAuthResponseDto updateIsDeleted(String uuid) {
+        Optional<AuthUser> optionalUser = authUserRepository.findById(uuid);
+
+        if (optionalUser.isPresent()) {
+            AuthUser authUser = optionalUser.get();
+            authUser.changeIsDelted();
+            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자의 삭제 여부가 변경되었습니다.");
         } else {
             return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");
         }

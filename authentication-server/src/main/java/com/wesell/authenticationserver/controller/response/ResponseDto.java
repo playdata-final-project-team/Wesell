@@ -1,8 +1,6 @@
 package com.wesell.authenticationserver.controller.response;
 
 import lombok.*;
-import org.springframework.http.HttpStatus;
-
 import java.time.LocalDateTime;
 
 /**

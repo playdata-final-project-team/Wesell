@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import java.time.Duration;
-import java.util.Base64;
 import java.util.Date;
 
 @Service
