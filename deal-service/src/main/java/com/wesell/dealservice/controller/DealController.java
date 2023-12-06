@@ -3,7 +3,6 @@ package com.wesell.dealservice.controller;
 import com.wesell.dealservice.domain.entity.Category;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
-import com.wesell.dealservice.facade.MainPageFacadeService;
 import com.wesell.dealservice.service.DealServiceImpl;
 import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
@@ -21,7 +20,6 @@ public class DealController {
 
     private final DealServiceImpl dealService;
     private final FileUploadService uploadService;
-    private final MainPageFacadeService facadeService;
 
     /**
      * @param requestDto
@@ -87,16 +85,16 @@ public class DealController {
      * @return 나의 판매 내역 (판매 완료, 판매 중) -> 삭제된 내역은 없음
      */
     @GetMapping("list")
-    public ResponseEntity<?> getMyPostInfo(@RequestParam("uuid") String uuid) {
-        return new ResponseEntity<>(dealService.getMyPostList(uuid),HttpStatus.OK);
+    public ResponseEntity<?> getMyPostInfo(@RequestParam("uuid") String uuid, @RequestParam(value = "page", defaultValue = "0") int page) {
+        return new ResponseEntity<>(dealService.getMyPostList(uuid, page),HttpStatus.OK);
     }
 
     /**
-     * @return 카테고리 리스트와 판매중인 게시글
+     * @return 판매중인 게시글
      */
     @GetMapping("main")
-    public ResponseEntity<?> getMainInfo() {
-        return new ResponseEntity<>(facadeService.getFacadeDto(), HttpStatus.OK);
+    public ResponseEntity<?> getMainInfo(@RequestParam(value = "page", defaultValue = "0") int page) {
+        return new ResponseEntity<>(dealService.getDealPostLists(page), HttpStatus.OK);
     }
 
     @GetMapping("category")
@@ -105,12 +103,13 @@ public class DealController {
     }
 
     @GetMapping("title")
-    public ResponseEntity<?> findAllByTitle(@RequestParam("title") String title) {
-        return new ResponseEntity<>(dealService.findByTitle(title), HttpStatus.OK);
+    public ResponseEntity<?> findAllByTitle(@RequestParam("title") String title, @RequestParam(value = "page", defaultValue = "0") int page) {
+        return new ResponseEntity<>(dealService.findByTitle(title, page), HttpStatus.OK);
     }
 
     @GetMapping("search")
-    public ResponseEntity<?> findAllByCategoryAndTitle(@RequestParam("category")Category category, @RequestParam("title") String title) {
-        return new ResponseEntity<>(dealService.findByCategoryAndTitle(category,title), HttpStatus.OK);
+    public ResponseEntity<?> findAllByCategoryAndTitle(@RequestParam("category")Category category, @RequestParam("title") String title
+                                        , @RequestParam(value = "page", defaultValue = "0") int page) {
+        return new ResponseEntity<>(dealService.findByCategoryAndTitle(category, title, page), HttpStatus.OK);
     }
 }

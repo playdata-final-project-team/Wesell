@@ -18,11 +18,16 @@ import com.wesell.dealservice.feignClient.UserFeignClient;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -39,6 +44,8 @@ public class DealServiceImpl implements DealService {
     @Override
     public Long createDealPost(@Valid UploadDealPostRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
+        String customLocalDateTimeFormat =LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())
                 .category(category)
@@ -46,7 +53,7 @@ public class DealServiceImpl implements DealService {
                 .price(requestDto.getPrice())
                 .link(requestDto.getLink())
                 .detail(requestDto.getDetail())
-                .createdAt(LocalDate.now())
+                .createdAt(customLocalDateTimeFormat)
                 .build();
         dealRepository.save(post);
 
@@ -81,16 +88,22 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public List<MyPostListResponseDto> getMyPostList(String uuid) {
+    public Page<MyPostListResponseDto> getMyPostList(String uuid, int page) {
         checkValidationByUuid(uuid);
-        List<DealPost> allByUuid = dealRepository.findAllByUuidAndIsDeleted(uuid, false);
-        return allByUuid.stream().map(MyPostListResponseDto::new).collect(Collectors.toList());
+        int pageLimit = 6;
+
+        Pageable pageable1 = PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<DealPost> allByUuid = dealRepository.findAllByUuidAndIsDeletedFalse(uuid, pageable1);
+        return allByUuid.map(MyPostListResponseDto::new);
     }
 
     @Override
-    public List<MainPagePostResponseDto> getDealPostLists() {
-        List<DealPost> dealPosts = dealRepository.findAllByStatusAndIsDeleted(SaleStatus.IN_PROGRESS, false);
-        return dealPosts.stream().map(MainPagePostResponseDto::new).collect(Collectors.toList());
+    public Page<MainPagePostResponseDto> getDealPostLists(int page) {
+        int pageLimit = 8;
+
+        Pageable pageable1 = PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "createAt"));
+        Page<DealPost> dealPosts = dealRepository.findAllByStatusAndIsDeletedFalse(SaleStatus.IN_PROGRESS, pageable1);
+        return dealPosts.map(MainPagePostResponseDto::new);
     }
 
     @Override
@@ -108,16 +121,23 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public List<DealPost> findByTitle(String title) {
-        List<DealPost> posts = dealRepository.findAllByStatusAndTitle(SaleStatus.IN_PROGRESS, title);
+    public Page<DealPost> findByTitle(String title, int page) {
+        int pageLimit = 8;
+
+        Pageable pageable1 = PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "createAt"));
+        Page<DealPost> posts = dealRepository.findAllByStatusAndTitle(SaleStatus.IN_PROGRESS, title, pageable1);
+
         return Optional.of(posts)
                 .filter(post -> !post.isEmpty())
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
     }
 
     @Override
-    public List<DealPost> findByCategoryAndTitle(Category category, String title) {
-        List<DealPost> posts = dealRepository.findAllByStatusAndCategoryAndTitle(SaleStatus.IN_PROGRESS, category, title);
+    public Page<DealPost> findByCategoryAndTitle(Category category, String title, int page) {
+        int pageLimit = 8;
+
+        Pageable pageable1 = PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "createAt"));
+        Page<DealPost> posts = dealRepository.findAllByStatusAndCategoryAndTitle(SaleStatus.IN_PROGRESS, category, title, pageable1);
         return Optional.of(posts)
                 .filter(post -> !post.isEmpty())
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));

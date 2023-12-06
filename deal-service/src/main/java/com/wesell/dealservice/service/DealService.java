@@ -8,6 +8,7 @@ import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
 import com.wesell.dealservice.domain.dto.response.MainPagePostResponseDto;
 import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
 import com.wesell.dealservice.domain.dto.response.PostInfoResponseDto;
+import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface DealService {
@@ -15,10 +16,10 @@ public interface DealService {
     EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId);
     void deletePost(String uuid, Long postId);
     PostInfoResponseDto getPostInfo(Long postId);
-    List<MyPostListResponseDto> getMyPostList(String uuid);
-    List<MainPagePostResponseDto> getDealPostLists();
+    Page<MyPostListResponseDto> getMyPostList(String uuid, int page);
+    Page<MainPagePostResponseDto> getDealPostLists(int page);
     void changePostStatus(String uuid, Long id);
     List<DealPost> findByCategory(Category category);
-    List<DealPost> findByTitle(String title);
-    List<DealPost> findByCategoryAndTitle(Category category, String title);
+    Page<DealPost> findByTitle(String title, int page);
+    Page<DealPost> findByCategoryAndTitle(Category category, String title, int page);
 }
