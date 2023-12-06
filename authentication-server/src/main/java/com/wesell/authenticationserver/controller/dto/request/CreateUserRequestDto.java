@@ -36,7 +36,6 @@ public class CreateUserRequestDto { // 회원가입(front) -> Auth-Server
     private String name; // 회원명
 
     @NotBlank(message = "닉네임을 입력해주세요.")
-    @Pattern()
     @Size(min = 1, max = 15, message = "닉네임은 1자이상 15자 이하로 입력하세요.")
     private String nickname; // 닉네임
 
