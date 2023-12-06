@@ -7,10 +7,10 @@ import com.wesell.adminservice.dto.response.UserListResponseDto;
 import com.wesell.adminservice.service.AdminService;
 import com.wesell.adminservice.service.VersionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,8 +26,9 @@ public class AdminController {
     }
 
     @GetMapping("get/users")
-    public ResponseEntity<List<UserListResponseDto>> getUserList() {
-        return adminService.getUserList();
+    public Page<UserListResponseDto> getUserList(@RequestParam("page") int page,
+                                                 @RequestParam("size") int size) {
+        return adminService.getUserList(page, size);
     }
 
     @GetMapping("version")
@@ -50,8 +51,10 @@ public class AdminController {
     }
 
     @GetMapping("get/post")
-    public ResponseEntity<List<PostListResponseDto>> getPostList(@RequestParam("uuid") String uuid){
-        return adminService.getPostList(uuid);
+    public Page<PostListResponseDto> getPostList(@RequestParam("uuid") String uuid,
+                                                 @RequestParam("page") int page,
+                                                 @RequestParam("size") int size){
+        return adminService.getPostList(uuid, page, size);
     }
 
     @PutMapping("updateIsForced/{uuid}")
@@ -60,16 +63,20 @@ public class AdminController {
     }
 
     @PutMapping("deletePost")
-    public ResponseEntity<?> deletePost(@RequestParam("uuid") String uuid, @RequestParam("id") Long postId) {
+    public ResponseEntity<?> deletePost(@RequestParam("uuid") String uuid,
+                                        @RequestParam("id") Long postId) {
         adminService.deletePost(uuid, postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("search")
-    public List<AdminUserResponseDto> searchUsers(@RequestParam(name = "name", defaultValue = "") String name,
+    public Page<AdminUserResponseDto> searchUsers(@RequestParam(name = "name", defaultValue = "") String name,
                                                   @RequestParam(name = "nickname", defaultValue = "") String nickname,
                                                   @RequestParam(name = "phone", defaultValue = "") String phone,
-                                                  @RequestParam(name = "uuid", defaultValue = "") String uuid) {
-        return adminService.searchUsers(name, nickname, phone, uuid);
+                                                  @RequestParam(name = "uuid", defaultValue = "") String uuid,
+                                                  @RequestParam(name = "page", defaultValue = "0") int page,
+                                                  @RequestParam(name = "size", defaultValue = "10") int size)
+    {
+        return adminService.searchUsers(name, nickname, phone, uuid, page, size);
     }
 }

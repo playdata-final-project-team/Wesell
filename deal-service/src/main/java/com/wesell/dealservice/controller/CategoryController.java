@@ -1,6 +1,6 @@
 package com.wesell.dealservice.controller;
 
-import com.wesell.dealservice.dto.request.CreateCategoryRequestDto;
+import com.wesell.dealservice.domain.dto.request.CreateCategoryRequestDto;
 import com.wesell.dealservice.service.CategoryServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("deal-service")
-//@CrossOrigin("http://127.0.0.1:5500")
+@RequestMapping("api/v1")
+//@CrossOrigin("http://localhost/3000")
 public class CategoryController {
 
     private final CategoryServiceImpl categoryServiceImpl;
@@ -20,6 +20,11 @@ public class CategoryController {
     public ResponseEntity<?> createDealPost(@Valid @RequestBody CreateCategoryRequestDto requestDto) {
         categoryServiceImpl.createCategory(requestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("categories")
+    public ResponseEntity<?> getCategories() {
+        return new ResponseEntity<>(categoryServiceImpl.getCategoryList(), HttpStatus.OK);
     }
 
 }

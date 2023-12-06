@@ -37,7 +37,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/api/signup")
+    @PostMapping("api/sign-up")
     public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDTO) {
             userService.save(signupRequestDTO);
             return new ResponseEntity<>("Signup successful", HttpStatus.OK);
@@ -54,5 +54,6 @@ public class UserController {
     public ResponseEntity<String> getNicknameByUuid(@PathVariable String uuid) {
         String nickname = userService.getNicknameByUuid(uuid);
         return ResponseEntity.ok(nickname);
+
     }
 }

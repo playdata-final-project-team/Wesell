@@ -9,6 +9,8 @@ import lombok.*;
 @Builder
 public class UserListResponseDto {
 
+    private String role;
+    private String email;
     private String name;
     private String nickname;
     private String phone;
