@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("user-service")
 public class UserController {
 
     private final UserService userService;

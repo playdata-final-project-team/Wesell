@@ -140,7 +140,7 @@ public class AuthUserService {
 
         if (optionalUser.isPresent()) {
             AuthUser authUser = optionalUser.get();
-            authUser.changeIsDelted();
+            authUser.changeIsDeleted();
             return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자의 삭제 여부가 변경되었습니다.");
         } else {
             return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");

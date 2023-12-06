@@ -25,7 +25,7 @@ public class AuthUser {
     @Column(name= "a_role", nullable = false)
     private Role role;
 
-    private boolean isDelete; // 삭제 여부
+    private boolean isDeleted; // 삭제 여부
 
     private boolean isForced; // 강제 탈퇴 여부
 
@@ -37,8 +37,8 @@ public class AuthUser {
         isForced = !isForced;
     }
 
-    public void changeIsDelted(){
-        isDelete = !isDelete;
+    public void changeIsDeleted(){
+        isDeleted = !isDeleted;
     }
 
     public void changePassword(String newPassword) {
