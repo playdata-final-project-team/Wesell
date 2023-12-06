@@ -25,21 +25,20 @@ public class UserService {
     private final EmailService emailService;
 
     public ResponseDto findUser(String uuid) { // uuid로 유저 조회
-        try {
-            User user = userRepository.findByOneId(uuid).get();
-            return ResponseDto.of(user);
-        }catch (Exception e) {
-            throw new UserNotFoundException(INTER_SERVER_ERROR);
-        }
+        User user = userRepository.findByOneId(uuid).orElseThrow(
+                () -> new UserNotFoundException(INTER_SERVER_ERROR)
+        );
+
+        return ResponseDto.of(user);
     }
 
-    public List<ResponseDto> findUsers() throws UserNotFoundException { // 유저 전체 조회
-        try {
-            List<User> userList = userRepository.findAll().get();
-            return ResponseDto.of(userList);
-        }
-        catch(Exception e) {
+    public List<ResponseDto> findUsers() { // 유저 전체 조회
+        List<User> userList = userRepository.findAll();
+        if(userList.isEmpty()) {
             throw new UserNotFoundException(INTER_SERVER_ERROR);
+        }
+        else {
+            return ResponseDto.of(userList);
         }
 
 
@@ -72,34 +71,27 @@ public class UserService {
     }
 
     public String getNicknameByUuid(String uuid) {
-        try {
-            String nickname = userRepository.findNicknameByUuid(uuid).get();
-            return nickname;
-        }catch (Exception e) {
-            throw new UserNotFoundException(NOT_FOUND_NICKNAME);
-        }
-
+        return userRepository.findNicknameByUuid(uuid).orElseThrow(
+                () -> new UserNotFoundException(NOT_FOUND_NICKNAME)
+        );
     }
 
     @Transactional
     public void updateUser(String uuid, SignupRequestDto signupRequestDTO) {
-        Optional<User> optionalUser = userRepository.findByOneId(uuid);
+        User user = userRepository.findByOneId(uuid).orElseThrow(
+                () -> new UserNotFoundException(INTER_SERVER_ERROR)
+        );
 
-        if (optionalUser.isPresent()) {
-            User updatedUser = optionalUser.get();
-            User user = updatedUser.changeUserInfo(signupRequestDTO.getName());
-            userRepository.update(user);
-        } else {
-            throw new EntityNotFoundException("User not found with uuid: " + uuid);
-        }
+        user.changeUserInfo(signupRequestDTO.getName());
+        userRepository.save(user);
     }
 
     public MypageResponseDto getMyPageDetails(String uuid) {
-        Optional<User> userOptional = userRepository.findByOneId(uuid);
+        User user = userRepository.findByOneId(uuid).orElseThrow(
+                () -> new UserNotFoundException(INTER_SERVER_ERROR)
+        );
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            EmailInfoDto emailInfoDto = emailService.getEmailInfo(uuid);
+        EmailInfoDto emailInfoDto = emailService.getEmailInfo(uuid);
 
             return MypageResponseDto.builder()
                     .name(user.getName())
@@ -107,19 +99,13 @@ public class UserService {
                     .phone(user.getPhone())
                     .email(emailInfoDto.getEmail())
                     .build();
-        } else {
-            throw new NoSuchElementException("User not found");
         }
-    }
+
 
     public String findIDPWD(String phone) throws UserNotFoundException {
-        try {
-            String userId = userRepository.findUuidByPhone(phone).get();
-            return userId;
-        } catch (Exception e) {
-            throw new UserNotFoundException(NOT_FOUND_PHONE);
-        }
-
+        return userRepository.findUuidByPhone(phone).orElseThrow(
+                () -> new UserNotFoundException(NOT_FOUND_PHONE)
+        );
     }
 }
 
