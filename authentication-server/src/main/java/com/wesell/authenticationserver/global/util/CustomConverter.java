@@ -47,7 +47,7 @@ public class CustomConverter {
     }
 
     public List<AuthUserListFeignResponseDto> toFeignDto(List<AuthUser> authUserList){
-        return authUserList.stream().filter(auth->!auth.isDelete()).map(
+        return authUserList.stream().filter(auth->!auth.isDeleted()).map(
                 user->AuthUserListFeignResponseDto.builder()
                         .uuid(user.getUuid())
                         .email(user.getEmail())

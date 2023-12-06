@@ -38,7 +38,6 @@ public class User {
     @Column(name = "u_agree", nullable = false)
     private boolean agree;
 
-
     public User changeUserInfo(String name) {
         this.name = name;
         updateCreatedAt();

@@ -8,6 +8,7 @@ import com.wesell.adminservice.feignClient.AuthFeignClient;
 import com.wesell.adminservice.feignClient.DealFeignClient;
 import com.wesell.adminservice.feignClient.UserFeignClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,8 @@ public class AdminService {
     private final AuthFeignClient authFeignClient;
     private final DealFeignClient dealFeignClient;
 
-    public ResponseEntity<List<UserListResponseDto>> getUserList(){
-        return userFeignClient.getUserList();
+    public Page<UserListResponseDto> getUserList(int page, int size){
+        return userFeignClient.getUserList(page, size);
     }
 
     public void changeUserRole(ChangeRoleRequestDto requestDto) {
@@ -35,8 +36,10 @@ public class AdminService {
         }
     }
 
-    public ResponseEntity<List<PostListResponseDto>> getPostList(String uuid) {
-        return dealFeignClient.getPostList(uuid);
+    public Page<PostListResponseDto> getPostList(String uuid,
+                                                 int page,
+                                                 int size) {
+        return dealFeignClient.getPostList(uuid, page, size);
     }
 
     public String updateIsForced(String uuid) {
@@ -47,11 +50,13 @@ public class AdminService {
         dealFeignClient.deletePost(uuid, postId);
     }
 
-    public List<AdminUserResponseDto> searchUsers(String name,
+    public Page<AdminUserResponseDto> searchUsers(String name,
                                                   String nickname,
                                                   String phone,
-                                                  String uuid) {
+                                                  String uuid,
+                                                  int page,
+                                                  int size) {
 
-        return userFeignClient.searchUsers(name, nickname, phone, uuid);
+        return userFeignClient.searchUsers(name, nickname, phone, uuid, page, size);
     }
 }
