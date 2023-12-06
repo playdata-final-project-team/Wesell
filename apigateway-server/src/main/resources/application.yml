@@ -30,22 +30,16 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
-          filters:
-            - RewritePath=/auth-server/(?<path>.*),/$\{path}
 
         - id: admin-service
           uri: lb://ADMIN-SERVICE
           predicates:
             - Path=/admin-service/**
-          filters:
-            - RewritePath=/auth-server/(?<path>.*),/$\{path}
 
         - id: deal-service
           uri: lb://DEAL-SERVICE
           predicates:
             - Path=/deal-service/**
-          filters:
-            - RewritePath=/auth-server/(?<path>.*),/$\{path}
 
         - id: authentication-server
           uri: lb://AUTHENTICATION-SERVER
