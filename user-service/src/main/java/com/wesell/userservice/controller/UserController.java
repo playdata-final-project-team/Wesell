@@ -48,7 +48,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/api/signup")
+    @PostMapping("api/sign-up")
     public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDTO) {
 
         try {
@@ -70,16 +70,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("user-service/users/{uuid}")
-    public ResponseEntity<String> getNicknameByUuid(@PathVariable String uuid) {
+    @GetMapping("users/{uuid}/nickname")
+    public ResponseEntity<String> getNicknameByUuid(@PathVariable(value = "uuid") String uuid) {
         Optional<String> nicknameOptional = userService.getNicknameByUuid(uuid);
-
-        if (nicknameOptional.isPresent()) {
-            System.out.println("값: " + nicknameOptional.get());
-            return ResponseEntity.ok(nicknameOptional.get());
-        } else {
-            System.out.println("값이 없습니다.");
-            return ResponseEntity.notFound().build();
-        }
+        return nicknameOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

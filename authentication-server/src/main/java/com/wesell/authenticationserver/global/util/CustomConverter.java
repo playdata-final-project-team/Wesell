@@ -60,6 +60,7 @@ public class CustomConverter {
                 .build();
     }
 
+<<<<<<< HEAD
     public CreateUserFeignResponseDto toFeignDto(KakaoAccount kakaoAccount, String uuid){
         return CreateUserFeignResponseDto.builder()
                 .name(kakaoAccount.getName())
@@ -71,7 +72,7 @@ public class CustomConverter {
     }
 
     public List<AuthUserListFeignResponseDto> toFeignDtoList(List<AuthUser> authUserList){
-        return authUserList.stream().filter(auth->!auth.isDelete()).map(
+        return authUserList.stream().filter(auth->!auth.isDeleted()).map(
                 user->AuthUserListFeignResponseDto.builder()
                         .uuid(user.getUuid())
                         .email(user.getEmail())
@@ -85,6 +86,4 @@ public class CustomConverter {
     /**
      * entity -> dto
      */
-
-
 }

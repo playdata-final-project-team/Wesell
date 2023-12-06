@@ -1,10 +1,9 @@
 package com.wesell.dealservice.service;
 
-import com.wesell.dealservice.dto.request.CreateCategoryRequestDto;
-import com.wesell.dealservice.dto.response.MainPageCategoryResponseDto;
-import java.util.List;
+import com.wesell.dealservice.domain.dto.request.CreateCategoryRequestDto;
+import com.wesell.dealservice.domain.dto.response.CategoryListResponseDto;
 
 public interface CategoryService {
     void createCategory(CreateCategoryRequestDto requestDto);
-    List<MainPageCategoryResponseDto> getCategoryList();
+    CategoryListResponseDto getCategoryList();
 }

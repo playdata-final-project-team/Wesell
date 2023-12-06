@@ -1,10 +1,9 @@
-package com.wesell.dealservice.dto.response;
+package com.wesell.dealservice.domain.dto.response;
 
 import com.wesell.dealservice.domain.entity.DealPost;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -12,7 +11,7 @@ import java.time.LocalDate;
 public class PostInfoResponseDto {
 
     private String title;
-    private LocalDate createdAt;
+    private String createdAt;
     private Long price;
     private String detail;
     private String link;
