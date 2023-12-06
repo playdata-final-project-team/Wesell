@@ -8,6 +8,8 @@ const Social: React.FC = ()=>{
     const queryParams = new URLSearchParams(location.search);
     const authCode = queryParams.get('code');
 
+    // alert(`인가 코드 정상 발급! : [ ${authCode} ]`);
+
     useEffect(
         ()=>{
        kakaoCallbackAuthCodeRequest(authCode);
