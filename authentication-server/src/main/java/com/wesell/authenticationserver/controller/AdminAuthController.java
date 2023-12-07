@@ -24,9 +24,5 @@ public class AdminAuthController {
     public ResponseEntity<AdminAuthResponseDto> updateIsForced(@PathVariable String uuid) {
         return new ResponseEntity<>(authUserService.updateIsForced(uuid), HttpStatus.OK);
     }
-    @PutMapping("updateIsDeleted/{uuid}")
-    public ResponseEntity<AdminAuthResponseDto> updateIsDeleted(@PathVariable String uuid) {
-        return new ResponseEntity<>(authUserService.updateIsDeleted(uuid), HttpStatus.OK);
-    }
 }
 

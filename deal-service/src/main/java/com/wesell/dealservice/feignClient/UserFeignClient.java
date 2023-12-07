@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 //Request to user-service
-@FeignClient(name = "USER-SERVICE", path = "user-service")
+@FeignClient(name = "USER-SERVICE")
 public interface UserFeignClient {
 
     @GetMapping("/users/{uuid}/nickname")
