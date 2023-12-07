@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "DEAL-SERVICE")
+@FeignClient(name = "DEAL-SERVICE", path = "api/v1")
 public interface DealFeignClient {
 
     @GetMapping("admin/list")

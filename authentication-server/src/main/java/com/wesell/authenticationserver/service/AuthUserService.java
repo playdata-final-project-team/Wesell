@@ -11,6 +11,7 @@ import com.wesell.authenticationserver.global.util.CustomConverter;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.controller.response.CustomException;
 import com.wesell.authenticationserver.controller.response.ErrorCode;
+import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
 import com.wesell.authenticationserver.service.dto.response.AdminAuthResponseDto;
 import com.wesell.authenticationserver.service.dto.response.CreateUserFeignResponseDto;
 import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
@@ -60,7 +61,35 @@ public class AuthUserService {
         CreateUserFeignResponseDto feignDto = customConverter.toFeignDto(createUserRequestDto);
         return userServiceFeignClient.registerUserDetailInfo(feignDto);
     }
+    /**
+     *  소셜 로그인 - 가입된 회원 여부 확인 후 저장
+     */
+    @Transactional
+    public GeneratedTokenDto findOrCreateUser(KakaoAccount kakaoAccount){
 
+        log.debug("소셜 로그인 - 회원 정보 확인");
+        String email = kakaoAccount.getEmail();
+        Optional<AuthUser> user = authUserRepository.findByEmail(email);
+
+        if(!user.isPresent()) {
+            log.debug("소셜 로그인 - 회원 정보 저장");
+            AuthUser newUser = customConverter.toEntity(kakaoAccount);
+            newUser = authUserRepository.save(newUser);
+            CreateUserFeignResponseDto feignDto = customConverter.toFeignDto(kakaoAccount, newUser.getUuid());
+            try {
+                userServiceFeignClient.registerUserDetailInfo(feignDto);
+                return tokenProvider.generateTokens(newUser);
+            }catch(Exception e){
+                log.error("유저 서비스로 Feign 요청 시 오류 발생.");
+                log.error("detail : {}",e.getCause());
+                throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"유저 서비스로 Feign 요청 시 오류 발생.");
+            }
+
+        }else {
+            return tokenProvider.generateTokens(user.get());
+        }
+
+    }
     /**
      * 로그인 기능
      */
@@ -79,11 +108,6 @@ public class AuthUserService {
 
         log.debug("토큰 발급");
         return tokenProvider.generateTokens(authUser);
-    }
-
-    // 로그아웃
-    public void logout(String accessToken){
-
     }
 
     /**
@@ -110,6 +134,12 @@ public class AuthUserService {
 
     }
 
+    /**
+     * 권한 변경 기능
+     * @param uuid
+     * @param newRole
+     * @return
+     */
     @Transactional
     public AdminAuthResponseDto updateRole(String uuid, Role newRole) {
         Optional<AuthUser> optionalUser = authUserRepository.findById(uuid);
@@ -122,6 +152,11 @@ public class AuthUserService {
         }
     }
 
+    /**
+     *
+     * @param uuid
+     * @return
+     */
     @Transactional
     public AdminAuthResponseDto updateIsForced(String uuid) {
         Optional<AuthUser> optionalUser = authUserRepository.findById(uuid);
@@ -150,6 +185,6 @@ public class AuthUserService {
     /*====================== Feign =======================*/
     public List<AuthUserListFeignResponseDto> getAllForFeign(){
         List<AuthUser> authUserList = authUserRepository.findAll();
-        return customConverter.toFeignDto(authUserList);
+        return customConverter.toFeignDtoList(authUserList);
     }
 }

@@ -14,7 +14,7 @@ public class CertificatePhoneController {
     private final SmsUtil smsUtil;
 
 
-    @PostMapping("/phone/id/validate")
+    @PostMapping("/phone/validate")
     public ResponseEntity<?> sendSMSById(@RequestBody String phoneNumber) {
 
         String numStr = smsUtil.createCode();
@@ -25,13 +25,4 @@ public class CertificatePhoneController {
         return ResponseEntity.ok(phoneNumber);
     }
 
-    @PostMapping("/phone/pwd/validate")
-    public ResponseEntity<?> sendSMSByPWD(@RequestBody String phoneNumber) {
-
-        String numStr = smsUtil.createCode();
-        System.out.println(phoneNumber);
-        smsUtil.sendOne(phoneNumber, numStr);
-
-        return ResponseEntity.ok(new Message());
-    }
 }
