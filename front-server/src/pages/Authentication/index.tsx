@@ -2,14 +2,15 @@ import InputBox from 'components/InputBox';
 import { useState, useRef, KeyboardEvent, ChangeEvent } from 'react';
 import './style.css';
 import CheckBox from 'components/CheckBox';
-import { SignInRequestDto, SignUpRequestDto } from 'apis/request/auth';
-import { nicknameDupCheckRequest, signInRequest, signUpRequest } from 'apis';
+import { SignInRequestDto } from 'apis/request/auth';
+import { nicknameDupCheckRequest, signInRequest } from 'apis';
 import { SignInResponseDto } from 'apis/response/auth';
 import { ResponseDto } from 'apis/response';
 import ButtonBox from 'components/ButtonBox';
 
 // component: 인증 화면 컴포넌트 //
 function AuthServer() {
+
   // state: 페이지 상태 //
   const [view, setView] = useState<'sign-in' | 'sign-up'>('sign-in');
 
@@ -72,6 +73,15 @@ function AuthServer() {
     const onSignInButtonClickHandler = () => {
       const requestBody: SignInRequestDto = { email, password, savedId };
       signInRequest(requestBody).then(signInResponse);
+    };
+
+    // event-handler: 소셜 로그인 button click 이벤트 처리//
+    const onSocialLoginClickHandler = () => {
+
+    // comment: kakao 인가번호 요청용 리소스 //
+      const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+      const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+      window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     };
 
     // event-handler: 비밀번호 표시/숨김 아이콘 버튼 click 이벤트 처리 //
@@ -164,7 +174,7 @@ function AuthServer() {
               <div className="auth-card-sign-in-btn" onClick={onSignInButtonClickHandler}>
                 {'Login'}
               </div>
-              <div className="icon auth-card-social-in-btn"></div>
+              <div className="icon auth-card-social-in-btn" onClick={onSocialLoginClickHandler}></div>
             </div>
             <div className="auth-desc-box">
               <div className="auth-desc">

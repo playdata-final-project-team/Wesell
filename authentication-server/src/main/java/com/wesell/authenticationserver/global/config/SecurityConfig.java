@@ -15,6 +15,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)throws Exception{
+
         http
                 // CSRF 설정
                 .csrf(AbstractHttpConfigurer::disable)
@@ -25,6 +26,7 @@ public class SecurityConfig {
                 // 폼 기반 로그인/로그아웃 비활성화
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable);
+
 
         return http.build();
     }

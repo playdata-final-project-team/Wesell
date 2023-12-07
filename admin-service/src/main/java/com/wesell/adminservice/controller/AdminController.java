@@ -15,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/v1")
 public class AdminController {
 
     private final AdminService adminService;
@@ -42,12 +43,8 @@ public class AdminController {
 
     @PutMapping("change-role")
     public ResponseEntity<String> changeUserRole(@RequestBody ChangeRoleRequestDto requestDto) {
-        try {
-            adminService.changeUserRole(requestDto);
-            return new ResponseEntity<>("User role changed successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Failed to change user role: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        adminService.changeUserRole(requestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("get/post")
@@ -59,13 +56,13 @@ public class AdminController {
 
     @PutMapping("updateIsForced/{uuid}")
     public ResponseEntity<String> updateIsForced(@PathVariable String uuid) {
-        return new ResponseEntity<>(adminService.updateIsForced(uuid), HttpStatus.OK);
+        return new ResponseEntity<>(adminService.userIsForced(uuid), HttpStatus.OK);
     }
 
     @PutMapping("deletePost")
     public ResponseEntity<?> deletePost(@RequestParam("uuid") String uuid,
                                         @RequestParam("id") Long postId) {
-        adminService.deletePost(uuid, postId);
+        adminService.postIsDeleted(uuid, postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

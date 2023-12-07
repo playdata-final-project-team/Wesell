@@ -4,12 +4,14 @@ import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestDto;
 import com.wesell.authenticationserver.controller.dto.request.SignInUserRequestDto;
 import com.wesell.authenticationserver.controller.response.ResponseDto;
+import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
 import com.wesell.authenticationserver.service.dto.response.SignInSuccessResponseDto;
 import com.wesell.authenticationserver.global.util.CustomCookie;
 import com.wesell.authenticationserver.controller.response.CustomException;
 import com.wesell.authenticationserver.controller.response.ErrorCode;
 import com.wesell.authenticationserver.controller.response.SuccessCode;
 import com.wesell.authenticationserver.service.AuthUserService;
+import com.wesell.authenticationserver.service.oauth.KakaoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthUserService authUserService;
+    private final KakaoService kakaoService;
     private final CustomCookie cookieUtil;
 
     // 헬스 체크
@@ -68,6 +71,26 @@ public class AuthController {
                 .header(HttpHeaders.AUTHORIZATION,"Bearer "+generatedTokenDto.getRefreshToken())
                 .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
                 .header(HttpHeaders.SET_COOKIE,savedEmailCookie.toString())
+                .body(new SignInSuccessResponseDto(generatedTokenDto.getUuid(), generatedTokenDto.getRole()));
+    }
+
+    // 소셜 로그인 - KAKAO
+    @PostMapping("kakao/auth-code")
+    public ResponseEntity<?> kakaoAuthCode(@RequestBody String authCode){
+
+        log.debug("소셜 로그인 - 카카오 로그인 ");
+        KakaoAccount kakaoAccount = kakaoService.getInfo(authCode).getKakaoAccount();
+
+        log.debug("소셜 로그인 - 회원 확인 및 회원 가입");
+        GeneratedTokenDto generatedTokenDto = authUserService.findOrCreateUser(kakaoAccount);
+
+        log.debug("AuthController - 액세스 토큰 쿠키 생성");
+        ResponseCookie accessTokenCookie = cookieUtil.createTokenCookie(generatedTokenDto.getAccessToken());
+
+        return ResponseEntity
+                .status(SuccessCode.OK.getStatus())
+                .header(HttpHeaders.AUTHORIZATION,"Bearer "+generatedTokenDto.getRefreshToken())
+                .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
                 .body(new SignInSuccessResponseDto(generatedTokenDto.getUuid(), generatedTokenDto.getRole()));
     }
 
