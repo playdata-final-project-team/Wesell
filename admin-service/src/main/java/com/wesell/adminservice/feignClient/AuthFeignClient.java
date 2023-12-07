@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name="AUTHENTICATION-SERVER", path = "admin-auth-server")
+@FeignClient(name = "AUTHENTICATION-SERVER", path = "api/v1")
 public interface AuthFeignClient {
 
     @PutMapping("change-role")

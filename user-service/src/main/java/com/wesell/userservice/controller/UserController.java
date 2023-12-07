@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/v1")
 public class UserController {
 
     private final UserService userService;
