@@ -60,10 +60,10 @@ const CorsTest: React.FC = () => {
 
   return (
     <>
-      <ButtonBox label="not-cors" type="button" onClick={notCorsResponse}/>
-      <ButtonBox label='cors' type='button' onClick={corsResponse}/>
-      <ButtonBox label='not-proxy' type='button' onClick={notProxyResponse}/>
-      <ButtonBox label='proxy' type='button' onClick={proxyResponse}/>
+      <ButtonBox isEnable={true} label="not-cors" type="button" onClick={notCorsResponse} />
+      <ButtonBox isEnable={true} label="cors" type="button" onClick={corsResponse} />
+      <ButtonBox isEnable={true} label="not-proxy" type="button" onClick={notProxyResponse} />
+      <ButtonBox isEnable={true} label="proxy" type="button" onClick={proxyResponse} />
     </>
   );
 };

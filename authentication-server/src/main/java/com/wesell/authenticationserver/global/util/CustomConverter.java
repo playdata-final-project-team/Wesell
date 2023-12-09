@@ -60,7 +60,6 @@ public class CustomConverter {
                 .build();
     }
 
-<<<<<<< HEAD
     public CreateUserFeignResponseDto toFeignDto(KakaoAccount kakaoAccount, String uuid){
         return CreateUserFeignResponseDto.builder()
                 .name(kakaoAccount.getName())

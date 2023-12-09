@@ -25,12 +25,6 @@ const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
   const { type, name, placeholder, error, value, icon, message } = props;
   const { onChange, onIconClick, onClick, onKeyDown } = props;
 
-  // // event-handler: input 값 변경 이벤트 처리 함수 //
-  // const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { value } = event.target;
-  //   setValue(value);
-  // };
-
   // event-handler: on Key-Down 이벤트 처리 함수 //
   const onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (!onKeyDown) return;

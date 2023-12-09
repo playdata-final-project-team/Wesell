@@ -40,7 +40,7 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("sign-up")
-    public ResponseEntity<String> signUp(@Valid @RequestBody CreateUserRequestDto requestDto){
+    public ResponseEntity<?> signUp(@Valid @RequestBody CreateUserRequestDto requestDto){
 
         log.debug("AuthController - 회원가입");
 

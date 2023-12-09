@@ -5,5 +5,5 @@ export default interface ResponseDto {
   status: string;
   code: ResponseCode;
   message: string;
-  detail: string;
+  vfMessages?: string[];
 }

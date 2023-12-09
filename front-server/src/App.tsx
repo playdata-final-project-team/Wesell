@@ -9,7 +9,6 @@ import CorsTest from 'pages/Test';
 import Social from 'pages/Social/kakao';
 import UploadBoard from 'pages/board/post/Post';
 
-
 // component: Application 컴포넌트 //
 function App() {
   // render: Application 컴포넌트 랜더링 //

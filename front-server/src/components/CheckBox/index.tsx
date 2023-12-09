@@ -1,4 +1,3 @@
-import axios from 'axios';
 import './style.css';
 
 // interface: Check Box 컴포넌트 Props //
@@ -9,11 +8,12 @@ interface Props {
   checked: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  message?: string;
 }
 
 // component: Check Box 컴포넌트 //
 const CheckBox = (props: Props) => {
-  const { id, label, name, checked } = props;
+  const { id, label, name, checked, message,} = props;
   const { onChange, onKeyDown } = props;
 
   // event-handler: on Key-Down 이벤트 처리 함수 //
@@ -34,6 +34,8 @@ const CheckBox = (props: Props) => {
         checked={checked}
       />
       <label htmlFor={id}>{label}</label>
+
+      {message && (<span className='checkbox-message'>{message}</span>)}
     </>
   );
 };
