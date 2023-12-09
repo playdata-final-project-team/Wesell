@@ -12,19 +12,7 @@ spring:
             message: Spring Cloud Gateway GlobalFilter Message
             showPreLogger: true
             showPostLogger: true
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: 'http://localhost:3000'
-            allow-credentials: true
-            allowedHeaders: '*'
-            allowedMethods:
-              - PUT
-              - GET
-              - POST
-              - DELETE
-              - PATCH
-              - OPTIONS
+
       routes:
         - id: user-service
           uri: lb://USER-SERVICE
@@ -54,6 +42,7 @@ spring:
           filters:
             - RewritePath=/auth-server/(?<path>.*),/$\{path}
             - AuthorizationCheckFilter
+
 
 eureka:
   instance:

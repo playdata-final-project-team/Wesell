@@ -23,6 +23,14 @@
   background-color: rgb(255, 255, 255);
 }
 
+.auth-card-top {
+  margin: 10px;
+}
+
+.auth-card-bottom {
+  margin: 10px;
+}
+
 .auth-card-bottom-a {
   display: flex;
   justify-content: space-around;
@@ -97,4 +105,28 @@
   color: rgba(0, 0, 0, 1);
   font-weight: 550;
   cursor: pointer;
+}
+
+.auth-sign-in-error-box {
+  min-height: 38px;
+  color: rgba(255, 0, 0, 0.8);
+  font-size: 14px;
+}
+
+.auth-sign-in-blank-box {
+  min-height: 38px;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+/* sign-up-card : 닉네임 & 번호 인증 */
+.auth-sign-up-valid-box {
+  display: flex;
+  align-items: center;
+}
+
+.auth-sign-up-valid-box > p{
+  margin: 5px;
+
+  font-size: 12px;
+  font-weight: 300;
 }

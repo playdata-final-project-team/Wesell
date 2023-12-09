@@ -3,7 +3,7 @@ export default interface SignUpRequestDto {
   nickname: string;
   phone: string;
   email: string;
-  password: string;
-  passwordCheck: string;
+  pw: string;
+  pwRe: string;
   agree: boolean;
 }

@@ -38,7 +38,7 @@ public class UserController {
 
     }
 
-    @PostMapping("api/sign-up")
+    @PostMapping("sign-up")
     public ResponseEntity<SignUpResponseDto> signup(@RequestBody SignupRequestDto signupRequestDTO) {
             SignUpResponseDto signUpResponseDto = SignUpResponseDto.of(SuccessCode.USER_CREATED);
             userService.save(signupRequestDTO);
