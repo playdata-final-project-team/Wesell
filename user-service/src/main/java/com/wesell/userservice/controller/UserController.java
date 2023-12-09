@@ -1,15 +1,16 @@
 package com.wesell.userservice.controller;
 
+import com.wesell.userservice.dto.feigndto.SignUpResponseDto;
 import com.wesell.userservice.dto.request.SignupRequestDto;
 import com.wesell.userservice.dto.response.ResponseDto;
-import com.wesell.userservice.error.exception.UserNotFoundException;
+import com.wesell.userservice.error.exception.SuccessCode;
 import com.wesell.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -38,9 +39,10 @@ public class UserController {
     }
 
     @PostMapping("api/sign-up")
-    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDTO) {
+    public ResponseEntity<SignUpResponseDto> signup(@RequestBody SignupRequestDto signupRequestDTO) {
+            SignUpResponseDto signUpResponseDto = SignUpResponseDto.of(SuccessCode.USER_CREATED);
             userService.save(signupRequestDTO);
-            return new ResponseEntity<>("Signup successful", HttpStatus.OK);
+            return ResponseEntity.ok(signUpResponseDto);
     }
 
     @PutMapping("/{uuid}")
