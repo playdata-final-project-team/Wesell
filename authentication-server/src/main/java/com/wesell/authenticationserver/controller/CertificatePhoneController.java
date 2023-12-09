@@ -7,15 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@RequestMapping("user-service")
 @RequiredArgsConstructor
+@RequestMapping("api/v1")
 public class CertificatePhoneController {
 
     private final SmsUtil smsUtil;
 
 
-    @PostMapping("/phone/validate")
-    public ResponseEntity<?> sendSMSById(@RequestBody String phoneNumber) {
+    @GetMapping("/phone/validate")
+    public ResponseEntity<?> sendSMSById(@RequestParam String phoneNumber) {
 
         String numStr = smsUtil.createCode();
         System.out.println(phoneNumber);

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("auth-server")
+@RequestMapping("api/v1")
 public class FindIDFeignController {
 
     private final FindIDFeignService findIDFeignService;
