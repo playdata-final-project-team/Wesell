@@ -4,11 +4,13 @@ import com.wesell.authenticationserver.service.dto.feign.AuthUserListFeignRespon
 import com.wesell.authenticationserver.service.AuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/v1")
 public class AuthFeignController {
 
     private final AuthUserService authUserService;

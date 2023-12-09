@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name="USER-SERVICE")
+@FeignClient(name = "USER-SERVICE", path = "api/v1")
 public interface UserServiceFeignClient {
 
     @PostMapping("api/v1/sign-up")

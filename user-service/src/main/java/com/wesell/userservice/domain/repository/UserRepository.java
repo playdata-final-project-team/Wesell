@@ -26,29 +26,24 @@ public class UserRepository {
     }
 
     public Optional<User> findByOneId(String uuid) {  // 유저 uuid로 유저 한명 조회
-        User user = em.createQuery("select u from User u where u.uuid = :uuid", User.class)
-                .setParameter("uuid", uuid)
-                .getSingleResult();
-        return Optional.ofNullable(user);
+        return em.createQuery("select u from User u where u.uuid = :uuid", User.class)
+                .setParameter("uuid", uuid).getResultStream().findAny();
+
     }
 
-    public Optional<List<User>> findAll() {   // 유저 정보 전체 조회
-        List<User> user = em.createQuery("select u from User u", User.class)
+    public List<User> findAll() {   // 유저 정보 전체 조회
+        return em.createQuery("select u from User u", User.class)
                 .getResultList();
-        return Optional.ofNullable(user);
     }
 
     public Optional<String> findNicknameByUuid(String uuid) {
-        String nickname = em.createQuery("select u.nickname from User u where u.uuid = :uuid", String.class)
-                .setParameter("uuid", uuid)
-                .getSingleResult();
-        return Optional.ofNullable(nickname);
+        return em.createQuery("select u.nickname from User u where u.uuid = :uuid", String.class)
+                .setParameter("uuid", uuid).getResultStream().findAny();
     }
 
     public Optional<String> findUuidByPhone(String phone) {
-        String uuid = em.createQuery("select u.uuid from User u where u.phone = :phone", String.class)
-                .setParameter("phone", phone)
-                .getSingleResult();
-        return Optional.ofNullable(uuid);
+        return em.createQuery("select u.uuid from User u where u.phone = :phone", String.class)
+                .setParameter("phone", phone).getResultStream().findAny();
+
     }
 }

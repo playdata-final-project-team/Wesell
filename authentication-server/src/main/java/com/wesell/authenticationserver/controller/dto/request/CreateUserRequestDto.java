@@ -23,6 +23,7 @@ public class CreateUserRequestDto { // 회원가입(front) -> Auth-Server
     private String email; // 이메일
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
+    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\S+$).{8,16}", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
     @Size(min = 8,max = 16,message = "비밀번호를 8자 이상 16자 이하로 입력하세요.")
     private String pw; // 비밀번호
 

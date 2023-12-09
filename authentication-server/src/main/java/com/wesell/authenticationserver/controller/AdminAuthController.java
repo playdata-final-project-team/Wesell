@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("admin-auth-server")
+@RequestMapping("api/v1")
 @RequiredArgsConstructor
 public class AdminAuthController {
 
@@ -23,10 +23,6 @@ public class AdminAuthController {
     @PutMapping("updateIsForced/{uuid}")
     public ResponseEntity<AdminAuthResponseDto> updateIsForced(@PathVariable String uuid) {
         return new ResponseEntity<>(authUserService.updateIsForced(uuid), HttpStatus.OK);
-    }
-    @PutMapping("updateIsDeleted/{uuid}")
-    public ResponseEntity<AdminAuthResponseDto> updateIsDeleted(@PathVariable String uuid) {
-        return new ResponseEntity<>(authUserService.updateIsDeleted(uuid), HttpStatus.OK);
     }
 }
 
