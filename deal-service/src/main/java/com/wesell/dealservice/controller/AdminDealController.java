@@ -1,6 +1,6 @@
 package com.wesell.dealservice.controller;
 
-import com.wesell.dealservice.dto.response.MyPostListResponseDto;
+import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
 import com.wesell.dealservice.service.AdminDealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

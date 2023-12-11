@@ -1,21 +1,19 @@
 package com.wesell.dealservice.service;
 
+import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
 import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.AdminDealRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
-import com.wesell.dealservice.dto.response.MyPostListResponseDto;
 import com.wesell.dealservice.error.ErrorCode;
 import com.wesell.dealservice.error.exception.CustomException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AdminDealService {
     private final AdminDealRepository adminDealRepository;
