@@ -85,7 +85,7 @@ public class DealController {
      * @return 나의 판매 내역 (판매 완료, 판매 중) -> 삭제된 내역은 없음
      */
     @GetMapping("list")
-    public ResponseEntity<?> getMyPostInfo(@RequestParam("uuid") String uuid, @RequestParam(value = "page", defaultValue = "0") int page) {
+    public ResponseEntity<?> getMyPostList(@RequestParam("uuid") String uuid, @RequestParam(name = "page", defaultValue = "0") Integer page) {
         return new ResponseEntity<>(dealService.getMyPostList(uuid, page),HttpStatus.OK);
     }
 
@@ -98,8 +98,8 @@ public class DealController {
     }
 
     @GetMapping("category")
-    public ResponseEntity<?> findAllByCategory(@RequestParam("category")Category category) {
-        return new ResponseEntity<>(dealService.findByCategory(category), HttpStatus.OK);
+    public ResponseEntity<?> findAllByCategory(@RequestParam("category")Long categoryId, @RequestParam(value = "page", defaultValue = "0") int page) {
+        return new ResponseEntity<>(dealService.findByCategory(categoryId, page), HttpStatus.OK);
     }
 
     @GetMapping("title")
@@ -108,8 +108,8 @@ public class DealController {
     }
 
     @GetMapping("search")
-    public ResponseEntity<?> findAllByCategoryAndTitle(@RequestParam("category")Category category, @RequestParam("title") String title
+    public ResponseEntity<?> findAllByCategoryAndTitle(@RequestParam("category")Long categoryId, @RequestParam("title") String title
                                         , @RequestParam(value = "page", defaultValue = "0") int page) {
-        return new ResponseEntity<>(dealService.findByCategoryAndTitle(category, title, page), HttpStatus.OK);
+        return new ResponseEntity<>(dealService.findByCategoryAndTitle(categoryId, title, page), HttpStatus.OK);
     }
 }
