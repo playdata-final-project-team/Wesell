@@ -59,9 +59,16 @@ public class AuthUserService {
 
         // 연동 전 테스트를 위해 주석처리
         log.debug("User-Service Api Call - 회원가입 요청");
-        CreateUserFeignResponseDto feignDto = customConverter.toFeignDto(createUserRequestDto);
-        return userServiceFeignClient.registerUserDetailInfo(feignDto);
+        try {
+            CreateUserFeignResponseDto feignDto = customConverter.toFeignDto(createUserRequestDto);
+            return userServiceFeignClient.registerUserDetailInfo(feignDto);
+        }catch(Exception e){
+            log.error("유저 서비스로 Feign 요청 시 오류 발생.");
+            log.error("detail : {}",e.getMessage());
+            throw new CustomException(ErrorCode.USER_SERVICE_FEIGN_ERROR);
+        }
     }
+
     /**
      *  소셜 로그인 - 가입된 회원 여부 확인 후 저장
      */
@@ -82,8 +89,8 @@ public class AuthUserService {
                 return tokenProvider.generateTokens(newUser);
             }catch(Exception e){
                 log.error("유저 서비스로 Feign 요청 시 오류 발생.");
-                log.error("detail : {}",e.getCause());
-                throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"유저 서비스로 Feign 요청 시 오류 발생.");
+                log.error("detail : {}",e.getMessage());
+                throw new CustomException(ErrorCode.USER_SERVICE_FEIGN_ERROR);
             }
 
         }else {
@@ -91,6 +98,7 @@ public class AuthUserService {
         }
 
     }
+
     /**
      * 로그인 기능
      */
@@ -100,11 +108,11 @@ public class AuthUserService {
 
         log.debug("이메일로 회원 조회");
         AuthUser authUser = authUserRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.SIGN_IN_FAIL,"가입하지 않은 회원입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         log.debug("비밀번호 일치 여부 확인");
         if(!passwordEncoder.matches(requestDto.getPassword(), authUser.getPassword())){
-            throw new CustomException(ErrorCode.SIGN_IN_FAIL,"비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.NOT_CORRECT_PASSWORD);
         }
 
         log.debug("토큰 발급");
@@ -114,25 +122,21 @@ public class AuthUserService {
     /**
      * refresh jwt 기능
      */
-    public String refreshToken(String refreshToken, String accessToken){
+    public GeneratedTokenDto refreshToken(String refreshToken, String accessToken){
 
         log.debug("토큰 재발급 서비스 시작");
-        // Bearer 제거
-        refreshToken = tokenProvider.resolveToken(refreshToken);
+        String uuid = tokenProvider.validateToken(refreshToken, accessToken);
 
         log.debug("refresh-token 검증");
-        if(tokenProvider.validateToken(refreshToken, accessToken)){
-
-            String uuid = tokenProvider.findUuidByRefreshToken(refreshToken);
-
+        if( uuid != null) {
             AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
                     () -> new CustomException(ErrorCode.NOT_FOUND_USER)
             );
 
-            return tokenProvider.generatedAccessToken(authUser);
+            return tokenProvider.generateTokens(authUser);
+        }else{
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
-            return "";
-
     }
 
     /**

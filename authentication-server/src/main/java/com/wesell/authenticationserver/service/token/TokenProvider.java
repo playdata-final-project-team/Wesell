@@ -1,5 +1,7 @@
 package com.wesell.authenticationserver.service.token;
 
+import com.wesell.authenticationserver.controller.response.CustomException;
+import com.wesell.authenticationserver.controller.response.ErrorCode;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.token.TokenProperties;
 import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
@@ -9,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +19,6 @@ import java.util.Date;
 public class TokenProvider {
 
     private final TokenProperties tokenProperties;
-    static final String X_AUTH_TOKEN = "Bearer";
 
     /**
      * 토큰 발급 기능
@@ -33,18 +35,16 @@ public class TokenProvider {
         // refreshToken 만료일 - 1일
         Date refreshTokenExpiry = createExpiry(now,tokenProperties.getRefreshExpiredTime());
 
+        // refresh - access 간의 연관 관계를 명시하기 위한 구분 값.
+        // 재발급 시, 헤더측 문자열을 비교하여 두 토큰이 관련된 토큰인지 여부를 확인함.
+        String sectionId = UUID.randomUUID().toString();
+
         // 토큰 생성
-        String accessToken = createToken(authUser,now, accessTokenExpiry);
-        String refreshToken = createToken(authUser,now,refreshTokenExpiry);
+        String accessToken = createToken(authUser,now, accessTokenExpiry, sectionId);
+        String refreshToken = createToken(authUser,now,refreshTokenExpiry, sectionId);
 
         return new GeneratedTokenDto(authUser.getUuid(),authUser.getRole().toString(),accessToken,refreshToken);
 
-    }
-
-    public String generatedAccessToken(AuthUser authUser){
-        Date now = new Date();
-        Date accessTokenExpiry = createExpiry(now, tokenProperties.getAccessExpiredTime());
-        return createToken(authUser,now,accessTokenExpiry);
     }
 
     public String findUuidByRefreshToken(String refreshToken){
@@ -52,32 +52,39 @@ public class TokenProvider {
     }
 
     // refresh-token 검증
-    public boolean validateToken(String refreshToken, String accessToken){
+    public String validateToken(String refreshToken, String accessToken){
 
-        try {
-            Claims refTokenClaims = getClaims(refreshToken);
-            Claims accTokenClaims = getClaims(accessToken);
+        boolean isExpiredToken = false;
 
-            boolean isNotExpired = refTokenClaims.getExpiration().after(new Date());
-            boolean isEquals = refTokenClaims.getSubject().equals(accTokenClaims.getSubject());
-
-            return isEquals && isNotExpired;
-        }catch(Exception e){
-            return false;
+        try{
+            getClaims(accessToken);
+        }catch(ExpiredJwtException ex){
+            isExpiredToken = true;
         }
-        
-    }
 
-    public String resolveToken(String bearerToken){
-        return bearerToken.substring(X_AUTH_TOKEN.length()).trim();
-    }
+        // access-token 이 기한 만료된 경우에만 refresh-token 재발급 가능.
+        if(!isExpiredToken) throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
 
+        // access-token 과 refresh-token 간의 연관 관계 확인
+        String refreshHeaderParam = refreshToken.split("\\.")[0];
+        if(!refreshHeaderParam.equals(accessToken.split("\\.")[0])){
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        // refresh-token 검증
+        try {
+            return getClaims(refreshToken).getSubject();
+        }catch(Exception e){
+            return null;
+        }
+    }
 
     // JwtToken -  클라이언트 측에 전달하는 Token 개인정보 O(서명으로 인증)
-    private String createToken(AuthUser authUser, Date now, Date expiration ){
+    private String createToken(AuthUser authUser, Date now, Date expiration, String sectionId ){
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE,Header.JWT_TYPE)
                 .setHeaderParam("alg","HS256")
+                .setHeaderParam("sectionId", sectionId)
                 .setSubject(authUser.getUuid())
                 .claim("role",authUser.getRole())
                 .setIssuer(tokenProperties.getIssuer())
