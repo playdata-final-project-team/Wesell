@@ -3,11 +3,12 @@ import './App.css';
 import AuthServer from 'pages/Authentication';
 import Main from 'pages/Main';
 import Container from 'layouts/Comtainer';
-import { MAIN_PATH, SOCAIL_PATH, TEST_PATH, UPLOAD_PATH } from 'constant';
+import { MAIN_PATH, SOCAIL_PATH, TEST_PATH, UPLOAD_PATH, BOARD_DETAIL } from 'constant';
 import { AUTH_PATH } from 'constant';
 import CorsTest from 'pages/Test';
 import Social from 'pages/Social/kakao';
 import UploadBoard from 'pages/board/post/Post';
+import PostDetailPage from 'pages/board/detail';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path={TEST_PATH()} element={<CorsTest />} />
         <Route path={TEST_PATH()} element={<></>} />
         <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
+        <Route path={BOARD_DETAIL()} element={<PostDetailPage />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
       </Route>
     </Routes>

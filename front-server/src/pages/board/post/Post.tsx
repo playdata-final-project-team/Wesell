@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Post.css';
-import { type } from 'os';
 
 function GetCategory() {
   const [category, setCategory] = useState<category[]>([]);
@@ -109,8 +108,6 @@ function UploadBoard() {
           <label>오픈 카카오톡 채팅 링크</label>
           <input type="text" value={link} onChange={(e) => setLink(e.target.value)}></input>
         </div>
-        {/* </form> */}
-
         <button
           className="post-view-go-list-btn"
           onClick={() => HandleSubmit(JSON.stringify(body))}
