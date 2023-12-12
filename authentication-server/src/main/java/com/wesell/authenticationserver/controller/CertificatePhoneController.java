@@ -2,15 +2,10 @@ package com.wesell.authenticationserver.controller;
 
 import com.wesell.authenticationserver.global.util.SmsUtil;
 import lombok.RequiredArgsConstructor;
-import net.nurigo.sdk.message.model.Message;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-<<<<<<< HEAD
-@RequestMapping("api/v1")
-=======
->>>>>>> dev
 @RequiredArgsConstructor
 @RequestMapping("api/v1")
 public class CertificatePhoneController {
@@ -28,5 +23,4 @@ public class CertificatePhoneController {
 
         return ResponseEntity.ok(phoneNumber);
     }
-
 }
