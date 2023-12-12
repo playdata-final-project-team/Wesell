@@ -5,12 +5,6 @@ spring:
   application:
     name: deal-service
 
-  datasource:
-    url: ${url}
-    username: ${username_}
-    password: ${password}
-    driver-class-name: ${driver-class-name}
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -32,19 +26,6 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
-
-cloud:
-  aws:
-    s3:
-      bucket: ${bucket}
-    stack:
-      auto: false
-    region:
-      static: ap-northeast-2
-      auto: false
-    credentials:
-      access-key: ${access-key}
-      secret-key: ${secret-key}
 
 logging:
   level:
