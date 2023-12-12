@@ -5,12 +5,6 @@ spring:
   application:
     name: authentication-server
 
-  datasource:
-    url: ${url}
-    username: ${username_}
-    password: ${password}
-    driver-class-name: ${driver-class-name}
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,7 +15,7 @@ spring:
     show_sql: true
 
   profiles:
-    active: db, secret
+    active: db
 
 eureka:
   instance:
@@ -32,11 +26,6 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
-coolsms:
-  api:
-    key: ${coolsms.api.key}
-    secret: ${coolsms.api.secret}
-
 springdoc:
   packages-to-scan: com.wesell.authenticationserver.controller
   default-consumes-media-type: application/json;charset=UTF-8
@@ -46,15 +35,3 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
-
-token:
-  access-expired-time: 1
-  refresh-expired-time: 24
-  secret-key: ${secret-key}
-  issuer: ${issuer}
-
-kakao:
-  auth-url: https://kauth.kakao.com/oauth/token
-  user-api-url: https://kapi.kakao.com/v2/user/me
-  client-id: ${client-id}
-  redirect-url: ${redirect-url}
