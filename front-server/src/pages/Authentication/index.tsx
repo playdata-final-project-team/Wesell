@@ -72,7 +72,8 @@ function AuthServer() {
       if (
         code === ResponseCode.SIGN_IN_FAIL ||
         code === ResponseCode.VALIDATION_FAIL ||
-        code === ResponseCode.NOT_FOUND_USER
+        code === ResponseCode.NOT_FOUND_USER ||
+        code === ResponseCode.NOT_CORRECT_PASSWORD
       ) {
         setError(true);
         return;

@@ -40,7 +40,7 @@ public enum ErrorCode {
     /**
      * feign 관련 오류
      */
-    USER_SERVICE_FEIGN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"USFE","유저 서비스로 Feign 요청 시 오류 발생");
+    USER_SERVICE_FEIGN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"UFE","유저 서비스로 Feign 요청 시 오류 발생");
 
 
     private final HttpStatus status; // 상태코드(숫자)
