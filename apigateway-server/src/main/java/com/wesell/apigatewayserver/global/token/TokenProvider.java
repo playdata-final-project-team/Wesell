@@ -43,7 +43,7 @@ public class TokenProvider {
             throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
         }catch (ExpiredJwtException e) {
             log.error("JWT token is expired: {}", e.getMessage());
-            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
+            throw new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN);
         }catch(UnsupportedJwtException e) {
             log.error("JWT token is unsupported: {}", e.getMessage());
             throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);

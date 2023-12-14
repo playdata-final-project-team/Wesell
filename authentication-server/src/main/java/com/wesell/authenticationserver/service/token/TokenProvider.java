@@ -35,39 +35,27 @@ public class TokenProvider {
         // refreshToken 만료일 - 1일
         Date refreshTokenExpiry = createExpiry(now,tokenProperties.getRefreshExpiredTime());
 
-        // refresh - access 간의 연관 관계를 명시하기 위한 구분 값.
-        // 재발급 시, 헤더측 문자열을 비교하여 두 토큰이 관련된 토큰인지 여부를 확인함.
-        String sectionId = UUID.randomUUID().toString();
-
         // 토큰 생성
-        String accessToken = createToken(authUser,now, accessTokenExpiry, sectionId);
-        String refreshToken = createToken(authUser,now,refreshTokenExpiry, sectionId);
+        String accessToken = createToken(authUser,now, accessTokenExpiry);
+        String refreshToken = createToken(authUser,now,refreshTokenExpiry);
 
         return new GeneratedTokenDto(authUser.getUuid(),authUser.getRole().toString(),accessToken,refreshToken);
 
     }
 
-    public String findUuidByRefreshToken(String refreshToken){
-        return getClaims(refreshToken).getSubject();
-    }
-
     // refresh-token 검증
     public String validateToken(String refreshToken, String accessToken){
 
-        boolean isExpiredToken = false;
-
-        try{
-            getClaims(accessToken);
-        }catch(ExpiredJwtException ex){
-            isExpiredToken = true;
+        // access-token 만료여부 재확인
+        if(!getClaims(accessToken).getExpiration().before(new Date())){
+            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
-        // access-token 이 기한 만료된 경우에만 refresh-token 재발급 가능.
-        if(!isExpiredToken) throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
-
         // access-token 과 refresh-token 간의 연관 관계 확인
-        String refreshHeaderParam = refreshToken.split("\\.")[0];
-        if(!refreshHeaderParam.equals(accessToken.split("\\.")[0])){
+        Date refreshCreatedAt = getClaims(refreshToken).getIssuedAt();
+        Date accessCreatedAt = getClaims(accessToken).getIssuedAt();
+
+        if(!refreshCreatedAt.equals(accessCreatedAt)){
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
@@ -80,11 +68,10 @@ public class TokenProvider {
     }
 
     // JwtToken -  클라이언트 측에 전달하는 Token 개인정보 O(서명으로 인증)
-    private String createToken(AuthUser authUser, Date now, Date expiration, String sectionId ){
+    private String createToken(AuthUser authUser, Date now, Date expiration){
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE,Header.JWT_TYPE)
                 .setHeaderParam("alg","HS256")
-                .setHeaderParam("sectionId", sectionId)
                 .setSubject(authUser.getUuid())
                 .claim("role",authUser.getRole())
                 .setIssuer(tokenProperties.getIssuer())
@@ -95,11 +82,15 @@ public class TokenProvider {
     }
 
     private Claims getClaims(String token){
-        return Jwts.parser()
-                .setSigningKey(tokenProperties.getSecretKey())
-                .requireIssuer(tokenProperties.getIssuer())
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parser()
+                    .setSigningKey(tokenProperties.getSecretKey())
+                    .requireIssuer(tokenProperties.getIssuer())
+                    .parseClaimsJws(token)
+                    .getBody();
+        }catch(ExpiredJwtException e){
+            return e.getClaims();
+        }
     }
 
     // 토큰 발급 기능 - 만료일 계산

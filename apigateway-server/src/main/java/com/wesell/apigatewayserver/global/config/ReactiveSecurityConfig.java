@@ -45,7 +45,8 @@ public class ReactiveSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring().requestMatchers("/v2/api-docs"
-                ,"/swagger-resources/**","/swagger-ui.html","/swagger/**");
+                ,"/swagger-resources/**","/swagger-ui.html","/swagger/**",
+                "/auth-server/api/v1/refresh");
     }
 
     @Bean
