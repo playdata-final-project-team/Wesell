@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostInfoResponseDto {
 
+    private Long postId;
     private String title;
     private String createdAt;
     private Long price;
@@ -19,6 +20,7 @@ public class PostInfoResponseDto {
     private String imageUrl;
 
     public PostInfoResponseDto (DealPost post, String nickname, String imageUrl) {
+        this.postId = post.getId();
         this.title = post.getTitle();
         this.createdAt = post.getCreatedAt();
         this.price = post.getPrice();

@@ -1,10 +1,8 @@
 package com.wesell.dealservice.service;
 
 import com.wesell.dealservice.domain.SaleStatus;
-import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
-import com.wesell.dealservice.domain.dto.response.MainPagePostResponseDto;
-import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
-import com.wesell.dealservice.domain.dto.response.PostInfoResponseDto;
+import com.wesell.dealservice.domain.dto.response.*;
+import com.wesell.dealservice.domain.entity.Image;
 import com.wesell.dealservice.domain.repository.ImageRepository;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
@@ -24,7 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -89,16 +86,8 @@ public class DealServiceImpl implements DealService {
     public Page<MyPostListResponseDto> getMyPostList(String uuid, int page) {
         checkValidationByUuid(uuid);
         int pageLimit = 6;
-
         Page<DealPost> allByUuid = readRepository.searchMyList(uuid, PageRequest.of(page, pageLimit));
         return allByUuid.map(MyPostListResponseDto::new);
-    }
-
-    @Override
-    public Page<MainPagePostResponseDto> getDealPostLists(int page) {
-        int pageLimit = 8;
-        Page<DealPost> dealPosts = readRepository.searchDealPostList(PageRequest.of(page, pageLimit));
-        return dealPosts.map(MainPagePostResponseDto::new);
     }
 
     @Override
@@ -108,24 +97,43 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
+    public Page<MainPagePostResponseDto> getDealPostLists(int page) {
+        int pageLimit = 8;
+        Page<DealPost> posts = readRepository.searchDealPostList(PageRequest.of(page, pageLimit));
+        return posts.map(post -> {
+            Image image = imageRepository.findImageByPostId(post.getId());
+            return new MainPagePostResponseDto(post, image);
+        });
+    }
+
+    @Override
     public Page<MainPagePostResponseDto> findByCategory(Long categoryId, int page) {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByCategory(categoryId, PageRequest.of(page, pageLimit));
-        return posts.map(MainPagePostResponseDto::new);
+        return posts.map(post -> {
+            Image image = imageRepository.findImageByPostId(post.getId());
+            return new MainPagePostResponseDto(post, image);
+        });
     }
 
     @Override
     public Page<MainPagePostResponseDto> findByTitle(String title, int page) {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByTitle(title, PageRequest.of(page, pageLimit));
-        return posts.map(MainPagePostResponseDto::new);
+        return posts.map(post -> {
+            Image image = imageRepository.findImageByPostId(post.getId());
+            return new MainPagePostResponseDto(post, image);
+        });
     }
 
     @Override
     public Page<MainPagePostResponseDto> findByCategoryAndTitle(Long categoryId, String title, int page) {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByCategoryAndTitle(categoryId, title, PageRequest.of(page, pageLimit));
-        return posts.map(MainPagePostResponseDto::new);
+        return posts.map(post -> {
+            Image image = imageRepository.findImageByPostId(post.getId());
+            return new MainPagePostResponseDto(post, image);
+        });
     }
 
     public void checkValidationByUuid(String uuid) {

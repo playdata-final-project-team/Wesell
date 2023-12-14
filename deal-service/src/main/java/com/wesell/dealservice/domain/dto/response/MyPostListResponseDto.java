@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyPostListResponseDto {
+    private Long id;
     private String title;
     private String createdAt;
     private SaleStatus status;
 
     public MyPostListResponseDto(DealPost post) {
+        this.id = post.getId();
         this.title = post.getTitle();
         this.createdAt = post.getCreatedAt();
         this.status = post.getStatus();
