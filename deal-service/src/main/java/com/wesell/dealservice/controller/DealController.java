@@ -15,6 +15,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1")
+@CrossOrigin("http://localhost/3000")
 public class DealController {
 
     private final DealServiceImpl dealService;
