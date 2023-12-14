@@ -9,7 +9,7 @@ const PostDetailPage = () => {
   useEffect(() => {
     const fetchPostInfo = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/deal-service/api/v1/post', {
+        const response = await axios.get('http://localhost:8888/api/v1/post', {
           params: { id: postId },
         });
         setPostInfo(response.data);

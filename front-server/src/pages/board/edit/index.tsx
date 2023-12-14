@@ -4,14 +4,14 @@ import axios from 'axios';
 const EditPostPage = () => {
   const [postId, setPostId] = useState(/**/);
   const [editPostInfo, setEditPostInfo] = useState({
-    uuid: /* localStorage에서 uuid를 가져오는 코드 작성 */,
+    uuid: window.sessionStorage.getItem("uuid"),
     categoryId: null,
     title: '',
     price: null,
     link: '',
     detail: '',
-  });
-
+  })
+  
   useEffect(() => {
     const fetchPostInfo = async () => {
       try {

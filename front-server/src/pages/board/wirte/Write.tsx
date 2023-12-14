@@ -6,8 +6,8 @@ function GetCategory() {
   const [category, setCategory] = useState<category[]>([]);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:8000/deal-service/api/v1/categories')
+    axios //8000/deal-service/api
+      .get('http://localhost:8888/api/v1/categories')
       .then((response) => {
         console.log(response.data.categories);
         const categoryArray = Object.values(response.data.categories) as category[];
@@ -35,6 +35,7 @@ function GetCategory() {
 }
 
 function UploadBoard() {
+  const [ uuid, setUuid] = useState('');
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const categories = GetCategory();
   const [title, setTitle] = useState('');
@@ -44,12 +45,20 @@ function UploadBoard() {
   const [link, setLink] = useState('');
 
   const body = {
+    uuid: uuid, 
     title: title,
     categoryId: categoryId,
     content: detail,
     price: price,
     link: link,
   };
+
+  useEffect(() => {
+    const storedUuid = window.sessionStorage.getItem("uuid");
+    if (storedUuid) {
+      setUuid(storedUuid);
+    }
+  }, []);
 
   const HandleSubmit = async (body: string) => {
     const response = await axios.post('http://localhost:8888/api/v1/post', body);
