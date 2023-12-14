@@ -15,7 +15,7 @@ spring:
     show_sql: true
 
   profiles:
-    active: db
+    active: local
 
 eureka:
   instance:
@@ -35,3 +35,9 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
+
+token:
+  access-expired-time: ${access-expired}
+  refresh-expired-time: ${refresh-expired}
+  secret-key: ${secret-key}
+  issuer: ${issuer}

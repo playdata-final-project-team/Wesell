@@ -115,7 +115,7 @@ public class AuthController {
     }
 
     // 로그아웃
-    @PostMapping("logout")
+    @GetMapping("logout")
     public ResponseEntity<?> logout(){
         log.debug("AuthController - 로그아웃");
         ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
