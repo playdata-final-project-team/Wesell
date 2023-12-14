@@ -41,8 +41,6 @@ spring:
             - Path=/auth-server/**
           filters:
             - RewritePath=/auth-server/(?<path>.*),/$\{path}
-            - AuthorizationCheckFilter
-
 
 eureka:
   instance:
@@ -52,9 +50,3 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
-
-token:
-  access-expired-time: 1
-  refresh-expired-time: 24
-  secret-key: testSecret
-  issuer: test@wesell.com

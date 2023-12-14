@@ -7,7 +7,8 @@ const SIGN_IN_URL = () => '/auth-server/api/v1/sign-in';
 const SIGN_UP_URL = () => '/auth-server/api/v1/sign-up';
 const NICKNAME_CHECK_URL = () => '/user-service/api/v1/dup-check';
 const PHONE_CHECK_URL = () => '/auth-service/api/v1/phone/validate';
-const KAKAO_CALLBACK_URL = () => `/auth-server/api/v1/kakao/auth-code`;
+const KAKAO_CALLBACK_URL = () => '/auth-server/api/v1/kakao/auth-code';
+const REFRESH_TOKEN_URL = () => '/auth-server/api/v1/refresh';
 
 export const signInRequest = async (requestBody: SignInRequestDto) => {
   try {
@@ -80,3 +81,15 @@ export const kakaoCallbackAuthCodeRequest = async (authCode: string | null) => {
   }
 };
 
+export const refreshTokenRequest = async () =>{
+  try{
+    const response = await axios.get(REFRESH_TOKEN_URL());
+    const responseBody: ResponseDto = response.data;
+    return responseBody;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }catch(error: any){
+    if(!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+};

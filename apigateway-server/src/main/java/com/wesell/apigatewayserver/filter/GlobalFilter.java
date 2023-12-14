@@ -24,18 +24,17 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
             ServerHttpRequest req= exchange.getRequest();
             ServerHttpResponse resp = exchange.getResponse();
 
-            log.info("Global Filter Message : {}",config.getMessage());
+            log.info("## Global Filter Message : {}",config.getMessage());
 
             if(config.isShowPreLogger()){
-                log.info("Global Filter Start : request uri -> {}",req.getURI());
+                log.info("## Global Filter Start : request uri -> {}",req.getURI().getPath());
             }
 
             return chain.filter(exchange).then(Mono.fromRunnable(()->{
                 if(config.isShowPostLogger()){
-                    log.info("Global Filter End: response code -> {}",resp.getStatusCode());
+                    log.info("## Global Filter End: response code -> {}",resp.getStatusCode());
                 }
             }));
-
 
         });
     }

@@ -1,4 +1,4 @@
-package com.wesell.apigatewayserver.filter;
+package com.wesell.apigatewayserver.global.token;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,4 @@ public class TokenProperties {
 
     private String issuer;
     private String secretKey;
-    private Long accessExpiredTime;
-    private Long refreshExpiredTime;
-
 }
