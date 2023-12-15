@@ -4,6 +4,7 @@ import com.wesell.dealservice.domain.entity.DealPost;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +23,8 @@ public class PostInfoResponseDto {
     public PostInfoResponseDto (DealPost post, String nickname, String imageUrl) {
         this.postId = post.getId();
         this.title = post.getTitle();
-        this.createdAt = post.getCreatedAt();
+        this.createdAt = post.getCreatedAt()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.price = post.getPrice();
         this.detail = post.getDetail();
         this.link = post.getLink();

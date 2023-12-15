@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Post.css';
+import './Write.css';
 
 function GetCategory() {
   const [category, setCategory] = useState<category[]>([]);
