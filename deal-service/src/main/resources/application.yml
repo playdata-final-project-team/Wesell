@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: deal-service
+    datasource:
+      url: ${url}
+      username: ${username_}
+      password: ${password}
+      driver-class-name: ${driver-class-name}
 
   jpa:
     hibernate:
@@ -33,3 +38,13 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: ERROR
+
+cloud:
+  aws:
+    s3:
+      bucket: ${bucket}
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: ${accessKey}
+      secretKey: ${secretKey}
