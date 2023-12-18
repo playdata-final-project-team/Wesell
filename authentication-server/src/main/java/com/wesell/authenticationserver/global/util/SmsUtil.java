@@ -19,7 +19,7 @@ public class SmsUtil {
     private String apiSecretKey;
 
     private DefaultMessageService messageService;
-    private String storedCode = "1234"; // 인증번호를 저장할 변수
+    private String storedCode; // 인증번호를 저장할 변수
 
     @PostConstruct
     private void init(){
