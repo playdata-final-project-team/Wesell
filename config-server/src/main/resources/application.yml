@@ -8,4 +8,4 @@ spring:
         git:
           uri: https://github.com/playdata-final-project-team/Config.git
           username: ENC(cW5SlvBaWmiP1+VKyAf+cTGIHqEjDF5WGvhV9opSnYE=)
-          password: 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
+          password: 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

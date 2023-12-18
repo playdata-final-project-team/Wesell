@@ -21,9 +21,9 @@ public enum ErrorCode {
      * token
      */
     // Access-Token Invalid
-    INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED,"IAT","유효 하지 않은 JWT token 입니다."),
+    INVALID_ACCESS_TOKEN(HttpStatus.FORBIDDEN,"IAT","유효 하지 않은 Access token 입니다."),
     // Refresh-token Invalid
-    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED,"IRT","유효 하지 않은 Refresh token 입니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.FORBIDDEN,"IRT","유효 하지 않은 Refresh token 입니다."),
     // Expired Jwt
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED,"EAT","JWT 만료 기한이 지났습니다.");
 

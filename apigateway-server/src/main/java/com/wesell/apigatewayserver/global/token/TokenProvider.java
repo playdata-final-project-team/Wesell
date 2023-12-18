@@ -1,6 +1,6 @@
 package com.wesell.apigatewayserver.global.token;
 
-import com.wesell.apigatewayserver.response.CustomException;
+import com.wesell.apigatewayserver.response.exception.CustomException;
 import com.wesell.apigatewayserver.response.ErrorCode;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Objects;
 
 @Component
@@ -38,39 +38,42 @@ public class TokenProvider {
                     .requireIssuer(tokenProperties.getIssuer())
                     .parseClaimsJws(accessToken);
             return true;
-        }catch(SignatureException e){
-            log.error("Invalid JWT Signature {}",e.getMessage());
+        } catch (SignatureException e) {
+            log.error("Invalid JWT signature: {}", e.getMessage());
             throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
-        }catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-            throw new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN);
-        }catch(UnsupportedJwtException e) {
+        } catch (UnsupportedJwtException e) {
             log.error("JWT token is unsupported: {}", e.getMessage());
             throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
             throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
-        }catch(JwtException e){
+        }catch (JwtException e){
             log.error("Invalid JWT token: {}", e.getMessage());
             throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
     }
 
-    public Authentication getAuthentication(String accessToken){
-        Claims claims = parseClaims(accessToken);
-
-        if(claims.get("role") == null){
-            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
+    public boolean isExpiredToken(String accessToken){
+        try {
+            return parseClaims(accessToken).getExpiration().before(new Date());
+        }catch(IllegalArgumentException e){
+            return false;
         }
+    }
+
+    public Authentication getAuthentication(String accessToken){
+        if(accessToken == null) return null;
+
+        Claims claims = parseClaims(accessToken);
+        String uuid = claims.getSubject();
+        String role = String.valueOf(claims.get("role"));
 
         Collection<? extends GrantedAuthority> authorities = Arrays
-                .stream(claims.get("role").toString().split(","))
+                .stream(role.split(","))
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        String uuid = claims.getSubject();
-
-        return new UsernamePasswordAuthenticationToken(uuid,"",authorities);
+        return new UsernamePasswordAuthenticationToken(uuid,accessToken,authorities);
     }
 
     private Claims parseClaims(String accessToken){
@@ -84,5 +87,4 @@ public class TokenProvider {
             return e.getClaims();
         }
     }
-
 }

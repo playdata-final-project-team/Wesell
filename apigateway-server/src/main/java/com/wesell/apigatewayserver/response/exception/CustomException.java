@@ -1,9 +1,11 @@
-package com.wesell.apigatewayserver.response;
+package com.wesell.apigatewayserver.response.exception;
 
+import com.wesell.apigatewayserver.response.ErrorCode;
 import lombok.Getter;
+import org.springframework.security.core.AuthenticationException;
 
 @Getter
-public class CustomException extends RuntimeException{
+public class CustomException extends AuthenticationException {
 
     ErrorCode errorCode;
 
