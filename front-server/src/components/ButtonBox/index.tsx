@@ -1,3 +1,5 @@
+import './style.css';
+
 // interface: Button Box 인터페이스//
 interface Props {
   label: string;

@@ -8,22 +8,23 @@ interface Props {
   placeholder: string;
   name: string;
   value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   error: boolean;
 
+  isReadOnly?: boolean
   icon?: 'eye-light-on-icon' | 'eye-light-off-icon';
   message?: string;
 
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onIconClick?: () => void;
   onClick?: () => void;
-  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void; 
 }
 
 // component: Input Box 컴포넌트 //
 const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
   /**state: props */
   const { type, name, placeholder, error, value, icon, message } = props;
-  const { onChange, onIconClick, onClick, onKeyDown } = props;
+  const { onChange, onIconClick, onClick, onKeyDown, isReadOnly } = props;
 
   // event-handler: on Key-Down 이벤트 처리 함수 //
   const onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -46,6 +47,7 @@ const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
           onChange={onChange}
           onKeyDown={onKeyDownHandler}
           autoComplete="off"
+          readOnly={isReadOnly}
         />
 
         {onIconClick !== undefined && (
