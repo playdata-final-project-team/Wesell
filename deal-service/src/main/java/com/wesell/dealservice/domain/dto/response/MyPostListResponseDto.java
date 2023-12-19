@@ -5,6 +5,7 @@ import com.wesell.dealservice.domain.entity.DealPost;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +19,7 @@ public class MyPostListResponseDto {
     public MyPostListResponseDto(DealPost post) {
         this.id = post.getId();
         this.title = post.getTitle();
-        this.createdAt = post.getCreatedAt();
+        this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.status = post.getStatus();
     }
 

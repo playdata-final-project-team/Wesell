@@ -39,8 +39,6 @@ public class DealServiceImpl implements DealService {
     @Override
     public Long createDealPost(@Valid UploadDealPostRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
-        String customLocalDateTimeFormat =LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())
                 .category(category)
@@ -48,7 +46,7 @@ public class DealServiceImpl implements DealService {
                 .price(requestDto.getPrice())
                 .link(requestDto.getLink())
                 .detail(requestDto.getDetail())
-                .createdAt(customLocalDateTimeFormat)
+                .createdAt(LocalDateTime.now())
                 .build();
         dealRepository.save(post);
 
