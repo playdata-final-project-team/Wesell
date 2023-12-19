@@ -21,18 +21,18 @@ public class AdminController {
     private final AdminService adminService;
     private final VersionService versionService;
 
-    @GetMapping("get-version")
+    @GetMapping("get-version") //버전 값 불러오기//기본값도 들어가있다
     public ResponseEntity<Map<String, String>> getVersions() {
         return new ResponseEntity<>(versionService.getVersions(), HttpStatus.OK);
     }
 
-    @GetMapping("get/users")
+    @GetMapping("get/users")//유저리스트
     public Page<UserListResponseDto> getUserList(@RequestParam("page") int page,
                                                  @RequestParam("size") int size) {
         return adminService.getUserList(page, size);
     }
 
-    @GetMapping("version")
+    @GetMapping("version") //버전저장
     public ResponseEntity<Map<String, String>> getVersionAndSave(
             @RequestParam(name = "jsVersion", defaultValue = "1.0") String jsVersion,
             @RequestParam(name = "cssVersion", defaultValue = "1.0") String cssVersion,
@@ -41,7 +41,7 @@ public class AdminController {
         return new ResponseEntity<>(versionService.setVersions(jsVersion, cssVersion, title, agree), HttpStatus.OK);
     }
 
-    @PutMapping("change-role")
+    @PutMapping("change-role") //유저권한수정
     public ResponseEntity<String> changeUserRole(@RequestBody ChangeRoleRequestDto requestDto) {
         adminService.changeUserRole(requestDto);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -54,7 +54,7 @@ public class AdminController {
         return adminService.getPostList(uuid, page, size);
     }
 
-    @PutMapping("updateIsForced/{uuid}")
+    @PutMapping("updateIsForced/{uuid}") //회원강제탈퇴
     public ResponseEntity<String> updateIsForced(@PathVariable String uuid) {
         return new ResponseEntity<>(adminService.userIsForced(uuid), HttpStatus.OK);
     }
@@ -66,7 +66,7 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("search")
+    @GetMapping("search") //유저검색
     public Page<AdminUserResponseDto> searchUsers(@RequestParam(name = "name", defaultValue = "") String name,
                                                   @RequestParam(name = "nickname", defaultValue = "") String nickname,
                                                   @RequestParam(name = "phone", defaultValue = "") String phone,

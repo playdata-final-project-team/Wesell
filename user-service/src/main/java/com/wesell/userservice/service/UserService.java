@@ -7,13 +7,10 @@ import com.wesell.userservice.dto.response.ResponseDto;
 import com.wesell.userservice.error.exception.UserNotFoundException;
 import com.wesell.userservice.domain.entity.User;
 import com.wesell.userservice.domain.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import static com.wesell.userservice.error.exception.ErrorCode.*;
 

@@ -12,6 +12,11 @@ import PostDetailPage from 'pages/board/detail';
 import Mypage from 'pages/Mypage';
 import Withdraw from 'pages/withdraw';
 import EditPostPage from 'pages/board/edit';
+import UuidComponent from 'pages/Userfindbyid/UuidComponent';
+import FoundEmailComponent from 'pages/Userfindbyid/FoundEmailComponent';
+import EmailfindComponent from 'pages/UserfindbyPwd/EmailfindComponent';
+import FoundSmsComponent from 'pages/UserfindbyPwd/FoundSmsComponent';
+import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -38,6 +43,11 @@ function App() {
         <Route path={WITHDRAW_PATH()} element={<Withdraw />} />
         <Route path={BOARD_EDIT()} element={<EditPostPage />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
+        <Route path='testJiho2' element = {<UuidComponent/>}/>
+        <Route path='/found-email/:uuid' element = {<FoundEmailComponent/>}/>
+        <Route path='testJiho4' element = {<EmailfindComponent/>}/>
+        <Route path='testJiho5/:uuid' element = {<FoundSmsComponent/>}/>
+        <Route path='/testJiho6/:uuid' element = {<PasswordUpdateComponent/>}/>
       </Route>
     </Routes>
   );
