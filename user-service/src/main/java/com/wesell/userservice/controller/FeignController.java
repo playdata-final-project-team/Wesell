@@ -26,8 +26,9 @@ public class FeignController {
     }
 
     @GetMapping("feign/mypage/{uuid}")
-    public MypageResponseDto getMyPageDetails(@PathVariable String uuid){
-        return userService.getMyPageDetails(uuid);
+    public ResponseEntity<MypageResponseDto> getMyPageDetails(@PathVariable String uuid){
+        MypageResponseDto responseDto = userService.getMyPageDetails(uuid);
+        return ResponseEntity.ok(responseDto);
     }
 
     @PostMapping("feign/find/id")
