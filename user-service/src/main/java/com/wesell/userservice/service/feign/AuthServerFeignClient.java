@@ -11,10 +11,10 @@ import java.util.List;
 @FeignClient(name="AUTHENTICATION-SERVER")
 public interface AuthServerFeignClient {
 
-    @GetMapping("feign/auth-list")
+    @GetMapping("api/v1/feign/auth-list")
     List<AuthUserInfoRequestDto> getListAuthUserInfo();
 
-    @GetMapping("emailinfo/{uuid}")
+    @GetMapping("api/v1/emailinfo/{uuid}")
     ResponseEntity<EmailInfoDto> getEmailInfo(@PathVariable("uuid") String uuid);
 
 

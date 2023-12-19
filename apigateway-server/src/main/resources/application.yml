@@ -2,6 +2,8 @@ server:
   port: 8000
 
 spring:
+  profiles:
+    active: jwt
   application:
     name: apigateway-server
   cloud:
@@ -50,3 +52,7 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+token:
+  secret-key: ${secret-key}
+  issuer: ${issuer}

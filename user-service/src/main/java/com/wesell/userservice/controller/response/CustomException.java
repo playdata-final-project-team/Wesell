@@ -1,6 +1,8 @@
-package com.wesell.apigatewayserver.response;
+package com.wesell.userservice.controller.response;
 
+import com.wesell.userservice.error.exception.ErrorCode;
 import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 @Getter
 public class CustomException extends RuntimeException{

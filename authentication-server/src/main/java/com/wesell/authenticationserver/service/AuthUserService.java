@@ -130,7 +130,7 @@ public class AuthUserService {
         log.debug("refresh-token 검증");
         if( uuid != null) {
             AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
-                    () -> new CustomException(ErrorCode.NOT_FOUND_USER)
+                    () -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN)
             );
 
             return tokenProvider.generateTokens(authUser);
