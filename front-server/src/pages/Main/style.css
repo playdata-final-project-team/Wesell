@@ -1,0 +1,30 @@
+
+/* List container */
+.postList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+  }
+  
+  /* Individual post item */
+  .postList > div {
+    text-align: center;
+  }
+  
+  /* Image styling */
+  .postList > div img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 8px;
+  }
+  
+  /* Title styling */
+  .postList > div p:nth-child(2) {
+    font-weight: bold;
+  }
+  
+  /* Price styling */
+  .postList > div p:nth-child(3) {
+    color: #007bff; /* Change the color as needed */
+  }
+  
