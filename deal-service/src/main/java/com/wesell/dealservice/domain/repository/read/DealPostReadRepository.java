@@ -15,10 +15,10 @@ public interface DealPostReadRepository extends JpaRepository<DealPost, Long> {
     Page<DealPost> searchMyList(@Param("uuid") String uuid, Pageable pageable);
 
     @Query("SELECT dp FROM DealPost dp " +
-            "WHERE dp.id = :id " +
+            "WHERE dp.id = :postId " +
             "AND dp.status = 'IN_PROGRESS' " +
             "AND dp.isDeleted = false")
-    DealPost searchDealPost(@Param("id") Long id);
+    DealPost searchDealPost(@Param("postId") Long postId);
 
     @Query("SELECT dp FROM DealPost dp " +
             "WHERE dp.status = 'IN_PROGRESS' " +
