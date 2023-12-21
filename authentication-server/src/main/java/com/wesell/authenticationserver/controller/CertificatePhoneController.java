@@ -23,5 +23,4 @@ public class CertificatePhoneController {
 
         return ResponseEntity.ok(phoneNumber);
     }
-
 }

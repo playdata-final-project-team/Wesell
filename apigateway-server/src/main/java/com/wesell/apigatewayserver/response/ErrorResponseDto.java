@@ -1,11 +1,12 @@
 package com.wesell.apigatewayserver.response;
 
+import com.wesell.apigatewayserver.response.exception.CustomException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 에러 메시지 응답 dto
@@ -15,18 +16,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ErrorResponseDto {
 
-    private String timeStamp;
-    private HttpStatus status;
-    private String code;
-    private String message;
-    private String detail; // exception 발생 시 오류 메시지
+    private String timeStamp; // 응답 시간
+    private String status; //  응답 상태 코드
+    private String code; // 커스텀 코드
+    private String message; // 메시지
+    private List<String> vfMessages; // validation 에러 메시지
 
     private ErrorResponseDto(CustomException e){
         this.timeStamp = LocalDateTime.now().toString();
-        this.status = e.getErrorCode().getStatus();
+        this.status = e.getErrorCode().getStatus().toString();
         this.code = e.getErrorCode().getCode();
-        this.message = e.errorCode.getMessage();
-        this.detail = e.getMessage();
+        this.message = e.getErrorCode().getMessage();
     }
 
     public static ErrorResponseDto of(CustomException e){

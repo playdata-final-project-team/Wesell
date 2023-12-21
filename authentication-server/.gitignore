@@ -37,5 +37,4 @@ out/
 .vscode/
 
 ### 민감정보 ###
-application-db.yml
-application-secret.yml
+application-local.yml

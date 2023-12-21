@@ -61,12 +61,14 @@ dependencies {
 	implementation "net.nurigo:sdk:4.3.0"
 
 	// 컨피그 설정
-	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 
 	// OAuth 2.0
 
 	// Test 코드
+	implementation 'com.h2database:h2'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }

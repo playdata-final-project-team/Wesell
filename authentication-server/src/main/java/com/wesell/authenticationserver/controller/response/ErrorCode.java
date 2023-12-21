@@ -20,23 +20,27 @@ public enum ErrorCode {
      */
     // Validation Fail
     VALIDATION_FAIL(HttpStatus.BAD_REQUEST,"VF","유효성 검증 실패하였습니다."),
-    // Sign-In-Fail
-    SIGN_IN_FAIL(HttpStatus.BAD_REQUEST,"SIF","로그인에 실패하였습니다."),
     // Forced-Deleted-User
     FORCED_DELETED_USER(HttpStatus.FORBIDDEN, "FDU","접근이 제한되었습니다."),
     // Not-Found-User
-    NOT_FOUND_USER(HttpStatus.BAD_REQUEST,"NFU","등록 되지 않은 회원입니다."),
-
+    NOT_FOUND_USER(HttpStatus.BAD_REQUEST,"NFU","가입 되지 않은 회원입니다."),
+    // Password-Not-Correct
+    NOT_CORRECT_PASSWORD(HttpStatus.BAD_REQUEST,"NCP","비밀번호가 일치하지 않습니다."),
 
     /**
      * token
      */
     // Access-Token Invalid
-    INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED,"IAT","유효 하지 않은 JWT token 입니다."),
+    INVALID_ACCESS_TOKEN(HttpStatus.FORBIDDEN,"IAT","유효 하지 않은 JWT token 입니다."),
     // Refresh-token Invalid
-    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED,"IRT","유효 하지 않은 Refresh token 입니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.FORBIDDEN,"IRT","유효 하지 않은 Refresh token 입니다."),
     // Expired Jwt
-    EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED,"EAT","JWT 만료 기한이 지났습니다.");
+    EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED,"EAT","JWT 만료 기한이 지났습니다."),
+
+    /**
+     * feign 관련 오류
+     */
+    USER_SERVICE_FEIGN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"UFE","유저 서비스로 Feign 요청 시 오류 발생");
 
 
     private final HttpStatus status; // 상태코드(숫자)

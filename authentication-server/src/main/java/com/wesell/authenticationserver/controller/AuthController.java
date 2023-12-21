@@ -7,8 +7,6 @@ import com.wesell.authenticationserver.controller.response.ResponseDto;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
 import com.wesell.authenticationserver.service.dto.response.SignInSuccessResponseDto;
 import com.wesell.authenticationserver.global.util.CustomCookie;
-import com.wesell.authenticationserver.controller.response.CustomException;
-import com.wesell.authenticationserver.controller.response.ErrorCode;
 import com.wesell.authenticationserver.controller.response.SuccessCode;
 import com.wesell.authenticationserver.service.AuthUserService;
 import com.wesell.authenticationserver.service.oauth.KakaoService;
@@ -56,7 +54,8 @@ public class AuthController {
         GeneratedTokenDto generatedTokenDto = authUserService.login(requestDto);
 
         log.debug("AuthController - 액세스 토큰 쿠키 생성");
-        ResponseCookie accessTokenCookie = cookieUtil.createTokenCookie(generatedTokenDto.getAccessToken());
+        ResponseCookie accessTokenCookie = cookieUtil.createAccessTokenCookie(generatedTokenDto.getAccessToken());
+        ResponseCookie refreshTokenCookie = cookieUtil.createRefreshTokenCookie(generatedTokenDto.getRefreshToken());
 
         log.debug("AuthController - 이메일 저장 기능");
         ResponseCookie savedEmailCookie;
@@ -68,8 +67,8 @@ public class AuthController {
 
         return ResponseEntity
                 .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.AUTHORIZATION,"Bearer "+generatedTokenDto.getRefreshToken())
                 .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
                 .header(HttpHeaders.SET_COOKIE,savedEmailCookie.toString())
                 .body(new SignInSuccessResponseDto(generatedTokenDto.getUuid(), generatedTokenDto.getRole()));
     }
@@ -84,47 +83,49 @@ public class AuthController {
         log.debug("소셜 로그인 - 회원 확인 및 회원 가입");
         GeneratedTokenDto generatedTokenDto = authUserService.findOrCreateUser(kakaoAccount);
 
-        log.debug("AuthController - 액세스 토큰 쿠키 생성");
-        ResponseCookie accessTokenCookie = cookieUtil.createTokenCookie(generatedTokenDto.getAccessToken());
+        log.debug("AuthController - 쿠키 생성");
+        ResponseCookie accessTokenCookie = cookieUtil.createAccessTokenCookie(generatedTokenDto.getAccessToken());
+        ResponseCookie refreshTokenCookie = cookieUtil.createRefreshTokenCookie(generatedTokenDto.getRefreshToken());
 
         return ResponseEntity
                 .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.AUTHORIZATION,"Bearer "+generatedTokenDto.getRefreshToken())
                 .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
                 .body(new SignInSuccessResponseDto(generatedTokenDto.getUuid(), generatedTokenDto.getRole()));
     }
 
     // 만료된 토큰 갱신
-    @PostMapping("refresh")
-    public ResponseEntity<Void> refresh(
+    @GetMapping("refresh")
+    public ResponseEntity<?> refresh(
             @CookieValue(name = "access-token") String accessToken,
-            @RequestHeader(value = "Authorization") String refreshToken
+            @CookieValue(name = "refresh-token") String refreshToken
             ){
-        log.debug("AuthController - 토큰 갱신");
-        String newToken = authUserService.refreshToken(refreshToken,accessToken);
-        ResponseCookie newTokenCookie = cookieUtil.createTokenCookie(newToken);
 
-        if(newTokenCookie.getValue().isEmpty()) {
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
-        }
+        log.debug("AuthController - 토큰 갱신");
+        GeneratedTokenDto generatedTokenDto = authUserService.refreshToken(refreshToken,accessToken);
+
+        ResponseCookie newAccessTokenCookie = cookieUtil.createAccessTokenCookie(generatedTokenDto.getAccessToken());
+        ResponseCookie newRefreshTokenCookie = cookieUtil.createRefreshTokenCookie(generatedTokenDto.getRefreshToken());
 
         return ResponseEntity
                 .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,newTokenCookie.toString())
-                .body(null);
-
+                .header(HttpHeaders.SET_COOKIE,newAccessTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE,newRefreshTokenCookie.toString())
+                .body(ResponseDto.of(SuccessCode.OK));
     }
 
     // 로그아웃
-    @PostMapping("logout")
-    public ResponseEntity<Void> logout(){
-
-        ResponseCookie deleteAccessToken = cookieUtil.deleteTokenCookie();
+    @GetMapping("logout")
+    public ResponseEntity<?> logout(){
+        log.debug("AuthController - 로그아웃");
+        ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
+        ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
 
         return ResponseEntity
                 .status(SuccessCode.OK.getStatus())
                 .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
-                .body(null);
+                .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
+                .body(ResponseDto.of(SuccessCode.OK));
     }
 
 }
