@@ -4,6 +4,9 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 20px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px; /* Link 간격 조절 */
   }
   
   /* Individual post item */
@@ -27,4 +30,17 @@
   .postList > div p:nth-child(3) {
     color: #007bff; /* Change the color as needed */
   }
-  
+
+  .postList a {
+    width: calc(80% - 10px); /* 이미지 간격과 여백을 고려하여 조정하세요 */
+    margin-bottom: 20px; /* 이미지 아래 여백 조정 */
+    text-align: center; /* 이미지 중앙 정렬을 위한 설정 */
+    border: 1px solid #ddd; /* Link에 테두리 추가 (선택사항) */
+    border-radius: 8px; /* Link에 둥근 테두리 추가 (선택사항) */
+    overflow: hidden; /* Link 크기에 따라 내용이 넘칠 경우 처리 (선택사항) */
+  }
+
+  .postList img {
+    width: 80%; /* 이미지 크기 */
+    height: auto; /* 가로 세로 비율 유지 */
+  }

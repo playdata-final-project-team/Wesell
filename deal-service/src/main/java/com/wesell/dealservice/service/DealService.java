@@ -12,7 +12,7 @@ public interface DealService {
     Long createDealPost(UploadDealPostRequestDto requestCreatePostDto);
     EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId);
     void deletePost(String uuid, Long postId);
-    PostInfoResponseDto getPostInfo(Long postId);
+    PostInfoResponseDto getPostInfo(String postId);
     Page<MyPostListResponseDto> getMyPostList(String uuid, int page);
     Page<MainPagePostResponseDto> getDealPostLists(int page);
     void changePostStatus(String uuid, Long id);

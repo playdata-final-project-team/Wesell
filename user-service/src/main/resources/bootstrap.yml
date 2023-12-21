@@ -1,5 +1,5 @@
-spring:
-  cloud:
-    config:
-      uri: http://127.0.0.1:8088
-      name: user-service-db
+#spring:
+#  cloud:
+#    config:
+#      uri: http://127.0.0.1:8088
+#      name: user-service-db

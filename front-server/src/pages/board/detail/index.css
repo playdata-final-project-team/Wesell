@@ -1,0 +1,33 @@
+/* PostDetailPage.css */
+
+.container {
+    display: flex;
+  }
+  
+  .image-container {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .details-container {
+    flex: 2;
+    padding: 20px;
+  }
+  
+  .details-container h2 {
+    margin-bottom: 10px;
+  }
+  
+  .details-container p {
+    margin-bottom: 8px;
+  }
+  
+  .details-container a {
+    color: #007bff; /* Link color */
+  }
+  

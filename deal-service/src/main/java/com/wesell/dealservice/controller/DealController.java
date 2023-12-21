@@ -47,7 +47,7 @@ public class DealController {
      * @return 상세글 보기 (제목, 생성날짜, 가격, 상세설명, 링크, 작성자 닉네임)
      */
     @GetMapping("post")
-    public ResponseEntity<?> getPostInfo(@Valid @RequestParam("postId") Long postId) {
+    public ResponseEntity<?> getPostInfo(@Valid @RequestParam("id") String postId) {
         return new ResponseEntity<>(dealService.getPostInfo(postId), HttpStatus.OK);
     }
 
@@ -56,7 +56,7 @@ public class DealController {
      * @return 게시글 수정
      */
     @PutMapping("edit")
-    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto, @RequestParam("potId") Long postId) {
+    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto, @RequestParam("id") Long postId) {
         return new ResponseEntity<>(dealService.editPost(requestDto, postId),HttpStatus.OK);
     }
 

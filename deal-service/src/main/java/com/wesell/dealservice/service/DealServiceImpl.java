@@ -69,8 +69,8 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public PostInfoResponseDto getPostInfo(Long postId) {
-        DealPost foundPost = readRepository.searchDealPost(postId);
+    public PostInfoResponseDto getPostInfo(String postId) {
+        DealPost foundPost = readRepository.searchDealPost(Long.parseLong(postId));
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         String imageUrl = imageRepository.findImageByPostId(foundPost.getId()).getImageUrl();
         return new PostInfoResponseDto(foundPost, nickname, imageUrl);

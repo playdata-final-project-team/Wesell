@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
 import './style.css';
 
 interface PostJson {
@@ -11,7 +12,7 @@ interface PostJson {
 function Main() {
   const [postJson, setPostJson] = useState<PostJson[]>();
 
-  useEffect(() => {
+  useEffect( () => {
     const POST_LIST_ENDPOINT = `/deal-service/api/v1/main?page=0`; // 페이지 파라미터를 직접 URL에 추가
 
     fetch(POST_LIST_ENDPOINT, {
@@ -26,18 +27,27 @@ function Main() {
         console.error('Error fetching data:', error);
       });
   }, []);
+
+  // // event-handler: 상세항목 click event handler //
+  // const onDetailClickHandler = (event: MouseEvent<HTMLInputElement>) => {
+  //   // href={`/board/detail/${post.postId}`}
+  //   console.log(event.target);
+  // }
+
   return (
     <>
       <div className = "postList">
         {postJson?.map(post => (
-          <a key={post.postId} href={`/deal-service/api/v1/id=${post.postId}`}>
+          //div, event-handler
+          <Link key={post.postId} to={`/board/detail/${post.postId}`}>
             <img src={post.imageUrl} />
             <p>{post.title}</p>
             <p>{post.price}</p>
-          </a>
+          </Link>
         ))}
       </div>
     </>
     );
 }
-export default Main
+export default Main;
+

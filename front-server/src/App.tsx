@@ -31,7 +31,7 @@ function App() {
         <Route path={TEST_PATH()} element={<CorsTest />} />
         <Route path={TEST_PATH()} element={<></>} />
         <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
-        <Route path={BOARD_DETAIL()} element={<PostDetailPage />} />
+        <Route path='/board/detail/:postId' element={<PostDetailPage />} />
         <Route path={BOARD_EDIT()} element={<EditPostPage />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
       </Route>
