@@ -61,8 +61,8 @@ dependencies {
 	implementation "net.nurigo:sdk:4.3.0"
 
 	// 컨피그 설정
-	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 
 	// OAuth 2.0
 

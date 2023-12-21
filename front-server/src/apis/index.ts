@@ -3,6 +3,7 @@ import { SignInRequestDto, SignUpRequestDto } from './request/auth';
 import { SignInResponseDto } from './response/auth';
 import { ResponseDto } from './response';
 import ResponseCode from 'constant/response-code.enum';
+import MypageResponseDto from './response/mypage/mypage.response.dto';
 
 const SIGN_IN_URL = () => '/auth-server/api/v1/sign-in';
 const SIGN_UP_URL = () => '/auth-server/api/v1/sign-up';
@@ -11,6 +12,8 @@ const NICKNAME_CHECK_URL = () => '/user-service/api/v1/dup-check';
 const PHONE_CHECK_URL = () => '/auth-service/api/v1/phone/validate';
 const KAKAO_CALLBACK_URL = () => '/auth-server/api/v1/kakao/auth-code';
 const REFRESH_TOKEN_URL = () => '/auth-server/api/v1/refresh';
+const MYPAGE_URL = (uuid : string|null) => `/user-service/api/v1/feign/mypage/${uuid}`;
+const MY_INFO_UPDATE_URL = (uuid: string) => `/user-service/api/v1/${uuid}`;
 
 export const signInRequest = async (requestBody: SignInRequestDto) => {
   try {
@@ -20,7 +23,7 @@ export const signInRequest = async (requestBody: SignInRequestDto) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (!error.response) return null;
-    const responseBody: ResponseDto = error.response.data;
+    const responseBody: SignInResponseDto = error.response.data;
     return responseBody;
   }
 };
@@ -106,7 +109,33 @@ export const logoutRequest = async () => {
     const responseBody: ResponseDto = error.response.data;
     return responseBody;
   }
-}
+};
+
+export const mypageInfoRequest = async (uuid:string|null) => {
+  try{
+    const response = await axios.get(MYPAGE_URL(uuid));
+    const responseBody: MypageResponseDto = response.data;
+    return responseBody;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }catch(error : any){
+    if(!error.response) return null;
+    const responseBody: MypageResponseDto = error.response.data;
+    return responseBody;
+  }
+};
+
+export const myInfoUpdateRequest = async (uuid: string) => {
+  try{
+    const response = await axios.put(MY_INFO_UPDATE_URL(uuid));
+    const responseBody: ResponseDto = response.data;
+    return responseBody;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }catch(error: any){
+    if(!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+};
 
 axios.interceptors.response.use(
     (res) => res,
@@ -127,8 +156,8 @@ axios.interceptors.response.use(
       }
 
       if(responseBody.code === ResponseCode.INVALID_REFRESH_TOKEN ||
-        responseBody.code === ResponseCode.EXPIRED_ACCESS_TOKEN){
-          logoutRequest();
+        responseBody.code === ResponseCode.INVALID_ACCESS_TOKEN){
+          await logoutRequest();
           window.location.href=`http://localhost:3000/auth`;// 로그인 페이지로 이동
       }
 

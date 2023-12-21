@@ -1,5 +1,6 @@
 package com.wesell.userservice.controller;
 
+import com.wesell.userservice.controller.response.NewResponseDto;
 import com.wesell.userservice.dto.feigndto.SignUpResponseDto;
 import com.wesell.userservice.dto.request.SignupRequestDto;
 import com.wesell.userservice.dto.response.ResponseDto;
@@ -46,10 +47,9 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<String> updateUser(@PathVariable String uuid, @RequestBody SignupRequestDto signupRequestDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable String uuid, @RequestBody SignupRequestDto signupRequestDTO) {
             userService.updateUser(uuid, signupRequestDTO);
-            return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
-
+            return ResponseEntity.status(HttpStatus.OK).body(NewResponseDto.of(SuccessCode.OK));
     }
 
     @GetMapping("/users/{uuid}/nickname")

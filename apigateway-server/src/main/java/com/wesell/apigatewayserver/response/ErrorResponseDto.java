@@ -1,9 +1,9 @@
 package com.wesell.apigatewayserver.response;
 
+import com.wesell.apigatewayserver.response.exception.CustomException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +26,7 @@ public class ErrorResponseDto {
         this.timeStamp = LocalDateTime.now().toString();
         this.status = e.getErrorCode().getStatus().toString();
         this.code = e.getErrorCode().getCode();
-        this.message = e.errorCode.getMessage();
+        this.message = e.getErrorCode().getMessage();
     }
 
     public static ErrorResponseDto of(CustomException e){
