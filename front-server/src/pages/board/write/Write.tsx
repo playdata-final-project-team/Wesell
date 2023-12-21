@@ -119,8 +119,7 @@ function UploadBoard() {
         </div>
         <button
           className="post-view-go-list-btn"
-          onClick={() => HandleSubmit(JSON.stringify(body))}
-        >
+          onClick={() => HandleSubmit(JSON.stringify(body))}>
           등록
         </button>
       </div>

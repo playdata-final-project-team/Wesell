@@ -8,7 +8,7 @@ interface PostJson {
   "title":string;
   "price":number;
 }
-// component: 메인 페이지 컴포넌트 //
+
 function Main() {
   const [postJson, setPostJson] = useState<PostJson[]>();
 
@@ -28,17 +28,9 @@ function Main() {
       });
   }, []);
 
-  // // event-handler: 상세항목 click event handler //
-  // const onDetailClickHandler = (event: MouseEvent<HTMLInputElement>) => {
-  //   // href={`/board/detail/${post.postId}`}
-  //   console.log(event.target);
-  // }
-
   return (
-    <>
       <div className = "postList">
         {postJson?.map(post => (
-          //div, event-handler
           <Link key={post.postId} to={`/board/detail/${post.postId}`}>
             <img src={post.imageUrl} />
             <p>{post.title}</p>
@@ -46,8 +38,7 @@ function Main() {
           </Link>
         ))}
       </div>
-    </>
     );
 }
-export default Main;
 
+export default Main;
