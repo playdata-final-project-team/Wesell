@@ -12,4 +12,5 @@ public class UploadFileRequestDto {
 
     private Long postId;
     private String url;
+    private int division = 2;
 }

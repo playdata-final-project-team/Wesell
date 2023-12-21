@@ -9,6 +9,7 @@ import com.wesell.dealservice.service.DealMessageQueueService;
 import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class MessageQueueController {
      * @return 판매글 저장
      */
     @PostMapping("post")
-    public ResponseEntity<?> uploadDealPost(@Valid @RequestBody UploadDealPostRequestDto requestDto) throws JsonProcessingException {
+    public ResponseEntity<?> uploadDealPost(@Valid @RequestBody UploadDealPostRequestDto requestDto) throws JsonProcessingException, JSONException {
         dealService.publishCreateItemMessage(requestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -41,7 +42,7 @@ public class MessageQueueController {
      * @throws IOException
      */
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestPart("file") MultipartFile file, @RequestPart("id") Long postId) throws IOException {
+    public ResponseEntity<?> uploadFile(@RequestPart("file") MultipartFile file, @RequestPart("id") Long postId) throws IOException, JSONException {
         String url = uploadService.getUrl(file);
         UploadFileRequestDto dto = new UploadFileRequestDto();
         dto.setUrl(url);
@@ -64,9 +65,9 @@ public class MessageQueueController {
      * @return 게시글 수정
      */
     @PutMapping("edit")
-    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto) throws JsonProcessingException {
+    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto) throws JsonProcessingException, JSONException {
 
-        dealService.publishUpdateItemMessage(requestDto);
+        dealService.publishCreateItemMessage(requestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -75,8 +76,8 @@ public class MessageQueueController {
      * @return 상태 변경(판매 완료)
      */
     @PutMapping("complete")
-    public ResponseEntity<?> changePostStatus(@Valid @RequestBody ChangePostRequestDto requestDto) throws JsonProcessingException{
-        dealService.publishUpdateItemMessage(requestDto);
+    public ResponseEntity<?> changePostStatus(@Valid @RequestBody ChangePostRequestDto requestDto) throws JsonProcessingException, JSONException {
+        dealService.publishCreateItemMessage(requestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

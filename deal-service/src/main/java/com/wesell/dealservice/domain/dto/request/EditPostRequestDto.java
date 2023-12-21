@@ -29,4 +29,5 @@ public class EditPostRequestDto {
     private String detail;
 
     private Long postId;
+    private int division = 3;
 }

@@ -1,24 +1,19 @@
 package com.wesell.dealservice.util;
 
-import com.amazonaws.services.s3.transfer.Upload;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadFileRequestDto;
-import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
 import com.wesell.dealservice.service.DealMessageQueueService;
-import com.wesell.dealservice.service.DealService;
 import com.wesell.dealservice.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.util.Map;
+
 
 
 @Component
@@ -30,34 +25,34 @@ public class Consumer {
     private final FileUploadService fileUploadService;
 
 
-    @RabbitListener(queues = "DEAL_CREATE_QUEUE")
-    public void createDeal(String message) throws JsonProcessingException {
-        // objectMapper.readValue("String형식인 JSON", "목적객체.class);
-        UploadDealPostRequestDto dto = objectMapper.readValue(message, UploadDealPostRequestDto.class);
-        // 서비스에서 DTO를 입력받아 DB에 INSERT해주는 로직을 호출
-        dealService.createDealPost(dto);
-    }
 
     @RabbitListener(queues = "DEAL_CREATE_QUEUE")
-    public void saveUrl(String message) throws IOException {
+    public void saveUrl(String message) throws IOException, JSONException {
 
-        UploadFileRequestDto dto = objectMapper.readValue(message, UploadFileRequestDto.class);
+        String[] str = message.trim().substring(1, message.length()-1).split(",");
 
-        fileUploadService.saveImageUrl(dto);
-    }
+        String[] answer = str[str.length-1].split(":");
 
-    @RabbitListener(queues = "DEAL_UPDATE_QUEUE")
-    public EditPostResponseDto editPostInfo(String message) throws JsonProcessingException {
+        if(answer[1].equals("1")) {
+            UploadDealPostRequestDto dto = objectMapper.readValue(message, UploadDealPostRequestDto.class);
 
-        EditPostRequestDto dto = objectMapper.readValue(message, EditPostRequestDto.class);
-        return dealService.editPost(dto);
-    }
+            dealService.createDealPost(dto);
+        }
+        else if(answer[1].equals("2")) {
+            UploadFileRequestDto dto = objectMapper.readValue(message, UploadFileRequestDto.class);
 
-    @RabbitListener(queues = "DEAL_UPDATE_QUEUE")
-    public void changeStatus(String message) throws JsonProcessingException {
+            fileUploadService.saveImageUrl(dto);
+        }
+        else if(answer[1].equals("3")) {
+            EditPostRequestDto dto = objectMapper.readValue(message, EditPostRequestDto.class);
 
-        ChangePostRequestDto dto = objectMapper.readValue(message, ChangePostRequestDto.class);
-        dealService.changePostStatus(dto);
+            dealService.editPost(dto);
+        }
+        else if(answer[1].equals("4")) {
+            ChangePostRequestDto dto = objectMapper.readValue(message, ChangePostRequestDto.class);
+
+            dealService.changePostStatus(dto);
+        }
     }
 
 

@@ -23,6 +23,8 @@ import com.wesell.dealservice.util.Producer;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -150,13 +152,8 @@ public class DealMessageQueueService implements DealService {
 
         // DTO를 json으로 직렬화
         String message = objectMapper.writeValueAsString(dto);
+
         producer.sendMessage(message);
-    }
-
-    public <T> void publishUpdateItemMessage(T dto) throws JsonProcessingException {
-
-        String message = objectMapper.writeValueAsString(dto);
-        producer.updateMessage(message);
     }
 
 }

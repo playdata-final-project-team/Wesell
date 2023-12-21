@@ -16,9 +16,5 @@ public class Producer {
 
     }
 
-    public void updateMessage(String message) {
-        rabbitTemplate.convertAndSend("DEAL_UPDATE_QUEUE", message);
-    }
-
 
 }
