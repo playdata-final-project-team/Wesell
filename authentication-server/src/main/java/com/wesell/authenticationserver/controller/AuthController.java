@@ -2,6 +2,7 @@ package com.wesell.authenticationserver.controller;
 
 import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
 import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestDto;
+import com.wesell.authenticationserver.controller.dto.request.DeleteUserPwCheckRequestDto;
 import com.wesell.authenticationserver.controller.dto.request.SignInUserRequestDto;
 import com.wesell.authenticationserver.controller.response.ResponseDto;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
@@ -127,5 +128,30 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
                 .body(ResponseDto.of(SuccessCode.OK));
     }
+
+    // 회원탈퇴 전 비밀번호 확인
+    @PostMapping("delete/pw-check")
+    public ResponseEntity<ResponseDto> checkPw(@RequestBody DeleteUserPwCheckRequestDto requestDto){
+        log.debug("AuthController - 회원 탈퇴 전 비밀번호 확인");
+        authUserService.checkPwForDelete(requestDto);
+        return ResponseEntity.ok(ResponseDto.of(SuccessCode.OK));
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("delete/{uuid}")
+    public ResponseEntity<ResponseDto> deleteUser(@PathVariable(value="uuid") String uuid){
+        log.debug("AuthController - 회원 탈퇴");
+        ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
+        ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
+
+        authUserService.deleteUser(uuid);
+
+        return ResponseEntity
+                .status(SuccessCode.OK.getStatus())
+                .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
+                .header(HttpHeaders.SET_COOKIE,deleteRefreshToken.toString())
+                .body(ResponseDto.of(SuccessCode.OK));
+    }
+
 
 }

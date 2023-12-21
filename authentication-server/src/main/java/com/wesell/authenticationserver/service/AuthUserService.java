@@ -1,5 +1,6 @@
 package com.wesell.authenticationserver.service;
 
+import com.wesell.authenticationserver.controller.dto.request.DeleteUserPwCheckRequestDto;
 import com.wesell.authenticationserver.controller.response.ResponseDto;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.enum_.Role;
@@ -185,6 +186,46 @@ public class AuthUserService {
         } else {
             return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");
         }
+    }
+
+    public void checkPwForDelete(DeleteUserPwCheckRequestDto requestDto){
+        log.debug("회원 탈퇴 전 비밀번호 확인");
+
+        log.debug("회원 조회");
+        String uuid = requestDto.getUuid();
+        AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(()->{
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+        });
+
+        log.debug("비밀번호 일치 여부");
+        String inputData = requestDto.getPw();
+        String pw = authUser.getPassword();
+        if(!passwordEncoder.matches(inputData,pw)){
+            throw new CustomException(ErrorCode.NOT_CORRECT_PASSWORD);
+        }
+    }
+
+    public void deleteUser(String uuid){
+        log.debug("회원 탈퇴");
+
+        log.debug("탈퇴할 회원 조회");
+        AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(() ->{
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+        });
+
+        log.debug("탈퇴한 회원으로 변경 - DB 반영");
+        authUser.changeIsDeleted();
+        authUserRepository.saveAndFlush(authUser);
+
+        log.debug("User-Service Api Call - 회원가입 요청");
+        try {
+            userServiceFeignClient.deleteUser(uuid);
+        }catch(Exception e){
+            log.error("유저 서비스로 Feign 요청 시 오류 발생.");
+            log.error("detail : {}",e.getMessage());
+            throw new CustomException(ErrorCode.USER_SERVICE_FEIGN_ERROR);
+        }
+
     }
 
     /*====================== Feign =======================*/

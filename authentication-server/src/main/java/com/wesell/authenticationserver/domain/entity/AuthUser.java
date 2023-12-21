@@ -22,7 +22,7 @@ public class AuthUser {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name= "a_role", nullable = false)
+    @Column(name= "a_role", nullable = false, length = 20)
     private Role role;
 
     @Column(name = "is_deleted")

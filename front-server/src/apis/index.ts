@@ -4,6 +4,8 @@ import { SignInResponseDto } from './response/auth';
 import { ResponseDto } from './response';
 import ResponseCode from 'constant/response-code.enum';
 import MypageResponseDto from './response/mypage/mypage.response.dto';
+import { PwCheckRequestDto } from './request/delete';
+import MyDealListWithPageResponseDto from './response/mypage/my.deal-list-page.response.dto';
 
 const SIGN_IN_URL = () => '/auth-server/api/v1/sign-in';
 const SIGN_UP_URL = () => '/auth-server/api/v1/sign-up';
@@ -14,6 +16,9 @@ const KAKAO_CALLBACK_URL = () => '/auth-server/api/v1/kakao/auth-code';
 const REFRESH_TOKEN_URL = () => '/auth-server/api/v1/refresh';
 const MYPAGE_URL = (uuid : string|null) => `/user-service/api/v1/feign/mypage/${uuid}`;
 const MY_INFO_UPDATE_URL = (uuid: string) => `/user-service/api/v1/${uuid}`;
+const PW_CHECK_URL = () => '/auth-server/api/v1/delete/pw-check';
+const DELETE_URL = (uuid: string | null) => `/auth-server/api/v1/delete/${uuid}`;
+const MY_DEAL_LIST_URL = () => '/deal-service/api/v1/list';
 
 export const signInRequest = async (requestBody: SignInRequestDto) => {
   try {
@@ -136,6 +141,61 @@ export const myInfoUpdateRequest = async (uuid: string) => {
     return responseBody;
   }
 };
+
+export const pwCheckRequest = async (requestDto: PwCheckRequestDto) => {
+  try{
+    const response = await axios.post(PW_CHECK_URL(),requestDto);
+    const responseBody : ResponseDto = response.data;
+    return responseBody
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }catch(error: any){
+    if(!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+}
+
+export const deleteUserRequest= async (uuid: string | null) => {
+  try{
+    const response = await axios.delete(DELETE_URL(uuid));
+    const responseBody : ResponseDto = response.data;
+    return responseBody
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }catch(error: any){
+    if(!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+}
+
+export const myDealListRequest = async (uuid: string | null, page: number) => {
+  try{
+    const response= await axios.get(MY_DEAL_LIST_URL(),{
+      params:{uuid: uuid, page: page}
+    });
+    const responseBody: MyDealListWithPageResponseDto = response.data;
+    return responseBody;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }catch(error:any){
+    if(!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+};
+
+export const GET_SING_IN_USER_URL = ()=> `/auth-server/api/v1/user`;
+const getSignInUserRequest = async ()=> {
+  try{
+    const response = await axios.get(GET_SING_IN_USER_URL());
+    const responseBody = response.data;
+    return responseBody;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }catch(error:any){
+    if(error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+}
 
 axios.interceptors.response.use(
     (res) => res,
