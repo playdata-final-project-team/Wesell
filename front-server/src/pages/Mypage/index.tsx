@@ -191,7 +191,96 @@ function Mypage() {
 
   // component: 마이페이지 - 판매내역 컴포넌트 //
   const DealInfo = () => {
-    return <></>;
+    // state: 판매 내역 한페이지 게시글 목록 상태값 //
+    const [posts, setPosts] = useState<MyDealListResponseDto[]>([]);
+    // state: 현재 페이지 상태값 //
+    const [curPage, setCurPage] = useState<number>(1);
+    // state: 한 페이지 보일 수 있는 항목 갯수 상태값 //
+    const [size, setSize] = useState<number>(10);
+    // state: 한 페이지에 보여 줄 페이지네이션 갯수 상태값 //
+    const [blockNum, setBlockNum] = useState<number>(0);
+    // state: 전체 항목 갯수 상태값 //
+    const [totalElements, SetTotalElements] = useState<number>(0);
+
+    // context: uuid, role 값//
+    const { uuid } = useStore((state) => state);
+
+    // effect: 판매 내역 목록 effect 처리 //
+    useEffect(() => {
+      async function fetchData(uuid: string | null, page: number) {
+        const responseBody: MyDealListWithPageResponseDto | ResponseDto | null =
+          await myDealListRequest(uuid, page);
+
+        console.log(responseBody);
+
+        if (!responseBody) {
+          alert('네트워크 연결 상태를 확인해주세요!');
+          return;
+        }
+
+        const responseBodyWithDealInfo = responseBody as MyDealListWithPageResponseDto;
+        const { empty, content, totalElements, size } = responseBodyWithDealInfo;
+
+        if (empty) {
+          return <p>판매 게시글이 없습니다.</p>;
+        }
+
+        setPosts(content);
+        SetTotalElements(totalElements);
+        setSize(size);
+      }
+
+      fetchData(uuid, curPage);
+    }, [uuid, curPage]);
+
+    // event-handler: 회원정보 on-click 이벤트 핸들링 //
+    const onDealInfoBtnClickHandler = () => {
+      setView('user-info');
+    };
+
+    // render: 마이페이지 - 판매내역 컴포넌트 렌더링 //
+    return (
+      <div className="dealInfo-card">
+        <h1 className="card-title">판매 내역</h1>
+        <div className="card-list-box">
+          <table className="dealInfo-list">
+            <thead>
+              <tr className="dealInfo-element">
+                <th></th>
+                <th>제목</th>
+                <th>게시일</th>
+                <th>판매 중/ 판매완료</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {posts.map((post, index) => (
+                <tr className="dealInfo-element" key={index}>
+                  <td></td>
+                  <td>{post.title}</td>
+                  <td>{post.createdAt}</td>
+                  <td>{post.status}</td>
+                  <div className="dealInfo-element-btn">
+                    <button type="button">수정</button>
+                  </div>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="card-btn-box">
+          <ABox label="회원 정보" onClick={onDealInfoBtnClickHandler}></ABox>
+          <ListPagenation
+            limit={size}
+            page={curPage}
+            setPage={setCurPage}
+            blockNum={blockNum}
+            counts={totalElements}
+            setBlockNum={setBlockNum}
+          />
+        </div>
+      </div>
+    );
   };
 
   // render: 마이페이지 컴포넌트 렌더링 //

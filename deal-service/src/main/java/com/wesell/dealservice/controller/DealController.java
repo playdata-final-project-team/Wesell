@@ -86,7 +86,7 @@ public class DealController {
      */
     @GetMapping("list")
     public ResponseEntity<?> getMyPostList(@RequestParam("uuid") String uuid, @RequestParam(name = "page", defaultValue = "0") Integer page) {
-        return new ResponseEntity<>(dealService.getMyPostList(uuid, page),HttpStatus.OK);
+        return new ResponseEntity<>(dealService.getMyPostList(uuid, page-1),HttpStatus.OK);
     }
 
     /**

@@ -17,15 +17,18 @@ import com.wesell.dealservice.feignClient.UserFeignClient;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Log4j2
 public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
@@ -55,7 +58,11 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
-        checkValidationByUuid(requestDto.getUuid());
+        try {
+            checkValidationByUuid(requestDto.getUuid());
+        }catch(CustomException e){
+            log.error("ErrorMessage : {}",e.getMessage());
+        }
         DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
@@ -66,7 +73,11 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public void deletePost(String uuid, Long postId) {
-        checkValidationByUuid(uuid);
+        try {
+            checkValidationByUuid(uuid);
+        }catch(CustomException e){
+            log.error("ErrorMessage : {}",e.getMessage());
+        }
         DealPost post = dealRepository.findDealPostByUuidAndId(uuid, postId);
         post.deleteMyPost();
     }
@@ -82,7 +93,12 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public Page<MyPostListResponseDto> getMyPostList(String uuid, int page) {
-        checkValidationByUuid(uuid);
+        try {
+            checkValidationByUuid(uuid);
+        }catch(CustomException e){
+            log.error("ErrorMessage : {}",e.getMessage());
+            return Page.empty();
+        }
         int pageLimit = 6;
         Page<DealPost> allByUuid = readRepository.searchMyList(uuid, PageRequest.of(page, pageLimit));
         return allByUuid.map(MyPostListResponseDto::new);
@@ -90,8 +106,12 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public void changePostStatus(String uuid, Long id) {
-        checkValidationByUuid(uuid);
-        dealRepository.findDealPostByIdAndIsDeleted(id, false).changeStatus();
+        try {
+            checkValidationByUuid(uuid);
+            dealRepository.findDealPostByIdAndIsDeleted(id, false).changeStatus();
+        }catch(CustomException e){
+            log.error("ErrorMessage : {}",e.getMessage());
+        }
     }
 
     @Override
@@ -136,13 +156,16 @@ public class DealServiceImpl implements DealService {
 
     public void checkValidationByUuid(String uuid) {
         DealPost post = dealRepository.findFirstByUuid(uuid);
+        if(Objects.isNull(post)){
+            throw new CustomException(ErrorCode.POST_NOT_FOUND);
+        }
         if(!uuid.equals(post.getUuid())) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
     }
 
     public void checkPostValidation(DealPost post) {
-        if(post.getIsDeleted() || post.getStatus().equals(SaleStatus.COMPLETED)) {
+        if(post.getIsDeleted() || post.getSaleStatus().equals(SaleStatus.COMPLETED)) {
             throw new CustomException(ErrorCode.INVALID_POST);
         }
     }

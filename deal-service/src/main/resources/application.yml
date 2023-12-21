@@ -5,6 +5,12 @@ spring:
   application:
     name: deal-service
 
+  datasource:
+    url: ${url}
+    username: ${username_}
+    password: ${password}
+    driver-class-name: ${driver-class-name}
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -33,3 +39,16 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: ERROR
+
+cloud:
+  aws:
+    s3:
+      bucket: wesell-bucket
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+      auto: false
+    credentials:
+      accessKey: ${access-key}
+      secretKey: ${secret-key}
