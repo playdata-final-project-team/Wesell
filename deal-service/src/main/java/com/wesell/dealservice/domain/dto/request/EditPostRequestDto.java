@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EditPostRequestDto {
 
-    private String uuid;
-
     @NotNull
     private Long categoryId;
 

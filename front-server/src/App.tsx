@@ -41,7 +41,7 @@ function App() {
         <Route path='/board/detail/:postId' element={<PostDetailPage />} />
         <Route path={MYPAGE_PATH()} element={<Mypage />}/>
         <Route path={WITHDRAW_PATH()} element={<Withdraw />} />
-        <Route path={BOARD_EDIT()} element={<EditPostPage />} />
+        <Route path='/board/edit/:postId' element={<EditPostPage />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
         <Route path='testJiho2' element = {<UuidComponent/>}/>
         <Route path='/found-email/:uuid' element = {<FoundEmailComponent/>}/>

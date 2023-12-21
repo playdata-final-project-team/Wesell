@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 public interface DealService {
     Long createDealPost(UploadDealPostRequestDto requestCreatePostDto);
     EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId);
-    void deletePost(String uuid, Long postId);
+    void deletePost(Long postId);
     PostInfoResponseDto getPostInfo(String postId);
     Page<MyPostListResponseDto> getMyPostList(String uuid, int page);
     Page<MainPagePostResponseDto> getDealPostLists(int page);

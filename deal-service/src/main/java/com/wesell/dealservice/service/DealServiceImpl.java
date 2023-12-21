@@ -54,7 +54,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
-        DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
+        DealPost editPost = dealRepository.findDealPostById( postId);
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         editPost.editCategory(category);
@@ -63,8 +63,8 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public void deletePost(String uuid, Long postId) {
-        DealPost post = dealRepository.findDealPostByUuidAndId(uuid, postId);
+    public void deletePost( Long postId) {
+        DealPost post = dealRepository.findDealPostById( postId);
         post.deleteMyPost();
     }
 

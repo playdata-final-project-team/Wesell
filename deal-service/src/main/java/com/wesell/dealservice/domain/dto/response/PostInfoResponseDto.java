@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class PostInfoResponseDto {
 
     private Long postId;
+    private Long categoryId;
     private String title;
     private String createdAt;
     private Long price;
@@ -22,6 +23,7 @@ public class PostInfoResponseDto {
 
     public PostInfoResponseDto (DealPost post, String nickname, String imageUrl) {
         this.postId = post.getId();
+        this.categoryId = post.getCategory().getId();
         this.title = post.getTitle();
         this.createdAt = post.getCreatedAt()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
