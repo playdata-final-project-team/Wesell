@@ -55,8 +55,11 @@ function AuthServer() {
     const [error, setError] = useState<boolean>(false);
 
     // function: sign in response 처리 함수//
-    const signInResponse = (responseBody: SignInResponseDto | ResponseDto | null) => {
+    const signInResponse = (responseBody: SignInResponseDto | null) => {
       // comment: 서버가 안켜진 경우 또는 도메인 주소가 잘못된 경우 //
+
+      console.log(responseBody);
+      
       if (!responseBody) {
         alert('네트워크 연결 상태를 확인해주세요!');
         return;
@@ -72,7 +75,8 @@ function AuthServer() {
       if (
         code === ResponseCode.SIGN_IN_FAIL ||
         code === ResponseCode.VALIDATION_FAIL ||
-        code === ResponseCode.NOT_FOUND_USER
+        code === ResponseCode.NOT_FOUND_USER ||
+        code === ResponseCode.NOT_CORRECT_PASSWORD
       ) {
         setError(true);
         return;
@@ -118,7 +122,7 @@ function AuthServer() {
     };
 
     // event-handler: 로그인 버튼 click 이벤트 처리 //
-    const onSignInButtonClickHandler = () => {
+    const onSignInButtonClickHandler = async () => {
       const requestBody: SignInRequestDto = { email, password, savedEmail };
 
       if (requestBody.email.trim() === '') {
@@ -131,7 +135,7 @@ function AuthServer() {
         return;
       }
 
-      signInRequest(requestBody).then(signInResponse);
+      await signInRequest(requestBody).then(signInResponse);
     };
 
     // event-handler: 소셜 로그인 button click 이벤트 처리//

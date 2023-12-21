@@ -4,7 +4,11 @@ server:
 spring:
   application:
     name: authentication-server
-
+  datasource:
+    url: ${url}
+    driver-class-name: ${driver-class-name}
+    username: ${username_}
+    password: ${password}
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,7 +19,7 @@ spring:
     show_sql: true
 
   profiles:
-    active: db
+    active: local
 
 eureka:
   instance:
@@ -35,3 +39,21 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
+
+token:
+  access-expired-time: ${access-expired}
+  refresh-expired-time: ${refresh-expired}
+  secret-key: ${secret-key}
+  issuer: ${issuer}
+
+kakao:
+  auth-url: ${auth-url}
+  user-api-url: ${user-api-url}
+  client-id: ${client-id}
+  client-secret: ${client-secret}
+  redirect-url : ${redirect-url}
+
+coolsms:
+  api:
+    key: ${coolsms-key}
+    secret: ${coolsms-secret}

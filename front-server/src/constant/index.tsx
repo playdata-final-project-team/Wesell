@@ -5,3 +5,7 @@ export const SEARCH_PATH = () => '/search';
 export const UPLOAD_PATH = () => '/board/post';
 export const USER_PATH = (userEmail: string) => `/user/${userEmail}`;
 export const TEST_PATH = () => '/test';
+export const BOARD_DETAIL = () => '/board/detail';
+export const MYPAGE_PATH = () => '/mypage';
+export const WITHDRAW_PATH = () => '/withdraw';
+export const BOARD_EDIT = () => '/board/edit';

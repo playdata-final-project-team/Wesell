@@ -9,6 +9,7 @@ enum ResponseCode {
   VALIDATION_FAIL = 'VF',
   SIGN_IN_FAIL = 'SIF',
   NOT_FOUND_USER = 'NFU',
+  NOT_CORRECT_PASSWORD = 'NCP',
 
   // comment: HttpStatus 401 //
   INVALID_ACCESS_TOKEN = 'IAT',
@@ -20,6 +21,7 @@ enum ResponseCode {
 
   // comment: HttpStatus 500 //
   TEMPORARY_SERVER_ERROR = 'TSE',
+  USER_SERVICE_FEIGN_ERROR = 'UFE',
 }
 
 export default ResponseCode;

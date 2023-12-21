@@ -7,13 +7,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomCookie {
 
-    // 쿠키 생성
-    public ResponseCookie createTokenCookie(String token){
+    // access-token 쿠키 생성
+    public ResponseCookie createAccessTokenCookie(String token){
 
         return ResponseCookie.from("access-token", token)
                 .path("/")
                 .httpOnly(true)
-                .maxAge(60*60)
+                .maxAge(60*60+(60*30))
+                .build();
+    }
+
+    // refresh-token 쿠키 생성
+    public ResponseCookie createRefreshTokenCookie(String refreshToken){
+        return ResponseCookie.from("refresh-token",refreshToken)
+                .path("/")
+                .httpOnly(true)
+                .maxAge(60*60*24+(60*30))
                 .build();
     }
 
@@ -24,12 +33,19 @@ public class CustomCookie {
                 .path("/")
                 .maxAge(60 * 60 *24)
                 .build();
-
     }
 
     // 쿠키 무효화
-    public ResponseCookie deleteTokenCookie(){
+    public ResponseCookie deleteAccessTokenCookie(){
         return ResponseCookie.from("access-token")
+                .path("/")
+                .httpOnly(true)
+                .maxAge(0)
+                .build();
+    }
+
+    public ResponseCookie deleteRefreshTokenCookie(){
+        return ResponseCookie.from("refresh-token")
                 .path("/")
                 .httpOnly(true)
                 .maxAge(0)

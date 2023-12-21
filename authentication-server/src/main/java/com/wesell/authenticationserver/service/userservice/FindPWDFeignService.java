@@ -1,5 +1,7 @@
 package com.wesell.authenticationserver.service.userservice;
 
+import com.wesell.authenticationserver.controller.response.CustomException;
+import com.wesell.authenticationserver.controller.response.ErrorCode;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.repository.FindPWDRepository;
 import com.wesell.authenticationserver.exception.UserNotFoundException;
@@ -27,7 +29,10 @@ public class FindPWDFeignService {
             if(pwd.equals(rePwd)) {
                 String encodedPassword = encoder.encode(pwd);
                 authUser.changePassword(encodedPassword);
+                findPWDRepository.saveAndFlush(authUser);
             }
+        }else{
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }
     }
 }

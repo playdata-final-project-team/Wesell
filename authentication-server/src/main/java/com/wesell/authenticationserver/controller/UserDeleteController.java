@@ -24,11 +24,13 @@ public class UserDeleteController {
     @PostMapping("delete/user/{uuid}")
     public ResponseEntity<?> deleteByUser(@PathVariable("uuid") String uuid, @RequestBody String pwd) {
         userDeleteService.deleteByUser(uuid, pwd);
-        ResponseCookie deleteAccessToken = cookieUtil.deleteTokenCookie();
+        ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
+        ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
 
         return ResponseEntity
                 .status(SuccessCode.OK.getStatus())
                 .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
+                .header(HttpHeaders.SET_COOKIE,deleteRefreshToken.toString())
                 .body(null);
     }
 }
