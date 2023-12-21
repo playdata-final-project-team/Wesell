@@ -21,6 +21,6 @@ public class UploadDealPostRequestDto {
     private String link;
     @NotBlank
     private String detail;
-    private LocalDate createdAt;
+
 
 }

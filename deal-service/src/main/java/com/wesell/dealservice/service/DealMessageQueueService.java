@@ -1,8 +1,13 @@
 package com.wesell.dealservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wesell.dealservice.domain.SaleStatus;
-import com.wesell.dealservice.domain.dto.response.*;
-import com.wesell.dealservice.domain.entity.Image;
+import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
+import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
+import com.wesell.dealservice.domain.dto.response.MainPagePostResponseDto;
+import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
+import com.wesell.dealservice.domain.dto.response.PostInfoResponseDto;
 import com.wesell.dealservice.domain.repository.ImageRepository;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
@@ -14,6 +19,7 @@ import com.wesell.dealservice.domain.repository.read.DealPostReadRepository;
 import com.wesell.dealservice.error.ErrorCode;
 import com.wesell.dealservice.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.UserFeignClient;
+import com.wesell.dealservice.util.Producer;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,19 +32,23 @@ import java.time.format.DateTimeFormatter;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class DealServiceImpl implements DealService {
+public class DealMessageQueueService implements DealService {
 
     private final DealRepository dealRepository;
     private final DealPostReadRepository readRepository;
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
     private final UserFeignClient userFeignClient;
+    private final Producer producer;
+    private final ObjectMapper objectMapper;
 
     //todo: 업로드 실패시?
 
     @Override
     public Long createDealPost(@Valid UploadDealPostRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
+        String customLocalDateTimeFormat =LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())
                 .category(category)
@@ -46,7 +56,7 @@ public class DealServiceImpl implements DealService {
                 .price(requestDto.getPrice())
                 .link(requestDto.getLink())
                 .detail(requestDto.getDetail())
-                .createdAt(LocalDateTime.now())
+                .createdAt(customLocalDateTimeFormat)
                 .build();
         dealRepository.save(post);
 
@@ -54,9 +64,9 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
+    public EditPostResponseDto editPost(EditPostRequestDto requestDto) {
         checkValidationByUuid(requestDto.getUuid());
-        DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
+        DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), requestDto.getPostId());
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         editPost.editCategory(category);
@@ -84,54 +94,43 @@ public class DealServiceImpl implements DealService {
     public Page<MyPostListResponseDto> getMyPostList(String uuid, int page) {
         checkValidationByUuid(uuid);
         int pageLimit = 6;
+
         Page<DealPost> allByUuid = readRepository.searchMyList(uuid, PageRequest.of(page, pageLimit));
         return allByUuid.map(MyPostListResponseDto::new);
     }
 
     @Override
-    public void changePostStatus(String uuid, Long id) {
-        checkValidationByUuid(uuid);
-        dealRepository.findDealPostByIdAndIsDeleted(id, false).changeStatus();
+    public Page<MainPagePostResponseDto> getDealPostLists(int page) {
+        int pageLimit = 8;
+        Page<DealPost> dealPosts = readRepository.searchDealPostList(PageRequest.of(page, pageLimit));
+        return dealPosts.map(MainPagePostResponseDto::new);
     }
 
     @Override
-    public Page<MainPagePostResponseDto> getDealPostLists(int page) {
-        int pageLimit = 8;
-        Page<DealPost> posts = readRepository.searchDealPostList(PageRequest.of(page, pageLimit));
-        return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
-        });
+    public void changePostStatus(ChangePostRequestDto requestDto) {
+        checkValidationByUuid(requestDto.getUuid());
+        dealRepository.findDealPostByIdAndIsDeleted(requestDto.getPostId(), false).changeStatus();
     }
 
     @Override
     public Page<MainPagePostResponseDto> findByCategory(Long categoryId, int page) {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByCategory(categoryId, PageRequest.of(page, pageLimit));
-        return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
-        });
+        return posts.map(MainPagePostResponseDto::new);
     }
 
     @Override
     public Page<MainPagePostResponseDto> findByTitle(String title, int page) {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByTitle(title, PageRequest.of(page, pageLimit));
-        return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
-        });
+        return posts.map(MainPagePostResponseDto::new);
     }
 
     @Override
     public Page<MainPagePostResponseDto> findByCategoryAndTitle(Long categoryId, String title, int page) {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByCategoryAndTitle(categoryId, title, PageRequest.of(page, pageLimit));
-        return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
-        });
+        return posts.map(MainPagePostResponseDto::new);
     }
 
     public void checkValidationByUuid(String uuid) {
@@ -145,6 +144,19 @@ public class DealServiceImpl implements DealService {
         if(post.getIsDeleted() || post.getStatus().equals(SaleStatus.COMPLETED)) {
             throw new CustomException(ErrorCode.INVALID_POST);
         }
+    }
+
+    public <T> void publishCreateItemMessage(T dto) throws JsonProcessingException {
+
+        // DTO를 json으로 직렬화
+        String message = objectMapper.writeValueAsString(dto);
+        producer.sendMessage(message);
+    }
+
+    public <T> void publishUpdateItemMessage(T dto) throws JsonProcessingException {
+
+        String message = objectMapper.writeValueAsString(dto);
+        producer.updateMessage(message);
     }
 
 }

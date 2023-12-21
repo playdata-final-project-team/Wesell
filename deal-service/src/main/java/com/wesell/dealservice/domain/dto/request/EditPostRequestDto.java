@@ -28,4 +28,5 @@ public class EditPostRequestDto {
     @NotBlank
     private String detail;
 
+    private Long postId;
 }
