@@ -7,7 +7,7 @@ function GetCategory() {
 
   useEffect(() => {
     axios //8000/deal-service/api
-      .get('http://localhost:8888/api/v1/categories')
+      .get('/deal-service/api/v1/categories')
       .then((response) => {
         console.log(response.data.categories);
         const categoryArray = Object.values(response.data.categories) as category[];
@@ -61,7 +61,7 @@ function UploadBoard() {
   }, []);
 
   const HandleSubmit = async (body: string) => {
-    const response = await axios.post('http://localhost:8888/api/v1/post', body);
+    const response = await axios.post('/deal-service/api/v1/post', body);
     const postId = response.data.id;
 
     // 2번 API 호출: 이미지 업로드
@@ -70,7 +70,7 @@ function UploadBoard() {
       formData.append('postId', postId);
       formData.append('file', imageFile);
 
-      await axios.post('http://localhost:8888/api/v1/upload', formData, {
+      await axios.post('/deal-service/api/v1/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -119,8 +119,7 @@ function UploadBoard() {
         </div>
         <button
           className="post-view-go-list-btn"
-          onClick={() => HandleSubmit(JSON.stringify(body))}
-        >
+          onClick={() => HandleSubmit(JSON.stringify(body))}>
           등록
         </button>
       </div>

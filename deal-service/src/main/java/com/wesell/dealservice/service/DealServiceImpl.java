@@ -21,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 @Transactional
@@ -55,7 +54,6 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
-        checkValidationByUuid(requestDto.getUuid());
         DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
@@ -66,15 +64,13 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public void deletePost(String uuid, Long postId) {
-        checkValidationByUuid(uuid);
         DealPost post = dealRepository.findDealPostByUuidAndId(uuid, postId);
         post.deleteMyPost();
     }
 
     @Override
-    public PostInfoResponseDto getPostInfo(Long postId) {
-        DealPost foundPost = readRepository.searchDealPost(postId);
-        checkPostValidation(foundPost);
+    public PostInfoResponseDto getPostInfo(String postId) {
+        DealPost foundPost = readRepository.searchDealPost(Long.parseLong(postId));
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         String imageUrl = imageRepository.findImageByPostId(foundPost.getId()).getImageUrl();
         return new PostInfoResponseDto(foundPost, nickname, imageUrl);
@@ -82,7 +78,6 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public Page<MyPostListResponseDto> getMyPostList(String uuid, int page) {
-        checkValidationByUuid(uuid);
         int pageLimit = 6;
         Page<DealPost> allByUuid = readRepository.searchMyList(uuid, PageRequest.of(page, pageLimit));
         return allByUuid.map(MyPostListResponseDto::new);
@@ -90,7 +85,6 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public void changePostStatus(String uuid, Long id) {
-        checkValidationByUuid(uuid);
         dealRepository.findDealPostByIdAndIsDeleted(id, false).changeStatus();
     }
 
@@ -115,7 +109,7 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public Page<MainPagePostResponseDto> findByTitle(String title, int page) {
+    public Page<MainPagePostResponseDto> findByTitle(String title , int page) {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByTitle(title, PageRequest.of(page, pageLimit));
         return posts.map(post -> {
@@ -132,19 +126,6 @@ public class DealServiceImpl implements DealService {
             Image image = imageRepository.findImageByPostId(post.getId());
             return new MainPagePostResponseDto(post, image);
         });
-    }
-
-    public void checkValidationByUuid(String uuid) {
-        DealPost post = dealRepository.findFirstByUuid(uuid);
-        if(!uuid.equals(post.getUuid())) {
-            throw new CustomException(ErrorCode.INVALID_REQUEST);
-        }
-    }
-
-    public void checkPostValidation(DealPost post) {
-        if(post.getIsDeleted() || post.getStatus().equals(SaleStatus.COMPLETED)) {
-            throw new CustomException(ErrorCode.INVALID_POST);
-        }
     }
 
 }

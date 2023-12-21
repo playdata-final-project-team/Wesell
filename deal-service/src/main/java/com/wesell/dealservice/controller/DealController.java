@@ -39,7 +39,7 @@ public class DealController {
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("postId") Long postId, @RequestParam("file") MultipartFile file) throws IOException {
         uploadService.saveImageUrl(postId, file);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -47,7 +47,7 @@ public class DealController {
      * @return 상세글 보기 (제목, 생성날짜, 가격, 상세설명, 링크, 작성자 닉네임)
      */
     @GetMapping("post")
-    public ResponseEntity<?> getPostInfo(@Valid @RequestParam("id") Long postId) {
+    public ResponseEntity<?> getPostInfo(@Valid @RequestParam("id") String postId) {
         return new ResponseEntity<>(dealService.getPostInfo(postId), HttpStatus.OK);
     }
 
@@ -97,12 +97,12 @@ public class DealController {
         return new ResponseEntity<>(dealService.getDealPostLists(page), HttpStatus.OK);
     }
 
-    @GetMapping("category")
+    @GetMapping("main/category")
     public ResponseEntity<?> findAllByCategory(@RequestParam("category")Long categoryId, @RequestParam(value = "page", defaultValue = "0") int page) {
         return new ResponseEntity<>(dealService.findByCategory(categoryId, page), HttpStatus.OK);
     }
 
-    @GetMapping("title")
+    @GetMapping("main/title")
     public ResponseEntity<?> findAllByTitle(@RequestParam("title") String title, @RequestParam(value = "page", defaultValue = "0") int page) {
         return new ResponseEntity<>(dealService.findByTitle(title, page), HttpStatus.OK);
     }

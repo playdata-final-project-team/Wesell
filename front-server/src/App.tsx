@@ -38,7 +38,7 @@ function App() {
         <Route path={TEST_PATH()} element={<CorsTest />} />
         <Route path={TEST_PATH()} element={<></>} />
         <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
-        <Route path={BOARD_DETAIL()} element={<PostDetailPage />} />
+        <Route path='/board/detail/:postId' element={<PostDetailPage />} />
         <Route path={MYPAGE_PATH()} element={<Mypage />}/>
         <Route path={WITHDRAW_PATH()} element={<Withdraw />} />
         <Route path={BOARD_EDIT()} element={<EditPostPage />} />
