@@ -24,6 +24,7 @@ import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent
 import AuthServer from 'pages/Authentication';
 import { useEffect, useState } from 'react';
 import Test from 'pages/Test';
+import { ToastContainer } from 'react-toastify';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -44,32 +45,35 @@ function App() {
 
   // render: Application 컴포넌트 랜더링 //
   return (
-    <Routes>
-      <Route element={<Container />}>
-        {/** 테스트 URL - S*/}
-        <Route path="/test" element={<Test />}></Route>
+    <>
+      <ToastContainer />
+      <Routes>
+        <Route element={<Container />}>
+          {/** 테스트 URL - S*/}
+          <Route path="/test" element={<Test />}></Route>
 
-        {/** 테스트 URL - E*/}
+          {/** 테스트 URL - E*/}
 
-        <Route path={MAIN_PATH()} element={<Main />} />
-        <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
-        <Route path={AUTH_PATH()} element={<AuthServer />} />
-        <Route path="testJiho2" element={<UuidComponent />} />
-        <Route path="/found-email/:uuid" element={<FoundEmailComponent />} />
-        <Route path="testJiho4" element={<EmailfindComponent />} />
-        <Route path="testJiho5/:uuid" element={<FoundSmsComponent />} />
-        <Route path="/testJiho6/:uuid" element={<PasswordUpdateComponent />} />
-        <Route path="*" element={<h1>404 NOT FOUND</h1>} />
-        {isLogin ? (
-          <>
-            <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
-            <Route path={BOARD_DETAIL()} element={<PostDetailPage />} />
-            <Route path={MYPAGE_PATH()} element={<Mypage />} />
-            <Route path={BOARD_EDIT()} element={<EditPostPage />} />
-          </>
-        ) : null}
-      </Route>
-    </Routes>
+          <Route path={MAIN_PATH()} element={<Main />} />
+          <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
+          <Route path={AUTH_PATH()} element={<AuthServer />} />
+          <Route path="testJiho2" element={<UuidComponent />} />
+          <Route path="/found-email/:uuid" element={<FoundEmailComponent />} />
+          <Route path="testJiho4" element={<EmailfindComponent />} />
+          <Route path="testJiho5/:uuid" element={<FoundSmsComponent />} />
+          <Route path="/testJiho6/:uuid" element={<PasswordUpdateComponent />} />
+          <Route path="*" element={<h1>404 NOT FOUND</h1>} />
+          {isLogin ? (
+            <>
+              <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
+              <Route path={BOARD_DETAIL()} element={<PostDetailPage />} />
+              <Route path={MYPAGE_PATH()} element={<Mypage />} />
+              <Route path={BOARD_EDIT()} element={<EditPostPage />} />
+            </>
+          ) : null}
+        </Route>
+      </Routes>
+    </>
   );
 }
 

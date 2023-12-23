@@ -79,7 +79,7 @@ export const signUpRequest = async (requestBody: SignUpRequestDto) => {
 export const kakaoCallbackAuthCodeRequest = async (authCode: string | null) => {
   try {
     const response = await axios.post(KAKAO_CALLBACK_URL(), authCode);
-    const resonseBody: ResponseDto = response.data;
+    const resonseBody: SignInResponseDto = response.data;
     return resonseBody;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

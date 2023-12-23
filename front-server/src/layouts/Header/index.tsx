@@ -3,9 +3,14 @@ import ButtonBox from 'components/ButtonBox';
 import { logoutRequest } from 'apis';
 import ResponseCode from 'constant/response-code.enum';
 import { useEffect, useState } from 'react';
+import { MAIN_PATH } from 'constant';
+import { useNavigate } from 'react-router-dom';
 
 // component: 헤더 레이아웃 //
 export default function Header() {
+  // state: navigator //
+  const navigator = useNavigate();
+
   // state: 로그인 상태 //
   const [role, setRole] = useState<string | null>(null);
   // state: 회원 등급 상태 //
@@ -16,10 +21,8 @@ export default function Header() {
   // effect: 페이지 리랜더링 시마다 수행 //
   useEffect(() => {
     const r = sessionStorage.getItem('role');
-    if (r) {
-      setRole(r);
-    }
-  }, []);
+    setRole(r);
+  }, [sessionStorage.getItem('role')]);
 
   // effect: role 값의 변경을 감지시마다 수행 //
   useEffect(() => {
@@ -47,6 +50,7 @@ export default function Header() {
     if (code === ResponseCode.OK) {
       window.sessionStorage.clear();
       console.log('로그아웃!');
+      navigator(MAIN_PATH());
     }
   };
 

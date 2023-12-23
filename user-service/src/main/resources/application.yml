@@ -2,9 +2,15 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: db
   application:
     name: user-service
-
+  datasource:
+    driver-class-name: ${driver-class-name}
+    url: ${url}
+    username: ${username_}
+    password: ${password}
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,9 +19,6 @@ spring:
         format_sql: true
         check_nullability: true
     show_sql: true
-
-spring.profiles:
-    active: db
 
 springdoc:
   packages-to-scan: com.wesell.userservice.contoller
@@ -26,5 +29,3 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
-
-

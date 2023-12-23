@@ -43,14 +43,14 @@ export default function SideButtonBox(props: Props) {
   return (
     <div className="side-button-container">
       <div className="side-button">
-        {!isUser && !isAdmin && (
+        {!isUser && !isAdmin ? (
           <ImageBUttonItem
             tooltip="로그인"
             icon="basic-profile"
             alt="로그인"
             onIconClick={onLoginBtnClickHandler}
           />
-        )}
+        ) : null}
         {isUser && (
           <ImageBUttonItem
             tooltip="마이페이지"
@@ -70,7 +70,7 @@ export default function SideButtonBox(props: Props) {
       </div>
       <div className="side-button">
         {isUser && (
-          <CgAddR className="icon board-write-btn">
+          <CgAddR className="side-icon-btn">
             <div title="게시글 작성" onClick={onWritePostBtnClickHandler}></div>
           </CgAddR>
         )}
