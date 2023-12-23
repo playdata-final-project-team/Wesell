@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useNavigate, Navigate  } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface PostJson {
   "postId":number;
@@ -13,6 +13,9 @@ interface PostJson {
 }
 
 function PostDetailPage() {
+  useEffect(() => {
+    const uuid = window.sessionStorage.getItem("uuid");
+}, []);
   const { postId } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<PostJson|null>(null);
@@ -51,14 +54,10 @@ function PostDetailPage() {
         </div>
       )}
     </div>
+    uuid === post.uuid &&
     <div className="edit-button">
       <button onClick={moveToUpdate}>수정하기</button>
-      {/* {post && (
-      <Link key={post.postId } to={`/board/edit/${post.postId}`}>         
-        <span className="d-block">수정하기</span>
-      </Link> 
-      )} */}
-</div>
+    </div>
 </>
   );
 }
