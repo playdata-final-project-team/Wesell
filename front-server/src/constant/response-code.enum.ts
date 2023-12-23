@@ -10,6 +10,7 @@ enum ResponseCode {
   SIGN_IN_FAIL = 'SIF',
   NOT_FOUND_USER = 'NFU',
   NOT_CORRECT_PASSWORD = 'NCP',
+  DUPLICATED_NICKNAME = 'DN',
 
   // comment: HttpStatus 401 //
   INVALID_ACCESS_TOKEN = 'IAT',

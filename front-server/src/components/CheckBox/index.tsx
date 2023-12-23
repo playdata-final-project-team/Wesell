@@ -13,7 +13,7 @@ interface Props {
 
 // component: Check Box 컴포넌트 //
 const CheckBox = (props: Props) => {
-  const { id, label, name, checked, message,} = props;
+  const { id, label, name, checked, message } = props;
   const { onChange, onKeyDown } = props;
 
   // event-handler: on Key-Down 이벤트 처리 함수 //
@@ -24,7 +24,7 @@ const CheckBox = (props: Props) => {
 
   // render: Check Box 컴포넌트 렌더링 //
   return (
-    <>
+    <div className="checkbox">
       <input
         id={id}
         name={name}
@@ -35,8 +35,9 @@ const CheckBox = (props: Props) => {
       />
       <label htmlFor={id}>{label}</label>
 
-      {message && (<span className='checkbox-message'>{message}</span>)}
-    </>
+      {message !== '' && <div className="checkbox-message">{message}</div>}
+      {message === '' && <div className="checkbox-message"></div>}
+    </div>
   );
 };
 

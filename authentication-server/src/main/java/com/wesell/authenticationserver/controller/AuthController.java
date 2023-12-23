@@ -5,6 +5,7 @@ import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestD
 import com.wesell.authenticationserver.controller.dto.request.DeleteUserPwCheckRequestDto;
 import com.wesell.authenticationserver.controller.dto.request.SignInUserRequestDto;
 import com.wesell.authenticationserver.controller.response.ResponseDto;
+import com.wesell.authenticationserver.global.util.SmsUtil;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
 import com.wesell.authenticationserver.service.dto.response.SignInSuccessResponseDto;
 import com.wesell.authenticationserver.global.util.CustomCookie;
@@ -28,6 +29,7 @@ public class AuthController {
     private final AuthUserService authUserService;
     private final KakaoService kakaoService;
     private final CustomCookie cookieUtil;
+    private final SmsUtil smsUtil;
 
     // 헬스 체크
     @GetMapping("health-check")
@@ -151,6 +153,18 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
                 .header(HttpHeaders.SET_COOKIE,deleteRefreshToken.toString())
                 .body(ResponseDto.of(SuccessCode.OK));
+    }
+
+    // 번호 인증
+    @GetMapping("/phone/validate")
+    public ResponseEntity<?> sendSMSById(@RequestParam String phoneNumber) {
+
+        String numStr = smsUtil.createCode();
+        System.out.println(phoneNumber);
+
+        smsUtil.sendOne(phoneNumber,numStr);
+
+        return ResponseEntity.ok(phoneNumber);
     }
 
 

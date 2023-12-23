@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { SignInRequestDto, SignUpRequestDto } from 'apis/request/auth';
 import { SignInResponseDto } from 'apis/response/auth';
 import { ResponseDto } from 'apis/response';
-import ButtonBox from 'components/ButtonBox';
 import InputBox from 'components/InputBox';
 import CheckBox from 'components/CheckBox';
 import { MAIN_PATH } from 'constant';
@@ -31,7 +30,7 @@ function AuthServer() {
     const [email, setEmail] = useState<string>('');
 
     // state: 이메일 오류 메시지 //
-    const [emailErrorMsg, setEmailErrorMsg] = useState<string | undefined>(undefined);
+    const [emailErrorMsg, setEmailErrorMsg] = useState<string>('');
 
     // state: 비밀번호 value 상태 //
     const [password, setPassword] = useState<string>('');
@@ -45,19 +44,37 @@ function AuthServer() {
     );
 
     // state: 비밀번호 오류 메시지 //
-    const [pwErrorMsg, setPwErrorMsg] = useState<string | undefined>(undefined);
+    const [pwErrorMsg, setPwErrorMsg] = useState<string>('');
 
     // state: 이메일 저장 value 상태 //
     const [savedEmail, setSavedEmail] = useState<boolean>(false);
 
-    // state: 에러 상태 //
-    const [error, setError] = useState<boolean>(false);
+    // effect: 이메일 저장한 경우 cookie에 담긴 savedEmail 값을 확인하여 값을 넣어둔다. //
+    useEffect(() => {
+      const cookieChangeHandler = () => {
+        //
+      };
+
+      cookieChangeHandler();
+    }, []);
+
+    // event-handler: 이메일 변경 이벤트 처리 //
+    const onEmailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setEmailErrorMsg('');
+      const { value } = event.target;
+      setEmail(value);
+    };
+
+    // event-handler: 비밀번호 변경 이벤트 처리 //
+    const onPasswordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      setPwErrorMsg('');
+      const { value } = event.target;
+      setPassword(value);
+    };
 
     // function: sign in response 처리 함수//
     const signInResponse = (responseBody: SignInResponseDto | null) => {
       // comment: 서버가 안켜진 경우 또는 도메인 주소가 잘못된 경우 //
-
-      console.log(responseBody);
 
       if (!responseBody) {
         alert('네트워크 연결 상태를 확인해주세요!');
@@ -77,64 +94,42 @@ function AuthServer() {
         code === ResponseCode.NOT_FOUND_USER ||
         code === ResponseCode.NOT_CORRECT_PASSWORD
       ) {
-        setError(true);
+        setPwErrorMsg('이메일 주소 또는 비밀번호를 잘못 입력했습니다.');
         return;
       }
 
-      // uuid 와 role 을 세션 스토리지에 저장.
-      if (responseBody !== null) {
-        if ('uuid' in responseBody) {
-          window.sessionStorage.setItem('uuid', responseBody.uuid);
-        }
+      // const responseBodyWithDealInfo = responseBody as MyDealListWithPageResponseDto;
 
-        if ('role' in responseBody) {
-          window.sessionStorage.setItem('role', responseBody.role);
-        }
+      // uuid 와 role 을 세션 스토리지에 저장.
+      const responseBodyWithUserInfo = responseBody as SignInResponseDto;
+      if (responseBodyWithUserInfo) {
+        window.sessionStorage.setItem('uuid', responseBodyWithUserInfo.uuid);
+
+        window.sessionStorage.setItem('role', responseBodyWithUserInfo.role);
       }
 
       navigator(MAIN_PATH());
     };
 
-    // effect: 이메일 저장한 경우 cookie에 담긴 savedEmail 값을 확인하여 값을 넣어둔다. //
-    useEffect(() => {
-      const cookieChangeHandler = () => {
-        //
-      };
-
-      cookieChangeHandler();
-    }, []);
-
-    // event-handler: 이메일 변경 이벤트 처리 //
-    const onEmailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-      setError(false);
-      setEmailErrorMsg(undefined);
-      const { value } = event.target;
-      setEmail(value);
-    };
-
-    // event-handler: 비밀번호 변경 이벤트 처리 //
-    const onPasswordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-      setError(false);
-      setPwErrorMsg(undefined);
-      const { value } = event.target;
-      setPassword(value);
+    // function: 로그인 시 validation 기능 //
+    const signInValidation = (dto: SignInRequestDto) => {
+      if (dto.email.trim() === '') {
+        setEmailErrorMsg('이메일을 입력바랍니다.');
+        return false;
+      } else if (dto.password.trim() === '') {
+        setPwErrorMsg('비밀번호를 입력 바랍니다.');
+        return false;
+      }
+      return true;
     };
 
     // event-handler: 로그인 버튼 click 이벤트 처리 //
     const onSignInButtonClickHandler = async () => {
       const requestBody: SignInRequestDto = { email, password, savedEmail };
 
-      if (requestBody.email.trim() === '') {
-        setEmailErrorMsg('이메일을 입력바랍니다.');
-        return;
+      if (signInValidation(requestBody)) {
+        await signInRequest(requestBody).then(signInResponse);
       }
-
-      if (requestBody.password.trim() === '') {
-        setPwErrorMsg('비밀번호를 입력 바랍니다.');
-        return;
-      }
-
-      await signInRequest(requestBody).then(signInResponse);
     };
 
     // event-handler: 소셜 로그인 button click 이벤트 처리//
@@ -191,7 +186,7 @@ function AuthServer() {
               placeholder="e-mail"
               type="text"
               value={email}
-              error={error}
+              error={emailErrorMsg !== ''}
               message={emailErrorMsg}
               onChange={onEmailChangeHandler}
               onKeyDown={onEmailKeyDownHandler}
@@ -201,7 +196,7 @@ function AuthServer() {
               name="password"
               placeholder="password"
               type={passwordType}
-              error={error}
+              error={pwErrorMsg !== ''}
               message={pwErrorMsg}
               value={password}
               onChange={onPasswordChangeHandler}
@@ -211,16 +206,6 @@ function AuthServer() {
             />
           </div>
           <div className="auth-card-bottom">
-            {error && (
-              <div className="auth-sign-in-error-box">
-                <div className="auth-sign-in-error-message">
-                  {`이메일 주소 또는 비밀번호를 잘못 입력했습니다.`}
-                  <br />
-                  {`입력하신 내용을 다시 확인해주세요.`}
-                </div>
-              </div>
-            )}
-            {!error && <div className="auth-sign-in-blank-box"></div>}
             <div className="auth-card-bottom-a">
               <div className="auth-card-save-email-box">
                 <CheckBox
@@ -236,7 +221,7 @@ function AuthServer() {
               </div>
             </div>
             <div className="auth-card-bottom-b">
-              <div className="auth-card-sign-in-btn" onClick={onSignInButtonClickHandler}>
+              <div className="auth-card-btn" onClick={onSignInButtonClickHandler}>
                 {'Login'}
               </div>
               <div
@@ -349,8 +334,9 @@ function AuthServer() {
     // state: 개인정보 동의 요소 상태 //
     const [agree, setAgree] = useState<boolean>(false);
 
+    // comment: 가입하기 버튼 활성화 요소//
     // state: 닉네임 중복 여부 확인 상태 //
-    const [isDuplicated, setIsDuplicated] = useState<boolean>(false);
+    const [isDuplicated, setIsDuplicated] = useState<boolean>(true);
 
     //state: 번호 인증 여부 확인 상태 //
     const [isValidation, setValidationCheck] = useState<boolean>(false);
@@ -374,7 +360,6 @@ function AuthServer() {
     // event-handler: 닉네임 변경 이벤트 처리 //
     const onNicknameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
       setNicknameError(false);
-      setIsDuplicated(false);
       message.nickname = '';
       const { value } = event.target;
       setNickname(value);
@@ -384,13 +369,23 @@ function AuthServer() {
     useEffect(() => {
       const fetchData = async () => {
         const response = await nicknameDupCheckRequest(nickname);
-        if (response) {
-          if (response.code === ResponseCode.OK) return;
+
+        if (!response) return;
+
+        const { code } = response;
+
+        if (code === ResponseCode.OK) {
+          setIsDuplicated(false);
+          return;
+        } else if (code === ResponseCode.DUPLICATED_NICKNAME) {
           setIsDuplicated(true);
+          return;
         }
       };
 
-      fetchData();
+      if (nickname.trim() !== '') {
+        fetchData();
+      }
     }, [nickname]);
 
     // event-handler: 전화번호 변경 이벤트 처리 //
@@ -505,11 +500,6 @@ function AuthServer() {
     // event-handler: 번호 인증 버튼 click 이벤트 처리 //
     const onValidationCheckClickHandler = async () => {
       const responseBody = await phoneValidateRequest(phone);
-      if (responseBody) {
-        if (responseBody.code === ResponseCode.OK) {
-          setValidationCheck(true);
-        }
-      }
     };
 
     // function: 회원 가입 시 에러메시지 처리 기능 //
@@ -549,6 +539,45 @@ function AuthServer() {
       }
     };
 
+    // function: 회원 가입 시 validation 기능 //
+    const signUpValidation = (dto: SignUpRequestDto) => {
+      if (dto.name.trim() === '') {
+        console.log('이름을 입력하지 않았습니다.');
+        setNameError(true);
+        setMessage((prev) => ({ ...prev, name: '이름을 입력해주세요.' }));
+        return;
+      } else if (dto.nickname.trim() === '') {
+        console.log('닉네임을 입력하지 않았습니다.');
+        setNicknameError(true);
+        setMessage((prev) => ({ ...prev, nickname: '닉네임을 입력해주세요' }));
+        return;
+      } else if (dto.phone.trim() === '') {
+        console.log('휴대전화 번호를 입력하지 않았습니다.');
+        setPhoneError(true);
+        setMessage((prev) => ({ ...prev, phone: '휴대전화 번호를 입력해주세요.' }));
+        return;
+      } else if (dto.email.trim() === '') {
+        console.log('이메일을 입력하지 않았습니다.');
+        setEmailError(true);
+        setMessage((prev) => ({ ...prev, email: '이메일을 입력해주세요.' }));
+        return;
+      } else if (dto.pw.trim() === '') {
+        console.log('비밀번호를 입력하지 않았습니다.');
+        setPwError(true);
+        setMessage((prev) => ({ ...prev, pw: '비밀번호를 입력해주세요.' }));
+        return;
+      } else if (dto.pwRe.trim() === '') {
+        console.log('비밀번호를 입력하지 않았습니다.');
+        setPwReError(true);
+        setMessage((prev) => ({ ...prev, pwRe: '비밀번호 확인을 입력해주세요.' }));
+        return;
+      } else if (!dto.agree) {
+        console.log('개인정보 제공 동의를 하지 않았습니다.');
+        setMessage((prev) => ({ ...prev, agree: '개인 정보 제공을 동의 해주세요.' }));
+        return;
+      }
+    };
+
     // event-handler: 가입하기 버튼 click 이벤트 처리 //
     const onSignUpButtonClickHandler = async () => {
       const requestBody: SignUpRequestDto = {
@@ -560,6 +589,16 @@ function AuthServer() {
         pwRe,
         agree,
       };
+      console.log(signUpEnable);
+
+      signUpValidation(requestBody);
+
+      const regex = /^[가-힣]*$/;
+
+      if (!regex.test(name.trim())) {
+        setNameError(true);
+        setMessage((prev) => ({ ...prev, name: '이름을 한글로 입력 바랍니다.' }));
+      }
 
       if (pw !== pwRe) {
         setMessage((prev) => ({ ...prev, pwRe: '비밀번호가 일치하지 않습니다' }));
@@ -578,7 +617,7 @@ function AuthServer() {
 
     // effect: 번호 인증 및 닉네임 중복 처리 완료 시 가입하기 버튼 활성화
     useEffect(() => {
-      if (nickname !== '' && !isDuplicated) {
+      if (!isDuplicated) {
         setSignUpEnable(true);
       } else {
         setSignUpEnable(false);
@@ -595,7 +634,7 @@ function AuthServer() {
               name="name"
               type="text"
               error={isNameError}
-              placeholder="이름"
+              placeholder="이름*"
               value={name}
               onChange={onNameChangeHandler}
               onKeyDown={onNameKeyDownHandler}
@@ -607,42 +646,34 @@ function AuthServer() {
                 name="nickname"
                 type="text"
                 error={isNicknameError}
-                placeholder="닉네임"
+                placeholder="닉네임*"
                 value={nickname}
                 onChange={onNicknameChangeHandler}
                 onKeyDown={onNicknameKeyDownHandler}
                 message={message.nickname}
-              />
-              {!isDuplicated && nickname !== '' ? (
-                <p className="correct-message">{'✅ 사용 가능'}</p>
-              ) : (
-                <></>
-              )}
-              {isDuplicated && <p className="error-message">{'❌ 사용 불가'}</p>}
-            </div>
-            <div className="auth-sign-up-valid-box">
-              <InputBox
-                ref={phoneRef}
-                name="phone"
-                type="text"
-                error={isPhoneError}
-                placeholder="휴대전화 번호"
-                value={phone}
-                onChange={onPhoneChangeHandler}
-                onKeyDown={onPhoneKeyDownHandler}
-                message={message.phone}
-              />
-              <ButtonBox
-                isEnable={true}
-                label="번호 인증"
-                type="button"
-                onClick={onValidationCheckClickHandler}
+                hasP={true}
+                dupCheck={isDuplicated}
               />
             </div>
             <InputBox
+              ref={phoneRef}
+              name="phone"
+              type="text"
+              error={isPhoneError}
+              placeholder="휴대전화 번호*"
+              value={phone}
+              onChange={onPhoneChangeHandler}
+              onKeyDown={onPhoneKeyDownHandler}
+              message={message.phone}
+              hasButton={true}
+              btnVlaue="번호인증"
+              onBtnClick={onValidationCheckClickHandler}
+            />
+
+            <InputBox
               ref={emailRef}
               name="email"
-              placeholder="이메일"
+              placeholder="이메일*"
               type="text"
               value={email}
               error={isEmailError}
@@ -653,7 +684,7 @@ function AuthServer() {
             <InputBox
               ref={passwordRef}
               name="password"
-              placeholder="비밀번호"
+              placeholder="비밀번호*"
               type={pwType}
               error={isPwError}
               value={pw}
@@ -666,7 +697,7 @@ function AuthServer() {
             <InputBox
               ref={passwordCheckRef}
               name="passwordCheck"
-              placeholder="비밀번호 확인"
+              placeholder="비밀번호 확인*"
               type={pwReType}
               error={isPwReError}
               value={pwRe}
@@ -680,19 +711,22 @@ function AuthServer() {
           <div className="auth-card-bottom">
             <CheckBox
               id="agree"
-              label="개인정보 제공 동의"
+              label="개인정보 제공 동의*"
               name="agree"
               checked={agree}
               onChange={onCheckBoxChangeHandler}
               onKeyDown={onAgreeKeyDownHandler}
               message={message.agree}
             />
-            <ButtonBox
-              isEnable={signUpEnable}
-              label={'가입하기'}
-              type={'button'}
-              onClick={onSignUpButtonClickHandler}
-            />
+            {signUpEnable ? (
+              <div className="auth-card-btn" onClick={onSignUpButtonClickHandler}>
+                {'가입하기'}
+              </div>
+            ) : (
+              <div className="auth-card-btn-disabled" aria-disabled={!signUpEnable}>
+                {'가입하기'}
+              </div>
+            )}
           </div>
           <div className="auth-desc-box">
             <div className="auth-desc">
