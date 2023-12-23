@@ -10,8 +10,7 @@ import InputBox from 'components/InputBox';
 import CheckBox from 'components/CheckBox';
 import { MAIN_PATH } from 'constant';
 import ResponseCode from 'constant/response-code.enum';
-import messageType from 'types';
-
+import { MessageType } from 'types/interface';
 // component: 인증 화면 컴포넌트 //
 function AuthServer() {
   // state: 페이지 상태 //
@@ -59,7 +58,7 @@ function AuthServer() {
       // comment: 서버가 안켜진 경우 또는 도메인 주소가 잘못된 경우 //
 
       console.log(responseBody);
-      
+
       if (!responseBody) {
         alert('네트워크 연결 상태를 확인해주세요!');
         return;
@@ -83,16 +82,16 @@ function AuthServer() {
       }
 
       // uuid 와 role 을 세션 스토리지에 저장.
-      if(responseBody !== null){
-        if('uuid' in responseBody){
-          window.sessionStorage.setItem("uuid",responseBody.uuid);
+      if (responseBody !== null) {
+        if ('uuid' in responseBody) {
+          window.sessionStorage.setItem('uuid', responseBody.uuid);
         }
 
-        if('role' in responseBody){
-          window.sessionStorage.setItem("role",responseBody.role);
+        if ('role' in responseBody) {
+          window.sessionStorage.setItem('role', responseBody.role);
         }
       }
-      
+
       navigator(MAIN_PATH());
     };
 
@@ -261,7 +260,6 @@ function AuthServer() {
 
   // component: 회원가입 컴포넌트 //
   const SignUpCard = () => {
-
     // comment: 요소 참조 상태 - key down 이벤트용 //
     // state: 이름 요소 참조 상태 //
     const nameRef = useRef<HTMLInputElement | null>(null);
@@ -322,14 +320,14 @@ function AuthServer() {
     const [isPwReError, setPwReError] = useState<boolean>(false);
 
     // state: 에러 메시지 //
-    const [message, setMessage] = useState<messageType>({   
-      name: "",
-      nickname: "",
-      phone: "",
-      email: "",
-      pw: "",
-      pwRe: "",
-      agree: "",
+    const [message, setMessage] = useState<MessageType>({
+      name: '',
+      nickname: '',
+      phone: '',
+      email: '',
+      pw: '',
+      pwRe: '',
+      agree: '',
     });
 
     // state: 비밀번호 type 상태 //
@@ -340,11 +338,13 @@ function AuthServer() {
 
     // state: 비밀번호 표시/숨김 아이콘 상태 //
     const [pwIcon, setPwIcon] = useState<'eye-light-off-icon' | 'eye-light-on-icon'>(
-      'eye-light-off-icon',);
+      'eye-light-off-icon',
+    );
 
     // state: 비밀번호 확인 표시/숨김 아이콘 상태 //
     const [pwReIcon, setPwReIcon] = useState<'eye-light-off-icon' | 'eye-light-on-icon'>(
-      'eye-light-off-icon',);
+      'eye-light-off-icon',
+    );
 
     // state: 개인정보 동의 요소 상태 //
     const [agree, setAgree] = useState<boolean>(false);
@@ -381,18 +381,17 @@ function AuthServer() {
     };
 
     // effect: 닉네임 변경을 감지하여 중복 체크 //
-    useEffect(()=>{
+    useEffect(() => {
       const fetchData = async () => {
         const response = await nicknameDupCheckRequest(nickname);
-        if(response){
-          if(response.code === ResponseCode.OK) return;
+        if (response) {
+          if (response.code === ResponseCode.OK) return;
           setIsDuplicated(true);
         }
-      }
+      };
 
       fetchData();
-
-    },[nickname]);
+    }, [nickname]);
 
     // event-handler: 전화번호 변경 이벤트 처리 //
     const onPhoneChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -430,7 +429,7 @@ function AuthServer() {
     const onCheckBoxChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
       const isChecked = event.target.checked;
       setAgree(isChecked);
-      if(isChecked) message.agree = '';
+      if (isChecked) message.agree = '';
     };
 
     // event-handler: 이름 input key down 이벤트 처리 //
@@ -506,49 +505,49 @@ function AuthServer() {
     // event-handler: 번호 인증 버튼 click 이벤트 처리 //
     const onValidationCheckClickHandler = async () => {
       const responseBody = await phoneValidateRequest(phone);
-      if(responseBody){
-        if(responseBody.code === ResponseCode.OK){
+      if (responseBody) {
+        if (responseBody.code === ResponseCode.OK) {
           setValidationCheck(true);
         }
       }
     };
 
     // function: 회원 가입 시 에러메시지 처리 기능 //
-    const signUpVfMsgResponse = (responseBody:string[])=> {
+    const signUpVfMsgResponse = (responseBody: string[]) => {
+      setMessage({
+        name: '',
+        nickname: '',
+        phone: '',
+        email: '',
+        pw: '',
+        pwRe: '',
+        agree: '',
+      });
 
-        setMessage({ 
-          name: "",
-          nickname: "",
-          phone: "",
-          email: "",
-          pw: "",
-          pwRe: "",
-          agree: "",})
-
-        responseBody.map(e => {
-          const message = e.split(" : ");
-          setMessage((prev) => ( {...prev, [message[0]] : message[1]}));
-        })
-    }
+      responseBody.map((e) => {
+        const message = e.split(' : ');
+        setMessage((prev) => ({ ...prev, [message[0]]: message[1] }));
+      });
+    };
 
     // function: 회원 가입 후 응답처리 기능 //
-    const signUpResponse =(responseBody: ResponseDto | null) => {
+    const signUpResponse = (responseBody: ResponseDto | null) => {
       // comment: 서버가 안켜진 경우 또는 도메인 주소가 잘못된 경우 //
       if (!responseBody) {
         alert('네트워크 연결 상태를 확인해주세요!');
         return;
       }
 
-      const { code, message } = responseBody
+      const { code, message } = responseBody;
 
-      if(code === ResponseCode.USER_CREATED) {
+      if (code === ResponseCode.USER_CREATED) {
         alert(message);
         navigator(MAIN_PATH());
-      }else{
+      } else {
         alert(code);
         return;
       }
-    }
+    };
 
     // event-handler: 가입하기 버튼 click 이벤트 처리 //
     const onSignUpButtonClickHandler = async () => {
@@ -562,15 +561,15 @@ function AuthServer() {
         agree,
       };
 
-      if(pw !== pwRe){
-        setMessage(prev => ({...prev, pwRe: "비밀번호가 일치하지 않습니다"}));
+      if (pw !== pwRe) {
+        setMessage((prev) => ({ ...prev, pwRe: '비밀번호가 일치하지 않습니다' }));
         return;
       }
 
       const response = await signUpRequest(requestBody);
-      if(response){
-        if(response.vfMessages) {
-          signUpVfMsgResponse(response.vfMessages); 
+      if (response) {
+        if (response.vfMessages) {
+          signUpVfMsgResponse(response.vfMessages);
           return;
         }
         signUpResponse(response);
@@ -579,13 +578,12 @@ function AuthServer() {
 
     // effect: 번호 인증 및 닉네임 중복 처리 완료 시 가입하기 버튼 활성화
     useEffect(() => {
-      if(nickname !== '' && !isDuplicated){
-       setSignUpEnable(true);
-      }else{
+      if (nickname !== '' && !isDuplicated) {
+        setSignUpEnable(true);
+      } else {
         setSignUpEnable(false);
       }
-    },[isDuplicated, isValidation]);
-
+    }, [isDuplicated, isValidation]);
 
     // render: 회원가입 컴포넌트 랜더링 //
     return (
@@ -594,7 +592,7 @@ function AuthServer() {
           <div className="auth-card-top">
             <InputBox
               ref={nameRef}
-             name="name"
+              name="name"
               type="text"
               error={isNameError}
               placeholder="이름"
@@ -615,9 +613,12 @@ function AuthServer() {
                 onKeyDown={onNicknameKeyDownHandler}
                 message={message.nickname}
               />
-              {!isDuplicated && nickname !== '' ?
-               (<p className='correct-message'>{'✅ 사용 가능'}</p>):<></>}
-              {isDuplicated && (<p className='error-message'>{'❌ 사용 불가'}</p>)}
+              {!isDuplicated && nickname !== '' ? (
+                <p className="correct-message">{'✅ 사용 가능'}</p>
+              ) : (
+                <></>
+              )}
+              {isDuplicated && <p className="error-message">{'❌ 사용 불가'}</p>}
             </div>
             <div className="auth-sign-up-valid-box">
               <InputBox
@@ -631,7 +632,12 @@ function AuthServer() {
                 onKeyDown={onPhoneKeyDownHandler}
                 message={message.phone}
               />
-              <ButtonBox isEnable={true} label="번호 인증" type="button" onClick={onValidationCheckClickHandler}/>
+              <ButtonBox
+                isEnable={true}
+                label="번호 인증"
+                type="button"
+                onClick={onValidationCheckClickHandler}
+              />
             </div>
             <InputBox
               ref={emailRef}
@@ -681,7 +687,12 @@ function AuthServer() {
               onKeyDown={onAgreeKeyDownHandler}
               message={message.agree}
             />
-            <ButtonBox isEnable={signUpEnable} label={'가입하기'} type={'button'} onClick={onSignUpButtonClickHandler} />
+            <ButtonBox
+              isEnable={signUpEnable}
+              label={'가입하기'}
+              type={'button'}
+              onClick={onSignUpButtonClickHandler}
+            />
           </div>
           <div className="auth-desc-box">
             <div className="auth-desc">

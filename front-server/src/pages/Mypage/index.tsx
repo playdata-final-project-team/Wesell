@@ -1,5 +1,5 @@
 import InputBox from 'components/InputBox';
-import ABox from 'components/aBox';
+import ABox from 'components/ABox';
 import { ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
@@ -254,17 +254,18 @@ function Mypage() {
               </tr>
             </thead>
             <tbody>
-              {posts.map((post, index) => (
-                <tr className="dealInfo-element" key={index}>
-                  <td></td>
-                  <td>{post.title}</td>
-                  <td>{post.createdAt}</td>
-                  <td>{post.status}</td>
-                  <div className="dealInfo-element-btn">
-                    <button type="button">수정</button>
-                  </div>
-                </tr>
-              ))}
+              {posts &&
+                posts.map((post, index) => (
+                  <tr className="dealInfo-element" key={index}>
+                    <td></td>
+                    <td>{post.title}</td>
+                    <td>{post.createdAt}</td>
+                    <td>{post.status}</td>
+                    <div className="dealInfo-element-btn">
+                      <button type="button">수정</button>
+                    </div>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

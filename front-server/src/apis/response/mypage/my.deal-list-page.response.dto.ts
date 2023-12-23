@@ -1,11 +1,9 @@
-import pageable from 'types/pageable';
+import { Pageable } from 'types/interface';
 import ResponseDto from '../response.dto';
 import MyDealListResponseDto from './my.deal-list.response.dto';
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export default interface MyDealListWithPageResponseDto extends ResponseDto {
   content: MyDealListResponseDto[];
-  pageable: pageable | string;
+  pageable: Pageable | string;
   last: boolean;
   totalPages: number;
   totalElements: number;
@@ -16,4 +14,3 @@ export default interface MyDealListWithPageResponseDto extends ResponseDto {
   numberOfElements: number;
   empty: boolean;
 }
-  

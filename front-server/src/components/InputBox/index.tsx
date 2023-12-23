@@ -10,14 +10,14 @@ interface Props {
   value: string;
   error: boolean;
 
-  isReadOnly?: boolean
+  isReadOnly?: boolean;
   icon?: 'eye-light-on-icon' | 'eye-light-off-icon';
   message?: string;
 
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onIconClick?: () => void;
   onClick?: () => void;
-  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void; 
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 // component: Input Box 컴포넌트 //

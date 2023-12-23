@@ -72,6 +72,7 @@ public class ReactiveSecurityConfig {
                         .pathMatchers("/admin-service/**").hasRole("ADMIN")
                         .pathMatchers("/user-service/**").authenticated()
                         .pathMatchers("/auth-server/**").permitAll()
+                        .pathMatchers("/deal-service/api/v1/main ").permitAll()
                         .anyExchange().permitAll()
                 )
                 //exception-handling
