@@ -69,7 +69,7 @@ public class ReactiveSecurityConfig {
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 // 권한 확인 설정
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/admin-service/**").hasRole("ADMIN")
+                        .pathMatchers("/admin-service/**").hasAuthority("ADMIN")
                         .pathMatchers("/user-service/**").authenticated()
                         .pathMatchers("/auth-server/**").permitAll()
                         .anyExchange().permitAll()
@@ -133,7 +133,7 @@ public class ReactiveSecurityConfig {
                 serverHttpResponse.setStatusCode(HttpStatus.UNAUTHORIZED);
                 errorResponseDto = ErrorResponseDto.of(new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN));
             }else{
-                serverHttpResponse.setStatusCode(HttpStatus.FORBIDDEN);
+                serverHttpResponse.setStatusCode(HttpStatus.UNAUTHORIZED);
                 errorResponseDto = ErrorResponseDto.of(new CustomException(ErrorCode.INVALID_ACCESS_TOKEN));
             }
 

@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: user-service
+  datasource:
+    url: ${url}
+    driver-class-name: ${driver-class-name}
+    username: ${username_}
+    password: ${password}
 
   jpa:
     hibernate:

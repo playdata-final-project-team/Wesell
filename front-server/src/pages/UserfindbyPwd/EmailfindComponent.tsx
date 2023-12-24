@@ -14,7 +14,7 @@ const EmailfindComponent = () => {
 
   const handleFindEmail = async () => {
     try {
-      const response = await axios.get(`/auth-server/find/pwd/email?email=${email}`);
+      const response = await axios.get(`/auth-server/api/v1/find/pwd/email?email=${email}`);
       setUuid(response.data);
       setError('');
 

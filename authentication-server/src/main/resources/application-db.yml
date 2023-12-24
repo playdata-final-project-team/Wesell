@@ -1,0 +1,22 @@
+url: jdbc:mysql://localhost:3306/msa_db
+driver-class-name: com.mysql.cj.jdbc.Driver
+username_: root
+password: 1234
+
+token:
+    access-expired-time: 10
+    refresh-expired-time: 3600
+    secret-key: testSecret
+    issuer: wesell@wesell.com
+
+kakao:
+    auth-url: https://kauth.kakao.com/oauth/token
+    user-api-url: https://kapi.kakao.com/v2/user/me
+    client-id: 6551a767db9faa5e9973ef21a860b692
+    client-secret: IHNf0LiDlaX1ty5LNLReKGm0WqcBnsY6
+    redirect-url: http://localhost:3000/social/kakao/callback
+
+coolsms:
+    api:
+        key: NCSXADOVCG3RJWPC
+        secret: AVHEVHRAXL4TDVLAG4T4WYUW8DX077PB

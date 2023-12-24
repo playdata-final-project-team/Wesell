@@ -1,0 +1,3 @@
+token:
+  secret-key: testSecret
+  issuer: wesell@wesell.com

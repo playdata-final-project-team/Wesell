@@ -17,6 +17,9 @@ import FoundEmailComponent from 'pages/Userfindbyid/FoundEmailComponent';
 import EmailfindComponent from 'pages/UserfindbyPwd/EmailfindComponent';
 import FoundSmsComponent from 'pages/UserfindbyPwd/FoundSmsComponent';
 import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent';
+import UserManagementComponent from 'pages/AdminSite/UserManagementComponent';
+import VersionupdateComponent from 'pages/AdminSite/VersionupdateComponent';
+import AdminUsersComponent from 'pages/AdminUsers/AdminUsersComponent';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -48,6 +51,9 @@ function App() {
         <Route path='testJiho4' element = {<EmailfindComponent/>}/>
         <Route path='testJiho5/:uuid' element = {<FoundSmsComponent/>}/>
         <Route path='/testJiho6/:uuid' element = {<PasswordUpdateComponent/>}/>
+        <Route path='/testJiho7' element = {<UserManagementComponent/>}/>
+        <Route path='/testJiho8' element = {<VersionupdateComponent/>}/>
+        <Route path='/testJiho9' element = {<AdminUsersComponent/>}/>
       </Route>
     </Routes>
   );

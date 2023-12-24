@@ -30,6 +30,7 @@ public class VersionService {
         versions.put("cssVersion", cssVersion);
         versions.put("title", title);
         versions.put("agree", agree);
+
         return versions;
     }
 }

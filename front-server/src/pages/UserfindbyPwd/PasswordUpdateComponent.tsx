@@ -24,7 +24,7 @@ const UpdatePasswordComponent = () => {
         return;
       }
 
-      const response = await axios.post(`/auth-server/update/pwd/${uuid}`, {
+      const response = await axios.post(`/auth-server/api/v1/update/pwd/${uuid}`, {
         pwd: pwd,
         rePwd: rePwd,
       });

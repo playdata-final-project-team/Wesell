@@ -38,7 +38,7 @@ const FoundSmsComponent = () => {
       }
 
       const response = await axios.post(
-        '/auth-server/send/id/phone',
+        '/auth-server/api/v1/send/id/phone',
         { phoneNumber, code },
         { headers: { 'Content-Type': 'application/json' } }
       );
