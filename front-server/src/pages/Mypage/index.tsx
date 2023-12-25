@@ -4,7 +4,7 @@ import { ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
 import useStore from 'stores';
-import { myDealListRequest, mypageInfoRequest } from 'apis';
+import { myDealListRequest, myInfoUpdateRequest, mypageInfoRequest } from 'apis';
 import MypageResponseDto from 'apis/response/mypage/mypage.response.dto';
 import { ResponseDto } from 'apis/response';
 import Withdraw from 'pages/withdraw';
@@ -12,6 +12,9 @@ import MyDealListWithPageResponseDto from 'apis/response/mypage/my.deal-list-pag
 import MyDealListResponseDto from 'apis/response/mypage/my.deal-list.response.dto';
 import ListPagenation from 'components/Pagenation';
 import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent';
+import { MypageUpdateRequestDto } from 'apis/request/mypage';
+import { MAIN_PATH } from 'constant';
+import ResponseCode from 'constant/response-code.enum';
 
 // component: 마이페이지 컴포넌트 //
 function Mypage() {
@@ -45,8 +48,8 @@ function Mypage() {
     // effect: 페이지 리렌더링 시마다 확인 //
     useEffect(() => {
       if (uuid === null) {
-        // alert("로그인 바랍니다.");
-        // navigator("/");
+        alert('로그인 바랍니다.');
+        navigator(MAIN_PATH());
         return;
       }
 
@@ -98,6 +101,12 @@ function Mypage() {
         alert('네트워크 연결 상태를 확인해주세요!');
         return;
       }
+
+      const { code } = responseBody;
+      if (code === ResponseCode.OK) {
+        alert('개인정보가 변경되었습니다.');
+        return;
+      }
     };
 
     // event-handler: 수정하기 on-click 이벤트 핸들링//
@@ -114,7 +123,9 @@ function Mypage() {
         setNameErrorMsg('이름을 한글로 입력 바랍니다.');
       }
 
-      await mypageInfoRequest(uuid).then(updateMyInfoResponse);
+      const requestDto: MypageUpdateRequestDto = { name, nickname, phone };
+
+      await myInfoUpdateRequest(uuid, requestDto).then(updateMyInfoResponse);
       // 입력한 데이터를 업데이트 하는 요청 보내기(수정) - put 메서드
     };
 
@@ -202,7 +213,7 @@ function Mypage() {
     // state: 전체 항목 갯수 상태값 //
     const [totalElements, SetTotalElements] = useState<number>(0);
 
-    // context: uuid, role 값//
+    // store: uuid, role 값//
     const { uuid } = useStore((state) => state);
 
     // effect: 판매 내역 목록 effect 처리 //
@@ -219,11 +230,7 @@ function Mypage() {
         }
 
         const responseBodyWithDealInfo = responseBody as MyDealListWithPageResponseDto;
-        const { empty, content, totalElements, size } = responseBodyWithDealInfo;
-
-        if (empty) {
-          return <p>판매 게시글이 없습니다.</p>;
-        }
+        const { content, totalElements, size } = responseBodyWithDealInfo;
 
         setPosts(content);
         SetTotalElements(totalElements);
@@ -254,31 +261,35 @@ function Mypage() {
               </tr>
             </thead>
             <tbody>
-              {posts &&
-                posts.map((post, index) => (
-                  <tr className="dealInfo-element" key={index}>
-                    <td></td>
-                    <td>{post.title}</td>
-                    <td>{post.createdAt}</td>
-                    <td>{post.status}</td>
-                    <div className="dealInfo-element-btn">
-                      <button type="button">수정</button>
-                    </div>
-                  </tr>
-                ))}
+              {posts
+                ? posts.map((post, index) => (
+                    <tr className="dealInfo-element" key={index}>
+                      <td></td>
+                      <td>{post.title}</td>
+                      <td>{post.createdAt}</td>
+                      <td>{post.status}</td>
+                      <div className="dealInfo-element-btn">
+                        <button type="button">수정</button>
+                      </div>
+                    </tr>
+                  ))
+                : null}
             </tbody>
           </table>
+          {!posts && <p>등록 하신 판매글이 없습니다</p>}
         </div>
         <div className="card-btn-box">
           <ABox label="회원 정보" onClick={onDealInfoBtnClickHandler}></ABox>
-          <ListPagenation
-            limit={size}
-            page={curPage}
-            setPage={setCurPage}
-            blockNum={blockNum}
-            counts={totalElements}
-            setBlockNum={setBlockNum}
-          />
+          {posts && (
+            <ListPagenation
+              limit={size}
+              page={curPage}
+              setPage={setCurPage}
+              blockNum={blockNum}
+              counts={totalElements}
+              setBlockNum={setBlockNum}
+            />
+          )}
         </div>
       </div>
     );

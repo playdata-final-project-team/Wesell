@@ -20,11 +20,14 @@ export default function RightAside() {
   useEffect(() => {
     if (role === 'USER') {
       setUser(true);
+      return;
     } else if (role === 'ADMIN') {
       setAdmin(true);
+      return;
     } else {
       setUser(false);
       setAdmin(false);
+      return;
     }
   }, [role]);
 

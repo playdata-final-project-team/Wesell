@@ -24,7 +24,6 @@ import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent
 import AuthServer from 'pages/Authentication';
 import { useEffect, useState } from 'react';
 import Test from 'pages/Test';
-import { ToastContainer } from 'react-toastify';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -46,14 +45,12 @@ function App() {
   // render: Application 컴포넌트 랜더링 //
   return (
     <>
-      <ToastContainer />
       <Routes>
         <Route element={<Container />}>
           {/** 테스트 URL - S*/}
           <Route path="/test" element={<Test />}></Route>
 
           {/** 테스트 URL - E*/}
-
           <Route path={MAIN_PATH()} element={<Main />} />
           <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
           <Route path={AUTH_PATH()} element={<AuthServer />} />

@@ -1,6 +1,6 @@
 import './style.css';
 import ButtonBox from 'components/ButtonBox';
-import { logoutRequest } from 'apis';
+import { kakaoLogoutRequest, logoutRequest } from 'apis';
 import ResponseCode from 'constant/response-code.enum';
 import { useEffect, useState } from 'react';
 import { MAIN_PATH } from 'constant';
@@ -28,29 +28,54 @@ export default function Header() {
   useEffect(() => {
     if (role === 'USER') {
       setUser(true);
+      return;
     } else if (role === 'ADMIN') {
       setAdmin(true);
+      return;
     } else {
       setUser(false);
       setAdmin(false);
+      return;
     }
   }, [role]);
 
   // event-handler: 로그아웃 버튼 click 이벤트 핸들러 //
   const onLogoutBtnClickHandler = async () => {
-    const responseBody = await logoutRequest();
+    const isKakaoSignin = sessionStorage.getItem('kakaoId');
 
-    if (!responseBody) {
-      alert('네트워크 연결 상태를 확인해주세요!');
-      return;
-    }
+    if (isKakaoSignin) {
+      // 소셜 로그아웃 처리
+      const responseBody = await kakaoLogoutRequest(isKakaoSignin);
 
-    const { code } = responseBody;
+      if (!responseBody) {
+        alert('네트워크 연결 상태를 확인해주세요!');
+        return;
+      }
 
-    if (code === ResponseCode.OK) {
-      window.sessionStorage.clear();
-      console.log('로그아웃!');
-      navigator(MAIN_PATH());
+      const { code } = responseBody;
+
+      if (code === ResponseCode.OK) {
+        window.sessionStorage.clear();
+        console.log('카카오 로그아웃 요청 완료!');
+        navigator(MAIN_PATH());
+        return;
+      }
+    } else {
+      const responseBody = await logoutRequest();
+
+      if (!responseBody) {
+        alert('네트워크 연결 상태를 확인해주세요!');
+        return;
+      }
+
+      const { code } = responseBody;
+
+      if (code === ResponseCode.OK) {
+        window.sessionStorage.clear();
+        console.log('로그아웃!');
+        navigator(MAIN_PATH());
+        return;
+      }
     }
   };
 

@@ -12,11 +12,14 @@ public class SignInSuccessResponseDto extends ResponseDto {
 
     private String role;
 
-    public SignInSuccessResponseDto(String uuid, String role){
+    private Long kakaoId;
+
+    public SignInSuccessResponseDto(String uuid, String role, Long kakaoId){
         this.setCode(SuccessCode.OK.getCode());
         this.setStatus(SuccessCode.OK.getStatus().toString());
         this.uuid = uuid;
         this.role = role;
+        this.kakaoId = kakaoId;
     }
 
 }

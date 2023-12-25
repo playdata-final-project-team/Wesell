@@ -6,18 +6,21 @@ import ResponseCode from 'constant/response-code.enum';
 import MypageResponseDto from './response/mypage/mypage.response.dto';
 import { PwCheckRequestDto } from './request/delete';
 import MyDealListWithPageResponseDto from './response/mypage/my.deal-list-page.response.dto';
+import { MypageUpdateRequestDto } from './request/mypage';
 
 const SIGN_IN_URL = () => '/auth-server/api/v1/sign-in';
 const SIGN_UP_URL = () => '/auth-server/api/v1/sign-up';
 const LOGOUT_URL = () => '/auth-server/api/v1/logout';
+const KAKAO_LOGOUT_URL = (kakaoId: string) => `/auth-server/api/v1/kakao/logout/${kakaoId}`;
 const NICKNAME_CHECK_URL = () => '/user-service/api/v1/dup-check';
 const PHONE_CHECK_URL = () => '/auth-service/api/v1/phone/validate';
 const KAKAO_CALLBACK_URL = () => '/auth-server/api/v1/kakao/auth-code';
 const REFRESH_TOKEN_URL = () => '/auth-server/api/v1/refresh';
 const MYPAGE_URL = (uuid: string | null) => `/user-service/api/v1/feign/mypage/${uuid}`;
-const MY_INFO_UPDATE_URL = (uuid: string) => `/user-service/api/v1/${uuid}`;
+const MY_INFO_UPDATE_URL = (uuid: string | null) => `/user-service/api/v1/${uuid}`;
 const PW_CHECK_URL = () => '/auth-server/api/v1/delete/pw-check';
 const DELETE_URL = (uuid: string | null) => `/auth-server/api/v1/delete/${uuid}`;
+const KAKAO_DELETE_URL = () => '/auth-server/api/v1/kakao/delete';
 const MY_DEAL_LIST_URL = () => '/deal-service/api/v1/list';
 
 export const signInRequest = async (requestBody: SignInRequestDto) => {
@@ -116,6 +119,19 @@ export const logoutRequest = async () => {
   }
 };
 
+export const kakaoLogoutRequest = async (kakaoId: string) => {
+  try {
+    const response = await axios.get(KAKAO_LOGOUT_URL(kakaoId));
+    const responseBody: ResponseDto = response.data;
+    return responseBody;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+};
+
 export const mypageInfoRequest = async (uuid: string | null) => {
   try {
     const response = await axios.get(MYPAGE_URL(uuid));
@@ -129,9 +145,12 @@ export const mypageInfoRequest = async (uuid: string | null) => {
   }
 };
 
-export const myInfoUpdateRequest = async (uuid: string) => {
+export const myInfoUpdateRequest = async (
+  uuid: string | null,
+  requestDto: MypageUpdateRequestDto,
+) => {
   try {
-    const response = await axios.put(MY_INFO_UPDATE_URL(uuid));
+    const response = await axios.put(MY_INFO_UPDATE_URL(uuid), requestDto);
     const responseBody: ResponseDto = response.data;
     return responseBody;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -168,6 +187,24 @@ export const deleteUserRequest = async (uuid: string | null) => {
   }
 };
 
+export const deleteKakaoUserRequest = async (kakaoId: string, uuid: string | null) => {
+  try {
+    const response = await axios.delete(KAKAO_DELETE_URL(), {
+      params: {
+        kakaoId: kakaoId,
+        uuid: uuid,
+      },
+    });
+    const responseBody: ResponseDto = response.data;
+    return responseBody;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+};
+
 export const myDealListRequest = async (uuid: string | null, page: number) => {
   try {
     const response = await axios.get(MY_DEAL_LIST_URL(), {
@@ -183,21 +220,6 @@ export const myDealListRequest = async (uuid: string | null, page: number) => {
   }
 };
 
-export const GET_SING_IN_USER_URL = () => `/auth-server/api/v1/user`;
-const getSignInUserRequest = async () => {
-  try {
-    const response = await axios.get(GET_SING_IN_USER_URL());
-    const responseBody = response.data;
-    return responseBody;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    if (error.response) return null;
-    const responseBody: ResponseDto = error.response.data;
-    return responseBody;
-  }
-};
-
-// comment: 토큰 재발급용 interceptor //
 axios.interceptors.response.use(
   (res) => res,
   async (err) => {

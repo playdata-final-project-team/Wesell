@@ -4,4 +4,5 @@ import ResponseDto from '../response.dto';
 export default interface SignInResponseDto extends ResponseDto {
   uuid: string;
   role: string;
+  kakaoId: number;
 }

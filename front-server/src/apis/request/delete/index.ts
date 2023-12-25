@@ -1,3 +1,3 @@
-import PwCheckRequestDto from "./delete.pw-check.dto";
+import PwCheckRequestDto from './delete.pw-check.request.dto';
 
-export type {PwCheckRequestDto};
+export type { PwCheckRequestDto };

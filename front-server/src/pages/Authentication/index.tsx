@@ -10,6 +10,7 @@ import CheckBox from 'components/CheckBox';
 import { MAIN_PATH } from 'constant';
 import ResponseCode from 'constant/response-code.enum';
 import { MessageType } from 'types/interface';
+
 // component: 인증 화면 컴포넌트 //
 function AuthServer() {
   // state: 페이지 상태 //

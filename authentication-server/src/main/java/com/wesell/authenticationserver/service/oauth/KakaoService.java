@@ -2,12 +2,14 @@ package com.wesell.authenticationserver.service.oauth;
 
 import com.wesell.authenticationserver.controller.response.CustomException;
 import com.wesell.authenticationserver.controller.response.ErrorCode;
+import com.wesell.authenticationserver.service.dto.feign.KakaoLogoutRequestDto;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoInfo;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoToken;
 import com.wesell.authenticationserver.service.feign.KakaoFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -31,12 +33,23 @@ public class KakaoService {
     @Value("${kakao.redirect-url}")
     private String redirectUrl;
 
+    @Value("${kakao.admin-key}")
+    private String adminKey;
+
+    @Value("${kakao.logout-api-url}")
+    private String kakaoLogoutApiUrl;
+
+    @Value("${kakao.unlink-api-url}")
+    private String kakaoUnlinkApiUrl;
+
     public KakaoInfo getInfo(String authCode){
         KakaoToken token = getToken(authCode);
         log.debug("token = {}",token);
         try {
-            return kakaoFeignClient.getInfo(new URI(kakaoUserApiUrl), token.getTokenType()
-            +" "+token.getAccessToken());
+            KakaoInfo info = kakaoFeignClient.getInfo(new URI(kakaoUserApiUrl),
+                    token.getTokenType()+" "+token.getAccessToken());
+            info.setKakaoToken(token.getAccessToken());
+            return info;
         } catch (Exception e) {
             log.error("Error! {}",e.getMessage());
             throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"kakao 회원 정보 가져오기 중 오류 발생");
@@ -46,12 +59,30 @@ public class KakaoService {
 
     private KakaoToken getToken(String authCode){
         try {
-            return kakaoFeignClient.getToken(new URI((kakaoAuthUrl)), restApiKey,
+            return kakaoFeignClient.getToken(new URI(kakaoAuthUrl), restApiKey,
                     redirectUrl, authCode, "authorization_code");
         } catch (Exception e) {
             log.error("Error! {}",e.getMessage());
             KakaoToken.fail();
             throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"kakao access-token 발급 중 오류 발생");
+        }
+    }
+
+    public void logout(String kakaoToken){
+        try{
+            kakaoFeignClient.logoutOrUnlink(new URI(kakaoLogoutApiUrl),"Bearer "+kakaoToken);
+        }catch(Exception e){
+            log.error("Error! {}",e.getMessage());
+            throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"kakao 로그아웃 중 오류 발생");
+        }
+    }
+
+    public void unlink(String kakaoToken){
+        try{
+            kakaoFeignClient.logoutOrUnlink(new URI(kakaoLogoutApiUrl),"Bearer "+ kakaoToken);
+        }catch(Exception e){
+            log.error("Error! {}",e.getMessage());
+            throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"kakao 연결끊기 중 오류 발생");
         }
     }
 }

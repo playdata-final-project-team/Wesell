@@ -3,10 +3,11 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import InputBox from 'components/InputBox';
 import { PwCheckRequestDto } from 'apis/request/delete';
 import useStore from 'stores';
-import { deleteUserRequest, pwCheckRequest } from 'apis';
+import { deleteKakaoUserRequest, deleteUserRequest, pwCheckRequest } from 'apis';
 import { ResponseDto } from 'apis/response';
 import ResponseCode from 'constant/response-code.enum';
 import { useNavigate } from 'react-router-dom';
+import { MAIN_PATH, MYPAGE_PATH } from 'constant';
 
 // interface: 회원탈퇴 삭제 box 컴포넌트 Props //
 interface Props {
@@ -93,17 +94,23 @@ const Withdraw = (props: Props) => {
 
     alert('회원 탈퇴가 완료되었습니다.');
 
-    navigator('/');
+    navigator(MAIN_PATH());
   }
 
   // event-handler: 삭제 확인 버튼 YES click event handler //
   const onYesClickHandler = async () => {
-    await deleteUserRequest(uuid).then(deleteUserResponse);
+    const isKakaoSignin = sessionStorage.getItem('kakaoId');
+    const uuid = sessionStorage.getItem('uuid');
+    if (isKakaoSignin) {
+      await deleteKakaoUserRequest(isKakaoSignin, uuid).then(deleteUserResponse);
+    } else {
+      await deleteUserRequest(uuid).then(deleteUserResponse);
+    }
   };
 
   // event-handler: 삭제 확인 버튼 No click event handler //
   const onNoClickHandler = () => {
-    navigator('/mypage');
+    navigator(MYPAGE_PATH());
   };
 
   // render: 회원 탈퇴 컴포넌트 렌더링//
