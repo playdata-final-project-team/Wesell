@@ -69,7 +69,14 @@ public class DealController {
     @PutMapping("edit")
     public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto) throws JsonProcessingException {
         dealService.publishCreateItemMessage(requestDto);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("edit")
+    public ResponseEntity<?> editPostConfirm(@Valid @RequestBody EditPostRequestDto requestDto) {
+
+        return new ResponseEntity<>(dealService.CompareWithUpdated(requestDto), HttpStatus.OK);
     }
 
     /**
@@ -119,3 +126,4 @@ public class DealController {
         return new ResponseEntity<>(dealService.findByTitle(title, page), HttpStatus.OK);
     }
 }
+

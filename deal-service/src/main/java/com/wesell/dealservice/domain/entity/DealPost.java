@@ -5,6 +5,7 @@ import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity @Getter

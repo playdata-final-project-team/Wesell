@@ -4,6 +4,8 @@ import com.wesell.authenticationserver.domain.enum_.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Getter @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

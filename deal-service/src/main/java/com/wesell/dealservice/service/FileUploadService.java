@@ -25,7 +25,7 @@ public class FileUploadService {
         return uploadAndGetUrl(file);
     }
 
-    public void saveImageUrl(UploadFileRequestDto requestDto) throws IOException {
+    public void saveImageUrl(UploadFileRequestDto requestDto) {
         Image userImage = Image.builder()
                 .postId(requestDto.getPostId())
                 .imageUrl(requestDto.getUrl())
