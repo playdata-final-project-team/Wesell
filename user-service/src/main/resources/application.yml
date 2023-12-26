@@ -7,10 +7,11 @@ spring:
   application:
     name: user-service
   datasource:
-    driver-class-name: ${driver-class-name}
     url: ${url}
     username: ${username_}
     password: ${password}
+    driver-class-name: ${driver-class-name}
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -29,3 +30,9 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
+
+coolsms:
+  api:
+    key: ${coolsms.api.key}
+    secret: ${coolsms.api.secret}
+

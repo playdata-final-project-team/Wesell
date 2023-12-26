@@ -1,5 +1,7 @@
 package com.wesell.dealservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
@@ -10,13 +12,12 @@ import org.springframework.data.domain.Page;
 
 public interface DealService {
     Long createDealPost(UploadDealPostRequestDto requestCreatePostDto);
-    EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId);
-    void deletePost(String uuid, Long postId);
+    EditPostResponseDto editPost(EditPostRequestDto requestDto);
+    void deletePost(Long postId);
     PostInfoResponseDto getPostInfo(Long postId);
     Page<MyPostListResponseDto> getMyPostList(String uuid, int page);
     Page<MainPagePostResponseDto> getDealPostLists(int page);
-    void changePostStatus(String uuid, Long id);
+    void changePostStatus(ChangePostRequestDto requestDto);
     Page<MainPagePostResponseDto> findByCategory(Long categoryId, int page);
     Page<MainPagePostResponseDto> findByTitle(String title, int page);
-    Page<MainPagePostResponseDto> findByCategoryAndTitle(Long categoryId, String title, int page);
 }

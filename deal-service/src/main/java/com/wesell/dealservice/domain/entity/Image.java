@@ -14,7 +14,7 @@ public class Image {
     @Column(name = "i_id")
     private Long id;
 
-    @Column(name = "postId")
+    @Column(name = "post_id")
     private Long postId;
 
     @Column(name = "i_url")

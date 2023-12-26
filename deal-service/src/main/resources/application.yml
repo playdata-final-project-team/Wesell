@@ -4,7 +4,6 @@ server:
 spring:
   application:
     name: deal-service
-
   datasource:
     url: ${url}
     username: ${username_}
@@ -43,12 +42,9 @@ logging:
 cloud:
   aws:
     s3:
-      bucket: wesell-bucket
-    stack:
-      auto: false
-    region:
-      static: ap-northeast-2
-      auto: false
+      bucket: ${bucket}
+    stack.auto: false
+    region.static: ap-northeast-2
     credentials:
-      accessKey: ${access-key}
-      secretKey: ${secret-key}
+      accessKey: ${accessKey}
+      secretKey: ${secretKey}

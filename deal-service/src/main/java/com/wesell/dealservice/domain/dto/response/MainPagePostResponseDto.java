@@ -12,12 +12,14 @@ import lombok.NoArgsConstructor;
 public class MainPagePostResponseDto {
 
     private Long postId;
+    private Long category;
     private String imageUrl;
     private String title;
     private Long price;
 
     public MainPagePostResponseDto(DealPost post, Image image) {
         this.postId = post.getId();
+        this.category = post.getCategory().getId();
         this.imageUrl = image.getImageUrl();
         this.title = post.getTitle();
         this.price = post.getPrice();

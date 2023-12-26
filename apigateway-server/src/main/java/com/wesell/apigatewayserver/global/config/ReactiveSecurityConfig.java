@@ -12,15 +12,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -75,8 +71,8 @@ public class ReactiveSecurityConfig {
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 // 권한 확인 설정
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/admin-service/**").hasRole("ADMIN")
                         .pathMatchers("/user-service/api/v1/dup-check").permitAll()
+                        .pathMatchers("/admin-service/**").hasAuthority("ADMIN")
                         .pathMatchers("/user-service/**").authenticated()
                         .pathMatchers("/auth-server/**").permitAll()
                         .pathMatchers("/deal-service/api/v1/main ").permitAll()

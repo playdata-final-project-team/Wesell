@@ -1,12 +1,16 @@
 package com.wesell.dealservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
+import com.wesell.dealservice.domain.dto.request.UploadFileRequestDto;
 import com.wesell.dealservice.service.DealServiceImpl;
 import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +19,6 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1")
-//@CrossOrigin("http://localhost/3000")
 public class DealController {
 
     private final DealServiceImpl dealService;
@@ -26,20 +29,28 @@ public class DealController {
      * @return 판매글 저장
      */
     @PostMapping("post")
-    public ResponseEntity<?> uploadDealPost(@Valid @RequestBody UploadDealPostRequestDto requestDto) {
-        return new ResponseEntity<>(dealService.createDealPost(requestDto), HttpStatus.CREATED);
+    public ResponseEntity<?> uploadDealPost(@Valid @RequestBody UploadDealPostRequestDto requestDto) throws JsonProcessingException {
+        dealService.publishCreateItemMessage(requestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
      *
-     * @param postId & file
+     * @param file
      * @return postId와 이미지 url 저장
      * @throws IOException
      */
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("postId") Long postId, @RequestParam("file") MultipartFile file) throws IOException {
-        uploadService.saveImageUrl(postId, file);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadFile( //@RequestParam("postId") Long postId,
+                                         @RequestPart("requestDto") UploadDealPostRequestDto requestDto,
+//                                        @RequestParam("file") MultipartFile file
+                                         @RequestPart(value = "file", required = false) MultipartFile file
+    ) throws IOException {
+        Long postId = dealService.createDealPost(requestDto);
+        String url = uploadService.uploadAndGetUrl(file);
+        UploadFileRequestDto fileRequestDto = new UploadFileRequestDto(postId,url);
+        dealService.publishCreateItemMessage(fileRequestDto);
+        return new ResponseEntity<>(postId, HttpStatus.CREATED);
     }
 
     /**
@@ -56,27 +67,28 @@ public class DealController {
      * @return 게시글 수정
      */
     @PutMapping("edit")
-    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto, @RequestParam("id") Long postId) {
-        return new ResponseEntity<>(dealService.editPost(requestDto, postId),HttpStatus.OK);
+    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequestDto requestDto) throws JsonProcessingException {
+        dealService.publishCreateItemMessage(requestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
-     * @param uuid & postId
+     * @param requestDto & postId
      * @return 상태 변경(판매 완료)
      */
     @PutMapping("complete")
-    public ResponseEntity<?> changePostStatus(@Valid @RequestParam("uuid") String uuid, @RequestParam("id") Long postId) {
-        dealService.changePostStatus(uuid, postId);
+    public ResponseEntity<?> changePostStatus(@Valid @RequestBody ChangePostRequestDto requestDto) throws JsonProcessingException {
+        dealService.publishCreateItemMessage(requestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
-     * @param uuid & postId
+     * @param postId
      * @return 게시글 논리 삭제
      */
     @PutMapping("delete")
-    public ResponseEntity<?> deletePost(@Valid @RequestParam("uuid") String uuid,  @RequestParam("id") Long postId) {
-        dealService.deletePost(uuid, postId);
+    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long postId) {
+        dealService.deletePost(postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -86,7 +98,7 @@ public class DealController {
      */
     @GetMapping("list")
     public ResponseEntity<?> getMyPostList(@RequestParam("uuid") String uuid, @RequestParam(name = "page", defaultValue = "0") Integer page) {
-        return new ResponseEntity<>(dealService.getMyPostList(uuid, page-1),HttpStatus.OK);
+        return new ResponseEntity<>(dealService.getMyPostList(uuid, page),HttpStatus.OK);
     }
 
     /**
@@ -105,11 +117,5 @@ public class DealController {
     @GetMapping("title")
     public ResponseEntity<?> findAllByTitle(@RequestParam("title") String title, @RequestParam(value = "page", defaultValue = "0") int page) {
         return new ResponseEntity<>(dealService.findByTitle(title, page), HttpStatus.OK);
-    }
-
-    @GetMapping("search")
-    public ResponseEntity<?> findAllByCategoryAndTitle(@RequestParam("category")Long categoryId, @RequestParam("title") String title
-                                        , @RequestParam(value = "page", defaultValue = "0") int page) {
-        return new ResponseEntity<>(dealService.findByCategoryAndTitle(categoryId, title, page), HttpStatus.OK);
     }
 }

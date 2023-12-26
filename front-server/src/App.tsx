@@ -2,18 +2,9 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Main from 'pages/Main';
 import Container from 'layouts/Container';
-import {
-  MAIN_PATH,
-  SOCIAL_PATH,
-  UPLOAD_PATH,
-  BOARD_DETAIL,
-  MYPAGE_PATH,
-  BOARD_EDIT,
-  AUTH_PATH,
-} from 'constant';
+import { MAIN_PATH, SOCIAL_PATH, UPLOAD_PATH, MYPAGE_PATH, BOARD_EDIT, AUTH_PATH } from 'constant';
 import Social from 'pages/Social/kakao';
 import UploadBoard from 'pages/board/write/Write';
-import PostDetailPage from 'pages/board/detail';
 import Mypage from 'pages/Mypage';
 import EditPostPage from 'pages/board/edit';
 import UuidComponent from 'pages/Userfindbyid/UuidComponent';
@@ -63,7 +54,6 @@ function App() {
           {isLogin ? (
             <>
               <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
-              <Route path={BOARD_DETAIL()} element={<PostDetailPage />} />
               <Route path={MYPAGE_PATH()} element={<Mypage />} />
               <Route path={BOARD_EDIT()} element={<EditPostPage />} />
             </>
