@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './style.css';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 interface PostJson {
   "postId":number;
@@ -9,13 +8,14 @@ interface PostJson {
   "price":number;
 }
 
-const Main = () => {
+const SearchByTitle = () => {
   const [postJson, setPostJson] = useState<PostJson[]>();
   const navigate = useNavigate();
+  const {title} = useParams();
   const [searchValue, setSearchValue] = useState('');
 
   useEffect( () => {
-    const POST_LIST_ENDPOINT = `/deal-service/api/v1/main?page=0`; // 페이지 파라미터를 직접 URL에 추가
+    const POST_LIST_ENDPOINT = `/deal-service/api/v1/main/title?title=${title}&page=0`; // /deal-service/api/v1/post?id=${postId}
 
     fetch(POST_LIST_ENDPOINT, {
       method: "GET"
@@ -28,7 +28,7 @@ const Main = () => {
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, []);
+  }, [title]);
 
   const handleCategoryButtonClick = (categoryId : number) => {
     navigate(`/main/category/`+categoryId );
@@ -39,7 +39,7 @@ const Main = () => {
       navigate(`/main/title/`+ encodeURIComponent(searchValue));
     }
   };
-
+  
   return (
     <>
     <div className="searching-box">
@@ -48,11 +48,11 @@ const Main = () => {
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)} />
           <button onClick={handleSearch}>
-            <img src = "./assets/image.png" />
+            <img src = "./assets/icon.png" />
           </button>
     </div>
     <div className="categoryList">
-    <button onClick={() => handleCategoryButtonClick(1)}>의류잡화</button>
+    <button onClick={() =>handleCategoryButtonClick(1)}>의류잡화</button>
     <button onClick={() =>handleCategoryButtonClick(2)}>식기</button>
     <button onClick={() =>handleCategoryButtonClick(3)}>전자제품</button>
     <button onClick={() =>handleCategoryButtonClick(4)}>헬스</button>
@@ -71,4 +71,4 @@ const Main = () => {
     );
 }
 
-export default Main;
+export default SearchByTitle;

@@ -1,6 +1,5 @@
-import React from "react";
 import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface PostJson {
   "postId":number;
@@ -13,13 +12,17 @@ interface PostJson {
   "imageUrl":string;  
 }
 
-interface PostDetailPageProps {
-  postId: number;
-}
-
 function PostDetailPage() {
+  useEffect(() => {
+    const uuid = window.sessionStorage.getItem("uuid");
+}, []);
   const { postId } = useParams();
+  const navigate = useNavigate();
   const [post, setPost] = useState<PostJson|null>(null);
+
+  const moveToUpdate = () => {
+    navigate('/board/edit/' + postId);
+  };
 
   useEffect(() => {
     console.log(postId);
@@ -35,13 +38,11 @@ function PostDetailPage() {
   },[]);
 
   return (
-    <div className="container">
-
+    <><div className="container">
       {post && (
-        <div className="image-container"> 
-          <img src={post.imageUrl} className="image" /> 
+        <div className="image-container">
+          <img src={post.imageUrl} className="image" />
         </div>)}
-
       {post && (
         <div className="details-container">
           <h2>제목{post.title}</h2>
@@ -53,6 +54,11 @@ function PostDetailPage() {
         </div>
       )}
     </div>
+    uuid === post.uuid &&
+    <div className="edit-button">
+      <button onClick={moveToUpdate}>수정하기</button>
+    </div>
+</>
   );
 }
 

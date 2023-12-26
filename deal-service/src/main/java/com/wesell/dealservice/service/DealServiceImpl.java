@@ -46,12 +46,12 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public Long createDealPost(@Valid UploadDealPostRequestDto requestDto) {
-        Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
+        Category category = categoryRepository.findById(Long.parseLong(requestDto.getCategoryId())).get();
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())
                 .category(category)
                 .title(requestDto.getTitle())
-                .price(requestDto.getPrice())
+                .price(Long.parseLong(requestDto.getPrice()))
                 .link(requestDto.getLink())
                 .detail(requestDto.getDetail())
                 .createdAt(LocalDateTime.now())
@@ -153,4 +153,5 @@ public class DealServiceImpl implements DealService {
         else
             throw new CustomException(INVALID_POST);
     }
+
 }

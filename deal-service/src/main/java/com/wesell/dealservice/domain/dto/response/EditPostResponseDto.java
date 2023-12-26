@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class EditPostResponseDto {
 
     @NotBlank
-    private Category category;
+    private Long category;
 
     @NotBlank
     private String title;
@@ -29,7 +29,7 @@ public class EditPostResponseDto {
     private String detail;
 
     public EditPostResponseDto(DealPost post) {
-        category = post.getCategory();
+        category = post.getCategory().getId();
         title = post.getTitle();
         price = post.getPrice();
         link = post.getLink();

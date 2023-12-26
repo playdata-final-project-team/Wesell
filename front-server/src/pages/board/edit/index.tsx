@@ -1,79 +1,82 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-
-const EditPostPage = () => {
-  const [postId, setPostId] = useState(/**/);
-  const [editPostInfo, setEditPostInfo] = useState({
-    uuid: window.sessionStorage.getItem("uuid"),
-    categoryId: null,
-    title: '',
-    price: null,
-    link: '',
-    detail: '',
-  })
   
+const EditPostPage = () => {
+  const navigate = useNavigate();
+  const { postId } = useParams();
+  const [ post, setPost] = useState({
+    postId: 0,
+    category: '',
+    title: '',
+    createdAt: '',
+    price: '',
+    detail: '', 
+    link: '',
+    nickname: '',
+    imageUrl: '',
+  });
+
+   const {category, title, price, detail, link, imageUrl} = post; //비구조화 할당
+
+   const onChange = (event: { target: { value: any; name: any; }; }) => {
+    const {value, name} = event.target; //event.target에서 name과 value만 가져오기  
+    setPost({
+      ...post,
+      [name]:value,
+    });
+   };
+  
+  const getBoard = async () => {
+    const response = await (await axios.get(`/deal-service/api/v1/post?id=${postId}`)).data;
+    setPost(response);
+  };
+
+  const updateBoard = async () => {
+    await axios.put(`/deal-service/api/v1/edit?id=${postId}`, post).then((res) => {
+      alert('수정되었습니다.');
+      navigate('/board/detail/'+postId);
+    });
+  };
+
+  const backToDetail = () => {
+    navigate('/board/detail/'+postId);
+  };
+
   useEffect(() => {
-    const fetchPostInfo = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/deal-service/api/v1/post?id=${postId}`);
-        const postInfo = response.data;
-        setEditPostInfo({
-          uuid: postInfo.uuid,
-          categoryId: postInfo.categoryId,
-          title: postInfo.title,
-          price: postInfo.price,
-          link: postInfo.link,
-          detail: postInfo.detail,
-        });
-      } catch (error) {
-        console.error('게시글 정보를 가져오는 중 오류 발생:', error);
-      }
-    };
-
-    if (postId) {
-      fetchPostInfo();
-    }
-  }, [postId]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setEditPostInfo((prevInfo) => ({
-      ...prevInfo,
-      [name]: value,
-    }));
-  };
-
-  const handleEditSubmit = async () => {
-    try {
-      const response = await axios.put(`http://localhost:8000/api/v1/edit?id=${postId}`, editPostInfo);
-      console.log('게시글 수정 완료:', response.data);
-    } catch (error) {
-      console.error('게시글 수정 중 오류 발생:', error);
-    }
-  };
-
+    getBoard();
+  }, []);
   return (
+    <>
+
     <div>
-      <h2>Edit Post</h2>
-      <form>
-        <label>Title:</label>
-        <input type="text" name="title" value={editPostInfo.title} onChange={handleInputChange} />
-
-        <label>Price:</label>
-        <input type="number" name="price" value={editPostInfo.price || ''} onChange={handleInputChange} />
-
-        <label>Link:</label>
-        <input type="text" name="link" value={editPostInfo.link} onChange={handleInputChange} />
-
-        <label>Detail:</label>
-        <textarea name="detail" value={editPostInfo.detail} onChange={handleInputChange} />
-
-        <button type="button" onClick={handleEditSubmit}>
-          수정 완료
-        </button>
-      </form>
-    </div>
+        <span>제목</span>
+        <input type="text" name="title" value={title} onChange={onChange} />
+      </div>
+      <div>
+        <span>카테고리</span>
+        <input type="text" name="category" value={category} onChange={onChange} />
+      </div>
+      <br />
+      <div>
+        <span>가격</span>
+        <input type="text" name="price" value={price} onChange={onChange} />
+      </div>
+      <br />
+      <div>
+        <span>설명</span>
+        <input type="text" name="detail" value={detail} onChange={onChange} />
+      </div>
+      <div>
+        <span>톡방링크</span>
+        <input type="text" name="link" value={link} onChange={onChange} />
+      </div>
+      <br />
+      <div>
+        <button onClick={updateBoard}>수정</button>
+        <button onClick={backToDetail}>취소</button>
+      </div>
+    </>
   );
 };
-
 export default EditPostPage;

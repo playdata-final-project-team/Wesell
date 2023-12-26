@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import './style.css';
 
 interface PostJson {
@@ -9,13 +9,14 @@ interface PostJson {
   "price":number;
 }
 
-const Main = () => {
+const SearchByCategory = () => {
   const [postJson, setPostJson] = useState<PostJson[]>();
   const navigate = useNavigate();
+  const {categoryId} = useParams();
   const [searchValue, setSearchValue] = useState('');
 
   useEffect( () => {
-    const POST_LIST_ENDPOINT = `/deal-service/api/v1/main?page=0`; // 페이지 파라미터를 직접 URL에 추가
+    const POST_LIST_ENDPOINT = `/deal-service/api/v1/main/category?category=${categoryId}&page=0`; // /deal-service/api/v1/post?id=${postId}
 
     fetch(POST_LIST_ENDPOINT, {
       method: "GET"
@@ -28,10 +29,10 @@ const Main = () => {
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, []);
+  }, [categoryId]);
 
   const handleCategoryButtonClick = (categoryId : number) => {
-    navigate(`/main/category/`+categoryId );
+    navigate(`/main/category/`+categoryId ); //'/board/edit/' + postId
   };
 
   const handleSearch = () => {
@@ -39,7 +40,7 @@ const Main = () => {
       navigate(`/main/title/`+ encodeURIComponent(searchValue));
     }
   };
-
+  
   return (
     <>
     <div className="searching-box">
@@ -47,12 +48,12 @@ const Main = () => {
           placeholder="제목을 검색하세요"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)} />
-          <button onClick={handleSearch}>
-            <img src = "./assets/image.png" />
+          <button className='search-icon-button' onClick={handleSearch}>
+            <div className='search-box-icon'></div>
           </button>
     </div>
     <div className="categoryList">
-    <button onClick={() => handleCategoryButtonClick(1)}>의류잡화</button>
+    <button onClick={() =>handleCategoryButtonClick(1)}>의류잡화</button>
     <button onClick={() =>handleCategoryButtonClick(2)}>식기</button>
     <button onClick={() =>handleCategoryButtonClick(3)}>전자제품</button>
     <button onClick={() =>handleCategoryButtonClick(4)}>헬스</button>
@@ -71,4 +72,4 @@ const Main = () => {
     );
 }
 
-export default Main;
+export default SearchByCategory;

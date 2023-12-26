@@ -24,15 +24,6 @@ public class DealController {
     private final DealServiceImpl dealService;
     private final FileUploadService uploadService;
 
-    /**
-     * @param requestDto
-     * @return 판매글 저장
-     */
-    @PostMapping("post")
-    public ResponseEntity<?> uploadDealPost(@Valid @RequestBody UploadDealPostRequestDto requestDto) throws JsonProcessingException {
-        dealService.publishCreateItemMessage(requestDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
 
     /**
      *
@@ -41,11 +32,8 @@ public class DealController {
      * @throws IOException
      */
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadFile( //@RequestParam("postId") Long postId,
-                                         @RequestPart("requestDto") UploadDealPostRequestDto requestDto,
-//                                        @RequestParam("file") MultipartFile file
-                                         @RequestPart(value = "file", required = false) MultipartFile file
-    ) throws IOException {
+    public ResponseEntity<?> uploadFile( @RequestPart("requestDto") UploadDealPostRequestDto requestDto,
+                                         @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
         Long postId = dealService.createDealPost(requestDto);
         String url = uploadService.uploadAndGetUrl(file);
         UploadFileRequestDto fileRequestDto = new UploadFileRequestDto(postId,url);
@@ -116,14 +104,15 @@ public class DealController {
         return new ResponseEntity<>(dealService.getDealPostLists(page), HttpStatus.OK);
     }
 
-    @GetMapping("category")
+    @GetMapping("main/category")
     public ResponseEntity<?> findAllByCategory(@RequestParam("category")Long categoryId, @RequestParam(value = "page", defaultValue = "0") int page) {
         return new ResponseEntity<>(dealService.findByCategory(categoryId, page), HttpStatus.OK);
     }
 
-    @GetMapping("title")
+    @GetMapping("main/title")
     public ResponseEntity<?> findAllByTitle(@RequestParam("title") String title, @RequestParam(value = "page", defaultValue = "0") int page) {
         return new ResponseEntity<>(dealService.findByTitle(title, page), HttpStatus.OK);
     }
+
 }
 
