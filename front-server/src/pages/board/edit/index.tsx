@@ -17,7 +17,7 @@ const EditPostPage = () => {
     imageUrl: '',
   });
 
-   const {category, title, price, detail, link, createdAt, nickname, imageUrl} = post; //비구조화 할당
+   const {category, title, price, detail, link, imageUrl} = post; //비구조화 할당
 
    const onChange = (event: { target: { value: any; name: any; }; }) => {
     const {value, name} = event.target; //event.target에서 name과 value만 가져오기  

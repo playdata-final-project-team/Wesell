@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface DealRepository extends JpaRepository<DealPost, Long> {
     DealPost findFirstByUuid(String uuid);
-    DealPost findDealPostById( Long id);
+    DealPost findDealPostById(Long id);
     DealPost findDealPostByIdAndIsDeleted(Long id, Boolean isDeleted);
 }

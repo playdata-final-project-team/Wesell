@@ -3,7 +3,7 @@ import './App.css';
 import AuthServer from 'pages/Authentication';
 import Main from 'pages/Main';
 import Container from 'layouts/Comtainer';
-import { MAIN_PATH, SOCAIL_PATH, TEST_PATH, UPLOAD_PATH, BOARD_DETAIL, MYPAGE_PATH, WITHDRAW_PATH, BOARD_EDIT } from 'constant';
+import { MAIN_PATH, SOCAIL_PATH, TEST_PATH, UPLOAD_PATH, MYPAGE_PATH, WITHDRAW_PATH} from 'constant';
 import { AUTH_PATH } from 'constant';
 import CorsTest from 'pages/Test';
 import Social from 'pages/Social/kakao';

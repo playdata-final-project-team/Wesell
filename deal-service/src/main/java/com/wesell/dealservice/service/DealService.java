@@ -9,14 +9,13 @@ import com.wesell.dealservice.domain.dto.response.PostInfoResponseDto;
 import org.springframework.data.domain.Page;
 
 public interface DealService {
-    Long createDealPost(UploadDealPostRequestDto requestCreatePostDto);
+    Long createDealPost(UploadDealPostRequestDto requestDto);
     EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId);
     void deletePost(Long postId);
-    PostInfoResponseDto getPostInfo(String postId);
+    PostInfoResponseDto getPostInfo(Long postId);
     Page<MyPostListResponseDto> getMyPostList(String uuid, int page);
     Page<MainPagePostResponseDto> getDealPostLists(int page);
-    void changePostStatus(String uuid, Long id);
+    void changePostStatus(Long id);
     Page<MainPagePostResponseDto> findByCategory(Long categoryId, int page);
     Page<MainPagePostResponseDto> findByTitle(String title, int page);
-    Page<MainPagePostResponseDto> findByCategoryAndTitle(Long categoryId, String title, int page);
 }

@@ -26,8 +26,4 @@ public class Image {
         this.imageUrl = imageUrl;
     }
 
-//    public void foreignDealPost(DealPost foreignPost) {
-//        this.post = foreignPost;
-//        post.getId()
-//    }
 }

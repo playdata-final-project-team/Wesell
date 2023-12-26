@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import './style.css';
 
 interface PostJson {
   "postId":number;
@@ -15,7 +16,7 @@ const SearchByCategory = () => {
   const [searchValue, setSearchValue] = useState('');
 
   useEffect( () => {
-    const POST_LIST_ENDPOINT = `/deal-service/api/v1/main/category?=${categoryId}?page=0`; // 페이지 파라미터를 직접 URL에 추가
+    const POST_LIST_ENDPOINT = `/deal-service/api/v1/main/category?category=${categoryId}&page=0`; // /deal-service/api/v1/post?id=${postId}
 
     fetch(POST_LIST_ENDPOINT, {
       method: "GET"
@@ -28,15 +29,15 @@ const SearchByCategory = () => {
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, []);
+  }, [categoryId]);
 
   const handleCategoryButtonClick = (categoryId : number) => {
-    navigate(`/main/categoryId=${categoryId}`);
+    navigate(`/main/category/`+categoryId ); //'/board/edit/' + postId
   };
 
   const handleSearch = () => {
     if (searchValue.trim() !== '') {
-      navigate(`/main/search?title=${encodeURIComponent(searchValue)}`);
+      navigate(`/main/title/`+ encodeURIComponent(searchValue));
     }
   };
   
@@ -47,8 +48,8 @@ const SearchByCategory = () => {
           placeholder="제목을 검색하세요"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)} />
-          <button onClick={handleSearch}>
-            <img src = "./assets/image.png" />
+          <button className='search-icon-button' onClick={handleSearch}>
+            <div className='search-box-icon'></div>
           </button>
     </div>
     <div className="categoryList">

@@ -15,7 +15,7 @@ const SearchByTitle = () => {
   const [searchValue, setSearchValue] = useState('');
 
   useEffect( () => {
-    const POST_LIST_ENDPOINT = `/deal-service/api/v1/main/title?=${title}?page=0`; // 페이지 파라미터를 직접 URL에 추가
+    const POST_LIST_ENDPOINT = `/deal-service/api/v1/main/title?title=${title}&page=0`; // /deal-service/api/v1/post?id=${postId}
 
     fetch(POST_LIST_ENDPOINT, {
       method: "GET"
@@ -28,15 +28,15 @@ const SearchByTitle = () => {
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, []);
+  }, [title]);
 
   const handleCategoryButtonClick = (categoryId : number) => {
-    navigate(`/main/categoryId=${categoryId}`);
+    navigate(`/main/category/`+categoryId );
   };
 
   const handleSearch = () => {
     if (searchValue.trim() !== '') {
-      navigate(`/main/search?title=${encodeURIComponent(searchValue)}`);
+      navigate(`/main/title/`+ encodeURIComponent(searchValue));
     }
   };
   
@@ -48,7 +48,7 @@ const SearchByTitle = () => {
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)} />
           <button onClick={handleSearch}>
-            <img src = "./assets/image.png" />
+            <img src = "./assets/icon.png" />
           </button>
     </div>
     <div className="categoryList">

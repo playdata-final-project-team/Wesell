@@ -31,12 +31,12 @@ const Main = () => {
   }, []);
 
   const handleCategoryButtonClick = (categoryId : number) => {
-    navigate(`/main/categoryId=${categoryId}`);
+    navigate(`/main/category/`+categoryId );
   };
 
   const handleSearch = () => {
     if (searchValue.trim() !== '') {
-      navigate(`/main/search?title=${encodeURIComponent(searchValue)}`);
+      navigate(`/main/title/`+ encodeURIComponent(searchValue));
     }
   };
 

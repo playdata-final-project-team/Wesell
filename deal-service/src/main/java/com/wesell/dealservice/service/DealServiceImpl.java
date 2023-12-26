@@ -1,6 +1,5 @@
 package com.wesell.dealservice.service;
 
-import com.wesell.dealservice.domain.SaleStatus;
 import com.wesell.dealservice.domain.dto.response.*;
 import com.wesell.dealservice.domain.entity.Image;
 import com.wesell.dealservice.domain.repository.ImageRepository;
@@ -11,8 +10,6 @@ import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
 import com.wesell.dealservice.domain.repository.read.DealPostReadRepository;
-import com.wesell.dealservice.error.ErrorCode;
-import com.wesell.dealservice.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.UserFeignClient;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -37,12 +34,12 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public Long createDealPost(@Valid UploadDealPostRequestDto requestDto) {
-        Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
+        Category category = categoryRepository.findById(Long.parseLong(requestDto.getCategoryId())).get();
         DealPost post = DealPost.builder()
                 .uuid(requestDto.getUuid())
                 .category(category)
                 .title(requestDto.getTitle())
-                .price(requestDto.getPrice())
+                .price(Long.parseLong(requestDto.getPrice()))
                 .link(requestDto.getLink())
                 .detail(requestDto.getDetail())
                 .createdAt(LocalDateTime.now())
@@ -63,14 +60,14 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public void deletePost( Long postId) {
-        DealPost post = dealRepository.findDealPostById( postId);
+    public void deletePost(Long postId) {
+        DealPost post = dealRepository.findDealPostById(postId);
         post.deleteMyPost();
     }
 
     @Override
-    public PostInfoResponseDto getPostInfo(String postId) {
-        DealPost foundPost = readRepository.searchDealPost(Long.parseLong(postId));
+    public PostInfoResponseDto getPostInfo(Long postId) {
+        DealPost foundPost = readRepository.searchDealPost(postId);
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         String imageUrl = imageRepository.findImageByPostId(foundPost.getId()).getImageUrl();
         return new PostInfoResponseDto(foundPost, nickname, imageUrl);
@@ -84,7 +81,7 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public void changePostStatus(String uuid, Long id) {
+    public void changePostStatus(Long id) {
         dealRepository.findDealPostByIdAndIsDeleted(id, false).changeStatus();
     }
 
@@ -112,16 +109,6 @@ public class DealServiceImpl implements DealService {
     public Page<MainPagePostResponseDto> findByTitle(String title , int page) {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByTitle(title, PageRequest.of(page, pageLimit));
-        return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
-        });
-    }
-
-    @Override
-    public Page<MainPagePostResponseDto> findByCategoryAndTitle(Long categoryId, String title, int page) {
-        int pageLimit = 8;
-        Page<DealPost> posts = readRepository.searchByCategoryAndTitle(categoryId, title, PageRequest.of(page, pageLimit));
         return posts.map(post -> {
             Image image = imageRepository.findImageByPostId(post.getId());
             return new MainPagePostResponseDto(post, image);

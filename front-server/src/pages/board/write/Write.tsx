@@ -70,28 +70,29 @@ function UploadBoard() {
     try{
       const formData = new FormData();
 
+      const data1 = {
+        uuid: uuid,
+        categoryId: categoryId,
+        title: title,
+        price: price,
+        link: link,
+        detail: detail
+      }
+
+      const data = new Blob([JSON.stringify(data1)], 
+      {type : "application/json"})
+
       // 필드 추가
-    formData.append("requestDto", JSON.stringify({
-      uuid,
-      categoryId,
-      title,
-      price,
-      link,
-      detail,
-    }));
+    formData.append("requestDto", data);
     // 파일 추가
     formData.append("file", image.image_file);
 
-      const response = await axios.post("/deal-service/api/v1/upload", formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+      const response = await axios.post("/deal-service/api/v1/upload", formData);
 
       window.alert("😎등록이 완료되었습니다😎");
 
-      const {postId} = response.data;
-      navigate('/board/detail/'+postId);
+      const postId = response.data; 
+      navigate('/board/detail/'+ postId);
     } catch (e) {
       // 서버에서 받은 에러 메시지 출력
       toast.error("오류발생! 이모지를 사용하면 오류가 발생할 수 있습니다" + "😭", {

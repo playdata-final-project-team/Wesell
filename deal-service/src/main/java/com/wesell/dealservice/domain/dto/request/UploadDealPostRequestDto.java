@@ -11,11 +11,11 @@ public class UploadDealPostRequestDto {
 
     private String uuid;
     @NotNull
-    private Long categoryId;
+    private String categoryId;
     @NotBlank
     private String title;
     @NotNull
-    private Long price;
+    private String  price;
     @NotBlank
     private String link;
     @NotBlank
