@@ -17,6 +17,8 @@ import FoundEmailComponent from 'pages/Userfindbyid/FoundEmailComponent';
 import EmailfindComponent from 'pages/UserfindbyPwd/EmailfindComponent';
 import FoundSmsComponent from 'pages/UserfindbyPwd/FoundSmsComponent';
 import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent';
+import SearchByCategory from 'pages/search/category';
+import SearchByTitle from 'pages/search/title';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -33,6 +35,8 @@ function App() {
     <Routes>
       <Route element={<Container />}>
         <Route path={MAIN_PATH()} element={<Main />} />
+        <Route path='main/category/:categoryId' element={<SearchByCategory />} />
+        <Route path='main/title/:title' element={<SearchByTitle />} />
         <Route path={AUTH_PATH()} element={<AuthServer />} />
         <Route path={SOCAIL_PATH('kakao')} element={<Social />} />
         <Route path={TEST_PATH()} element={<CorsTest />} />
