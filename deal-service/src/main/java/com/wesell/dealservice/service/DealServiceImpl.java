@@ -1,7 +1,12 @@
 package com.wesell.dealservice.service;
 
-import com.wesell.dealservice.domain.SaleStatus;
-import com.wesell.dealservice.domain.dto.response.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
+import com.wesell.dealservice.domain.dto.response.EditPostResponseDto;
+import com.wesell.dealservice.domain.dto.response.MainPagePostResponseDto;
+import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
+import com.wesell.dealservice.domain.dto.response.PostInfoResponseDto;
 import com.wesell.dealservice.domain.entity.Image;
 import com.wesell.dealservice.domain.repository.ImageRepository;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
@@ -11,9 +16,8 @@ import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
 import com.wesell.dealservice.domain.repository.read.DealPostReadRepository;
-import com.wesell.dealservice.error.ErrorCode;
-import com.wesell.dealservice.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.UserFeignClient;
+import com.wesell.dealservice.util.Producer;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +36,8 @@ public class DealServiceImpl implements DealService {
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
     private final UserFeignClient userFeignClient;
+    private final Producer producer;
+    private final ObjectMapper objectMapper;
 
     //todo: 업로드 실패시?
 
@@ -53,8 +59,8 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
-        DealPost editPost = dealRepository.findDealPostByUuidAndId(requestDto.getUuid(), postId);
+    public EditPostResponseDto editPost(EditPostRequestDto requestDto) {
+        DealPost editPost = dealRepository.findDealPostById(requestDto.getPostId());
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         editPost.editCategory(category);
@@ -63,14 +69,19 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public void deletePost(String uuid, Long postId) {
-        DealPost post = dealRepository.findDealPostByUuidAndId(uuid, postId);
+    public void deletePost(Long postId) {
+        DealPost post = dealRepository.findDealPostById(postId);
         post.deleteMyPost();
     }
 
     @Override
-    public PostInfoResponseDto getPostInfo(String postId) {
-        DealPost foundPost = readRepository.searchDealPost(Long.parseLong(postId));
+    public void changePostStatus(ChangePostRequestDto requestDto) {
+        dealRepository.findDealPostByIdAndIsDeleted(requestDto.getPostId(), false).changeStatus();
+    }
+
+    @Override
+    public PostInfoResponseDto getPostInfo(Long postId) {
+        DealPost foundPost = readRepository.searchDealPost(postId);
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         String imageUrl = imageRepository.findImageByPostId(foundPost.getId()).getImageUrl();
         return new PostInfoResponseDto(foundPost, nickname, imageUrl);
@@ -81,11 +92,6 @@ public class DealServiceImpl implements DealService {
         int pageLimit = 6;
         Page<DealPost> allByUuid = readRepository.searchMyList(uuid, PageRequest.of(page, pageLimit));
         return allByUuid.map(MyPostListResponseDto::new);
-    }
-
-    @Override
-    public void changePostStatus(String uuid, Long id) {
-        dealRepository.findDealPostByIdAndIsDeleted(id, false).changeStatus();
     }
 
     @Override
@@ -118,14 +124,12 @@ public class DealServiceImpl implements DealService {
         });
     }
 
-    @Override
-    public Page<MainPagePostResponseDto> findByCategoryAndTitle(Long categoryId, String title, int page) {
-        int pageLimit = 8;
-        Page<DealPost> posts = readRepository.searchByCategoryAndTitle(categoryId, title, PageRequest.of(page, pageLimit));
-        return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
-        });
+    public <T> void publishCreateItemMessage(T dto) throws JsonProcessingException {
+
+        // DTO를 json으로 직렬화
+        String message = objectMapper.writeValueAsString(dto);
+
+        producer.sendMessage(message);
     }
 
 }

@@ -6,28 +6,23 @@ import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadFileRequestDto;
-import com.wesell.dealservice.service.DealMessageQueueService;
+import com.wesell.dealservice.service.DealServiceImpl;
 import com.wesell.dealservice.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
-
-
 
 @Component
 @RequiredArgsConstructor
 public class Consumer {
 
     private final ObjectMapper objectMapper;
-    private final DealMessageQueueService dealService;
+    private final DealServiceImpl dealService;
     private final FileUploadService fileUploadService;
 
-
-
     @RabbitListener(queues = "DEAL_CREATE_QUEUE")
-    public void saveUrl(String message) throws IOException, JSONException {
+    public void saveUrl(String message) throws IOException {
 
         String[] str = message.trim().substring(1, message.length()-1).split(",");
 

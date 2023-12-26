@@ -1,5 +1,7 @@
 package com.wesell.userservice.error.exception;
 
+import com.wesell.userservice.controller.response.CustomException;
+import com.wesell.userservice.controller.response.NewResponseDto;
 import com.wesell.userservice.dto.response.ErrorResponseDto;
 import com.wesell.userservice.error.exception.ErrorCode;
 import com.wesell.userservice.error.exception.UserNotFoundException;
@@ -20,5 +22,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getErrorCode().getStatus()).body(dto);
     }
 
-
+    @ExceptionHandler(CustomException.class)
+    protected ResponseEntity<NewResponseDto> globalExceptionHandler(CustomException e){
+        return ResponseEntity
+                .status(e.getErrorCode().getStatus())
+                .body(NewResponseDto.of(e));
+    }
 }

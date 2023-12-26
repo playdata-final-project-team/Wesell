@@ -1,5 +1,7 @@
 package com.wesell.userservice.controller;
 
+import com.wesell.userservice.controller.response.NewResponseDto;
+import com.wesell.userservice.error.exception.SuccessCode;
 import com.wesell.userservice.service.DupNicknameCheckService;
 import com.wesell.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,8 @@ public class DupNicknameCheckController {
     private final DupNicknameCheckService service;
 
     @GetMapping("/dup-check")
-    public ResponseEntity<Void> checkNickname(@RequestParam("nickname") String nickname){
+    public ResponseEntity<NewResponseDto> checkNickname(@RequestParam("nickname") String nickname){
         service.checkNickname(nickname);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(NewResponseDto.of(SuccessCode.OK));
     }
 }

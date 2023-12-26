@@ -12,15 +12,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -34,6 +30,8 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableWebFluxSecurity
@@ -41,6 +39,10 @@ import reactor.core.publisher.Mono;
 public class ReactiveSecurityConfig {
 
     private final TokenProvider tokenProvider;
+
+    private String[] permitPath = {
+            "/user-service/api/v1/dup-check"
+    };
 
     /**
      * 인증 인가 과정을 거치지 않도록 처리한 설정 - swagger
@@ -69,9 +71,11 @@ public class ReactiveSecurityConfig {
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 // 권한 확인 설정
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/admin-service/**").hasRole("ADMIN")
+                        .pathMatchers("/user-service/api/v1/dup-check").permitAll()
+                        .pathMatchers("/admin-service/**").hasAuthority("ADMIN")
                         .pathMatchers("/user-service/**").authenticated()
                         .pathMatchers("/auth-server/**").permitAll()
+                        .pathMatchers("/deal-service/api/v1/main ").permitAll()
                         .anyExchange().permitAll()
                 )
                 //exception-handling
@@ -125,11 +129,12 @@ public class ReactiveSecurityConfig {
     private ServerAuthenticationEntryPoint serverAuthenticationEntryPoint() {
         return (exchange, exception) -> {
             String requestPath = exchange.getRequest().getPath().value();
+            String accessToken = tokenProvider.getToken(exchange.getRequest());
             ServerHttpResponse serverHttpResponse = exchange.getResponse();
             serverHttpResponse.getHeaders().setContentType(MediaType.APPLICATION_JSON);
             ErrorResponseDto errorResponseDto;
 
-            if(exception instanceof TokenExpiredException){
+            if(exception instanceof TokenExpiredException || Objects.isNull(accessToken) ){
                 serverHttpResponse.setStatusCode(HttpStatus.UNAUTHORIZED);
                 errorResponseDto = ErrorResponseDto.of(new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN));
             }else{

@@ -13,4 +13,10 @@ public class UploadFileRequestDto {
     private Long postId;
     private String url;
     private int division = 2;
+
+    public UploadFileRequestDto(Long postId, String url) {
+        this.postId = postId;
+        this.url = url;
+        this.division = 2;
+    }
 }

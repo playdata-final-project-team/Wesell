@@ -1,55 +1,66 @@
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
-import AuthServer from 'pages/Authentication';
 import Main from 'pages/Main';
-import Container from 'layouts/Comtainer';
-import { MAIN_PATH, SOCAIL_PATH, TEST_PATH, UPLOAD_PATH, BOARD_DETAIL, MYPAGE_PATH, WITHDRAW_PATH, BOARD_EDIT } from 'constant';
-import { AUTH_PATH } from 'constant';
-import CorsTest from 'pages/Test';
+import Container from 'layouts/Container';
+import { MAIN_PATH, SOCIAL_PATH, UPLOAD_PATH, MYPAGE_PATH, BOARD_EDIT, AUTH_PATH } from 'constant';
 import Social from 'pages/Social/kakao';
 import UploadBoard from 'pages/board/write/Write';
-import PostDetailPage from 'pages/board/detail';
 import Mypage from 'pages/Mypage';
-import Withdraw from 'pages/withdraw';
 import EditPostPage from 'pages/board/edit';
 import UuidComponent from 'pages/Userfindbyid/UuidComponent';
 import FoundEmailComponent from 'pages/Userfindbyid/FoundEmailComponent';
 import EmailfindComponent from 'pages/UserfindbyPwd/EmailfindComponent';
 import FoundSmsComponent from 'pages/UserfindbyPwd/FoundSmsComponent';
 import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent';
+import AuthServer from 'pages/Authentication';
+import { useEffect, useState } from 'react';
+import Test from 'pages/Test';
 
 // component: Application 컴포넌트 //
 function App() {
-  // render: Application 컴포넌트 랜더링 //
-  // comment: 메인 화면 : '/' - Main //
-  // comment: 로그인 + 회원가입 : '/auth' - Authentication //
-  // comment: 검색 화면 : '/search/:word' - Search //
-  // comment: 회원 페이지: '/user-service/mypage - User //
-  // comment: 게시물 상세보기: '/board/detail/:boardNumber' - BoardDetail //
-  // comment: 게시물 상세보기: '/board/write' - BoardWrite //
-  // comment: 게시물 수정하기: '/board/update/:boardNumber' - BoardUpdate //
+  // state: 로그인 여부 확인 상태값 //
+  const [isLogin, setLogin] = useState<boolean>(false);
 
+  // effect: 페이지 렌더링 시마다 로그인 여부 확인 //
+  useEffect(() => {
+    const uuid = sessionStorage.getItem('uuid');
+    const role = sessionStorage.getItem('role');
+
+    if (uuid && role) {
+      setLogin(true);
+    } else {
+      setLogin(false);
+    }
+  }, []);
+
+  // render: Application 컴포넌트 랜더링 //
   return (
-    <Routes>
-      <Route element={<Container />}>
-        <Route path={MAIN_PATH()} element={<Main />} />
-        <Route path={AUTH_PATH()} element={<AuthServer />} />
-        <Route path={SOCAIL_PATH('kakao')} element={<Social />} />
-        <Route path={TEST_PATH()} element={<CorsTest />} />
-        <Route path={TEST_PATH()} element={<></>} />
-        <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
-        <Route path='/board/detail/:postId' element={<PostDetailPage />} />
-        <Route path={MYPAGE_PATH()} element={<Mypage />}/>
-        <Route path={WITHDRAW_PATH()} element={<Withdraw />} />
-        <Route path={BOARD_EDIT()} element={<EditPostPage />} />
-        <Route path="*" element={<h1>404 NOT FOUND</h1>} />
-        <Route path='testJiho2' element = {<UuidComponent/>}/>
-        <Route path='/found-email/:uuid' element = {<FoundEmailComponent/>}/>
-        <Route path='testJiho4' element = {<EmailfindComponent/>}/>
-        <Route path='testJiho5/:uuid' element = {<FoundSmsComponent/>}/>
-        <Route path='/testJiho6/:uuid' element = {<PasswordUpdateComponent/>}/>
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route element={<Container />}>
+          {/** 테스트 URL - S*/}
+          <Route path="/test" element={<Test />}></Route>
+
+          {/** 테스트 URL - E*/}
+          <Route path={MAIN_PATH()} element={<Main />} />
+          <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
+          <Route path={AUTH_PATH()} element={<AuthServer />} />
+          <Route path="testJiho2" element={<UuidComponent />} />
+          <Route path="/found-email/:uuid" element={<FoundEmailComponent />} />
+          <Route path="testJiho4" element={<EmailfindComponent />} />
+          <Route path="testJiho5/:uuid" element={<FoundSmsComponent />} />
+          <Route path="/testJiho6/:uuid" element={<PasswordUpdateComponent />} />
+          <Route path="*" element={<h1>404 NOT FOUND</h1>} />
+          {isLogin ? (
+            <>
+              <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
+              <Route path={MYPAGE_PATH()} element={<Mypage />} />
+              <Route path={BOARD_EDIT()} element={<EditPostPage />} />
+            </>
+          ) : null}
+        </Route>
+      </Routes>
+    </>
   );
 }
 

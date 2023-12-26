@@ -1,3 +1,52 @@
+.black-button {
+  border-radius: 46px;
+  width: 95px;
+  height: 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 1);
+
+  color: rgba(255, 255, 255, 1);
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 40%;
+
+  cursor: pointer;
+}
+
+.black-button:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.white-button {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 46px;
+  width: 93px;
+  height: 28px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(255, 255, 255, 1);
+
+  color: rgba(0, 0, 0, 0.5);
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 40%;
+
+  cursor: pointer;
+}
+
+.white-button:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
 .icon-button {
   border-radius: 50% 50%;
 
@@ -11,11 +60,46 @@
   cursor: pointer;
 }
 
-.icon-button:hover {
+.icon-button {
+  border-radius: 50% 50%;
+
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.side-icon-button {
+  border-radius: 50% 50%;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.icon-button:hover,
+.side-icon-button:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
 .icon {
+  width: 100%;
+  height: 100%;
+
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+.side-icon {
   width: 100%;
   height: 100%;
 
@@ -33,4 +117,12 @@
 
 .logo-wesell-icon {
   background-image: url(assets/images/wesell-logo.png);
+}
+
+.basic-profile {
+  background-image: url(assets/images/Designed-by-Freepik.png);
+}
+
+.admin-profile {
+  background-image: url(assets/images/Designed-by-Freepik2.png);
 }

@@ -38,7 +38,7 @@ public class DealPost {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "p_status", nullable = false)
-    private SaleStatus status;
+    private SaleStatus saleStatus;
 
     @Column(name = "p_create_at")
     LocalDateTime createdAt;
@@ -55,7 +55,7 @@ public class DealPost {
         this.price = price;
         this.link = link;
         this.detail = detail;
-        this.status = SaleStatus.IN_PROGRESS;
+        this.saleStatus = SaleStatus.IN_PROGRESS;
         this.createdAt = createdAt;
         this.isDeleted = false;
     }
@@ -72,7 +72,7 @@ public class DealPost {
     }
 
     public void changeStatus() {
-        this.status = SaleStatus.COMPLETED;
+        this.saleStatus = SaleStatus.COMPLETED;
     }
 
     public void deleteMyPost() {

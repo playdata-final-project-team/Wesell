@@ -19,33 +19,8 @@ spring:
         check_nullability: true
     show_sql: true
 
-  datasource:
-    url: ${url}
-    username: ${username_}
-    password: ${password}
-    driver-class-name: ${driver-class-name}
-
-  rabbitmq:
-    host: localhost
-    username: guest
-    password: guest
-    port: 5672
-
   profiles:
     active: db
-
-cloud:
-  aws:
-    s3:
-      bucket: ${bucket}
-    stack:
-      auto: false
-    region:
-      static: ap-northeast-2
-      auto: false
-    credentials:
-      accessKey: ${accessKey}
-      secretKey: ${secretKey}
 
 springdoc:
   packages-to-scan: com.wesell.dealservice.controller

@@ -33,9 +33,9 @@ public class UserController {
     }
 
     @DeleteMapping("user/{uuid}")
-    public ResponseEntity<String> deleteUserEntity(@PathVariable String uuid) {
+    public ResponseEntity<Void> deleteUserEntity(@PathVariable String uuid) {
             userService.deleteUser(uuid);
-            return ResponseEntity.ok("성공적으로 삭제되었습니다.");
+            return ResponseEntity.ok(null);
 
     }
 

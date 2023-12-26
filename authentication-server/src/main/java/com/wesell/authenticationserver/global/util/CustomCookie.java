@@ -58,4 +58,11 @@ public class CustomCookie {
                 .maxAge(0)
                 .build();
     }
+
+    public ResponseCookie deleteJSESSIONIDCookie(){
+        return ResponseCookie.from("JSESSIONID")
+                .path("/")
+                .maxAge(0)
+                .build();
+    }
 }
