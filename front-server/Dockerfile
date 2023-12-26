@@ -13,6 +13,11 @@ COPY . /app
 # package.json 에 명시된 의존성 설치
 RUN npm install
 
+RUN npm install -g npm@latest
+
+# react-scripts 전역 설치
+RUN npm install -g react-scripts
+
 # 빌드 시작
 RUN npm run build
 

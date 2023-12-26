@@ -12,7 +12,7 @@ pipeline {
                     $class: 'GitSCM',
                     branches: [[name: '*/builds']],
                     extensions: [[$class: 'PathRestriction', excludedRegions: '', includedRegions: 'front-end/.*']],
-                    userRemoteConfigs: [[url: 'https://github.com/unan25/TodayTrend.git']]
+                    userRemoteConfigs: [[url: 'https://github.com/playdata-final-project-team/Wesell.git']]
                 ])
             }
         }
@@ -22,7 +22,7 @@ pipeline {
                 script {
                     dir('front-end') {
                         docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
-                            def app = docker.build("unan25/tt_front", "-f Dockerfile .")
+                            def app = docker.build("lbs991218/wesell:front-server", "-f Dockerfile .")
                             app.push("latest")
                     }
                 }
@@ -34,12 +34,12 @@ pipeline {
             steps {
                 dir('front-end') {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-36-130-134.ap-northeast-2.compute.amazonaws.com '
+                        ssh -o StrictHostKeyChecking=no ubuntu@ec2-18-191-195-236.us-east-2.compute.amazonaws.com '
                             sudo docker stop \$(sudo docker ps -q) || true
                             sudo docker rm \$(sudo docker ps -a -q) || true
                             sudo docker rmi \$(sudo docker images -q) || true
-                            sudo docker pull unan25/tt_front:latest
-                            sudo docker run -d -p 3000:3000 unan25/tt_front:latest
+                            sudo docker pull lbs991218/wesell:front-server
+                            sudo docker run -d -p 3000:3000 lbs991218/wesell:front-server
                         '
                     """
                 }
