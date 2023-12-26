@@ -17,28 +17,28 @@ spring:
 
       routes:
         - id: user-service
-          uri: lb://USER-SERVICE
+          uri: http://18.218.24.186:8082/
           predicates:
             - Path=/user-service/**
           filters:
             - RewritePath=/user-service/(?<path>.*),/$\{path}
 
         - id: admin-service
-          uri: lb://ADMIN-SERVICE
+          uri: http://3.144.42.103:8887/
           predicates:
             - Path=/admin-service/**
           filters:
             - RewritePath=/admin-service/(?<path>.*),/$\{path}
 
         - id: deal-service
-          uri: lb://DEAL-SERVICE
+          uri: http://18.226.75.205:8888/
           predicates:
             - Path=/deal-service/**
           filters:
             - RewritePath=/deal-service/(?<path>.*),/$\{path}
 
         - id: authentication-server
-          uri: lb://AUTHENTICATION-SERVER
+          uri: http://3.17.154.72:8081/
           predicates:
             - Path=/auth-server/**
           filters:
@@ -46,12 +46,13 @@ spring:
 
 eureka:
   instance:
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+#    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://3.138.105.178:8761/eureka/
 
 token:
   secret-key: ${secret-key}

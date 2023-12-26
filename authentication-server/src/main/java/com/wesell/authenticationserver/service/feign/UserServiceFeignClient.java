@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "USER-SERVICE", path = "api/v1")
 public interface UserServiceFeignClient {
 
-    @PostMapping("api/v1/sign-up")
+    @PostMapping("sign-up")
     ResponseEntity<ResponseDto> registerUserDetailInfo(@RequestBody CreateUserFeignResponseDto dto);
 
-    @PostMapping("api/v1/feign/find/id")
+    @PostMapping("feign/find/id")
     String findID(@RequestBody String phoneNumber);
 }

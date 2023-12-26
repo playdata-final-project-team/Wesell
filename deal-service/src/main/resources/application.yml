@@ -5,6 +5,12 @@ spring:
   application:
     name: deal-service
 
+  datasource:
+    url: ${url}
+    username: ${username_}
+    password: ${password}
+    driver-class-name: ${driver-class-name}
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -33,3 +39,10 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: ERROR
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://3.138.105.178:8761/eureka/

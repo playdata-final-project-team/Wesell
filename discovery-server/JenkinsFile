@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Pull Docker Image') {
+            steps {
+                script {
+                    // Docker 이미지를 pull하는 명령
+                    sh 'sudo docker pull lbs991218/wesell:discovery-server'
+                }
+            }
+        }
+
+        // 다른 스테이지들 추가 가능
+    }
+}

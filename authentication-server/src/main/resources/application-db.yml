@@ -1,0 +1,22 @@
+url: jdbc:mysql://wesell-rds.cni8my8w26et.us-east-2.rds.amazonaws.com:3306/wesell
+driver-class-name: com.mysql.cj.jdbc.Driver
+username_: root
+password: 12345678
+
+coolsms:
+  api:
+    key: "NCSXADOVCG3RJWPC"
+    secret: "AVHEVHRAXL4TDVLAG4T4WYUW8DX077PB"
+
+token:
+  access-expired-time: 0.06
+  refresh-expired-time: 24
+  secret-key: testSecret
+  issuer: wesell@wesell.com
+
+kakao:
+  auth-url: https://kauth.kakao.com/oauth/token
+  user-api-url: https://kapi.kakao.com/v2/user/me
+  client-id: 6551a767db9faa5e9973ef21a860b692
+  client-secret: IHNf0LiDlaX1ty5LNLReKGm0WqcBnsY6
+  redirect-url : http://localhost:3000/social/kakao/callback
