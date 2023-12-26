@@ -2,6 +2,7 @@ package com.wesell.dealservice.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.wesell.dealservice.domain.dto.request.UploadFileRequestDto;
 import com.wesell.dealservice.domain.entity.Image;
 import com.wesell.dealservice.domain.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,15 @@ public class FileUploadService {
     private final AmazonS3 amazonS3;
     private final ImageRepository imageRepository;
 
-    public void saveImageUrl(Long postId, MultipartFile file) throws IOException {
+
+    public String getUrl(MultipartFile file) throws IOException {
+        return uploadAndGetUrl(file);
+    }
+
+    public void saveImageUrl(UploadFileRequestDto requestDto) {
         Image userImage = Image.builder()
-                .postId(postId)
-                .imageUrl(uploadAndGetUrl(file))
+                .postId(requestDto.getPostId())
+                .imageUrl(requestDto.getUrl())
                 .build();
         imageRepository.save(userImage);
     }

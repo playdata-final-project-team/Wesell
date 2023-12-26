@@ -1,5 +1,6 @@
 package com.wesell.authenticationserver.service;
 
+import com.wesell.authenticationserver.controller.dto.request.DeleteUserPwCheckRequestDto;
 import com.wesell.authenticationserver.controller.response.ResponseDto;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.enum_.Role;
@@ -13,6 +14,7 @@ import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.controller.response.CustomException;
 import com.wesell.authenticationserver.controller.response.ErrorCode;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
+import com.wesell.authenticationserver.service.dto.oauth.KakaoInfo;
 import com.wesell.authenticationserver.service.dto.response.AdminAuthResponseDto;
 import com.wesell.authenticationserver.service.dto.response.CreateUserFeignResponseDto;
 import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
@@ -23,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -73,9 +76,11 @@ public class AuthUserService {
      *  소셜 로그인 - 가입된 회원 여부 확인 후 저장
      */
     @Transactional
-    public GeneratedTokenDto findOrCreateUser(KakaoAccount kakaoAccount){
+    public GeneratedTokenDto findOrCreateUser(KakaoInfo kakaoInfo){
 
         log.debug("소셜 로그인 - 회원 정보 확인");
+        KakaoAccount kakaoAccount = kakaoInfo.getKakaoAccount();
+
         String email = kakaoAccount.getEmail();
         Optional<AuthUser> user = authUserRepository.findByEmail(email);
 
@@ -122,13 +127,20 @@ public class AuthUserService {
     /**
      * refresh jwt 기능
      */
-    public GeneratedTokenDto refreshToken(String refreshToken, String accessToken){
+    public GeneratedTokenDto refreshToken(String refreshToken, String accessToken) {
 
         log.debug("토큰 재발급 서비스 시작");
         String uuid = tokenProvider.validateToken(refreshToken, accessToken);
 
         log.debug("refresh-token 검증");
-        if( uuid != null) {
+        if (uuid != null) {
+            AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
+                    () -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN)
+            );
+
+            return tokenProvider.generateTokens(authUser);
+        }else if(Objects.isNull(accessToken) && Objects.nonNull(refreshToken)){
+            uuid = tokenProvider.validateRefreshToken(refreshToken);
             AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
                     () -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN)
             );
@@ -185,6 +197,46 @@ public class AuthUserService {
         } else {
             return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");
         }
+    }
+
+    public void checkPwForDelete(DeleteUserPwCheckRequestDto requestDto){
+        log.debug("회원 탈퇴 전 비밀번호 확인");
+
+        log.debug("회원 조회");
+        String uuid = requestDto.getUuid();
+        AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(()->{
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+        });
+
+        log.debug("비밀번호 일치 여부");
+        String inputData = requestDto.getPw();
+        String pw = authUser.getPassword();
+        if(!passwordEncoder.matches(inputData,pw)){
+            throw new CustomException(ErrorCode.NOT_CORRECT_PASSWORD);
+        }
+    }
+
+    public void deleteUser(String uuid){
+        log.debug("회원 탈퇴");
+
+        log.debug("탈퇴할 회원 조회");
+        AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(() ->{
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+        });
+
+        log.debug("탈퇴한 회원으로 변경 - DB 반영");
+        authUser.changeIsDeleted();
+        authUserRepository.saveAndFlush(authUser);
+
+        log.debug("User-Service Api Call - 회원가입 요청");
+        try {
+            userServiceFeignClient.deleteUser(uuid);
+        }catch(Exception e){
+            log.error("유저 서비스로 Feign 요청 시 오류 발생.");
+            log.error("detail : {}",e.getMessage());
+            throw new CustomException(ErrorCode.USER_SERVICE_FEIGN_ERROR);
+        }
+
     }
 
     /*====================== Feign =======================*/

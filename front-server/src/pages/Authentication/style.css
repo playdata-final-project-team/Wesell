@@ -4,7 +4,6 @@
   /* 추후 헤더 정의 시 해당 내용을 적용하여 calc 하기 */
   height: calc(100vh);
   min-height: 960px;
-  background-color: beige;
 
   display: flex;
   justify-content: center;
@@ -48,7 +47,7 @@
   justify-content: space-evenly;
 }
 
-.auth-card-sign-in-btn {
+.auth-card-btn {
   cursor: pointer;
 
   background-color: rgba(10, 160, 255, 0.7);
@@ -61,12 +60,23 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-.auth-card-sign-in-btn:hover {
+.auth-card-btn:hover {
   background-color: rgba(10, 160, 255, 0.9);
 }
 
-.auth-card-sign-in-btn:active {
+.auth-card-btn:active {
   box-shadow: inset 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
+}
+
+.auth-card-btn-disabled {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  padding: 5px 30px;
+  margin: 5px;
+
+  text-align: center;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .auth-card-social-in-btn {
@@ -120,13 +130,7 @@
 
 /* sign-up-card : 닉네임 & 번호 인증 */
 .auth-sign-up-valid-box {
+  min-height: 40px;
   display: flex;
   align-items: center;
-}
-
-.auth-sign-up-valid-box > p{
-  margin: 5px;
-
-  font-size: 12px;
-  font-weight: 300;
 }

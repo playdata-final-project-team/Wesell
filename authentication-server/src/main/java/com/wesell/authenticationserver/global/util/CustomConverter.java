@@ -61,12 +61,17 @@ public class CustomConverter {
     }
 
     public CreateUserFeignResponseDto toFeignDto(KakaoAccount kakaoAccount, String uuid){
+
+        // phone 양식 통일을 위해 문자열 형태 수정 처리함.
+        String data = kakaoAccount.getPhone_number();
+        String phone = data.trim().replace("+82 ","0").replaceAll("-","");
+
         return CreateUserFeignResponseDto.builder()
                 .name(kakaoAccount.getName())
-                .nickname(kakaoAccount.getProfile().getNickname())
+                .nickname(RandomNicknameUtil.makeRandomNickname())
                 .uuid(uuid)
                 .agree(true)
-                .phone(kakaoAccount.getPhone_number())
+                .phone(phone)
                 .build();
     }
 

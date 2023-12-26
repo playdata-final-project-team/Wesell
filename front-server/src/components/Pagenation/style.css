@@ -1,0 +1,50 @@
+.listPagenationWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 37px;
+    margin: 38px 94px 38px 88px;
+}
+
+.moveToFirstPage, .moveToLastPage{
+
+}
+
+.moveToPrevPage, .moveToNextPage{
+    color: #5a5a5a;
+    background-color: transparent;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.pageBtn{
+    width: 49px;
+    height: 49px;
+    margin: 0 10px;
+    border: none;
+    color: black;
+    font-size: 20px;
+    opacity: 0.2;
+}
+
+&:hover{
+    /* background-color: #b42954;
+    cursor: pointer;
+    transform: translateY(-2px); */
+}
+
+&[disabled]{
+    background-color: #e2e2e2;
+    cursor: revert;
+    transform: revert;  
+}
+
+&[aria-current]{
+    background-color: #f5d3dd;
+    font-weight: bold;
+    cursor: revert;
+    transform: revert;
+    opacity: 1;
+}

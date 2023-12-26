@@ -19,7 +19,7 @@ spring:
     show_sql: true
 
   profiles:
-    active: db
+    active: local, db
 
 eureka:
   instance:
@@ -52,6 +52,9 @@ kakao:
   client-id: ${client-id}
   client-secret: ${client-secret}
   redirect-url : ${redirect-url}
+  logout-api-url: ${logout-api-url}
+  unlink-api-url: ${unlink-api-url}
+  admin-key: ${admin-key}
 
 coolsms:
   api:

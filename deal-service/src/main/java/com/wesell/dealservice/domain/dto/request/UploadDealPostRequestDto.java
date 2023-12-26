@@ -21,4 +21,7 @@ public class UploadDealPostRequestDto {
     @NotBlank
     private String detail;
 
+    private int division = 1;
+
+
 }

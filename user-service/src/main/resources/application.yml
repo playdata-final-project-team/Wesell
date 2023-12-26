@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: db
   application:
     name: user-service
   datasource:
@@ -19,9 +21,6 @@ spring:
         check_nullability: true
     show_sql: true
 
-spring.profiles:
-    active: db
-
 springdoc:
   packages-to-scan: com.wesell.userservice.contoller
   default-consumes-media-type: application/json;charset=UTF-8
@@ -32,7 +31,8 @@ springdoc:
     display-request-duration: true
     operations-sorter: alpha
 
-    coolsms:
-      api:
-        key: ${coolsms.api.key}
-        secret: ${coolsms.api.secret}
+coolsms:
+  api:
+    key: ${coolsms.api.key}
+    secret: ${coolsms.api.secret}
+

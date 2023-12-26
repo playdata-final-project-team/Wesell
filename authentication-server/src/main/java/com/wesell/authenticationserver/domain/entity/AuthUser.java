@@ -4,6 +4,8 @@ import com.wesell.authenticationserver.domain.enum_.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Getter @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,7 +24,7 @@ public class AuthUser {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name= "a_role", nullable = false)
+    @Column(name= "a_role", nullable = false, length = 20)
     private Role role;
 
     @Column(name = "is_deleted")

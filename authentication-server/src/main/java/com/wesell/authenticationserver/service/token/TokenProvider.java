@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -46,6 +47,10 @@ public class TokenProvider {
     // refresh-token 검증
     public String validateToken(String refreshToken, String accessToken){
 
+        if(Objects.isNull(accessToken)){
+            return null;
+        }
+
         // access-token 만료여부 재확인
         if(!getClaims(accessToken).getExpiration().before(new Date())){
             throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
@@ -56,6 +61,24 @@ public class TokenProvider {
         Date accessCreatedAt = getClaims(accessToken).getIssuedAt();
 
         if(!refreshCreatedAt.equals(accessCreatedAt)){
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        // refresh-token 검증
+        try {
+            return getClaims(refreshToken).getSubject();
+        }catch(Exception e){
+            return null;
+        }
+    }
+
+    // refresh-token 단독 검증하기
+    public String validateRefreshToken(String refreshToken){
+        if(Objects.isNull(refreshToken)){
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        if(getClaims(refreshToken).getExpiration().before(new Date())){
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 

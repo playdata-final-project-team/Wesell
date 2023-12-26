@@ -1,5 +1,8 @@
 package com.wesell.dealservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.response.*;
 import com.wesell.dealservice.domain.entity.Image;
 import com.wesell.dealservice.domain.repository.ImageRepository;
@@ -10,18 +13,25 @@ import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
 import com.wesell.dealservice.domain.repository.read.DealPostReadRepository;
+import com.wesell.dealservice.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.UserFeignClient;
+import com.wesell.dealservice.util.Producer;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
+import static com.wesell.dealservice.error.ErrorCode.INVALID_POST;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Log4j2
 public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
@@ -29,6 +39,8 @@ public class DealServiceImpl implements DealService {
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
     private final UserFeignClient userFeignClient;
+    private final Producer producer;
+    private final ObjectMapper objectMapper;
 
     //todo: 업로드 실패시?
 
@@ -50,8 +62,8 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public EditPostResponseDto editPost(EditPostRequestDto requestDto, Long postId) {
-        DealPost editPost = dealRepository.findDealPostById( postId);
+    public EditPostResponseDto editPost(EditPostRequestDto requestDto) {
+        DealPost editPost = dealRepository.findDealPostById(requestDto.getPostId());
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         editPost.editCategory(category);
@@ -66,6 +78,11 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
+    public void changePostStatus(ChangePostRequestDto requestDto) {
+        dealRepository.findDealPostByIdAndIsDeleted(requestDto.getPostId(), false).changeStatus();
+    }
+
+    @Override
     public PostInfoResponseDto getPostInfo(Long postId) {
         DealPost foundPost = readRepository.searchDealPost(postId);
         String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
@@ -74,26 +91,30 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public Page<MyPostListResponseDto> getMyPostList(String uuid, int page) {
+    @Cacheable(key = "'uuid: ' + #uuid + ' page: ' + #page", value = "MYPAGE_CACHE")
+    public PageResponseDto getMyPostList(String uuid, int page) {
         int pageLimit = 6;
         Page<DealPost> allByUuid = readRepository.searchMyList(uuid, PageRequest.of(page, pageLimit));
-        return allByUuid.map(MyPostListResponseDto::new);
+        return PageResponseDto.builder()
+                .dtoList(allByUuid.map(MyPostListResponseDto::new).stream().toList())
+                .page(page)
+                .totalPage(pageLimit)
+                .build();
     }
 
     @Override
-    public void changePostStatus(Long id) {
-        dealRepository.findDealPostByIdAndIsDeleted(id, false).changeStatus();
-    }
-
-    @Override
-    public Page<MainPagePostResponseDto> getDealPostLists(int page) {
+    @Cacheable(key = "'page: ' + #page", value = "MAIN_CACHE")
+    public PageResponseDto getDealPostLists(int page) {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchDealPostList(PageRequest.of(page, pageLimit));
-        return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
-        });
+        log.info(posts.toList());
+        return PageResponseDto.builder()
+                .dtoList(posts.map(post -> new MainPagePostResponseDto(post, imageRepository.findImageByPostId(post.getId()))).toList())
+                .page(page)
+                .totalPage(pageLimit)
+                .build();
     }
+
 
     @Override
     public Page<MainPagePostResponseDto> findByCategory(Long categoryId, int page) {
@@ -113,6 +134,24 @@ public class DealServiceImpl implements DealService {
             Image image = imageRepository.findImageByPostId(post.getId());
             return new MainPagePostResponseDto(post, image);
         });
+    }
+
+    public <T> void publishCreateItemMessage(T dto) throws JsonProcessingException {
+
+        // DTO를 json으로 직렬화
+        String message = objectMapper.writeValueAsString(dto);
+
+        producer.sendMessage(message);
+    }
+
+    public EditPostResponseDto CompareWithUpdated(EditPostRequestDto dto) {
+        DealPost editPost = dealRepository.findDealPostById(dto.getPostId());
+        if(editPost.getTitle().equals(dto.getTitle()) && editPost.getPrice() == dto.getPrice()
+                && editPost.getLink().equals(dto.getLink()) && editPost.getDetail().equals(dto.getDetail())) {
+            return new EditPostResponseDto(editPost);
+        }
+        else
+            throw new CustomException(INVALID_POST);
     }
 
 }
