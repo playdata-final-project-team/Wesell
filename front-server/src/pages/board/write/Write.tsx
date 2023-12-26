@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback,useEffect, useState } from 'react';
 import axios from 'axios';
 import './Write.css';
+import ImageUploader from 'components/ImageUploader/ImageUploader';
+import TextArea from 'components/TextArea/TextArea';
+import {Button} from "@mui/material";
+import {toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 
 function GetCategory() {
   const [category, setCategory] = useState<category[]>([]);
@@ -35,96 +41,102 @@ function GetCategory() {
 }
 
 function UploadBoard() {
-  const [ uuid, setUuid] = useState('');
-  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const navigate = useNavigate();
+  const [ uuid, setUuid] = useState('www');
+  const [image, setImage] = useState({
+    image_file: "",
+    preview_URL: "image/default_image.png",
+  });
   const categories = GetCategory();
   const [title, setTitle] = useState('');
-  const [categoryId, setCategoryId] = useState(1);
+  const [categoryId, setCategoryId] = useState('');
   const [price, setPrice] = useState('');
   const [detail, setDetail] = useState('');
   const [link, setLink] = useState('');
 
-  const body = {
-    uuid: uuid, 
-    title: title,
-    categoryId: categoryId,
-    content: detail,
-    price: price,
-    link: link,
-  };
+  const canSubmit = useCallback(() => {
+    return image.image_file !== "" && title !== "";
+  }, [image, title, categoryId,price,detail,link]);
 
-  useEffect(() => {
-    const storedUuid = window.sessionStorage.getItem("uuid");
-    if (storedUuid) {
-      setUuid(storedUuid);
-    }
-  }, []);
 
-  const HandleSubmit = async (body: string) => {
-    const response = await axios.post('/deal-service/api/v1/post', body);
-    const postId = response.data.id;
+  // useEffect(() => {
+  //   const uuid = window.sessionStorage.getItem("uuid");
+  //   if (uuid) {
+  //     setUuid(uuid);
+  //   }
+  // }, []);
 
-    // 2번 API 호출: 이미지 업로드
-    if (imageFile) {
+  const handleSubmit = useCallback(async () => {
+    try{
       const formData = new FormData();
-      formData.append('postId', postId);
-      formData.append('file', imageFile);
 
-      await axios.post('/deal-service/api/v1/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      // 필드 추가
+    formData.append("requestDto", JSON.stringify({
+      uuid,
+      categoryId,
+      title,
+      price,
+      link,
+      detail,
+    }));
+    // 파일 추가
+    formData.append("file", image.image_file);
+
+      const response = await axios.post("/deal-service/api/v1/upload", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+      window.alert("😎등록이 완료되었습니다😎");
+
+      const {postId} = response.data;
+      navigate('/board/detail/'+postId);
+    } catch (e) {
+      // 서버에서 받은 에러 메시지 출력
+      toast.error("오류발생! 이모지를 사용하면 오류가 발생할 수 있습니다" + "😭", {
+        position: "top-center",
       });
     }
-  };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileInput = e.target as HTMLInputElement;
-    const selectedFile = fileInput.files?.[0];
-
-    if (selectedFile) {
-      setImageFile(selectedFile);
-    }
-  };
+  }, [uuid, categoryId, title, price, link, detail, image, navigate]);
 
   return (
-    <>
-      <div className="post-view-wrapper">
-        {/* <form onSubmit={HandleSubmit}> */}
-        <div className="post-view-row">
-          <label>이미지</label>
-          <input type="file" onChange={handleImageChange} />
-        </div>
-        <div className="post-view-row">
-          <label>제목</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}></input>
-        </div>
-        <div className="post-view-row">
-          <label>카테고리 선택</label>
-          <select onChange={(event) => setCategoryId(parseInt(event.target.value))}>
-            {categories}
-          </select>
-        </div>
-        <div className="post-view-row">
-          <label>가격</label>
-          <input type="text" value={price} onChange={(e) => setPrice(e.target.value)}></input>
-        </div>
-        <div className="post-view-row">
-          <label>내용</label>
-          <input type="text" value={detail} onChange={(e) => setDetail(e.target.value)}></input>
-        </div>
-        <div className="post-view-row">
-          <label>오픈 카카오톡 채팅 링크</label>
-          <input type="text" value={link} onChange={(e) => setLink(e.target.value)}></input>
-        </div>
-        <button
-          className="post-view-go-list-btn"
-          onClick={() => HandleSubmit(JSON.stringify(body))}>
-          등록
-        </button>
+    <div className="addBoard-wrapper">
+      <div className="submitButton">
+        {canSubmit() ? (
+          <Button
+            onClick={handleSubmit}
+            className="success-button"
+            variant="outlined"
+          >
+            등록하기
+          </Button>
+        ) : (
+          <Button
+            className="disable-button"
+            variant="outlined"
+            size="large"
+          >
+            사진과 내용을 모두 입력하세요.
+          </Button>
+        )}
       </div>
-    </>
+      <div className="addBoard-body">
+      <select
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+        >
+          <option value="" disabled>
+            카테고리를 선택하세요.
+          </option>
+          {categories}
+        </select>
+        <ImageUploader setImage={setImage} preview_URL={image.preview_URL}/>
+        <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} setLink={setLink} 
+        title={title} price={price} detail={detail} link={link}/>
+      </div>
+    </div>
   );
 }
-
 export default UploadBoard;
