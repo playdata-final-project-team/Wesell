@@ -5,9 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92f63182-175e-4fe9-8f41-34293aef690c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../authentication-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/AuthenticationServerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/AuthenticationServerApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/controller/AuthFeignController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/controller/AuthFeignController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/domain/entity/AuthUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/domain/entity/AuthUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/global/util/SmsUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/global/util/SmsUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../authentication-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/controller/DealController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/controller/DealController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/domain/dto/response/MyPostListResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/domain/dto/response/MyPostListResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/domain/entity/DealPost.java" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/domain/entity/DealPost.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/service/DealService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/service/DealService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/service/DealServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/service/DealServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/service/FileUploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/service/FileUploadService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/util/Consumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/util/Consumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,14 +42,21 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "C:/Wesell/front-server"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat-143&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Wesell/front-server&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -43,7 +65,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1701850161027</updated>
+      <workItem from="1703550907431" duration="38000" />
+      <workItem from="1703550948803" duration="23000" />
+      <workItem from="1703550976550" duration="1138000" />
+      <workItem from="1703552578873" duration="1106000" />
+      <workItem from="1703553873420" duration="1691000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

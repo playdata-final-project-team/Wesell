@@ -1,9 +1,15 @@
 server:
   port: 8888
 
+redis:
+  host: localhost
+  port: 6379
+
 spring:
   application:
     name: deal-service
+  cache:
+    type: redis
   datasource:
     url: ${url}
     username: ${username_}
@@ -19,6 +25,12 @@ spring:
         check_nullability: true
     show_sql: true
 
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+    port: 5672
+
   profiles:
     active: db
 
@@ -32,13 +44,6 @@ springdoc:
     display-request-duration: true
     operations-sorter: alpha
 
-logging:
-  level:
-    com:
-      amazonaws:
-        util:
-          EC2MetadataUtils: ERROR
-
 cloud:
   aws:
     s3:
@@ -48,3 +53,10 @@ cloud:
     credentials:
       accessKey: ${accessKey}
       secretKey: ${secretKey}
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
