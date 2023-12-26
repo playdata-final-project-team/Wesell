@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { FaSearch } from "react-icons/fa";
 
 interface PostJson {
   "postId":number;
@@ -44,11 +45,11 @@ const SearchByTitle = () => {
     <>
     <div className="searching-box">
     <input type="text"
-          placeholder="제목을 검색하세요"
+          placeholder="Search..."
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)} />
           <button onClick={handleSearch}>
-            <img src = "./assets/icon.png" />
+          <FaSearch color="#00A8CC" />
           </button>
     </div>
     <div className="categoryList">
