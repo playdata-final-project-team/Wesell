@@ -39,7 +39,6 @@ const UpdatePasswordComponent = () => {
 
   return (
     <div>
-
       <label>Password:</label>
       <input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} />
 

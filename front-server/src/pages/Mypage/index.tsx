@@ -15,6 +15,14 @@ import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent
 import { MypageUpdateRequestDto } from 'apis/request/mypage';
 import { MAIN_PATH } from 'constant';
 import ResponseCode from 'constant/response-code.enum';
+import { AiFillEdit, AiFillProfile } from 'react-icons/ai';
+import {
+  BsDoorOpenFill,
+  BsFileExcelFill,
+  BsFilePersonFill,
+  BsFillPencilFill,
+} from 'react-icons/bs';
+import ReactModal from 'react-modal';
 
 // component: 마이페이지 컴포넌트 //
 function Mypage() {
@@ -39,11 +47,16 @@ function Mypage() {
     const [isNameError, setNameError] = useState<boolean>(false);
     // state: 이름 관련 오류 메시지 상태값 //
     const [nameErrorMsg, setNameErrorMsg] = useState<string>('');
-    // context: uuid, role 값//
+    // store: uuid, role 값//
     const uuid = useStore((state) => state.uuid);
 
     // function: navaigation 함수 //
     const navigator = useNavigate();
+
+    // function: 비밀번호 찾기 팝업창 닫기 함수 //
+    const closePasswordUpdate = () => {
+      setPwUpdatePopupOpen(false);
+    };
 
     // effect: 페이지 리렌더링 시마다 확인 //
     useEffect(() => {
@@ -80,7 +93,7 @@ function Mypage() {
       };
 
       feignData(uuid);
-    }, []);
+    }, [sessionStorage.getItem('uuid')]);
 
     // event-handler: 이름 on-change 이벤트 핸들링 //
     const onNicknameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -138,12 +151,13 @@ function Mypage() {
     // event-handler: 비밀번호 수정 on-click 이벤트 핸들링//
     const onUpdatePwBtnClickHandler = () => {
       // 비밀번호 수정 페이지로 이동하기
-      setPwUpdatePopupOpen(!isPwUpdatePopupOpen);
+      setPwUpdatePopupOpen(true);
     };
 
     // render: 마이페이지 - 회원정보 컴포넌트 렌더링 //
     return (
       <div className="userInfo-card">
+        <h1 className="card-title">회원 정보</h1>
         <div
           className={
             isDeletePopupOpen || isPwUpdatePopupOpen
@@ -151,9 +165,10 @@ function Mypage() {
               : 'userInfo-card-content'
           }
         >
-          <h1 className="card-title">회원 정보</h1>
           <div className="card-input-box">
             <InputBox
+              id="mypage-nickname"
+              label="Nickname : "
               placeholder="닉네임(Nickname)"
               name="nickname"
               type="text"
@@ -162,6 +177,8 @@ function Mypage() {
               error={false}
             />
             <InputBox
+              id="mypage-email"
+              label="Email : "
               placeholder="이메일(E-Mail)"
               name="email"
               type="text"
@@ -170,6 +187,8 @@ function Mypage() {
               error={false}
             />
             <InputBox
+              id="mypage-phone"
+              label="Phone : "
               placeholder="전화번호"
               name="phone"
               type="text"
@@ -178,6 +197,8 @@ function Mypage() {
               error={false}
             />
             <InputBox
+              id="mypage-name"
+              label="Name : "
               placeholder="이름"
               name="name"
               type="text"
@@ -188,14 +209,54 @@ function Mypage() {
             />
           </div>
           <div className="card-btn-box">
-            <ABox label="판매 내역" onClick={onDealInfoBtnClickHandler}></ABox>
-            <ABox label="수정 하기" onClick={onUpdateBtnClickHandler} />
-            <ABox label="탈퇴 하기" onClick={onWithdrawBtnClickHandler} />
-            <ABox label="비밀번호 수정" onClick={onUpdatePwBtnClickHandler} />
+            <ABox
+              label="판매 내역"
+              icon={<AiFillProfile size={'25px'} color="rgba(10, 160, 255, 0.7)" />}
+              onClick={onDealInfoBtnClickHandler}
+            ></ABox>
+            <ABox
+              label="수정 하기"
+              icon={<AiFillEdit size={'25px'} color="rgba(10, 160, 255, 0.7)" />}
+              onClick={onUpdateBtnClickHandler}
+            />
+            <ABox
+              label="탈퇴 하기"
+              icon={<BsDoorOpenFill size={'25px'} color="rgba(10, 160, 255, 0.7)" />}
+              onClick={onWithdrawBtnClickHandler}
+            />
+            <ABox
+              label="비밀번호 수정"
+              icon={<BsFillPencilFill size={'25px'} color="rgba(10, 160, 255, 0.7)" />}
+              onClick={onUpdatePwBtnClickHandler}
+            />
           </div>
         </div>
-        {isDeletePopupOpen && <Withdraw setPopupOpen={setDeletePopupOpen} />}
-        {isPwUpdatePopupOpen && <PasswordUpdateComponent />}
+        <ReactModal
+          overlayClassName={'modal-overlay'}
+          className={'modal-content'}
+          isOpen={isDeletePopupOpen}
+          onRequestClose={() => {
+            setDeletePopupOpen(false);
+          }}
+          ariaHideApp={false}
+          contentLabel={'Pop up Message'}
+          shouldCloseOnOverlayClick={false}
+        >
+          <Withdraw setPopupOpen={setDeletePopupOpen} />
+        </ReactModal>
+        <ReactModal
+          overlayClassName={'modal-overlay'}
+          className={'modal-content'}
+          isOpen={isPwUpdatePopupOpen}
+          onRequestClose={() => {
+            setPwUpdatePopupOpen(false);
+          }}
+          ariaHideApp={false}
+          contentLabel={'Pop up Message'}
+          shouldCloseOnOverlayClick={false}
+        >
+          <PasswordUpdateComponent />
+        </ReactModal>
       </div>
     );
   };
@@ -212,6 +273,28 @@ function Mypage() {
     const [blockNum, setBlockNum] = useState<number>(0);
     // state: 전체 항목 갯수 상태값 //
     const [totalElements, SetTotalElements] = useState<number>(0);
+
+    // state: 체크된 항목을 담을 배열 //
+    const [checkItems, setCheckItems] = useState<number[]>([]);
+
+    // function: 체크박스 단일 선택 //
+    const handleSingleCheck = (checked: boolean, id: number) => {
+      if (checked) {
+        setCheckItems((prev) => [...prev, id]);
+      } else {
+        setCheckItems(checkItems.filter((el) => el !== id));
+      }
+    };
+
+    // function: 체크박스 전체 선택 //
+    const handleAllCheck = (checked: boolean) => {
+      if (checked) {
+        const idArray: number[] = posts.map((el) => el.id);
+        setCheckItems(idArray);
+      } else {
+        setCheckItems([]);
+      }
+    };
 
     // store: uuid, role 값//
     const { uuid } = useStore((state) => state);
@@ -245,52 +328,87 @@ function Mypage() {
       setView('user-info');
     };
 
+    // event-handler: 삭제하기 button click 처리 //
+    const onCheckItemsClickHandler = () => {
+      setPosts(posts.filter((item) => !checkItems.includes(item.id)));
+      setCheckItems([]);
+    };
+
     // render: 마이페이지 - 판매내역 컴포넌트 렌더링 //
     return (
       <div className="dealInfo-card">
         <h1 className="card-title">판매 내역</h1>
-        <div className="card-list-box">
-          <table className="dealInfo-list">
-            <thead>
-              <tr className="dealInfo-element">
-                <th></th>
-                <th>제목</th>
-                <th>게시일</th>
-                <th>판매 중/ 판매완료</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {posts
-                ? posts.map((post, index) => (
-                    <tr className="dealInfo-element" key={index}>
-                      <td></td>
-                      <td>{post.title}</td>
-                      <td>{post.createdAt}</td>
-                      <td>{post.status}</td>
-                      <div className="dealInfo-element-btn">
-                        <button type="button">수정</button>
+        <div className="dealInfo-card-content">
+          <div className="card-list-box">
+            <table className="dealInfo-list">
+              <thead>
+                <tr className="dealInfo-element">
+                  <th>
+                    {posts && (
+                      <div className="dealInfo-list-check-all">
+                        <input
+                          type="checkbox"
+                          name="select-all"
+                          onChange={(e) => handleAllCheck(e.target.checked)}
+                          checked={checkItems.length === posts.length ? true : false}
+                        />
                       </div>
-                    </tr>
-                  ))
-                : null}
-            </tbody>
-          </table>
-          {!posts && <p>등록 하신 판매글이 없습니다</p>}
-        </div>
-        <div className="card-btn-box">
-          <ABox label="회원 정보" onClick={onDealInfoBtnClickHandler}></ABox>
-          {posts && (
-            <ListPagenation
-              limit={size}
-              page={curPage}
-              setPage={setCurPage}
-              blockNum={blockNum}
-              counts={totalElements}
-              setBlockNum={setBlockNum}
+                    )}
+                  </th>
+                  <th>제목</th>
+                  <th>게시일</th>
+                  <th>판매 중/ 판매완료</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {posts
+                  ? posts.map((post, index) => (
+                      <tr className="dealInfo-element" key={index}>
+                        <td>
+                          <input
+                            type="checkbox"
+                            name={`select-${post.id}`}
+                            onChange={(e) => handleSingleCheck(e.target.checked, post.id)}
+                            checked={checkItems.includes(post.id) ? true : false}
+                          />
+                        </td>
+                        <td>{post.title}</td>
+                        <td>{post.createdAt}</td>
+                        <td>{post.status}</td>
+                        <div className="dealInfo-element-btn">
+                          <button type="button">수정</button>
+                        </div>
+                      </tr>
+                    ))
+                  : null}
+              </tbody>
+            </table>
+            {!posts && <p>😒 등록 하신 판매글이 없습니다!</p>}
+          </div>
+          <div className="card-btn-box">
+            <ABox
+              label="회원 정보"
+              icon={<BsFilePersonFill size={'25px'} color="rgba(10, 160, 255, 0.7)" />}
+              onClick={onDealInfoBtnClickHandler}
+            ></ABox>
+            <ABox
+              label="삭제하기"
+              icon={<BsFileExcelFill size={'25px'} color="#f46b6b" />}
+              onClick={onCheckItemsClickHandler}
             />
-          )}
+          </div>
         </div>
+        {posts && (
+          <ListPagenation
+            limit={size}
+            page={curPage}
+            setPage={setCurPage}
+            blockNum={blockNum}
+            counts={totalElements}
+            setBlockNum={setBlockNum}
+          />
+        )}
       </div>
     );
   };
