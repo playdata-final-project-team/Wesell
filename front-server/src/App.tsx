@@ -66,8 +66,8 @@ function App() {
             <>
               <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
               <Route path={MYPAGE_PATH()} element={<Mypage />} />
-              <Route path='/board/edit/:postId' element={<EditPostPage />} />
-              <Route path='/board/detail/:postId' element={<PostDetailPage />} />
+              <Route path="/board/edit/:postId" element={<EditPostPage />} />
+              <Route path="/board/detail/:postId" element={<PostDetailPage />} />
             </>
           ) : null}
         </Route>
