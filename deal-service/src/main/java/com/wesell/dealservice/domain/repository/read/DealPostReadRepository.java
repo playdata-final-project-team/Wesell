@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface DealPostReadRepository extends JpaRepository<DealPost, Long> {
     @Query("SELECT dp FROM DealPost dp " +
             "WHERE dp.uuid =:uuid " +
@@ -31,14 +33,14 @@ public interface DealPostReadRepository extends JpaRepository<DealPost, Long> {
             "AND dp.isDeleted = false " +
             "AND dp.category.id = :categoryId " +
             "ORDER BY dp.createdAt desc")
-    Page<DealPost> searchByCategory(@Param("categoryId") Long categoryId, Pageable pageable);
+    Optional<Page<DealPost>> searchByCategory(@Param("categoryId") Long categoryId, Pageable pageable);
 
     @Query("SELECT dp FROM DealPost dp " +
             "WHERE dp.saleStatus = 'IN_PROGRESS' " +
             "AND dp.isDeleted = false " +
             "AND dp.title = :title " +
             "ORDER BY dp.createdAt desc")
-    Page<DealPost> searchByTitle(@Param("title") String title, Pageable pageable);
+    Optional<Page<DealPost>> searchByTitle(@Param("title") String title, Pageable pageable);
 
     @Query("SELECT dp FROM DealPost dp " +
             "WHERE dp.saleStatus = 'IN_PROGRESS' " +
