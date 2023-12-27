@@ -68,8 +68,12 @@ const SearchByCategory = () => {
             <img src={post.imageUrl} />
           </div>
           <div className="board-body-text">
+            <div className="text-title">
             <p>{post.title}</p>
+            </div>
+            <div className="text-price">
             <p>{post.price}</p>
+            </div>
           </div>
           </div>
         </Link>
