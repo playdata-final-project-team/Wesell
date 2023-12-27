@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 
 const FoundEmailComponent = () => {
   const [uuid, setUuid] = useState('');
@@ -19,7 +20,7 @@ const FoundEmailComponent = () => {
         return;
       }
 
-      const response = await axios.get(`/auth-server/find/email/${paramUuid}`);
+      const response = await axios.get(`/auth-server/api/v1/find/email/${paramUuid}`);
       const emails = response.data;
       setFoundEmails([emails]);
       setError('');
@@ -36,10 +37,10 @@ const FoundEmailComponent = () => {
   console.log(foundEmails);
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontSize: '50px', marginTop: '-150px' }}>
       {foundEmails.length > 0 ? (
         <div>
-          <p>찾은 이메일:</p>
+          <h1>아이디 찾기 완료!</h1>
           <ul>
             {foundEmails.map((email, index) => (
               <li key={index}>{email}</li>
@@ -47,7 +48,7 @@ const FoundEmailComponent = () => {
           </ul>
         </div>
       ) : (
-        <p>{error || '이메일이 없습니다.'}</p>
+        <p style={{ fontSize: '24px' }}>{error || '이메일이 없습니다.'}</p>
       )}
     </div>
   );

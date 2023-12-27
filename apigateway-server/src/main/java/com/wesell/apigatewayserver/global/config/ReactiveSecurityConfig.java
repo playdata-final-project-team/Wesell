@@ -138,7 +138,7 @@ public class ReactiveSecurityConfig {
                 serverHttpResponse.setStatusCode(HttpStatus.UNAUTHORIZED);
                 errorResponseDto = ErrorResponseDto.of(new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN));
             }else{
-                serverHttpResponse.setStatusCode(HttpStatus.FORBIDDEN);
+                serverHttpResponse.setStatusCode(HttpStatus.UNAUTHORIZED);
                 errorResponseDto = ErrorResponseDto.of(new CustomException(ErrorCode.INVALID_ACCESS_TOKEN));
             }
 
