@@ -13,8 +13,9 @@ interface Props {
   isReadOnly?: boolean;
   icon?: 'eye-light-on-icon' | 'eye-light-off-icon';
   message?: string;
+  label?: string;
+  id?: string;
 
-  hasButton?: boolean;
   btnVlaue?: string;
   onBtnClick?: () => void;
 
@@ -30,8 +31,8 @@ interface Props {
 // component: Input Box 컴포넌트 //
 const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
   /**state: props */
-  const { type, name, placeholder, error, value, icon, message } = props;
-  const { hasButton, btnVlaue, onBtnClick } = props;
+  const { type, name, placeholder, error, value, icon, message, label, id } = props;
+  const { btnVlaue, onBtnClick } = props;
   const { hasP, dupCheck } = props;
   const { onChange, onIconClick, onClick, onKeyDown, isReadOnly } = props;
 
@@ -45,7 +46,9 @@ const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
   return (
     <div className="inputbox">
       <div className={error ? 'inputbox-container-error' : 'inputbox-container'}>
+        {label && <label form={id}>{label}</label>}
         <input
+          id={id}
           className="input"
           name={name}
           ref={ref}
@@ -81,7 +84,7 @@ const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
           </>
         )}
 
-        {hasButton && (
+        {btnVlaue && (
           <button className="input-box-inner-btn" type="button" onClick={onBtnClick}>
             {btnVlaue}
           </button>

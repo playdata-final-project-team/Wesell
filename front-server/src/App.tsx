@@ -34,7 +34,7 @@ function App() {
     } else {
       setLogin(false);
     }
-  }, []);
+  }, [sessionStorage.getItem('uuid'), sessionStorage.getItem('role')]);
 
   // render: Application 컴포넌트 랜더링 //
   return (
@@ -46,8 +46,8 @@ function App() {
 
           {/** 테스트 URL - E*/}
           <Route path={MAIN_PATH()} element={<Main />} />
-          <Route path='main/category/:categoryId' element={<SearchByCategory />} />
-          <Route path='main/title/:title' element={<SearchByTitle />} />
+          <Route path="main/category/:categoryId" element={<SearchByCategory />} />
+          <Route path="main/title/:title" element={<SearchByTitle />} />
           <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
           <Route path={AUTH_PATH()} element={<AuthServer />} />
           <Route path="testJiho2" element={<UuidComponent />} />
@@ -61,8 +61,8 @@ function App() {
             <>
               <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
               <Route path={MYPAGE_PATH()} element={<Mypage />} />
-              <Route path='/board/edit/:postId' element={<EditPostPage />} />
-              <Route path='/board/detail/:postId' element={<PostDetailPage />} />
+              <Route path="/board/edit/:postId" element={<EditPostPage />} />
+              <Route path="/board/detail/:postId" element={<PostDetailPage />} />
             </>
           ) : null}
         </Route>

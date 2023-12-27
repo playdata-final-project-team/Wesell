@@ -1,0 +1,10 @@
+.pw-check-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.withdraw-content-pwCheck {
+  display: flex;
+  align-items: center;
+}
