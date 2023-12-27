@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './index.css'
 
 interface PostJson {
+  "uuid":string;
   "postId":number;
   "title":string;
   "createdAt":string;
@@ -14,12 +15,10 @@ interface PostJson {
 }
 
 function PostDetailPage() {
-  useEffect(() => {
-    const uuid = window.sessionStorage.getItem("uuid");
-}, []);
   const { postId } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<PostJson|null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const moveToUpdate = () => {
     navigate('/board/edit/' + postId);
@@ -34,7 +33,8 @@ function PostDetailPage() {
     method: "GET"
     })
     .then(response => response.json())
-    .then(json => setPost(json));
+    .then(json => setPost(json))
+    .then(() => setIsLoaded(true));
 
   },[]);
 
@@ -46,19 +46,16 @@ function PostDetailPage() {
         </div>)}
       {post && (
         <div className="details-container">
-          <h2>제목{post.title}</h2>
-          <p>작성일: {post.createdAt}</p>
-          <p>닉네임: {post.nickname}</p>
-          <p>가격: {post.price}</p>
-          <p>설명: {post.detail}</p>
-          <p>링크: <a href={post.link} target="_blank" rel="noopener noreferrer">{post.link}</a></p>
+          <h2>{post.title}</h2>
+          <p className="createdAt">{post.createdAt}</p>
+          <p className="nickname">{post.nickname}</p>
+          <p className="price">{post.price}</p>
+          <p className="detail">{post.detail}</p>
+          <p>오픈 카카오톡: <a href={post.link} target="_blank" rel="noopener noreferrer">{post.link}</a></p>
         </div>
       )}
     </div>
-    uuid === post.uuid &&
-    <div className="edit-button">
-      <button onClick={moveToUpdate}>수정하기</button>
-    </div>
+      <button className="update-button" onClick={moveToUpdate}>수정하기</button>
 </>
   );
 }

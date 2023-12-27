@@ -62,10 +62,16 @@ const SearchByCategory = () => {
     </div>
     <div className = "postList">
       {postJson?.map(post => (
-        <Link className = "one-board" key={post.postId} to={`/board/detail/${post.postId}`}>
-          <img src={post.imageUrl} />
-          <p>{post.title}</p>
-          <p>{post.price}</p>
+        <Link  key={post.postId} to={`/board/detail/${post.postId}`}>
+          <div className="postItem">
+          <div className="board-body-img">
+            <img src={post.imageUrl} />
+          </div>
+          <div className="board-body-text">
+            <p>{post.title}</p>
+            <p>{post.price}</p>
+          </div>
+          </div>
         </Link>
       ))}
     </div>

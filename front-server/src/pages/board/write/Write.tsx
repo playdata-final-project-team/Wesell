@@ -42,7 +42,7 @@ function GetCategory() {
 
 function UploadBoard() {
   const navigate = useNavigate();
-  const [ uuid, setUuid] = useState('www');
+  const [ uuid, setUuid] = useState('');
   const [image, setImage] = useState({
     image_file: "",
     preview_URL: "image/default_image.png",
