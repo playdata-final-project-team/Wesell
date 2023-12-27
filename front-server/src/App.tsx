@@ -56,7 +56,6 @@ function App() {
           <Route path="testJiho5/:uuid" element={<FoundSmsComponent />} />
           <Route path="/testJiho6/:uuid" element={<PasswordUpdateComponent />} />
           <Route path="*" element={<h1>404 NOT FOUND</h1>} />
-
           {isLogin ? (
             <>
               <Route path={UPLOAD_PATH()} element={<UploadBoard />} />

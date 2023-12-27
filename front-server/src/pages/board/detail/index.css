@@ -1,33 +1,107 @@
-/* PostDetailPage.css */
+@keyframes smoothAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1.5;
+    transform: translateY(0);
+  }
+}
 
-.container {
+
+@media all and (min-width: 1024px){
+  .board-wrapper{
+    width: 500px;
+    .board-body{
+      height: 400px;
+    }
+  }
+}
+
+@media all and (max-width: 1024px) {
+  .board-wrapper{
+    width: 450px;
+    .board-body{
+       height: 360px;
+     }
+  }
+}
+@media all and (max-width: 768px) {
+  .board-wrapper {
+    width: 400px;
+    .board-body{
+      height: 320px;
+    }
+  }
+}
+
+
+@media all and (max-width: 768px) {
+  .board-wrapper {
+    width: 360px;
+    .board-body{
+      height: 300px;
+    }
+  }
+}
+
+.board-wrapper{
+  transition: width 1s;
+  margin: 0 auto 1.5rem auto;
+  opacity: 0;
+  border-radius: 10px;
+  animation: smoothAppear 1.5s forwards;
+  animation-delay: 0.5s;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #fff;
+  padding: 4rem;
+  
+  .board-body{
+    display: flex;
+    .board-image{
+      flex-shrink: 0;
+      margin-right: 1rem;
+      width: 50%;
+      height: 100%;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .board-content{
+      word-break: break-all;
+      margin-left: 1rem;
+      overflow: auto;
+      flex-grow: 1;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .h2{
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: midnightblue;
+      }
+      .board-content{
+        font-size: 1.2rem;
+      }
+    }
+  }
+  .board-body{
     display: flex;
   }
-  
-  .image-container {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  .image {
-    width: 100%;
-    height: auto;
-  }
-  
-  .details-container {
-    flex: 2;
-    padding: 20px;
-  }
-  
-  .details-container h2 {
-    margin-bottom: 10px;
-  }
-  
-  .details-container p {
-    margin-bottom: 8px;
-  }
-  
-  .details-container a {
-    color: #007bff; /* Link color */
-  }
-  
+}
+
+.update-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 150px 400px; /* 여백 추가 */
+  color: #e0e7e8;
+  background-color: #00A8CC;
+  border: 2px solid #00A8CC; /* 테두리 스타일 및 색상 */
+  border-radius: 50px; /* 테두리의 모퉁이 */
+  transform: scale(1.5);
+}

@@ -42,7 +42,7 @@ function GetCategory() {
 
 function UploadBoard() {
   const navigate = useNavigate();
-  const [ uuid, setUuid] = useState('www');
+  const [ uuid, setUuid] = useState('');
   const [image, setImage] = useState({
     image_file: "",
     preview_URL: "image/default_image.png",
@@ -59,12 +59,12 @@ function UploadBoard() {
   }, [image, title, categoryId,price,detail,link]);
 
 
-  // useEffect(() => {
-  //   const uuid = window.sessionStorage.getItem("uuid");
-  //   if (uuid) {
-  //     setUuid(uuid);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const uuid = window.sessionStorage.getItem("uuid");
+    if (uuid) {
+      setUuid(uuid);
+    }
+  }, []);
 
   const handleSubmit = useCallback(async () => {
     try{
