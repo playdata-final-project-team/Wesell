@@ -1,44 +1,98 @@
-
-.container {
-  display: grid;
-  grid-template-columns: 1fr 2fr; /* 두 개의 컬럼, 첫 번째 컬럼은 1배, 두 번째 컬럼은 2배 */
-  gap: 20px; /* 각 섹션 간의 간격 */
+@keyframes smoothAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1.5;
+    transform: translateY(0);
+  }
 }
 
-.image-container {
-  grid-column: 1 / 2; /* 이미지는 첫 번째 컬럼에 배치 */
+
+@media all and (min-width: 1024px){
+  .board-wrapper{
+    width: 500px;
+    .board-body{
+      height: 400px;
+    }
+  }
 }
 
-.image {
-  width: 100%; /* 이미지 100% 너비로 조절 */
-  height: auto; /* 비율에 맞게 높이 조절 */
+@media all and (max-width: 1024px) {
+  .board-wrapper{
+    width: 450px;
+    .board-body{
+       height: 360px;
+     }
+  }
+}
+@media all and (max-width: 768px) {
+  .board-wrapper {
+    width: 400px;
+    .board-body{
+      height: 320px;
+    }
+  }
 }
 
-.details-container {
-  grid-column: 2 / 3; /* 세부 정보는 두 번째 컬럼에 배치 */
-  display: grid;
-  grid-template-rows: auto repeat(4, 1fr) auto; /* 여섯 개의 행, 상하 여백은 자동으로 처리 */
+
+@media all and (max-width: 768px) {
+  .board-wrapper {
+    width: 360px;
+    .board-body{
+      height: 300px;
+    }
+  }
 }
 
-h2 {
-  margin: 0; /* 기본적인 제목의 margin 제거 */
+.board-wrapper{
+  transition: width 1s;
+  margin: 0 auto 1.5rem auto;
+  opacity: 0;
+  border-radius: 10px;
+  animation: smoothAppear 1.5s forwards;
+  animation-delay: 0.5s;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #fff;
+  padding: 4rem;
+  
+  .board-body{
+    display: flex;
+    .board-image{
+      flex-shrink: 0;
+      margin-right: 1rem;
+      width: 50%;
+      height: 100%;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .board-content{
+      word-break: break-all;
+      margin-left: 1rem;
+      overflow: auto;
+      flex-grow: 1;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .h2{
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: midnightblue;
+      }
+      .board-content{
+        font-size: 1.2rem;
+      }
+    }
+  }
+  .board-body{
+    display: flex;
+  }
 }
-
-.createdAt,
-.nickname,
-.detail,
-.price {
-  margin: 5px 0; /* 상하 여백 조절 */
-}
-
-.createdAt,
-.nickname,
-.price,
-.detail,
-a {
-  font-size: 16px; /* 텍스트 사이즈 설정 */
-}
-
 
 .update-button {
   position: absolute;

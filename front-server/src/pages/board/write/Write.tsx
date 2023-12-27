@@ -59,12 +59,12 @@ function UploadBoard() {
   }, [image, title, categoryId,price,detail,link]);
 
 
-  // useEffect(() => {
-  //   const uuid = window.sessionStorage.getItem("uuid");
-  //   if (uuid) {
-  //     setUuid(uuid);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const uuid = window.sessionStorage.getItem("uuid");
+    if (uuid) {
+      setUuid(uuid);
+    }
+  }, []);
 
   const handleSubmit = useCallback(async () => {
     try{

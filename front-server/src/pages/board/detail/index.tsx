@@ -39,13 +39,15 @@ function PostDetailPage() {
   },[]);
 
   return (
-    <><div className="container">
+    <>
+    <div className="board-wrapper">
+    <div className="board-body">
       {post && (
-        <div className="image-container">
+        <div className="board-image">
           <img src={post.imageUrl} className="image" />
         </div>)}
       {post && (
-        <div className="details-container">
+        <div className="board-content">
           <h2>{post.title}</h2>
           <p className="createdAt">{post.createdAt}</p>
           <p className="nickname">{post.nickname}</p>
@@ -54,8 +56,15 @@ function PostDetailPage() {
           <p>오픈 카카오톡: <a href={post.link} target="_blank" rel="noopener noreferrer">{post.link}</a></p>
         </div>
       )}
-    </div>
+      <div className="update-button-wrapper">
+    {
+      window.sessionStorage.getItem("uuid") === post?.uuid &&
       <button className="update-button" onClick={moveToUpdate}>수정하기</button>
+    }
+    </div>
+    </div>
+    
+    </div>
 </>
   );
 }

@@ -46,7 +46,7 @@ const SearchByCategory = () => {
     <>
     <div className="searching-box">
     <input type="text"
-          placeholder="Search..."
+          placeholder=" Search..."
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)} />
           <button className='search-icon-button' onClick={handleSearch}>

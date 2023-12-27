@@ -1,3 +1,13 @@
+@keyframes smoothAppear {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
 /*입력창*/
 .searching-box {
   display: flex;
@@ -123,32 +133,31 @@
         object-fit: cover;
       }
     }
+
     .board-body-text {
-      width: 100%;
-      height: 50%; /* 텍스트 부분의 높이를 50%로 조절 */
+      flex-grow: 1;
+      word-break: break-all;
+      overflow: auto;
       padding: 0.6rem;
-      box-sizing: border-box;
+  
+      &::-webkit-scrollbar {
+        display: none;
+      }
+  
+      .text-title {
+        font-size: 1.3rem;
+        color: rgb(30, 32, 32);
+        font-weight: bold;
+      }
     }
 
-    
-.text-title,
-.text-price {
-  height: 45%; /* 제목과 가격 부분을 반반으로 나눔 */
-  display: flex;
-  align-items: center;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-
-.text-title p,
-.text-price p {
-  margin: 0;
-}
     }
   
   .postList {
     margin-top: 700px; /* 상단 여백 */
-    margin-left: 300px;
-    margin-right: 50px;
+    /* margin-left: 300px;
+    margin-right: 50px; */
+    margin: 0 auto;
     width: 800px;
     height: 500px;
     flex-wrap: wrap;
