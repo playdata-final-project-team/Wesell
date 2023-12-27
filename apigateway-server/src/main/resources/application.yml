@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: jwt
+    active: jwt,db
   application:
     name: apigateway-server
   cloud:

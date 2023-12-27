@@ -666,7 +666,6 @@ function AuthServer() {
               onChange={onPhoneChangeHandler}
               onKeyDown={onPhoneKeyDownHandler}
               message={message.phone}
-              hasButton={true}
               btnVlaue="번호인증"
               onBtnClick={onValidationCheckClickHandler}
             />

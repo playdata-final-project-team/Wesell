@@ -32,7 +32,7 @@ public class AdminController {
         return adminService.getUserList(page, size);
     }
 
-    @GetMapping("version") //버전저장
+    @PostMapping("version") //버전저장
     public ResponseEntity<Map<String, String>> getVersionAndSave(
             @RequestParam(name = "jsVersion", defaultValue = "1.0") String jsVersion,
             @RequestParam(name = "cssVersion", defaultValue = "1.0") String cssVersion,
