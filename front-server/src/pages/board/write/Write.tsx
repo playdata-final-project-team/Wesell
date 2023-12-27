@@ -3,7 +3,6 @@ import axios from 'axios';
 import './Write.css';
 import ImageUploader from 'components/ImageUploader/ImageUploader';
 import TextArea from 'components/TextArea/TextArea';
-import {Button} from "@mui/material";
 import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router-dom';
@@ -59,19 +58,19 @@ function UploadBoard() {
   }, [image, title, categoryId,price,detail,link]);
 
 
-  useEffect(() => {
-    const uuid = window.sessionStorage.getItem("uuid");
-    if (uuid) {
-      setUuid(uuid);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const uuid = window.sessionStorage.getItem("uuid");
+  //   if (uuid) {
+  //     setUuid(uuid);
+  //   }
+  // }, []);
 
   const handleSubmit = useCallback(async () => {
     try{
       const formData = new FormData();
 
       const data1 = {
-        uuid: uuid,
+        uuid: window.sessionStorage.getItem("uuid"),
         categoryId: categoryId,
         title: title,
         price: price,
@@ -104,27 +103,9 @@ function UploadBoard() {
 
   return (
     <div className="addBoard-wrapper">
-      <div className="submitButton">
-        {canSubmit() ? (
-          <Button
-            onClick={handleSubmit}
-            className="success-button"
-            variant="outlined"
-          >
-            등록하기
-          </Button>
-        ) : (
-          <Button
-            className="disable-button"
-            variant="outlined"
-            size="large"
-          >
-            사진과 내용을 모두 입력하세요.
-          </Button>
-        )}
-      </div>
       <div className="addBoard-body">
-      <select
+        <div className="category-select">
+        <select
           value={categoryId}
           onChange={(e) => setCategoryId(e.target.value)}
         >
@@ -133,9 +114,15 @@ function UploadBoard() {
           </option>
           {categories}
         </select>
+        </div>
         <ImageUploader setImage={setImage} preview_URL={image.preview_URL}/>
         <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} setLink={setLink} 
         title={title} price={price} detail={detail} link={link}/>
+      </div>
+      <div className="submit-button">
+        <button className="success-button" onClick={handleSubmit}>
+          등록하기
+        </button>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
+import ListPagenation from 'components/Pagenation';
 import './style.css';
 
 interface PostJson {
@@ -41,6 +42,15 @@ const Main = () => {
     }
   };
 
+    // state: 현재 페이지 상태값 //
+    const [curPage, setCurPage] = useState<number>(1);
+    // state: 한 페이지 보일 수 있는 항목 갯수 상태값 //
+    const [size, setSize] = useState<number>(8);
+    // state: 한 페이지에 보여 줄 페이지네이션 갯수 상태값 //
+    const [blockNum, setBlockNum] = useState<number>(0);
+    // state: 전체 항목 갯수 상태값 //
+    const [totalElements, SetTotalElements] = useState<number>(0);
+
   return (
     <>
     <div className="searching-box">
@@ -78,6 +88,16 @@ const Main = () => {
         </Link>
       ))}
     </div>
+    {postJson && (
+          <ListPagenation
+            limit={size}
+            page={curPage}
+            setPage={setCurPage}
+            blockNum={blockNum}
+            counts={totalElements}
+            setBlockNum={setBlockNum}
+          />
+        )}
       </>
     );
 }

@@ -126,13 +126,7 @@
 
     .board-body-text {
       flex-grow: 1;
-      word-break: break-all;
       overflow: auto;
-      padding: 0.6rem;
-  
-      &::-webkit-scrollbar {
-        display: none;
-      }
   
       .text-title {
         font-size: 1.3rem;
