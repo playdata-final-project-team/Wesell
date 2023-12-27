@@ -117,21 +117,28 @@ const Withdraw = (props: Props) => {
   return (
     <div className="withdraw-wrapper">
       <div className="withdraw-container">
+        <button
+          className="close-btn"
+          title="close"
+          type="button"
+          onClick={onCloseBtnClickHandler}
+        />
         {view === 'pw-check' && (
-          <div className="withdraw-content-pwCheck">
+          <div className="pw-check-card">
             <h2>비밀번호 확인</h2>
-            <InputBox
-              name="pwRe"
-              placeholder="password"
-              type="password"
-              value={pw}
-              error={pwError}
-              message={pwErrorMsg}
-              onChange={onPwChangeHandler}
-            />
-            <button className="pw-check-request-btn" type="button" onClick={onPwBtnClickHandler}>
-              입력
-            </button>
+            <div className="withdraw-content-pwCheck">
+              <InputBox
+                name="pwRe"
+                placeholder="password"
+                type="password"
+                value={pw}
+                error={pwError}
+                message={pwErrorMsg}
+                onChange={onPwChangeHandler}
+                btnVlaue={'입력'}
+                onBtnClick={onPwBtnClickHandler}
+              />
+            </div>
           </div>
         )}
         {view === 'confirm-msg' && (
@@ -141,9 +148,6 @@ const Withdraw = (props: Props) => {
             <div onClick={onNoClickHandler}>NO</div>
           </div>
         )}
-        <button className="close-btn" title="close" type="button" onClick={onCloseBtnClickHandler}>
-          닫기
-        </button>
       </div>
     </div>
   );

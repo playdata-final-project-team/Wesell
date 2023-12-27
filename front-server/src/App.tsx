@@ -18,6 +18,10 @@ import AuthServer from 'pages/Authentication';
 import { useEffect, useState } from 'react';
 import Test from 'pages/Test';
 import PostDetailPage from 'pages/board/detail';
+import UserManagementComponent from 'pages/AdminSite/UserManagementComponent';
+import VersionupdateComponent from 'pages/AdminSite/VersionupdateComponent';
+import AdminUsersComponent from 'pages/AdminUsers/AdminUsersComponent';
+
 
 // component: Application 컴포넌트 //
 function App() {
@@ -34,7 +38,7 @@ function App() {
     } else {
       setLogin(false);
     }
-  }, []);
+  }, [sessionStorage.getItem('uuid'), sessionStorage.getItem('role')]);
 
   // render: Application 컴포넌트 랜더링 //
   return (
@@ -43,11 +47,10 @@ function App() {
         <Route element={<Container />}>
           {/** 테스트 URL - S*/}
           <Route path="/test" element={<Test />}></Route>
-
           {/** 테스트 URL - E*/}
           <Route path={MAIN_PATH()} element={<Main />} />
-          <Route path='main/category/:categoryId' element={<SearchByCategory />} />
-          <Route path='main/title/:title' element={<SearchByTitle />} />
+          <Route path="main/category/:categoryId" element={<SearchByCategory />} />
+          <Route path="main/title/:title" element={<SearchByTitle />} />
           <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
           <Route path={AUTH_PATH()} element={<AuthServer />} />
           <Route path="testJiho2" element={<UuidComponent />} />
@@ -56,7 +59,9 @@ function App() {
           <Route path="testJiho5/:uuid" element={<FoundSmsComponent />} />
           <Route path="/testJiho6/:uuid" element={<PasswordUpdateComponent />} />
           <Route path="*" element={<h1>404 NOT FOUND</h1>} />
-
+          <Route path='/testJiho7' element = {<UserManagementComponent/>}/>
+          <Route path='/testJiho8' element = {<VersionupdateComponent/>}/>
+          <Route path='/testJiho9' element = {<AdminUsersComponent/>}/>
           {isLogin ? (
             <>
               <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
@@ -69,6 +74,5 @@ function App() {
       </Routes>
     </>
   );
-}
-
+          }
 export default App;

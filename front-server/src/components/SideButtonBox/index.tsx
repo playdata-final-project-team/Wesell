@@ -1,7 +1,7 @@
 import ImageBUttonItem from 'components/SideIconButtonItem';
 import './style.css';
 import { useNavigate } from 'react-router-dom';
-import { AUTH_PATH, MYPAGE_PATH } from 'constant';
+import { AUTH_PATH, MYPAGE_PATH, UPLOAD_PATH } from 'constant';
 import { CgAddR } from 'react-icons/cg';
 
 // interface: Props //
@@ -36,7 +36,7 @@ export default function SideButtonBox(props: Props) {
 
   // event-handler: 게시글 작성 이미지 버튼 클릭 이벤트 처리 //
   const onWritePostBtnClickHandler = () => {
-    return <></>;
+    navigator(UPLOAD_PATH());
   };
 
   // render: side button box 렌더링 //
@@ -70,9 +70,11 @@ export default function SideButtonBox(props: Props) {
       </div>
       <div className="side-button">
         {isUser && (
-          <CgAddR className="side-icon-btn">
-            <div title="게시글 작성" onClick={onWritePostBtnClickHandler}></div>
-          </CgAddR>
+          <CgAddR
+            className="side-icon-post-button"
+            title="게시글 작성"
+            onClick={onWritePostBtnClickHandler}
+          />
         )}
       </div>
     </div>

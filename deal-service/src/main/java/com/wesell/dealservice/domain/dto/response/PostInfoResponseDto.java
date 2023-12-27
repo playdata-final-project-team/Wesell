@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class PostInfoResponseDto {
 
+    private String uuid;
     private Long postId;
     private Long categoryId;
     private String title;
@@ -22,6 +23,7 @@ public class PostInfoResponseDto {
     private String imageUrl;
 
     public PostInfoResponseDto (DealPost post, String nickname, String imageUrl) {
+        this.uuid = post.getUuid();
         this.postId = post.getId();
         this.categoryId = post.getCategory().getId();
         this.title = post.getTitle();
