@@ -69,6 +69,7 @@ const SearchByCategory = () => {
     <button onClick={() =>handleCategoryButtonClick(5)}>기타</button>
     </div>
     <div className = "postList">
+      {!postJson && <p>😒 검색 결과가 없습니다.</p>}
       {postJson?.map(post => (
         <Link  key={post.postId} to={`/board/detail/${post.postId}`}>
           <div className="postItem">
