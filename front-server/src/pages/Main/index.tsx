@@ -62,9 +62,19 @@ const Main = () => {
     <div className = "postList">
       {postJson?.map(post => (
         <Link key={post.postId} to={`/board/detail/${post.postId}`}>
-          <img src={post.imageUrl} />
-          <p>{post.title}</p>
-          <p>{post.price}</p>
+          <div className="postItem">
+          <div className="board-body-img">
+            <img src={post.imageUrl} />
+          </div>
+          <div className="board-body-text">
+            <div className="text-title">
+              <p>{post.title}</p>
+            </div>
+          <div className="text-price">
+            <p>{post.price}</p>
+          </div>
+          </div>
+          </div>
         </Link>
       ))}
     </div>
