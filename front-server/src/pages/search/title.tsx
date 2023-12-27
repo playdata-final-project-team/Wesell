@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
+import ListPagenation from 'components/Pagenation';
 
 interface PostJson {
   "postId":number;
@@ -14,6 +15,14 @@ const SearchByTitle = () => {
   const navigate = useNavigate();
   const {title} = useParams();
   const [searchValue, setSearchValue] = useState('');
+      // state: 현재 페이지 상태값 //
+      const [curPage, setCurPage] = useState<number>(1);
+      // state: 한 페이지 보일 수 있는 항목 갯수 상태값 //
+      const [size, setSize] = useState<number>(8);
+      // state: 한 페이지에 보여 줄 페이지네이션 갯수 상태값 //
+      const [blockNum, setBlockNum] = useState<number>(0);
+      // state: 전체 항목 갯수 상태값 //
+      const [totalElements, SetTotalElements] = useState<number>(0);
 
   useEffect( () => {
     const POST_LIST_ENDPOINT = `/deal-service/api/v1/main/title?title=${title}&page=0`; // /deal-service/api/v1/post?id=${postId}
@@ -78,6 +87,16 @@ const SearchByTitle = () => {
         </Link>
       ))}
     </div>
+    {postJson && (
+          <ListPagenation
+            limit={size}
+            page={curPage}
+            setPage={setCurPage}
+            blockNum={blockNum}
+            counts={totalElements}
+            setBlockNum={setBlockNum}
+          />
+        )}
       </>
     );
 }
