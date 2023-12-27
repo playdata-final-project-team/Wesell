@@ -16,6 +16,7 @@ import com.wesell.dealservice.domain.repository.read.DealPostReadRepository;
 import com.wesell.dealservice.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.UserFeignClient;
 import com.wesell.dealservice.util.Producer;
+import feign.FeignException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -84,8 +85,13 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public PostInfoResponseDto getPostInfo(Long postId) {
+        String nickname;
         DealPost foundPost = readRepository.searchDealPost(postId);
-        String nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
+        try {
+            nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
+        } catch (FeignException e) {
+            nickname = "nickname";
+        }
         String imageUrl = imageRepository.findImageByPostId(foundPost.getId()).getImageUrl();
         return new PostInfoResponseDto(foundPost, nickname, imageUrl);
     }
@@ -119,7 +125,7 @@ public class DealServiceImpl implements DealService {
     @Override
     public Page<MainPagePostResponseDto> findByCategory(Long categoryId, int page) {
         int pageLimit = 8;
-        Page<DealPost> posts = readRepository.searchByCategory(categoryId, PageRequest.of(page, pageLimit));
+        Page<DealPost> posts = readRepository.searchByCategory(categoryId, PageRequest.of(page, pageLimit)).orElse(null);
         return posts.map(post -> {
             Image image = imageRepository.findImageByPostId(post.getId());
             return new MainPagePostResponseDto(post, image);
@@ -129,7 +135,7 @@ public class DealServiceImpl implements DealService {
     @Override
     public Page<MainPagePostResponseDto> findByTitle(String title , int page) {
         int pageLimit = 8;
-        Page<DealPost> posts = readRepository.searchByTitle(title, PageRequest.of(page, pageLimit));
+        Page<DealPost> posts = readRepository.searchByTitle(title, PageRequest.of(page, pageLimit)).orElse(null);
         return posts.map(post -> {
             Image image = imageRepository.findImageByPostId(post.getId());
             return new MainPagePostResponseDto(post, image);
