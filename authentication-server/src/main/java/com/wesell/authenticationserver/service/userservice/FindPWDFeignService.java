@@ -16,11 +16,24 @@ public class FindPWDFeignService {
     private final FindPWDRepository findPWDRepository;
     private final CustomPasswordEncoder encoder;
 
-    public String findUuid(String email) throws UserNotFoundException {
+    public String findUuid(String email) {
+        String uuid = findPWDRepository.findUuidByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        return findPWDRepository.findUuidByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
-    }
+        Optional<AuthUser> optionalAuthUser = findPWDRepository.findByUuid(uuid);
+
+        if (optionalAuthUser.isPresent()) {
+            if (optionalAuthUser.get().getPassword() == null) {
+                throw new CustomException(ErrorCode.SOCIAL_LOGIN_FOUND_PWD);
+            } else {
+                return uuid;
+            }
+        } else {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            }
+
+        }
+
 
     public void setPassword(String uuid, String pwd, String rePwd) {
         Optional<AuthUser> authUserOptional = findPWDRepository.findByUuid(uuid);
