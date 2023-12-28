@@ -5,9 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92f63182-175e-4fe9-8f41-34293aef690c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../admin-service/src/main/java/com/wesell/adminservice/feignClient/AuthFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../admin-service/src/main/java/com/wesell/adminservice/feignClient/AuthFeignClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../admin-service/src/main/java/com/wesell/adminservice/feignClient/DealFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../admin-service/src/main/java/com/wesell/adminservice/feignClient/DealFeignClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../admin-service/src/main/java/com/wesell/adminservice/feignClient/UserFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../admin-service/src/main/java/com/wesell/adminservice/feignClient/UserFeignClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/service/feign/UserServiceFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/service/feign/UserServiceFeignClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/feignClient/UserFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../deal-service/src/main/java/com/wesell/dealservice/feignClient/UserFeignClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/service/feign/AuthServerFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/service/feign/AuthServerFeignClient.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +47,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "ts.external.directory.path": "C:\\codespace\\wesell\\front-server\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -71,6 +76,7 @@
       <updated>1701850161027</updated>
       <workItem from="1703410493243" duration="4193000" />
       <workItem from="1703499709740" duration="13316000" />
+      <workItem from="1703722862121" duration="664000" />
     </task>
     <servers />
   </component>

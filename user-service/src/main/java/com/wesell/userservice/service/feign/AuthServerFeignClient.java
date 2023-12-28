@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
-@FeignClient(name="AUTHENTICATION-SERVER")
+@FeignClient(name="AUTHENTICATION-SERVER", url = "3.17.154.72:8081", path = "api/v1")
 public interface AuthServerFeignClient {
 
-    @GetMapping("api/v1/feign/auth-list")
+    @GetMapping("feign/auth-list")
     List<AuthUserInfoRequestDto> getListAuthUserInfo();
 
-    @GetMapping("api/v1/emailinfo/{uuid}")
+    @GetMapping("emailinfo/{uuid}")
     ResponseEntity<EmailInfoDto> getEmailInfo(@PathVariable("uuid") String uuid);
 
 
