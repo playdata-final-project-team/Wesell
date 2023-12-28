@@ -97,7 +97,7 @@ const EditPostPage = () => {
             <option value="" disabled>카테고리를 선택하세요.</option>
             {categories}
           </select>
-          {/* <input type="text" name="category" value={category} onChange={onChange} /> */}
+          <input type="text" name="category" value={category} onChange={onChange} />
             <input type="text" name="price" placeholder="가격" value={price} onChange={onChange} />
             <input type="text" name="detail" placeholder="상세 설명" value={detail} onChange={onChange} />
             <input type="text" name="link" placeholder="오픈 채팅방 링크" value={link} onChange={onChange} />

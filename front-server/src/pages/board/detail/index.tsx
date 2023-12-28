@@ -62,13 +62,13 @@ function PostDetailPage() {
             </div>
           )}
           <div className="update-button-wrapper">
-            {/* {
-               window.sessionStorage.getItem('uuid') === post?.uuid && */}
+            {
+               window.sessionStorage.getItem('uuid') === post?.uuid &&
 
               <button className="update-button" onClick={moveToUpdate}>
                 수정하기
               </button>
-            {/* } */}
+           }
           </div>
         </div>
       </div>

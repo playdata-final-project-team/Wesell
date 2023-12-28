@@ -1,13 +1,3 @@
-@keyframes smoothAppear {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -100%, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translateZ(0);
-  }
-}
 /*입력창*/
 .searching-box {
   display: flex;
@@ -68,103 +58,41 @@
   }
 }
 
-  /*post list*/
-  @media all and (min-width: 1024px) {
-    .postItem {
-      width: 220px;
-      height: 290px;
-
-      &:hover {
-        width: 223px;
-        height: 292px;
-        box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 7px 0px;
-      }
-    }
+@keyframes smoothAppear {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
   }
-
-  @media all and (max-width: 1024px) {
-    .postItem {
-      width: 220px;
-      height: 290px;
-
-      &:hover {
-        width: 223px;
-        height: 292px;
-        box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 7px 0px;
-      }
-    }
+  to {
+    opacity: 1;
+    transform: translateZ(0);
   }
-  @media all and (max-width: 768px) {
-    .postItem {
-      width: 220px;
-      height: 290px;
+}
+.categoryList + .boardList-wrapper {
+  margin-top: 10mm;
+}
 
-      &:hover {
-        width: 223px;
-        height: 292px;;
-        box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 7px 4px;
-      }
-    }
-  }
-  .postItem {
-    flex-shrink: 0;
-    font-family: 'Noto Sans KR', sans-serif;
-    border-radius: 50px;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 1px 0px;
-    background-color: #fff;
+/*boardList*/
+.boardList-wrapper{
+  opacity: 0;
+  animation: smoothAppear 1.5s forwards;
+  animation-delay: 0.5s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .boardList-body{
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: width 0.5s, height 0.5s, box-shadow 0.5s;
-    cursor: pointer;
-    margin: 0 1mm 1mm 0; /* 각 .postItem 사이에 간격 1mm 추가 */
-    border: 2px solid #00A8CC;
-    
-  
-    .board-body-img {
-      width: 100%;
-      height: 70%;
-  
-      img {
-        border-top-left-radius: 50px;
-        border-top-right-radius: 50px;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    .board-body-text {
-      flex-grow: 1;
-      word-break: break-all;
-      overflow: auto;
-      padding: 0.6rem;
-  
-      &::-webkit-scrollbar {
-        display: none;
-      }
-  
-      .text-title {
-        font-size: 1.3rem;
-        color: rgb(30, 32, 32);
-        font-weight: bold;
-      }
-    }
-
-    }
-  
-  .postList {
-    margin-top: 700px; /* 상단 여백 */
-    /* margin-left: 300px;
-    margin-right: 50px; */
-    margin: 0 auto;
-    width: 800px;
-    height: 500px;
+    align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
-    color: #24292e; 
-    gap: 10px;
-    width: 800px;
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4열로 설정 */
     grid-template-rows: repeat(2, 1fr); /* 2행으로 설정 */
   }
+  .boardList-footer{
+    margin: 1.5rem;
+  }
+}
+
+ 

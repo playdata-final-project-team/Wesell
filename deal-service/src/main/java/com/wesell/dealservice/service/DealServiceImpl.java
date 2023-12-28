@@ -118,6 +118,8 @@ public class DealServiceImpl implements DealService {
         return PageResponseDto.builder()
                 .dtoList(posts.map(post -> new MainPagePostResponseDto(post, imageRepository.findImageByPostId(post.getId()))).toList())
                 .page(page)
+                .totalElements(posts.getTotalElements())
+                .size(posts.getSize())
                 .build();
     }
 
