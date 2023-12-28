@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92f63182-175e-4fe9-8f41-34293aef690c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../discovery-server/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../discovery-server/Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../deal-service/Jenkinsfile" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
