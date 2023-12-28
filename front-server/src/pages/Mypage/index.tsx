@@ -4,14 +4,19 @@ import { ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
 import useStore from 'stores';
-import { myDealListRequest, myInfoUpdateRequest, mypageInfoRequest } from 'apis';
+import {
+  myDealListRequest,
+  myInfoUpdateRequest,
+  mypageInfoRequest,
+  saleStatusChangeRequest,
+} from 'apis';
 import MypageResponseDto from 'apis/response/mypage/mypage.response.dto';
 import { ResponseDto } from 'apis/response';
 import Withdraw from 'pages/withdraw';
 import MyDealListResponseDto from 'apis/response/mypage/my.deal-list.response.dto';
 import ListPagenation from 'components/Pagenation';
 import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent';
-import { MypageUpdateRequestDto } from 'apis/request/mypage';
+import { DealInfoStatusUpdateRequestDto, MypageUpdateRequestDto } from 'apis/request/mypage';
 import { MAIN_PATH } from 'constant';
 import ResponseCode from 'constant/response-code.enum';
 import { AiFillEdit, AiFillProfile } from 'react-icons/ai';
@@ -28,6 +33,8 @@ import PageResponseDto from 'apis/response/mypage/my.deal-list-page.response.dto
 function Mypage() {
   // state: view 상태값 //
   const [view, setView] = useState<'user-info' | 'deal-info'>('user-info');
+
+  const navigator = useNavigate();
 
   // component: 마이페이지 - 회원정보 컴포넌트 //
   const UserInfo = () => {
@@ -67,7 +74,7 @@ function Mypage() {
       }
 
       // comment: uuid 값 회원 정보 조회하기
-      const feignData = async (uuid: string) => {
+      const fetchData = async (uuid: string) => {
         const responseBody: MypageResponseDto | null = await mypageInfoRequest(uuid);
 
         if (!responseBody) {
@@ -92,7 +99,7 @@ function Mypage() {
         }
       };
 
-      feignData(uuid);
+      fetchData(uuid);
     }, [sessionStorage.getItem('uuid')]);
 
     // event-handler: 이름 on-change 이벤트 핸들링 //
@@ -338,6 +345,17 @@ function Mypage() {
       setCheckItems([]);
     };
 
+    //event-handler: 판매완료 button click 처리 //
+    const onSaleCompleteClickHandler = async (postId: number) => {
+      const dto: DealInfoStatusUpdateRequestDto = { uuid, postId };
+      await saleStatusChangeRequest(dto);
+    };
+
+    //event-handler: 수정하기 button click 처리 //
+    const onDealInfoUpdateClickHandler = (postId: number) => {
+      navigator(`/board/edit/${postId}`);
+    };
+
     // render: 마이페이지 - 판매내역 컴포넌트 렌더링 //
     return (
       <div className="dealInfo-card">
@@ -361,6 +379,7 @@ function Mypage() {
                   </th>
                   <th>제목</th>
                   <th>게시일</th>
+                  <th>판매상태</th>
                   <th></th>
                 </tr>
               </thead>
@@ -378,10 +397,36 @@ function Mypage() {
                         </td>
                         <td>{post.title}</td>
                         <td>{post.createdAt}</td>
+                        <td>{post.saleStatus === 'IN_PROGRESS' ? '판매 중' : '판매 완료'}</td>
                         <td>
                           <div className="dealInfo-element-btn">
-                            <button type="button">판매 완료</button>
-                            <button type="button">수정</button>
+                            {post.saleStatus === 'IN_PROGRESS' ? (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onSaleCompleteClickHandler(post.id);
+                                }}
+                              >
+                                판매 완료
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onSaleCompleteClickHandler(post.id);
+                                }}
+                              >
+                                판매중
+                              </button>
+                            )}
+                            <button
+                              onClick={() => {
+                                onDealInfoUpdateClickHandler(post.id);
+                              }}
+                              type="button"
+                            >
+                              수정
+                            </button>
                           </div>
                         </td>
                       </tr>

@@ -12,7 +12,9 @@ export default function Container() {
     <>
       <Header />
       <Outlet />
-      {pathname === '/' && <RightAside />}
+      {(pathname === '/' || pathname.includes('/category') || pathname.includes('/title')) && (
+        <RightAside />
+      )}
     </>
   );
 }

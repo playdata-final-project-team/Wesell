@@ -73,7 +73,11 @@ public class DealPost {
     }
 
     public void changeStatus() {
-        this.saleStatus = SaleStatus.COMPLETED;
+        if(this.saleStatus == SaleStatus.IN_PROGRESS) {
+            this.saleStatus = SaleStatus.COMPLETED;
+        }else{
+            this.saleStatus = SaleStatus.IN_PROGRESS;
+        }
     }
 
     public void deleteMyPost() {

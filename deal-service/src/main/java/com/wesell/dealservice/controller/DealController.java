@@ -77,6 +77,11 @@ public class DealController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("status/{postId}")
+    public ResponseEntity<?> getSaleStatus(@PathVariable Long postId){
+
+    }
+
     /**
      * @param postId
      * @return 게시글 논리 삭제
