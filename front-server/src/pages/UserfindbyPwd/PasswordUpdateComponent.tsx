@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const RoundInput = styled.input`
   width: 300px;
-  height: 50;
+  height: 50px;
   border-radius: 50px; /* 둥근 테두리를 위한 값 설정 */
   padding: 15px;
   font-size: 20px;
@@ -49,7 +49,7 @@ const UpdatePasswordComponent = () => {
         return;
       } else if (!rePwd) {
         setError('비밀번호를 확인해주시길 바랍니다.');
-      }
+      }``
 
       if (pwd !== rePwd) {
         setError('비밀번호가 일치하지 않습니다.');
