@@ -59,6 +59,29 @@
 }
 
 .card-list-box {
+  min-width: 500px;
   margin-right: 80px;
 }
+
+.dealInfo-list {
+  width: 500px;
+  border-collapse: collapse;
+  border-spacing: 20px 30px;
+}
+
+.dealInfo-list th,
+td {
+  margin: auto 0;
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.dealInfo-list th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: rgba(10, 160, 255, 0.9);
+  color: white;
+}
+
 /* 판매 내역 card -E */
