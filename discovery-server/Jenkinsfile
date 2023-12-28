@@ -1,27 +1,19 @@
 pipeline {
     agent any
-    environment {
-        SERVER_NAME = 'discovery-server'
-        DOCKER_REGISTRY = 'https://registry.hub.docker.com'
-        DOCKER_REPO = 'lbs991218/wesell'
-        SSH_USER = 'ubuntu'
-        EC2_HOST = 'ec2-3-138-105-178.us-east-2.compute.amazonaws.com'
-        DOCKER_IMAGE_TAG = "${DOCKER_REPO}:${SERVER_NAME}"
-    }
     stages {
         stage('Checkout') {
             steps {
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: '*/deploy']],
-                    extensions: [[$class: 'PathRestriction', excludedRegions: '', includedRegions: "${SERVER_NAME}/.*"]],
+                    extensions: [[$class: 'PathRestriction', excludedRegions: '', includedRegions: 'config-server/.*']],
                     userRemoteConfigs: [[url: 'https://github.com/playdata-final-project-team/Wesell.git']]
                 ])
             }
         }
         stage('Gradle Build') {
             steps {
-                dir("${SERVER_NAME}") {
+                dir("config-server") {
                     sh 'chmod +x gradlew'
                     sh './gradlew clean build -x test'
                 }
@@ -30,10 +22,13 @@ pipeline {
         stage('Build and push Docker image') {
             steps {
                 script {
-                    dir("${SERVER_NAME}") {
-                        docker.withRegistry("${DOCKER_REGISTRY}", 'dockerhub-credentials') {
-                            def app = docker.build("${DOCKER_IMAGE_TAG}", "-f Dockerfile .")
-                            app.push("${SERVER_NAME}")
+                    dir("config-server") {
+                        // Docker Hub Credentials 설정
+                        withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                            // Docker Build 및 Push
+                            sh "docker build -t lbs991218/wesell:config-server ."
+                            sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
+                            sh "docker push lbs991218/wesell:config-server"
                         }
                     }
                 }
@@ -41,14 +36,15 @@ pipeline {
         }
         stage('Deploy to EC2') {
             steps {
-                dir("${SERVER_NAME}") {
+                script {
+                    // EC2에 접속하여 Docker 컨테이너 관리
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${SSH_USER}@${EC2_HOST} '
+                            sudo -u ubuntu ssh -o StrictHostKeyChecking=no ubuntu@ec2-18-118-152-48.us-east-2.compute.amazonaws.com '
                             sudo docker stop \$(sudo docker ps -q) || true
                             sudo docker rm \$(sudo docker ps -a -q) || true
                             sudo docker rmi \$(sudo docker images -q) || true
-                            sudo docker pull ${DOCKER_IMAGE_TAG}
-                            sudo docker run -d -p 8081:8081 ${DOCKER_IMAGE_TAG}
+                            sudo docker pull lbs991218/wesell:config-server
+                            sudo docker run -d -p 8088:8088 lbs991218/wesell:config-server
                         '
                     """
                 }
