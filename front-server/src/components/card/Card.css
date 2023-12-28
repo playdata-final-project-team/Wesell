@@ -1,0 +1,84 @@
+@media all and (min-width: 1024px) {
+    .card-wrapper {
+      width: 200px;
+      height: 300px;
+  
+      &:hover {
+        width: 205px;
+        height: 305px;
+        box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 7px 0px;
+      }
+    }
+  }
+  
+  @media all and (max-width: 1024px) {
+    .card-wrapper {
+      width: 170px;
+      height: 280px;
+  
+      &:hover {
+        width: 175px;
+        height: 285px;
+        box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 7px 0px;
+      }
+    }
+  }
+  
+  @media all and (max-width: 768px) {
+    .card-wrapper {
+      width: 140px;
+      height: 240px;
+  
+      &:hover {
+        width: 145px;
+        height: 245px;
+        box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 7px 0px;
+      }
+    }
+  }
+  
+  .card-wrapper {
+    flex-shrink: 0;
+    margin: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    border-radius: 50px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: width 1s, height 1s, box-shadow 1s;
+    cursor: pointer;
+    border: 2px solid #00A8CC; /* 테두리 스타일 및 색상 */
+  
+    .card-body-img {
+      width: 100%;
+      height: 70%;
+  
+      img {
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  
+    .card-body-text {
+      flex-grow: 1;
+      font-size: 1.5rem;
+      word-break: break-all;
+      overflow: auto;
+      padding: 0.6rem;
+  
+      &::-webkit-scrollbar {
+        display: none;
+      }
+  
+      .card-body-text-title {
+        font-size: 1.5rem;
+        color: rgb(47, 50, 50);
+        font-weight: bold;
+      }
+    }
+  }
