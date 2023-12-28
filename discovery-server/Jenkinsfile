@@ -6,14 +6,14 @@ pipeline {
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: '*/deploy']],
-                    extensions: [[$class: 'PathRestriction', excludedRegions: '', includedRegions: 'discovery-server/.*']],
+                    extensions: [[$class: 'PathRestriction', excludedRegions: '', includedRegions: 'deal-service/.*']],
                     userRemoteConfigs: [[url: 'https://github.com/playdata-final-project-team/Wesell.git']]
                 ])
             }
         }
         stage('Gradle Build') {
             steps {
-                dir("discovery-server") {
+                dir("deal-service") {
                     sh 'chmod +x gradlew'
                     sh './gradlew clean build -x test'
                 }
@@ -22,13 +22,13 @@ pipeline {
         stage('Build and push Docker image') {
             steps {
                 script {
-                    dir("discovery-server") {
+                    dir("deal-service") {
                         // Docker Hub Credentials 설정
                         withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                             // Docker Build 및 Push
-                            sh "docker build -t lbs991218/wesell:discovery-server ."
+                            sh "docker build -t lbs991218/wesell:deal-service ."
                             sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
-                            sh "docker push lbs991218/wesell:discovery-server"
+                            sh "docker push lbs991218/wesell:deal-service"
                         }
                     }
                 }
@@ -39,12 +39,12 @@ pipeline {
                 script {
                     // EC2에 접속하여 Docker 컨테이너 관리
                     sh """
-                            sudo -u ubuntu ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-138-105-178.us-east-2.compute.amazonaws.com '
+                            sudo -u ubuntu ssh -o StrictHostKeyChecking=no ubuntu@ec2-18-226-75-205.us-east-2.compute.amazonaws.com '
                             sudo docker stop \$(sudo docker ps -q) || true
                             sudo docker rm \$(sudo docker ps -a -q) || true
                             sudo docker rmi \$(sudo docker images -q) || true
-                            sudo docker pull lbs991218/wesell:discovery-server
-                            sudo docker run -d -p 8761:8761 lbs991218/wesell:discovery-server
+                            sudo docker pull lbs991218/wesell:deal-service
+                            sudo docker run -d -p 8888:8888 lbs991218/wesell:deal-service
                         '
                     """
                 }
