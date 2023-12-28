@@ -21,6 +21,10 @@ public class AdminController {
     private final AdminService adminService;
     private final VersionService versionService;
 
+    @GetMapping("health-check")
+    public String healthCheck(){
+        return "서버 연결 가능한 상태입니다";
+    }
     @GetMapping("get-version") //버전 값 불러오기//기본값도 들어가있다
     public ResponseEntity<Map<String, String>> getVersions() {
         return new ResponseEntity<>(versionService.getVersions(), HttpStatus.OK);
