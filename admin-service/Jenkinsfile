@@ -39,7 +39,7 @@ pipeline {
                 script {
                     // EC2에 접속하여 Docker 컨테이너 관리
                     sh """
-                            sudo -u ubuntu ssh -S -o StrictHostKeyChecking=no ubuntu@ec2-3-144-42-103.us-east-2.compute.amazonaws.com '
+                            sudo -u ubuntu ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-144-42-103.us-east-2.compute.amazonaws.com '
                             sudo docker stop \$(sudo docker ps -q) || true
                             sudo docker rm \$(sudo docker ps -a -q) || true
                             sudo docker rmi \$(sudo docker images -q) || true
