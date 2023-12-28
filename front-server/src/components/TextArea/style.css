@@ -2,9 +2,7 @@
     margin: 0 10px;
     display: flex;
     flex-direction: column;
-    .title {
-      margin-bottom: 0.7rem;
-    }
+    
     .text {
       width: 270px;
       height: 270px;
@@ -30,4 +28,7 @@
         border: 3px solid skyblue;
       }
     }
+  }
+  .title {
+    margin-bottom: 0.7rem;
   }
