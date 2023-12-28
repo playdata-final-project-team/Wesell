@@ -1,5 +1,5 @@
-import MyDealListWithPageResponseDto from "./my.deal-list-page.response.dto";
-import MyDealListResponseDto from "./my.deal-list.response.dto";
-import MypageResponseDto from "./mypage.response.dto";
+import MyDealListWithPageResponseDto from './my.deal-list-page.response.dto';
+import MyPostlListResponseDto from './my.deal-list.response.dto';
+import PageResponseDto from './mypage.response.dto';
 
-export type {MypageResponseDto, MyDealListWithPageResponseDto, MyDealListResponseDto};
+export type { PageResponseDto, MyDealListWithPageResponseDto, MyPostlListResponseDto };

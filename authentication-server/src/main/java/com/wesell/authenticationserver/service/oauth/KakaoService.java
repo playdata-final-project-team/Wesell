@@ -2,18 +2,15 @@ package com.wesell.authenticationserver.service.oauth;
 
 import com.wesell.authenticationserver.controller.response.CustomException;
 import com.wesell.authenticationserver.controller.response.ErrorCode;
-import com.wesell.authenticationserver.service.dto.feign.KakaoLogoutRequestDto;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoInfo;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoToken;
 import com.wesell.authenticationserver.service.feign.KakaoFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 @Service
 @Log4j2

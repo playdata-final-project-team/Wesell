@@ -1,4 +1,4 @@
-// import "./imageUploader.css";
+import "./ImageUploader.css";
 import { Button } from "@mui/material";
 
 const ImageUploader = ({ preview_URL, setImage }) => {
@@ -20,6 +20,13 @@ const ImageUploader = ({ preview_URL, setImage }) => {
 
   return (
     <div className="uploader-wrapper">
+      <Button
+            className="disable-button"
+            variant="outlined"
+            size="large"
+          >
+            사진과 내용을 모두 입력하세요.
+      </Button>
       <input
         type="file"
         accept="image/*"

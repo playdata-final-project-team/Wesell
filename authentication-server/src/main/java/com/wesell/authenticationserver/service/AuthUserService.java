@@ -240,6 +240,7 @@ public class AuthUserService {
     }
 
     /*====================== Feign =======================*/
+
     public List<AuthUserListFeignResponseDto> getAllForFeign(){
         List<AuthUser> authUserList = authUserRepository.findAll();
         return customConverter.toFeignDtoList(authUserList);

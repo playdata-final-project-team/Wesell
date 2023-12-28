@@ -1,0 +1,51 @@
+@keyframes smoothAppear {
+    from {
+      opacity: 0;
+      transform: translateY(-5%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .addBoard-wrapper {
+    opacity: 0;
+    animation: smoothAppear 1s forwards;
+    animation-delay: 0.5s;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    align-items: center;
+  }
+  .addBoard-body {
+    display: flex;
+    margin: 20px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  select {
+    z-index: 2;
+    top: 10;
+    margin-left: 500px;
+  }
+
+  .success-button {
+    min-width: 80px;
+    text-align: center;
+    margin-right: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 450px;
+    flex-direction: row;
+    color: #f4f7f7;
+    background-color: #00a8cc;
+    border: 2px solid #00a8cc;
+    border-radius: 50px; 
+    transform: scale(1.5);
+  }
+
+  .category-select,
+  .ImageUploader,
+  .TextArea {
+    flex: 1; /* 각 요소가 나머지 공간을 동일하게 차지하도록 함 */
+  }

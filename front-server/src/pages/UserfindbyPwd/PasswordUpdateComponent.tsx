@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
-
 const RoundInput = styled.input`
-  width: 450px;
-  border-radius: 70px; /* 둥근 테두리를 위한 값 설정 */
-  padding: 50px;
-  font-size: 25px;
+  width: 300px;
+  height: 50;
+  border-radius: 50px; /* 둥근 테두리를 위한 값 설정 */
+  padding: 15px;
+  font-size: 20px;
+  margin-bottom: 10px;
 `;
 
 const RoundButton = styled.button`
-  width: 350px;
-  height: 70px;
-  border-radius: 70px; /* 둥근 테두리를 위한 값 설정 */
-  background-color: #00A8CC;
+  width: 110px;
+  height: 40px;
+  border-radius: 50px; /* 둥근 테두리를 위한 값 설정 */
+  background-color: #00a8cc;
   color: #fff;
-  font-size: 30px;
+  font-size: 15px;
   border: none;
   cursor: pointer;
-  margin: 40px;
+  margin: 10px;
 `;
 
 const UpdatePasswordComponent = () => {
@@ -40,23 +41,26 @@ const UpdatePasswordComponent = () => {
 
   const handleUpdatePassword = async () => {
     try {
-      console.log('Updating password...');
-
       if (!uuid) {
         console.error('UUID is undefined');
         return;
+      } else if (!pwd) {
+        setError('비밀번호를 입력 바랍니다.');
+        return;
+      } else if (!rePwd) {
+        setError('비밀번호를 확인해주시길 바랍니다.');
       }
 
       if (pwd !== rePwd) {
         setError('비밀번호가 일치하지 않습니다.');
         return;
       }
-      if (pwd == rePwd) {
-        setError('비밀번호가 수정되었습니다. 로그인페이지로 이동합니다.');
-        setTimeout(() => {
+
+      setError('비밀번호가 수정되었습니다. 로그인페이지로 이동합니다.');
+      setTimeout(() => {
         navigate('/auth');
         return;
-      },1800);}
+      }, 1800);
 
       const response = await axios.post(`/auth-server/api/v1/update/pwd/${uuid}`, {
         pwd: pwd,
@@ -72,34 +76,56 @@ const UpdatePasswordComponent = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-      <div style={{ position: 'relative', marginBottom: '90px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ position: 'relative', marginTop: '-150px' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '300px',
+      }}
+    >
+      <div>
+        <div>
           <RoundInput
             type="password"
             value={pwd}
-            onChange={(e) => setPwd(e.target.value)}
+            onChange={(e) => {
+              setPwd(e.target.value);
+              setError('');
+            }}
             placeholder="새 비밀번호를 입력하세요"
           />
         </div>
       </div>
 
-      <div style={{ position: 'relative', marginBottom: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ position: 'relative', marginTop: '-50px' }}>
+      <div>
+        <div>
           <RoundInput
             type="password"
             value={rePwd}
-            onChange={(e) => setRePwd(e.target.value)}
+            onChange={(e) => {
+              setRePwd(e.target.value);
+              setError('');
+            }}
             placeholder="비밀번호 확인"
           />
         </div>
       </div>
-      {error && <p style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
+      <p
+        style={{
+          color: 'red',
+          height: '35px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        {error}
+      </p>
 
       <div>
-        <RoundButton onClick={handleUpdatePassword}>
-          비밀번호 수정
-        </RoundButton>
+        <RoundButton onClick={handleUpdatePassword}>비밀번호 수정</RoundButton>
       </div>
     </div>
   );

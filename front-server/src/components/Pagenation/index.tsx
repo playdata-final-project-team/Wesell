@@ -80,7 +80,7 @@ const ListPagenation = ({
                 {pArr.map((n: number)=>(
                     <button className="pageBtn" key={n}
                     onClick={()=>{
-                        setPage(n);
+                        setPage(n); console.log('눌림!');
                     }}
                     aria-current={page === n ? 'page': undefined}
                     >

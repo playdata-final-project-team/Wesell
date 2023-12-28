@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.service.dto.feign;
+package com.wesell.authenticationserver.controller.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

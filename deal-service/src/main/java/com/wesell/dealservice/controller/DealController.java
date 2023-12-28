@@ -93,7 +93,7 @@ public class DealController {
      */
     @GetMapping("list")
     public ResponseEntity<?> getMyPostList(@RequestParam("uuid") String uuid, @RequestParam(name = "page", defaultValue = "0") Integer page) {
-        return new ResponseEntity<>(dealService.getMyPostList(uuid, page),HttpStatus.OK);
+        return new ResponseEntity<>(dealService.getMyPostList(uuid, page-1),HttpStatus.OK);
     }
 
     /**
@@ -106,12 +106,12 @@ public class DealController {
 
     @GetMapping("main/category")
     public ResponseEntity<?> findAllByCategory(@RequestParam("category")Long categoryId, @RequestParam(value = "page", defaultValue = "0") int page) {
-        return new ResponseEntity<>(dealService.findByCategory(categoryId, page), HttpStatus.OK);
+        return new ResponseEntity<>(dealService.findByCategory(categoryId, page-1), HttpStatus.OK);
     }
 
     @GetMapping("main/title")
     public ResponseEntity<?> findAllByTitle(@RequestParam("title") String title, @RequestParam(value = "page", defaultValue = "0") int page) {
-        return new ResponseEntity<>(dealService.findByTitle(title, page), HttpStatus.OK);
+        return new ResponseEntity<>(dealService.findByTitle(title, page-1), HttpStatus.OK);
     }
 
 }
