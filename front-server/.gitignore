@@ -25,5 +25,11 @@ yarn-error.log*
 # 민감정보
 .env
 
+### IntelliJ IDEA ###
 .idea
-.idea/workspace.xml
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
