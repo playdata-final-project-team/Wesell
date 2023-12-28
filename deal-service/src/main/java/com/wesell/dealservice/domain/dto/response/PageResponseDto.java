@@ -15,5 +15,6 @@ import java.util.List;
 public class PageResponseDto implements Serializable {
     private List<?> dtoList;
     private int page;
-    private int totalPage;
+    private long totalElements;
+    private int size;
 }

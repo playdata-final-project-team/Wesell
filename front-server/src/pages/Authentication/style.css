@@ -1,9 +1,7 @@
 #auth-wrapper {
-  padding: 50px 0px;
   min-width: 1440px;
-  /* 추후 헤더 정의 시 해당 내용을 적용하여 calc 하기 */
-  height: calc(100vh);
-  min-height: 960px;
+  min-height: 550px;
+  padding: 50px 0px;
 
   display: flex;
   justify-content: center;
@@ -11,7 +9,7 @@
 }
 
 .auth-contianer {
-  width: 1200px;
+  width: 1000px;
   height: 100%;
 
   display: flex;
@@ -32,23 +30,28 @@
 
 .auth-card-bottom-a {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: space-evenly;
 }
 
 .auth-card-find-info-box > a {
   text-decoration: none;
   color: rgba(0, 0, 0, 1);
   font-weight: 550;
+  cursor: pointer;
 }
 
 .auth-card-bottom-b {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
+  align-items: center;
+  margin: 10px;
 }
 
 .auth-card-btn {
   cursor: pointer;
+
+  min-width: 100px;
+  min-height: 30px;
 
   background-color: rgba(10, 160, 255, 0.7);
   border-radius: 10px;
@@ -56,6 +59,7 @@
   margin: 5px;
 
   text-align: center;
+  font-size: 20px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
 }
@@ -84,9 +88,8 @@
 
   cursor: pointer;
   border-radius: 10px;
-  /* padding: 16px; */
-  width: 120px;
-  height: 35px;
+  min-width: 120px;
+  min-height: 40px;
   margin: 5px;
 }
 

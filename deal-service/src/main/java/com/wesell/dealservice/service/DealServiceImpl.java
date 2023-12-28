@@ -102,9 +102,10 @@ public class DealServiceImpl implements DealService {
         int pageLimit = 6;
         Page<DealPost> allByUuid = readRepository.searchMyList(uuid, PageRequest.of(page, pageLimit));
         return PageResponseDto.builder()
-                .dtoList(allByUuid.map(MyPostListResponseDto::new).stream().toList())
+                .dtoList(allByUuid.map(MyPostListResponseDto::new).toList())
                 .page(page)
-                .totalPage(pageLimit)
+                .totalElements(allByUuid.getTotalElements())
+                .size(allByUuid.getSize())
                 .build();
     }
 
@@ -117,7 +118,6 @@ public class DealServiceImpl implements DealService {
         return PageResponseDto.builder()
                 .dtoList(posts.map(post -> new MainPagePostResponseDto(post, imageRepository.findImageByPostId(post.getId()))).toList())
                 .page(page)
-                .totalPage(pageLimit)
                 .build();
     }
 

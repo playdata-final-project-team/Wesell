@@ -5,7 +5,7 @@
 }
 
 .header-container {
-  width: 1200px;
+  width: 950px;
 
   display: flex;
   justify-content: space-between;
@@ -13,8 +13,8 @@
 }
 
 .logo-wesell-icon {
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
 }
 
 .header-left-box {

@@ -207,11 +207,13 @@ public class AuthController {
     @GetMapping("/phone/validate")
     public ResponseEntity<?> sendSMSById(@RequestParam String phoneNumber) {
 
+        log.debug("AuthController - 번호 인증");
         String numStr = smsUtil.createCode();
-        System.out.println(phoneNumber);
+
+        log.info("수신자 번호 : {}",phoneNumber);
 
         smsUtil.sendOne(phoneNumber,numStr);
 
-        return ResponseEntity.ok(phoneNumber);
+        return ResponseEntity.ok(numStr);
     }
 }
