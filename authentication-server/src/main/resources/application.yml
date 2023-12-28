@@ -60,4 +60,3 @@ coolsms:
   api:
     key: ${coolsms-key}
     secret: ${coolsms-secret}
-    from: ${coolsms-from}
