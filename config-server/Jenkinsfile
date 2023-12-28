@@ -1,11 +1,11 @@
 pipeline {
     agent any
     environment {
-        SERVER_NAME = 'front-server'
+        SERVER_NAME = 'config-server'
         DOCKER_REGISTRY = 'https://registry.hub.docker.com'
         DOCKER_REPO = 'lbs991218/wesell'
         SSH_USER = 'ubuntu'
-        EC2_HOST = 'ec2-18-191-195-236.us-east-2.compute.amazonaws.com'
+        EC2_HOST = 'ec2-18-118-152-48.us-east-2.compute.amazonaws.com'
         DOCKER_IMAGE_TAG = "${DOCKER_REPO}:${SERVER_NAME}"
     }
     stages {
