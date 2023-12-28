@@ -63,10 +63,11 @@
       margin-right: 1rem;
       width: 50%;
       height: 100%;
+      text-align: center;
       img {
-        width: 100%;
+        width: 100%; /* 수정: 이미지가 부모 요소의 100%로 표시되도록 설정 */
         height: 100%;
-        object-fit: cover;
+        
       }
     }
     .board-content {
@@ -86,6 +87,51 @@
 }
 
 .update-button {
+  min-width: 80px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 400px;
+  flex-direction: row;
+  color: #e0e7e8;
+  background-color: #00a8cc;
+  border: 2px solid #00a8cc; 
+  border-radius: 50px; 
+  transform: scale(1.5);
+}
+
+
+.disable-button {
+  min-width: 80px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 400px;
+  flex-direction: row;
+  color: #e0e7e8;
+  background-color: #00a8cc;
+  border: 2px solid #00a8cc; 
+  border-radius: 50px; 
+  transform: scale(1.5);
+}
+
+.success-button {
+  min-width: 80px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 400px;
+  flex-direction: row;
+  color: #e0e7e8;
+  background-color: #00a8cc;
+  border: 2px solid #00a8cc; 
+  border-radius: 50px; 
+  transform: scale(1.5);
+}
+.cancel-button {
   min-width: 80px;
   text-align: center;
   display: flex;
