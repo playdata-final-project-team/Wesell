@@ -22,7 +22,8 @@ const SearchByTitle = () => {
       // state: 한 페이지에 보여 줄 페이지네이션 갯수 상태값 //
       const [blockNum, setBlockNum] = useState<number>(0);
       // state: 전체 항목 갯수 상태값 //
-      const [totalElements, SetTotalElements] = useState<number>(0);
+      const [totalElements, setTotalElements] = useState<number>(0);
+      const [isEmpty, setEmpty] = useState<boolean>(false);
 
   useEffect( () => {
     const POST_LIST_ENDPOINT = `/deal-service/api/v1/main/title?title=${title}&page=0`; // /deal-service/api/v1/post?id=${postId}
@@ -34,6 +35,9 @@ const SearchByTitle = () => {
       .then(data => {
         console.log(data); // 가져온 데이터를 콘솔에 출력하거나 원하는 작업 수행
         setPostJson(data['content']);
+        setEmpty(data['empty']);
+        setTotalElements(data['totalElements']);
+        setSize(data['size']);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -57,7 +61,7 @@ const SearchByTitle = () => {
           placeholder=" Search..."
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)} />
-          <button onClick={handleSearch}>
+          <button className='search-icon-button' onClick={handleSearch}>
           <FaSearch color="#00A8CC" />
           </button>
     </div>
@@ -69,24 +73,26 @@ const SearchByTitle = () => {
     <button onClick={() =>handleCategoryButtonClick(5)}>기타</button>
     </div>
     <div className = "postList">
-      {!postJson && <p>😒 검색 결과가 없습니다.</p>}
-      {postJson?.map(post => (
-        <Link key={post.postId} to={`/board/detail/${post.postId}`}>
-          <div className="postItem">
-          <div className="board-body-img">
-            <img src={post.imageUrl} />
-          </div>
-          <div className="board-body-text">
-          <div className="text-title">
-            <p>{post.title}</p>
-          </div>
-          <div className="text-price">
-            <p>{post.price}</p>
-          </div>
-          </div>
-          </div>
-        </Link>
-      ))}
+    {postJson && (
+          postJson.map((post) => (
+            <Link key={post.postId} to={`/board/detail/${post.postId}`}>
+              <div className="postItem">
+                <div className="board-body-img">
+                  <img src={post.imageUrl} alt={post.title} />
+                </div>
+                <div className="board-body-text">
+                  <div className="text-title">
+                    <p>{post.title}</p>
+                  </div>
+                  <div className="text-price">
+                    <p>{post.price}</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))
+        )}
+        {isEmpty && <p>😒 검색 결과가 없습니다.</p>}
     </div>
     {postJson && (
           <ListPagenation

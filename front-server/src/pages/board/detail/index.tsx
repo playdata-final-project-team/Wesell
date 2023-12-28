@@ -51,8 +51,8 @@ function PostDetailPage() {
               <h2>{post.title}</h2>
               <p className="createdAt">{post.createdAt}</p>
               <p className="nickname">{post.nickname}</p>
-              <p className="price">{post.price}</p>
-              <p className="detail">{post.detail}</p>
+              <p className="price">가격: {post.price}</p>
+              <p className="detail">설명: {post.detail}</p>
               <p>
                 오픈 카카오톡:{' '}
                 <a href={post.link} target="_blank" rel="noopener noreferrer">
@@ -62,13 +62,13 @@ function PostDetailPage() {
             </div>
           )}
           <div className="update-button-wrapper">
-            {
-              // window.sessionStorage.getItem('uuid') === post?.uuid &&
+            {/* {
+               window.sessionStorage.getItem('uuid') === post?.uuid && */}
 
               <button className="update-button" onClick={moveToUpdate}>
                 수정하기
               </button>
-            }
+            {/* } */}
           </div>
         </div>
       </div>

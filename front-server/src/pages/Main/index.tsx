@@ -15,7 +15,18 @@ const Main = () => {
   const [postJson, setPostJson] = useState<PostJson[]>();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
-
+   
+    // state: 현재 페이지 상태값 //
+    const [curPage, setCurPage] = useState<number>(1);
+    // state: 한 페이지 보일 수 있는 항목 갯수 상태값 //
+    const [size, setSize] = useState<number>(8);
+    // state: 한 페이지에 보여 줄 페이지네이션 갯수 상태값 //
+    const [blockNum, setBlockNum] = useState<number>(0);
+    // state: 전체 항목 갯수 상태값 //
+    const [totalElements, setTotalElements] = useState<number>(0);
+    // state:
+    const [isEmpty, setEmpty] = useState<boolean>(false);
+    
   useEffect( () => {
     const POST_LIST_ENDPOINT = `/deal-service/api/v1/main?page=0`; // 페이지 파라미터를 직접 URL에 추가
 
@@ -26,6 +37,9 @@ const Main = () => {
       .then(data => {
         console.log(data); // 가져온 데이터를 콘솔에 출력하거나 원하는 작업 수행
         setPostJson(data['content']);
+        setEmpty(data['empty']);
+        setTotalElements(data['totalElements']);
+        setSize(data['size']);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -41,15 +55,6 @@ const Main = () => {
       navigate(`/main/title/`+ encodeURIComponent(searchValue));
     }
   };
-
-    // state: 현재 페이지 상태값 //
-    const [curPage, setCurPage] = useState<number>(1);
-    // state: 한 페이지 보일 수 있는 항목 갯수 상태값 //
-    const [size, setSize] = useState<number>(8);
-    // state: 한 페이지에 보여 줄 페이지네이션 갯수 상태값 //
-    const [blockNum, setBlockNum] = useState<number>(0);
-    // state: 전체 항목 갯수 상태값 //
-    const [totalElements, SetTotalElements] = useState<number>(0);
 
   return (
     <>

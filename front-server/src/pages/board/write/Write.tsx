@@ -11,7 +11,7 @@ function GetCategory() {
   const [category, setCategory] = useState<category[]>([]);
 
   useEffect(() => {
-    axios //8000/deal-service/api
+    axios 
       .get('/deal-service/api/v1/categories')
       .then((response) => {
         console.log(response.data.categories);
@@ -105,10 +105,7 @@ function UploadBoard() {
     <div className="addBoard-wrapper">
       <div className="addBoard-body">
         <div className="category-select">
-        <select
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
-        >
+          <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
           <option value="" disabled>
             카테고리를 선택하세요.
           </option>

@@ -61,12 +61,13 @@ function App() {
           <Route path="/testJiho7" element={<UserManagementComponent />} />
           <Route path="/testJiho8" element={<VersionupdateComponent />} />
           <Route path="/testJiho9" element={<AdminUsersComponent />} />
-          <Route path="/board/detail/:postId" element={<PostDetailPage />} />
+  
           {isLogin ? (
             <>
               <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
               <Route path={MYPAGE_PATH()} element={<Mypage />} />
               <Route path="/board/edit/:postId" element={<EditPostPage />} />
+              <Route path="/board/detail/:postId" element={<PostDetailPage />} />
             </>
           ) : null}
         </Route>
