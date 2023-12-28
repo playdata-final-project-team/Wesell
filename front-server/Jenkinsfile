@@ -11,14 +11,6 @@ pipeline {
                 ])
             }
         }
-        stage('Gradle Build') {
-            steps {
-                dir("front-server") {
-                    sh 'chmod +x gradlew'
-                    sh './gradlew clean build -x test'
-                }
-            }
-        }
         stage('Build and push Docker image') {
             steps {
                 script {
