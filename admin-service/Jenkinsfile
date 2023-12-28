@@ -44,7 +44,7 @@ pipeline {
                             sudo docker rm \$(sudo docker ps -a -q) || true
                             sudo docker rmi \$(sudo docker images -q) || true
                             sudo docker pull lbs991218/wesell:admin-service
-                            sudo docker run -d -p 8081:8081 lbs991218/wesell:admin-service
+                            sudo docker run -d -p 8887:8887 lbs991218/wesell:admin-service
                         '
                     """
                 }
