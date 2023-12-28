@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import './style.css';
 import { FaSearch } from "react-icons/fa";
 import ListPagenation from 'components/Pagenation';
+import { Card } from 'components/card/Card';
 
 interface PostJson {
   "postId":number;
@@ -73,29 +74,15 @@ const SearchByCategory = () => {
     <button onClick={() =>handleCategoryButtonClick(4)}>헬스</button>
     <button onClick={() =>handleCategoryButtonClick(5)}>기타</button>
     </div>
-    <div className = "postList">
-      {postJson && (
-          postJson.map((post) => (
-            <Link key={post.postId} to={`/board/detail/${post.postId}`}>
-              <div className="postItem">
-                <div className="board-body-img">
-                  <img src={post.imageUrl} alt={post.title} />
-                </div>
-                <div className="board-body-text">
-                  <div className="text-title">
-                    <p>{post.title}</p>
-                  </div>
-                  <div className="text-price">
-                    <p>{post.price}</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))
-        )}
-        {isEmpty && <p>😒 검색 결과가 없습니다.</p>}
+    <div className="boardList-wrapper">
+    <div className="boardList-body">
+      {postJson?.map((item) => (
+        <Card key={item.postId} board_id={item.postId} title={item.title} img_url={item.imageUrl} price={item.price} />
+      ))}
+      {isEmpty && <p>😒 검색 결과가 없습니다.</p>}
     </div>
-    {postJson && (
+    <div className="boardList-footer">
+      {postJson && (
           <ListPagenation
             limit={size}
             page={curPage}
@@ -104,7 +91,9 @@ const SearchByCategory = () => {
             counts={totalElements}
             setBlockNum={setBlockNum}
           />
-        )}
+      )}
+    </div>
+    </div>
       </>
     );
 }

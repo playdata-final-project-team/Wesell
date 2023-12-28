@@ -57,14 +57,6 @@ function UploadBoard() {
     return image.image_file !== "" && title !== "";
   }, [image, title, categoryId,price,detail,link]);
 
-
-  // useEffect(() => {
-  //   const uuid = window.sessionStorage.getItem("uuid");
-  //   if (uuid) {
-  //     setUuid(uuid);
-  //   }
-  // }, []);
-
   const handleSubmit = useCallback(async () => {
     try{
       const formData = new FormData();
@@ -105,12 +97,12 @@ function UploadBoard() {
     <div className="addBoard-wrapper">
       <div className="addBoard-body">
         <div className="category-select">
-          <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
-          <option value="" disabled>
-            카테고리를 선택하세요.
-          </option>
-          {categories}
-        </select>
+            <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+            <option value="" disabled>
+              카테고리를 선택하세요.
+            </option>
+            {categories}
+          </select>
         </div>
         <ImageUploader setImage={setImage} preview_URL={image.preview_URL}/>
         <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} setLink={setLink} 

@@ -33,7 +33,7 @@ public class DealController {
      */
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFile( @RequestPart("requestDto") UploadDealPostRequestDto requestDto,
-                                         @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+                                         @RequestPart(value = "file") MultipartFile file) throws IOException {
         Long postId = dealService.createDealPost(requestDto);
         String url = uploadService.uploadAndGetUrl(file);
         UploadFileRequestDto fileRequestDto = new UploadFileRequestDto(postId,url);
@@ -106,7 +106,7 @@ public class DealController {
      */
     @GetMapping("main")
     public ResponseEntity<?> getMainInfo(@RequestParam(value = "page", defaultValue = "0") int page) {
-        return new ResponseEntity<>(dealService.getDealPostLists(page), HttpStatus.OK);
+        return new ResponseEntity<>(dealService.getDealPostLists(page-1), HttpStatus.OK);
     }
 
     @GetMapping("main/category")
