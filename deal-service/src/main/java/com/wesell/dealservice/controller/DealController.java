@@ -25,6 +25,10 @@ public class DealController {
      * @param requestDto
      * @return 판매글 저장
      */
+    @GetMapping("health-check")
+    String healthCheck(){
+        return "서버 정상 작동중";
+    }
     @PostMapping("post")
     public ResponseEntity<?> uploadDealPost(@Valid @RequestBody UploadDealPostRequestDto requestDto) {
         return new ResponseEntity<>(dealService.createDealPost(requestDto), HttpStatus.CREATED);
