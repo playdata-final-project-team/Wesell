@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92f63182-175e-4fe9-8f41-34293aef690c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../admin-service/src/main/java/com/wesell/adminservice/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../admin-service/src/main/java/com/wesell/adminservice/controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../authentication-server/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/Jenkinsfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
