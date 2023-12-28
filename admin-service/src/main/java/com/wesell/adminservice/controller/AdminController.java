@@ -23,7 +23,7 @@ public class AdminController {
 
     @GetMapping("health-check")
     public String healthCheck(){
-        return "서버 연결 가능한 상태입니다 21트";
+        return "서버 연결 가능한 상태입니다 22트";
     }
     @GetMapping("get-version") //버전 값 불러오기//기본값도 들어가있다
     public ResponseEntity<Map<String, String>> getVersions() {
