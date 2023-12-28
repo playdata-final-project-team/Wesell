@@ -6,7 +6,7 @@ import ResponseCode from 'constant/response-code.enum';
 import MypageResponseDto from './response/mypage/mypage.response.dto';
 import { PwCheckRequestDto } from './request/delete';
 import MyDealListWithPageResponseDto from './response/mypage/my.deal-list-page.response.dto';
-import { MypageUpdateRequestDto } from './request/mypage';
+import { DealInfoStatusUpdateRequestDto, MypageUpdateRequestDto } from './request/mypage';
 
 const SIGN_IN_URL = () => '/auth-server/api/v1/sign-in';
 const SIGN_UP_URL = () => '/auth-server/api/v1/sign-up';
@@ -22,6 +22,7 @@ const PW_CHECK_URL = () => '/auth-server/api/v1/delete/pw-check';
 const DELETE_URL = (uuid: string | null) => `/auth-server/api/v1/delete/${uuid}`;
 const KAKAO_DELETE_URL = () => '/auth-server/api/v1/kakao/delete';
 const MY_DEAL_LIST_URL = () => '/deal-service/api/v1/list';
+const SALESTATUS_CHANGE_URL = () => '/deal-service/api/v1/complete';
 
 export const signInRequest = async (requestBody: SignInRequestDto) => {
   try {
@@ -217,6 +218,18 @@ export const myDealListRequest = async (uuid: string | null, page: number) => {
     if (!error.response) return null;
     const responseBody: ResponseDto = error.response.data;
     return responseBody;
+  }
+};
+
+export const saleStatusChangeRequest = async (requestDto: DealInfoStatusUpdateRequestDto) => {
+  try {
+    const response = await axios.put(SALESTATUS_CHANGE_URL(), requestDto);
+    const responseBody = response.data;
+    return responseBody;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (!error.response) return null;
+    return error.response.data;
   }
 };
 

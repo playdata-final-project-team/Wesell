@@ -26,13 +26,14 @@ function App() {
   const [isLogin, setLogin] = useState<boolean>(false);
 
   // state: 관리자 여부 확인 상태값 //
+
   const [isAdmin, setAdmin] = useState<boolean>(false);
 
   // effect: 페이지 렌더링 시마다 로그인 여부 확인 //
   useEffect(() => {
     const uuid = sessionStorage.getItem('uuid');
     const role = sessionStorage.getItem('role');
-
+    console.log(uuid);
     if (uuid && role) {
       setLogin(true);
       if (uuid === 'ADMIN') {
@@ -43,7 +44,7 @@ function App() {
     } else {
       setLogin(false);
     }
-  }, [sessionStorage.getItem('uuid'), sessionStorage.getItem('role')]);
+  }, []);
 
   // render: Application 컴포넌트 랜더링 //
   return (
@@ -53,8 +54,8 @@ function App() {
         <Route path="/test" element={<Test />}></Route>
         {/** 테스트 URL - E*/}
         <Route path={MAIN_PATH()} element={<Main />} />
-        <Route path="main/category/:categoryId" element={<SearchByCategory />} />
-        <Route path="main/title/:title" element={<SearchByTitle />} />
+        <Route path="/category/:categoryId" element={<SearchByCategory />} />
+        <Route path="/title/:title" element={<SearchByTitle />} />
         <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
         <Route path={AUTH_PATH()} element={<AuthServer />} />
         <Route path="/found-email/:uuid" element={<FoundEmailComponent />} />

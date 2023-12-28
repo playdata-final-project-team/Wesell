@@ -103,7 +103,7 @@ public class DealServiceImpl implements DealService {
         Page<DealPost> allByUuid = readRepository.searchMyList(uuid, PageRequest.of(page, pageLimit));
         return PageResponseDto.builder()
                 .dtoList(allByUuid.map(MyPostListResponseDto::new).toList())
-                .page(page)
+                .page(page+1)
                 .totalElements(allByUuid.getTotalElements())
                 .size(allByUuid.getSize())
                 .build();
