@@ -23,16 +23,16 @@ public class FindPWDFeignController {
         return ResponseEntity.ok(userId);
     }
 
-    @PostMapping("/send/pwd/phone")
-    public ResponseEntity<?> sendPhoneForPWD(@RequestBody String code) {
-        boolean isCodeValid = smsUtil.isCodeValid(code);
-        if(isCodeValid) {
-            return ResponseEntity.ok(HttpStatus.OK);
-        }
-        else {
-            throw new InvalidCodeException("인증 정보가 일치하지 않습니다.");
-        }
-    }
+//    @PostMapping("/send/pwd/phone")
+//    public ResponseEntity<?> sendPhoneForPWD(@RequestBody String code) {
+//        boolean isCodeValid = smsUtil.isCodeValid(code);
+//        if(isCodeValid) {
+//            return ResponseEntity.ok(HttpStatus.OK);
+//        }
+//        else {
+//            throw new InvalidCodeException("인증 정보가 일치하지 않습니다.");
+//        }
+//    }
 
     @PostMapping("/update/pwd/{uuid}")
     public ResponseEntity<?> updatePWD(@PathVariable("uuid") String uuid, @RequestBody FindPWDRequestDto findPWDRequestDto) {

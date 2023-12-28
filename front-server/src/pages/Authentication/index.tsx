@@ -47,18 +47,6 @@ function AuthServer() {
     // state: 비밀번호 오류 메시지 //
     const [pwErrorMsg, setPwErrorMsg] = useState<string>('');
 
-    // state: 이메일 저장 value 상태 //
-    const [savedEmail, setSavedEmail] = useState<boolean>(false);
-
-    // effect: 이메일 저장한 경우 cookie에 담긴 savedEmail 값을 확인하여 값을 넣어둔다. //
-    useEffect(() => {
-      const cookieChangeHandler = () => {
-        //
-      };
-
-      cookieChangeHandler();
-    }, []);
-
     // event-handler: 이메일 변경 이벤트 처리 //
     const onEmailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
       setEmailErrorMsg('');
@@ -126,7 +114,7 @@ function AuthServer() {
 
     // event-handler: 로그인 버튼 click 이벤트 처리 //
     const onSignInButtonClickHandler = async () => {
-      const requestBody: SignInRequestDto = { email, password, savedEmail };
+      const requestBody: SignInRequestDto = { email, password };
 
       if (signInValidation(requestBody)) {
         await signInRequest(requestBody).then(signInResponse);
@@ -156,6 +144,16 @@ function AuthServer() {
       setView('sign-up');
     };
 
+    // event-handler: 아이디 찾기 click 이벤트 처리 //
+    const onFindIdClickHandler = () => {
+      navigator('/find-id');
+    };
+
+    // event-handler: 비밀번호 찾기 click 이벤트 처리 //
+    const onFindPwClickHandler = () => {
+      navigator('/find-pw');
+    };
+
     // event-handler: 이메일 input key-down 이벤트 처리//
     const onEmailKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key !== 'Enter') return;
@@ -167,13 +165,6 @@ function AuthServer() {
     const onPasswordKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key !== 'Enter') return;
       onSignInButtonClickHandler();
-    };
-
-    // event-handler: 아이디 저장 change 이벤트 처리 //
-    const onCheckBoxChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-      const isChecked = event.target.checked;
-      setSavedEmail(isChecked);
-      console.log(isChecked);
     };
 
     // render: 로그인 컴포넌트 랜더링 //
@@ -208,20 +199,6 @@ function AuthServer() {
           </div>
           <div className="auth-card-bottom">
             <div className="auth-card-bottom-a">
-              <div className="auth-card-save-email-box">
-                <CheckBox
-                  id="savedEmail"
-                  name="savedEmail"
-                  label="이메일 저장"
-                  checked={savedEmail}
-                  onChange={onCheckBoxChangeHandler}
-                />
-              </div>
-              <div className="auth-card-find-info-box">
-                <a href="/">아이디</a>/<a href="/">비밀번호 찾기</a>
-              </div>
-            </div>
-            <div className="auth-card-bottom-b">
               <div className="auth-card-btn" onClick={onSignInButtonClickHandler}>
                 {'Login'}
               </div>
@@ -229,6 +206,12 @@ function AuthServer() {
                 className="icon auth-card-social-in-btn"
                 onClick={onSocialLoginClickHandler}
               ></div>
+            </div>
+            <div className="auth-card-bottom-b">
+              <div className="auth-card-find-info-box">
+                <a onClick={onFindIdClickHandler}>아이디</a>/
+                <a onClick={onFindPwClickHandler}>비밀번호 찾기</a>
+              </div>
             </div>
             <div className="auth-desc-box">
               <div className="auth-desc">

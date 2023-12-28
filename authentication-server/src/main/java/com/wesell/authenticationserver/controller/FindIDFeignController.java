@@ -1,6 +1,8 @@
 package com.wesell.authenticationserver.controller;
 
 import com.wesell.authenticationserver.controller.dto.request.FindIDRequestDto;
+import com.wesell.authenticationserver.controller.response.CustomException;
+import com.wesell.authenticationserver.controller.response.ErrorCode;
 import com.wesell.authenticationserver.exception.InvalidCodeException;
 import com.wesell.authenticationserver.exception.UserNotFoundException;
 import com.wesell.authenticationserver.global.util.SmsUtil;
@@ -17,19 +19,15 @@ public class FindIDFeignController {
 
     private final FindIDFeignService findIDFeignService;
     private final UserServiceFeignClient findIDFeignClient;
-    private final SmsUtil smsUtil;
 
     @PostMapping("/send/id/phone")
     public ResponseEntity<?> sendPhoneForID(@RequestBody FindIDRequestDto findIDRequestDto) {
-        boolean isCodeValid = smsUtil.isCodeValid(findIDRequestDto.getCode());
-        if(isCodeValid) {
+        try {
             String userId = findIDFeignClient.findID(findIDRequestDto.getPhoneNumber());
             return ResponseEntity.ok(userId);
+        }catch(Exception e){
+            throw new CustomException(ErrorCode.USER_SERVICE_FEIGN_ERROR);
         }
-        else {
-            throw new InvalidCodeException("인증 정보가 일치하지 않습니다.");
-        }
-
     }
 
     @GetMapping("/find/email/{uuid}")

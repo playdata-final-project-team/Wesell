@@ -1,18 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const FoundEmailComponent = () => {
-  const [uuid, setUuid] = useState('');
   const [foundEmails, setFoundEmails] = useState<string[]>([]);
   const [error, setError] = useState('');
   const { uuid: paramUuid } = useParams();
 
+  const navigator = useNavigate();
+
   useEffect(() => {
     handleFindEmails();
-    console.log(uuid);
   }, [paramUuid]);
+
+  const RoundButton = styled.button`
+    width: 110px;
+    height: 40px;
+    border-radius: 50px; /* 둥근 테두리를 위한 값 설정 */
+    background-color: #00a8cc;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+  `;
 
   const handleFindEmails = async () => {
     try {
@@ -34,13 +46,25 @@ const FoundEmailComponent = () => {
     }
   };
 
-  console.log(foundEmails);
+  const handleMoveToFindPw = () => {
+    navigator('/find-pw');
+  };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontSize: '50px', marginTop: '-150px' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        fontSize: '30px',
+        marginTop: '-150px',
+      }}
+    >
       {foundEmails.length > 0 ? (
         <div>
-          <h1>아이디 찾기 완료!</h1>
+          <h1>ID :</h1>
           <ul>
             {foundEmails.map((email, index) => (
               <li key={index}>{email}</li>
@@ -50,6 +74,9 @@ const FoundEmailComponent = () => {
       ) : (
         <p style={{ fontSize: '24px' }}>{error || '이메일이 없습니다.'}</p>
       )}
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <RoundButton onClick={handleMoveToFindPw}>비밀번호 찾기</RoundButton>
+      </div>
     </div>
   );
 };

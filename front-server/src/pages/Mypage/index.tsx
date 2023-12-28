@@ -8,7 +8,6 @@ import { myDealListRequest, myInfoUpdateRequest, mypageInfoRequest } from 'apis'
 import MypageResponseDto from 'apis/response/mypage/mypage.response.dto';
 import { ResponseDto } from 'apis/response';
 import Withdraw from 'pages/withdraw';
-import MyDealListWithPageResponseDto from 'apis/response/mypage/my.deal-list-page.response.dto';
 import MyDealListResponseDto from 'apis/response/mypage/my.deal-list.response.dto';
 import ListPagenation from 'components/Pagenation';
 import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent';
@@ -23,6 +22,7 @@ import {
   BsFillPencilFill,
 } from 'react-icons/bs';
 import ReactModal from 'react-modal';
+import PageResponseDto from 'apis/response/mypage/my.deal-list-page.response.dto';
 
 // component: 마이페이지 컴포넌트 //
 function Mypage() {
@@ -127,6 +127,7 @@ function Mypage() {
       if (name.trim() === '') {
         setNameError(true);
         setNameErrorMsg('이름을 입력 바랍니다.');
+        return;
       }
 
       const regex = /^[가-힣]*$/;
@@ -134,6 +135,7 @@ function Mypage() {
       if (!regex.test(name.trim())) {
         setNameError(true);
         setNameErrorMsg('이름을 한글로 입력 바랍니다.');
+        return;
       }
 
       const requestDto: MypageUpdateRequestDto = { name, nickname, phone };
@@ -302,8 +304,10 @@ function Mypage() {
     // effect: 판매 내역 목록 effect 처리 //
     useEffect(() => {
       async function fetchData(uuid: string | null, page: number) {
-        const responseBody: MyDealListWithPageResponseDto | ResponseDto | null =
-          await myDealListRequest(uuid, page);
+        const responseBody: PageResponseDto | ResponseDto | null = await myDealListRequest(
+          uuid,
+          page,
+        );
 
         console.log(responseBody);
 
@@ -312,10 +316,10 @@ function Mypage() {
           return;
         }
 
-        const responseBodyWithDealInfo = responseBody as MyDealListWithPageResponseDto;
-        const { content, totalElements, size } = responseBodyWithDealInfo;
+        const responseBodyWithDealInfo = responseBody as PageResponseDto;
+        const { dtoList, totalElements, size } = responseBodyWithDealInfo;
 
-        setPosts(content);
+        setPosts(dtoList);
         SetTotalElements(totalElements);
         setSize(size);
       }
@@ -357,7 +361,6 @@ function Mypage() {
                   </th>
                   <th>제목</th>
                   <th>게시일</th>
-                  <th>판매 중/ 판매완료</th>
                   <th></th>
                 </tr>
               </thead>
@@ -375,10 +378,12 @@ function Mypage() {
                         </td>
                         <td>{post.title}</td>
                         <td>{post.createdAt}</td>
-                        <td>{post.status}</td>
-                        <div className="dealInfo-element-btn">
-                          <button type="button">수정</button>
-                        </div>
+                        <td>
+                          <div className="dealInfo-element-btn">
+                            <button type="button">판매 완료</button>
+                            <button type="button">수정</button>
+                          </div>
+                        </td>
                       </tr>
                     ))
                   : null}

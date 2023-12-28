@@ -32,9 +32,7 @@ public class FeignController {
     }
 
     @PostMapping("feign/find/id")
-    public ResponseEntity<String> findID(@RequestBody String phoneNumber) {
-        String userId = userService.findIDPWD(phoneNumber);
-
-        return ResponseEntity.ok(userId);
+    public String findID(@RequestBody String phoneNumber) {
+        return userService.findIDPWD(phoneNumber);
     }
 }
