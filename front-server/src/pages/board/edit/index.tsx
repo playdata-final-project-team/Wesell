@@ -112,15 +112,14 @@ const [image, setImage] = useState("");
           </div>
         </div>
       </div>
-      <div className="SubmitButton">
+      <div className="submitButton">
         {canSubmit() ? (
           <button className="success-button" onClick={updateBoard}>수정 완료</button>
         ) : (
           <button className="disable-button">제목과 내용을 모두 입력하세요😭</button>
         )}
+        </div>
         <button className="cancel-button" onClick={backToDetail}>취소</button>
-      </div>
-    
     </>
   );
 };

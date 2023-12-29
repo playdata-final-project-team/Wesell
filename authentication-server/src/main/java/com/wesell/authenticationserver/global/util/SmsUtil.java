@@ -22,7 +22,6 @@ public class SmsUtil {
     @Value("${coolsms.api.secret}")
     private String apiSecretKey;
 
-
     private DefaultMessageService messageService;
 
     @PostConstruct
