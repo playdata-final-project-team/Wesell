@@ -90,7 +90,6 @@ const ListPagenation = ({
             key={n}
             onClick={() => {
               setPage(n);
-              console.log('눌림!');
             }}
             aria-current={page === n ? 'page' : undefined}
           >

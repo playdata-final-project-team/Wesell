@@ -26,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static com.wesell.dealservice.error.ErrorCode.INVALID_POST;
 
@@ -78,9 +79,21 @@ public class DealServiceImpl implements DealService {
         post.deleteMyPost();
     }
 
+    public void deletePosts(Long[] idList){
+        Arrays.stream(idList)
+                .map(id -> dealRepository.findDealPostById(id))
+                .peek(post->post.deleteMyPost())
+                .forEach(post->dealRepository.saveAndFlush(post));
+    }
+
     @Override
     public void changePostStatus(ChangePostRequestDto requestDto) {
         dealRepository.findDealPostByIdAndIsDeleted(requestDto.getPostId(), false).changeStatus();
+    }
+
+    public String getSaleStatus(Long postId){
+        DealPost dealPost = dealRepository.findById(postId).get();
+        return dealPost.getSaleStatus().toString();
     }
 
     @Override

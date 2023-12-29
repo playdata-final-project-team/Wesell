@@ -38,7 +38,6 @@ public class UserService {
             return ResponseDto.of(userList);
         }
 
-
     }
 
     @Transactional
