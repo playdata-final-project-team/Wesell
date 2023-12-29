@@ -65,12 +65,11 @@ function App() {
         <Route path="/update-pw/:uuid" element={<PasswordUpdateComponent />} />
         <Route path="/board/detail/:postId" element={<PostDetailPage />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
-        <Route path="/board/edit/:postId" element={<EditPostPage />} />
         {isLogin ? (
           <>
             <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
             <Route path={MYPAGE_PATH()} element={<Mypage />} />
-            {/* <Route path="/board/edit/:postId" element={<EditPostPage />} /> */}
+            <Route path="/board/edit/:postId" element={<EditPostPage />} />
           </>
         ) : null}
         {isAdmin ? (
