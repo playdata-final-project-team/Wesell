@@ -18,7 +18,7 @@ public class FindPWDFeignController {
     private final SmsUtil smsUtil;
 
     @GetMapping("/find/pwd/email")
-    public ResponseEntity<?> findEmailByUuid(@RequestParam("email") String email) throws UserNotFoundException {
+    public ResponseEntity<?> findEmailByUuid(@RequestParam("email") String email) {
         String userId = findPWDFeignService.findUuid(email);
         return ResponseEntity.ok(userId);
     }

@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Main from 'pages/Main';
 import Container from 'layouts/Container';
@@ -15,37 +15,12 @@ import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent
 import SearchByCategory from 'pages/search/category';
 import SearchByTitle from 'pages/search/title';
 import AuthServer from 'pages/Authentication';
-import { useEffect, useState } from 'react';
 import Test from 'pages/Test';
 import PostDetailPage from 'pages/board/detail';
 import AdminUsersComponent from 'pages/AdminUsers/AdminUsersComponent';
 
 // component: Application 컴포넌트 //
 function App() {
-  // state: 로그인 여부 확인 상태값 //
-  const [isLogin, setLogin] = useState<boolean>(false);
-
-  // state: 관리자 여부 확인 상태값 //
-
-  const [isAdmin, setAdmin] = useState<boolean>(false);
-
-  // effect: 페이지 렌더링 시마다 로그인 여부 확인 //
-  useEffect(() => {
-    const uuid = sessionStorage.getItem('uuid');
-    const role = sessionStorage.getItem('role');
-    console.log(uuid);
-    if (uuid && role) {
-      setLogin(true);
-      if (uuid === 'ADMIN') {
-        setAdmin(true);
-      } else {
-        setAdmin(false);
-      }
-    } else {
-      setLogin(false);
-    }
-  }, []);
-
   // render: Application 컴포넌트 랜더링 //
   return (
     <Routes>
@@ -64,19 +39,11 @@ function App() {
         <Route path="/phone/valid/:uuid" element={<FoundSmsComponent />} />
         <Route path="/update-pw/:uuid" element={<PasswordUpdateComponent />} />
         <Route path="/board/detail/:postId" element={<PostDetailPage />} />
+        <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
+        <Route path={MYPAGE_PATH()} element={<Mypage />} />
+        <Route path="/board/edit/:postId" element={<EditPostPage />} />
+        <Route path="/admin/users" element={<AdminUsersComponent />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
-        {isLogin ? (
-          <>
-            <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
-            <Route path={MYPAGE_PATH()} element={<Mypage />} />
-            <Route path="/board/edit/:postId" element={<EditPostPage />} />
-          </>
-        ) : null}
-        {isAdmin ? (
-          <>
-            <Route path="/admin/users" element={<AdminUsersComponent />} />
-          </>
-        ) : null}
       </Route>
     </Routes>
   );

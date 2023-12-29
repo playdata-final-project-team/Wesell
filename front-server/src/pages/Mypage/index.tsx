@@ -3,8 +3,8 @@ import ABox from 'components/ABox';
 import { ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
-import useStore from 'stores';
 import {
+  deletePostListRequest,
   myDealListRequest,
   myInfoUpdateRequest,
   mypageInfoRequest,
@@ -36,6 +36,10 @@ function Mypage() {
 
   const navigator = useNavigate();
 
+  // store: uuid, role 값//
+  const uuid = sessionStorage.getItem('uuid');
+  const kakoId = sessionStorage.getItem('kakaoId');
+
   // component: 마이페이지 - 회원정보 컴포넌트 //
   const UserInfo = () => {
     // state: 탈퇴하기 팝업창 상태값 //
@@ -54,8 +58,6 @@ function Mypage() {
     const [isNameError, setNameError] = useState<boolean>(false);
     // state: 이름 관련 오류 메시지 상태값 //
     const [nameErrorMsg, setNameErrorMsg] = useState<string>('');
-    // store: uuid, role 값//
-    const uuid = useStore((state) => state.uuid);
 
     // function: navaigation 함수 //
     const navigator = useNavigate();
@@ -142,6 +144,14 @@ function Mypage() {
       if (!regex.test(name.trim())) {
         setNameError(true);
         setNameErrorMsg('이름을 한글로 입력 바랍니다.');
+        return;
+      }
+
+      const response = await mypageInfoRequest(uuid);
+
+      if (!response) return;
+
+      if (name === response.name) {
         return;
       }
 
@@ -233,11 +243,13 @@ function Mypage() {
               icon={<BsDoorOpenFill size={'25px'} color="rgba(10, 160, 255, 0.7)" />}
               onClick={onWithdrawBtnClickHandler}
             />
-            <ABox
-              label="비밀번호 수정"
-              icon={<BsFillPencilFill size={'25px'} color="rgba(10, 160, 255, 0.7)" />}
-              onClick={onUpdatePwBtnClickHandler}
-            />
+            {!kakoId && (
+              <ABox
+                label="비밀번호 수정"
+                icon={<BsFillPencilFill size={'25px'} color="rgba(10, 160, 255, 0.7)" />}
+                onClick={onUpdatePwBtnClickHandler}
+              />
+            )}
           </div>
         </div>
         <ReactModal
@@ -282,9 +294,12 @@ function Mypage() {
     const [blockNum, setBlockNum] = useState<number>(0);
     // state: 전체 항목 갯수 상태값 //
     const [totalElements, SetTotalElements] = useState<number>(0);
-
     // state: 체크된 항목을 담을 배열 //
     const [checkItems, setCheckItems] = useState<number[]>([]);
+    // state: 판매 상태 관련 상태값 //
+    const [statusChange, setStatusChange] = useState<boolean>(false);
+    // state: 삭제 여부 관련 상태값 //
+    const [isDeleted, setDeleted] = useState<boolean>(false);
 
     // function: 체크박스 단일 선택 //
     const handleSingleCheck = (checked: boolean, id: number) => {
@@ -305,9 +320,6 @@ function Mypage() {
       }
     };
 
-    // store: uuid, role 값//
-    const { uuid } = useStore((state) => state);
-
     // effect: 판매 내역 목록 effect 처리 //
     useEffect(() => {
       async function fetchData(uuid: string | null, page: number) {
@@ -315,8 +327,6 @@ function Mypage() {
           uuid,
           page,
         );
-
-        console.log(responseBody);
 
         if (!responseBody) {
           alert('네트워크 연결 상태를 확인해주세요!');
@@ -329,10 +339,12 @@ function Mypage() {
         setPosts(dtoList);
         SetTotalElements(totalElements);
         setSize(size);
+        setStatusChange(false);
+        setDeleted(false);
       }
 
       fetchData(uuid, curPage);
-    }, [uuid, curPage]);
+    }, [uuid, curPage, statusChange, isDeleted]);
 
     // event-handler: 회원정보 on-click 이벤트 핸들링 //
     const onDealInfoBtnClickHandler = () => {
@@ -340,7 +352,16 @@ function Mypage() {
     };
 
     // event-handler: 삭제하기 button click 처리 //
-    const onCheckItemsClickHandler = () => {
+    const onCheckItemsClickHandler = async () => {
+      if (checkItems.length === 0) return;
+
+      const data = await deletePostListRequest(checkItems);
+      const { state } = data;
+
+      if (state === '200') {
+        setDeleted(true);
+      }
+
       setPosts(posts.filter((item) => !checkItems.includes(item.id)));
       setCheckItems([]);
     };
@@ -349,6 +370,7 @@ function Mypage() {
     const onSaleCompleteClickHandler = async (postId: number) => {
       const dto: DealInfoStatusUpdateRequestDto = { uuid, postId };
       await saleStatusChangeRequest(dto);
+      setStatusChange(true);
     };
 
     //event-handler: 수정하기 button click 처리 //
@@ -401,14 +423,24 @@ function Mypage() {
                         <td>
                           <div className="dealInfo-element-btn">
                             {post.saleStatus === 'IN_PROGRESS' ? (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  onSaleCompleteClickHandler(post.id);
-                                }}
-                              >
-                                판매 완료
-                              </button>
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    onSaleCompleteClickHandler(post.id);
+                                  }}
+                                >
+                                  판매 완료
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    onDealInfoUpdateClickHandler(post.id);
+                                  }}
+                                  type="button"
+                                >
+                                  수정
+                                </button>
+                              </>
                             ) : (
                               <button
                                 type="button"
@@ -419,14 +451,6 @@ function Mypage() {
                                 판매중
                               </button>
                             )}
-                            <button
-                              onClick={() => {
-                                onDealInfoUpdateClickHandler(post.id);
-                              }}
-                              type="button"
-                            >
-                              수정
-                            </button>
                           </div>
                         </td>
                       </tr>

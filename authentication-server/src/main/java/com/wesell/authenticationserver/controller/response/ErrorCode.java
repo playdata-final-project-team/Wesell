@@ -36,6 +36,15 @@ public enum ErrorCode {
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED,"EAT","JWT 만료 기한이 지났습니다."),
 
     /**
+     * user 관련 오류
+     */
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "UNF", "유저 정보를 찾을 수 없습니다."),
+
+    /**
+     * 소셜 로그인 계정 비밀번호 찾기
+     */
+    SOCIAL_LOGIN_FOUND_PWD(HttpStatus.INTERNAL_SERVER_ERROR, "SFP", "소셜 로그인 계정입니다."),
+    /**
      * feign 관련 오류
      */
     USER_SERVICE_FEIGN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"UFE","유저 서비스로 Feign 요청 시 오류 발생"),
