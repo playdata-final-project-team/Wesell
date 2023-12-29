@@ -23,6 +23,7 @@ const DELETE_URL = (uuid: string | null) => `/auth-server/api/v1/delete/${uuid}`
 const KAKAO_DELETE_URL = () => '/auth-server/api/v1/kakao/delete';
 const MY_DEAL_LIST_URL = () => '/deal-service/api/v1/list';
 const SALESTATUS_CHANGE_URL = () => '/deal-service/api/v1/complete';
+const DELETE_POSTLIST_URL = () => '/deal-service/api/v1/checked/delete';
 
 export const signInRequest = async (requestBody: SignInRequestDto) => {
   try {
@@ -233,6 +234,17 @@ export const saleStatusChangeRequest = async (requestDto: DealInfoStatusUpdateRe
   }
 };
 
+export const deletePostListRequest = async (idArr: number[]) => {
+  try {
+    const response = await axios.put(DELETE_POSTLIST_URL(), idArr);
+    return response;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (!error.response) return null;
+    return error.response.data;
+  }
+};
+
 axios.interceptors.response.use(
   (res) => res,
   async (err) => {
@@ -240,6 +252,10 @@ axios.interceptors.response.use(
       config,
       response: { status },
     } = err;
+
+    if (status === 403) {
+      console.log('403 Forbidden');
+    }
 
     if (status === 504) {
       console.log('504 Gateway Timeout Error');
@@ -264,6 +280,7 @@ axios.interceptors.response.use(
       responseBody.code === ResponseCode.INVALID_ACCESS_TOKEN
     ) {
       await logoutRequest();
+      sessionStorage.clear();
       window.location.href = `http://localhost:3000/auth`; // 로그인 페이지로 이동
     }
 

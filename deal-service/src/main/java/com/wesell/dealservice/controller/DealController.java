@@ -79,7 +79,8 @@ public class DealController {
 
     @GetMapping("status/{postId}")
     public ResponseEntity<?> getSaleStatus(@PathVariable Long postId){
-
+        String saleStatus = dealService.getSaleStatus(postId);
+        return new ResponseEntity<>(saleStatus,HttpStatus.OK);
     }
 
     /**
@@ -89,6 +90,17 @@ public class DealController {
     @PutMapping("delete")
     public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long postId) {
         dealService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     *
+     * @param idArr
+     * @return 게시글 일괄 삭제(논리)
+     */
+    @PutMapping("checked/delete")
+    public ResponseEntity<?> deletePostList(@RequestBody Long[] idArr){
+        dealService.deletePosts(idArr);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

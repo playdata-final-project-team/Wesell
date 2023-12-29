@@ -26,7 +26,7 @@ export default function Social() {
 
     const { code } = responseBody;
 
-    console.log(code);
+    console.log(`카카오 로그인 ${code}`);
 
     if (code === ResponseCode.USER_SERVICE_FEIGN_ERROR) {
       console.log('백에서 소셜 로그인 처리 중 오류 발생.');

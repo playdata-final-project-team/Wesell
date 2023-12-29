@@ -1,5 +1,5 @@
-import "./ImageUploader.css";
-import { Button } from "@mui/material";
+import './ImageUploader.css';
+import { Button } from '@mui/material';
 
 const ImageUploader = ({ preview_URL, setImage }) => {
   let inputRef;
@@ -20,29 +20,21 @@ const ImageUploader = ({ preview_URL, setImage }) => {
 
   return (
     <div className="uploader-wrapper">
-      <Button
-            className="disable-button"
-            variant="outlined"
-            size="large"
-          >
-            사진과 내용을 모두 입력하세요.
+      <Button className="disable-button" variant="outlined" size="large">
+        사진과 내용을 모두 입력하세요.
       </Button>
       <input
         type="file"
         accept="image/*"
         onChange={saveImage}
         ref={(refParam) => (inputRef = refParam)}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
       />
       <div className="img-wrapper">
         <img src={preview_URL} />
       </div>
       <div className="upload-button">
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => inputRef.click()}
-        >
+        <Button variant="outlined" color="primary" onClick={() => inputRef.click()}>
           😎사진 고르기😎
         </Button>
       </div>
