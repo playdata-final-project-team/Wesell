@@ -79,7 +79,7 @@ public class DealController {
 
     @GetMapping("status/{postId}")
     public ResponseEntity<?> getSaleStatus(@PathVariable Long postId){
-
+        return null;
     }
 
     /**

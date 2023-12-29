@@ -54,8 +54,9 @@ function UploadBoard() {
   const [link, setLink] = useState('');
 
   const canSubmit = useCallback(() => {
-    return image.image_file !== "" && title !== "";
-  }, [image, title, categoryId,price,detail,link]);
+    return image.image_file !== "" && title !== "" && price !== ""
+    && detail !== "" && link !== "";
+  }, [image, title, price, detail, link]);
 
   const handleSubmit = useCallback(async () => {
     try{
@@ -107,11 +108,18 @@ function UploadBoard() {
         <ImageUploader setImage={setImage} preview_URL={image.preview_URL}/>
         <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} setLink={setLink} 
         title={title} price={price} detail={detail} link={link}/>
-      </div>
-      <div className="submit-button">
-        <button className="success-button" onClick={handleSubmit}>
-          등록하기
-        </button>
+        <div className="submitButton">
+          {canSubmit() ? (
+            <button className="success-button" onClick={handleSubmit}>
+            등록하기
+            </button>
+            ) : (
+            <button
+              className="disable-button">
+              사진과 내용을 모두 입력하세요😭
+            </button>
+            )}
+        </div>
       </div>
     </div>
   );
