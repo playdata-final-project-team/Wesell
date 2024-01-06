@@ -14,7 +14,7 @@ public interface AuthServerFeignClient {
     @GetMapping("api/v1/feign/auth-list")
     List<AuthUserInfoRequestDto> getListAuthUserInfo();
 
-    @GetMapping("api/v1/emailinfo/{uuid}")
+    @GetMapping("api/v1/{uuid}/email")
     ResponseEntity<EmailInfoDto> getEmailInfo(@PathVariable("uuid") String uuid);
 
 

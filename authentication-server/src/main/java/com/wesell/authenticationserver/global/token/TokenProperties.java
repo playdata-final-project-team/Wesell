@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.domain.token;
+package com.wesell.authenticationserver.global.token;
 
 import lombok.Getter;
 import lombok.Setter;

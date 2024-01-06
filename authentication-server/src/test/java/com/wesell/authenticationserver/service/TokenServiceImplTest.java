@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
-public class TokenProviderTest {
+public class TokenServiceImplTest {
 
     private GeneratedTokenDto tokenDto;
 

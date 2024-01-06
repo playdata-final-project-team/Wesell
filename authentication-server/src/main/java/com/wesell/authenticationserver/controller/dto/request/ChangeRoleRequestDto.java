@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminAuthRoleRequestDto {
+public class ChangeRoleRequestDto {
     private String uuid;
     private Role role;
 }

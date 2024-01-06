@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FindPWDRequestDto {
+public class UpdatePwRequestDto {
+    private String uuid;
     private String pwd;
-    private String rePwd;
 }

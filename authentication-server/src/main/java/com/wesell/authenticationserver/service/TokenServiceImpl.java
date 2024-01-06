@@ -1,9 +1,12 @@
-package com.wesell.authenticationserver.service.token;
+package com.wesell.authenticationserver.service;
 
 import com.wesell.authenticationserver.controller.response.CustomException;
 import com.wesell.authenticationserver.controller.response.ErrorCode;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
-import com.wesell.authenticationserver.domain.token.TokenProperties;
+import com.wesell.authenticationserver.domain.enum_.RefreshStatus;
+import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
+import com.wesell.authenticationserver.domain.service.TokenService;
+import com.wesell.authenticationserver.global.token.TokenProperties;
 import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -12,22 +15,22 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Date;
 import java.util.Objects;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class TokenProvider {
+public class TokenServiceImpl implements TokenService {
 
     private final TokenProperties tokenProperties;
+    private final AuthUserRepository authUserRepository;
 
     /**
      * 토큰 발급 기능
      * @param authUser
      * @return
      */
-    public GeneratedTokenDto generateTokens(AuthUser authUser){
-
+    @Override
+    public GeneratedTokenDto generateTokens(AuthUser authUser) {
         Date now = new Date();
 
         // accessToken 만료일 - 1시간
@@ -41,53 +44,63 @@ public class TokenProvider {
         String refreshToken = createToken(authUser,now,refreshTokenExpiry);
 
         return new GeneratedTokenDto(authUser.getUuid(),authUser.getRole().toString(),accessToken,refreshToken);
+    }
 
+    /**
+     * refresh jwt 기능
+     */
+    @Override
+    public GeneratedTokenDto refreshToken(String refreshToken, String accessToken) {
+
+        log.debug("토큰 재발급 서비스 시작");
+        RefreshStatus status = validateToken(refreshToken, accessToken);
+
+        if(status == RefreshStatus.NORMAL){
+            log.debug("액세스 토큰 쿠키 만료 전 재발급 요청옴");
+            String uuid = getClaims(accessToken).getSubject();
+            AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
+                    () -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN)
+            );
+            return generateTokens(authUser);
+        }else if(status == RefreshStatus.NEED){
+            log.debug("액세스 토큰 쿠키 만료 후 재발급 요청옴");
+            String uuid = getClaims(refreshToken).getSubject();
+            AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
+                    () -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN)
+            );
+            return generateTokens(authUser);
+        }else{
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
     }
 
     // refresh-token 검증
-    public String validateToken(String refreshToken, String accessToken){
+    @Override
+    public RefreshStatus validateToken(String refreshToken, String accessToken){
 
-        if(Objects.isNull(accessToken)){
-            return null;
+        // access-token null인 경우, 만료된 경우가 많기 때문에, 이 경우, 새로운 access-token 발급 및 refresh-token을 발급한다.
+        if(Objects.isNull(accessToken) && Objects.nonNull(refreshToken)){
+           return RefreshStatus.NEED;
         }
 
-        // access-token 만료여부 재확인
-        if(!getClaims(accessToken).getExpiration().before(new Date())){
-            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
+        if(Objects.isNull(refreshToken)){
+            return RefreshStatus.ABNORMAL;
+        }
+
+        // 만료 여부 확인
+        if(getClaims(accessToken).getExpiration().before(new Date()) ||
+        getClaims(refreshToken).getExpiration().before(new Date())) {
+            return RefreshStatus.ABNORMAL;
         }
 
         // access-token 과 refresh-token 간의 연관 관계 확인
         Date refreshCreatedAt = getClaims(refreshToken).getIssuedAt();
         Date accessCreatedAt = getClaims(accessToken).getIssuedAt();
-
         if(!refreshCreatedAt.equals(accessCreatedAt)){
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+           return RefreshStatus.ABNORMAL;
         }
 
-        // refresh-token 검증
-        try {
-            return getClaims(refreshToken).getSubject();
-        }catch(Exception e){
-            return null;
-        }
-    }
-
-    // refresh-token 단독 검증하기
-    public String validateRefreshToken(String refreshToken){
-        if(Objects.isNull(refreshToken)){
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
-        }
-
-        if(getClaims(refreshToken).getExpiration().before(new Date())){
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
-        }
-
-        // refresh-token 검증
-        try {
-            return getClaims(refreshToken).getSubject();
-        }catch(Exception e){
-            return null;
-        }
+        return RefreshStatus.NORMAL;
     }
 
     // JwtToken -  클라이언트 측에 전달하는 Token 개인정보 O(서명으로 인증)
@@ -104,6 +117,7 @@ public class TokenProvider {
                 .compact();
     }
 
+    // 토큰 parsing
     private Claims getClaims(String token){
         try {
             return Jwts.parser()
@@ -113,13 +127,13 @@ public class TokenProvider {
                     .getBody();
         }catch(ExpiredJwtException e){
             return e.getClaims();
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
     }
 
-    // 토큰 발급 기능 - 만료일 계산
+    // 토큰 만료일 계산
     private Date createExpiry(Date now, Long expiredAt){
-
         return new Date(now.getTime() + Duration.ofHours(expiredAt).toMillis());
-
     }
 }

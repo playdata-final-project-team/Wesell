@@ -1,10 +1,10 @@
-package com.wesell.authenticationserver.service.oauth;
+package com.wesell.authenticationserver.service;
 
 import com.wesell.authenticationserver.controller.response.CustomException;
 import com.wesell.authenticationserver.controller.response.ErrorCode;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoInfo;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoToken;
-import com.wesell.authenticationserver.service.feign.KakaoFeignClient;
+import com.wesell.authenticationserver.domain.feign.KakaoFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;

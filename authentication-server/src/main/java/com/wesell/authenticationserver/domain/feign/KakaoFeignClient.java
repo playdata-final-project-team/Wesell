@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.service.feign;
+package com.wesell.authenticationserver.domain.feign;
 
 import com.wesell.authenticationserver.global.config.KakaoFeignConfig;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoInfo;

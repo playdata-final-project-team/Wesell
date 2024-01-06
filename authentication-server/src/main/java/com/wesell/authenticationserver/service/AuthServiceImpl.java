@@ -1,14 +1,15 @@
 package com.wesell.authenticationserver.service;
 
-import com.wesell.authenticationserver.controller.dto.request.DeleteUserPwCheckRequestDto;
+import com.wesell.authenticationserver.controller.dto.request.*;
 import com.wesell.authenticationserver.controller.response.ResponseDto;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.enum_.Role;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
+import com.wesell.authenticationserver.domain.repository.AuthUserSelectRepository;
+import com.wesell.authenticationserver.domain.service.AuthService;
+import com.wesell.authenticationserver.global.util.SmsUtil;
 import com.wesell.authenticationserver.service.dto.feign.AuthUserListFeignResponseDto;
-import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestDto;
-import com.wesell.authenticationserver.controller.dto.request.SignInUserRequestDto;
 import com.wesell.authenticationserver.global.util.CustomConverter;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
 import com.wesell.authenticationserver.controller.response.CustomException;
@@ -17,8 +18,8 @@ import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoInfo;
 import com.wesell.authenticationserver.service.dto.response.AdminAuthResponseDto;
 import com.wesell.authenticationserver.service.dto.response.CreateUserFeignResponseDto;
-import com.wesell.authenticationserver.service.feign.UserServiceFeignClient;
-import com.wesell.authenticationserver.service.token.TokenProvider;
+import com.wesell.authenticationserver.domain.feign.UserServiceFeignClient;
+import com.wesell.authenticationserver.service.dto.response.SendSmsResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -35,17 +36,20 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class AuthUserService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserServiceFeignClient userServiceFeignClient;
-    private final TokenProvider tokenProvider;
+    private final TokenServiceImpl tokenServiceImpl;
     private final AuthUserRepository authUserRepository;
+    private final AuthUserSelectRepository authUserSelectRepository;
     private final CustomPasswordEncoder passwordEncoder;
     private final CustomConverter customConverter;
+    private final SmsUtil smsUtil;
 
     /**
      * 회원 가입 기능
      */
+    @Override
     @Transactional
     public ResponseEntity<ResponseDto> createUser(CreateUserRequestDto createUserRequestDto){
         log.debug("회원 가입 시작");
@@ -75,6 +79,7 @@ public class AuthUserService {
     /**
      *  소셜 로그인 - 가입된 회원 여부 확인 후 저장
      */
+    @Override
     @Transactional
     public GeneratedTokenDto findOrCreateUser(KakaoInfo kakaoInfo){
 
@@ -91,7 +96,7 @@ public class AuthUserService {
             CreateUserFeignResponseDto feignDto = customConverter.toFeignDto(kakaoAccount, newUser.getUuid());
             try {
                 userServiceFeignClient.registerUserDetailInfo(feignDto);
-                return tokenProvider.generateTokens(newUser);
+                return tokenServiceImpl.generateTokens(newUser);
             }catch(Exception e){
                 log.error("유저 서비스로 Feign 요청 시 오류 발생.");
                 log.error("detail : {}",e.getMessage());
@@ -99,7 +104,7 @@ public class AuthUserService {
             }
 
         }else {
-            return tokenProvider.generateTokens(user.get());
+            return tokenServiceImpl.generateTokens(user.get());
         }
 
     }
@@ -107,6 +112,7 @@ public class AuthUserService {
     /**
      * 로그인 기능
      */
+    @Override
     public GeneratedTokenDto login(SignInUserRequestDto requestDto){
 
         log.debug("로그인 서비스 시작");
@@ -121,84 +127,46 @@ public class AuthUserService {
         }
 
         log.debug("토큰 발급");
-        return tokenProvider.generateTokens(authUser);
-    }
-
-    /**
-     * refresh jwt 기능
-     */
-    public GeneratedTokenDto refreshToken(String refreshToken, String accessToken) {
-
-        log.debug("토큰 재발급 서비스 시작");
-        String uuid = tokenProvider.validateToken(refreshToken, accessToken);
-
-        log.debug("refresh-token 검증");
-        if (uuid != null) {
-            AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
-                    () -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN)
-            );
-
-            return tokenProvider.generateTokens(authUser);
-        }else if(Objects.isNull(accessToken) && Objects.nonNull(refreshToken)){
-            uuid = tokenProvider.validateRefreshToken(refreshToken);
-            AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
-                    () -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN)
-            );
-
-            return tokenProvider.generateTokens(authUser);
-        }else{
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
-        }
+        return tokenServiceImpl.generateTokens(authUser);
     }
 
     /**
      * 권한 변경 기능
-     * @param uuid
-     * @param newRole
-     * @return
+     * @param requestDto
      */
+    @Override
     @Transactional
-    public AdminAuthResponseDto updateRole(String uuid, Role newRole) {
-        Optional<AuthUser> optionalUser = authUserRepository.findById(uuid);
-        if (optionalUser.isPresent()) {
-            AuthUser user = optionalUser.get();
-            user.changeRole(newRole);
-            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자의 권한이 변경되었습니다.");
-        } else {
-            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");
-        }
+    public void updateRole(ChangeRoleRequestDto requestDto) {
+
+        AuthUser authUser = authUserRepository.findById(requestDto.getUuid()).orElseThrow(
+                ()->new CustomException(ErrorCode.NOT_FOUND_USER)
+        );
+
+        authUser.changeRole(requestDto.getRole());
+        authUserRepository.saveAndFlush(authUser);
     }
 
     /**
-     *
+     * 강제 탈퇴 여부 변경 기능
      * @param uuid
      * @return
      */
+    @Override
     @Transactional
-    public AdminAuthResponseDto updateIsForced(String uuid) {
-        Optional<AuthUser> optionalUser = authUserRepository.findById(uuid);
-        if (optionalUser.isPresent()) {
-            AuthUser authUser = optionalUser.get();
-            authUser.changeIsForced();
-            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자의 강제 탈퇴 여부가 변경되었습니다.");
-        } else {
-            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");
-        }
+    public void updateIsForced(String uuid) {
+        AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
+                ()->new CustomException(ErrorCode.NOT_FOUND_USER)
+        );
+
+        authUser.changeIsDeleted();
+        authUser.changeIsForced();
+        authUserRepository.saveAndFlush(authUser);
     }
 
-    @Transactional
-    public AdminAuthResponseDto updateIsDeleted(String uuid) {
-        Optional<AuthUser> optionalUser = authUserRepository.findById(uuid);
-
-        if (optionalUser.isPresent()) {
-            AuthUser authUser = optionalUser.get();
-            authUser.changeIsDeleted();
-            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자의 삭제 여부가 변경되었습니다.");
-        } else {
-            return new AdminAuthResponseDto(uuid + " UUID를 가진 사용자를 찾을 수 없습니다.");
-        }
-    }
-
+    /**
+     * 회원탈퇴 전 비밀번호 확인 기능
+     */
+    @Override
     public void checkPwForDelete(DeleteUserPwCheckRequestDto requestDto){
         log.debug("회원 탈퇴 전 비밀번호 확인");
 
@@ -216,6 +184,11 @@ public class AuthUserService {
         }
     }
 
+    /**
+     * 회원 탈퇴 기능
+     * @param uuid
+     */
+    @Override
     public void deleteUser(String uuid){
         log.debug("회원 탈퇴");
 
@@ -239,8 +212,63 @@ public class AuthUserService {
 
     }
 
+    /**
+     * 이메일 찾기 전 회원 조회 기능
+     * @param phone
+     * @return
+     */
+    @Override
+    public SendSmsResponseDto findUserByPhone(String phone) {
+        String uuid = userServiceFeignClient.findID(phone);
+
+        if(Objects.isNull(uuid)){
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+        }
+
+        String certNum = smsUtil.createCode();
+        smsUtil.sendOne(phone,certNum);
+        return new SendSmsResponseDto(uuid, certNum);
+    }
+
+    /**
+     * 이메일 찾기 기능
+     * @param uuid
+     * @return
+     */
+    @Override
+    public String findEmail(String uuid) {
+        return authUserSelectRepository.findEmailByUuid(uuid).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+    }
+
+    /**
+     * 비번 찾기 전 회원 조회 기능
+     */
+    @Override
+    public void findUserByEmail(String email) {
+        authUserSelectRepository.findUuidByEmail(email).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+    }
+
+    /**
+     * 비번 변경 기능
+     * @param requestDto
+     */
+    @Override
+    public void updatePw(UpdatePwRequestDto requestDto) {
+        AuthUser authUser = authUserRepository.findById(requestDto.getUuid()).orElseThrow(
+                ()-> new CustomException(ErrorCode.NOT_FOUND_USER)
+        );
+
+        authUser.changePassword(passwordEncoder.encode(requestDto.getPwd()));
+        authUserRepository.saveAndFlush(authUser);
+    }
+    
     /*====================== Feign =======================*/
 
+    // 관리자 페이지 - 회원 전체 목록 조회 기능
     public List<AuthUserListFeignResponseDto> getAllForFeign(){
         List<AuthUser> authUserList = authUserRepository.findAll();
         return customConverter.toFeignDtoList(authUserList);

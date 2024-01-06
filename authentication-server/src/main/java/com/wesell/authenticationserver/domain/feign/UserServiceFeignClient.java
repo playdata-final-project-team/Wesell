@@ -1,4 +1,4 @@
-package com.wesell.authenticationserver.service.feign;
+package com.wesell.authenticationserver.domain.feign;
 
 import com.wesell.authenticationserver.controller.response.ResponseDto;
 import com.wesell.authenticationserver.service.dto.response.CreateUserFeignResponseDto;
