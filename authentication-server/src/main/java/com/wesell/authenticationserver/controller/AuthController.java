@@ -47,7 +47,7 @@ public class AuthController {
     @PostMapping("sign-in")
     public ResponseEntity<?> signIn(@Valid @RequestBody SignInUserRequestDto requestDto){
         log.info("client 로그인 요청");
-        GeneratedTokenDto generatedTokenDto = authService.login(requestDto);
+        GeneratedTokenDto generatedTokenDto = authService.signIn(requestDto);
 
         log.debug("AuthController - 액세스 토큰 쿠키 생성");
         ResponseCookie accessTokenCookie = cookieUtil.createAccessTokenCookie(generatedTokenDto.getAccessToken());
@@ -220,25 +220,18 @@ public class AuthController {
         return ResponseEntity.ok(ResponseDto.of(SuccessCode.OK));
     }
 
+    // 이메일 중복 조회
+    @GetMapping("dup-check")
+    public ResponseEntity<?> dupCheckEmail(@RequestParam("email") String email){
+        authService.checkEmail(email);
+        return ResponseEntity.ok(ResponseDto.of(SuccessCode.OK));
+    }
+
     // 비밀번호 찾기 - 비밀번호 수정
     @PostMapping("update-pw")
     public ResponseEntity<?> updatePWD(@RequestBody UpdatePwRequestDto requestDto) {
         authService.updatePw(requestDto);
         return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    // 권한 변경
-    @PutMapping("change-role")
-    public ResponseEntity<?> changeUserRole(@RequestBody ChangeRoleRequestDto requestDto) {
-        authService.updateRole(requestDto);
-        return ResponseEntity.ok(ResponseDto.of(SuccessCode.OK));
-    }
-
-    // 강제 탈퇴
-    @PutMapping("updateIsForced/{uuid}")
-    public ResponseEntity<?> updateIsForced(@PathVariable String uuid) {
-        authService.updateIsForced(uuid);
-        return ResponseEntity.ok(ResponseDto.of(SuccessCode.OK));
     }
 
 }

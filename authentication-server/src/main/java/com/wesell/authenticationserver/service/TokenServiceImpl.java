@@ -26,11 +26,13 @@ public class TokenServiceImpl implements TokenService {
 
     /**
      * 토큰 발급 기능
-     * @param authUser
+     * @param uuid
+     * @param role
      * @return
      */
+   
     @Override
-    public GeneratedTokenDto generateTokens(AuthUser authUser) {
+    public GeneratedTokenDto generateTokens(String uuid, String role) {
         Date now = new Date();
 
         // accessToken 만료일 - 1시간
@@ -40,10 +42,10 @@ public class TokenServiceImpl implements TokenService {
         Date refreshTokenExpiry = createExpiry(now,tokenProperties.getRefreshExpiredTime());
 
         // 토큰 생성
-        String accessToken = createToken(authUser,now, accessTokenExpiry);
-        String refreshToken = createToken(authUser,now,refreshTokenExpiry);
+        String accessToken = createToken(uuid,role,now, accessTokenExpiry);
+        String refreshToken = createToken(uuid, role,now,refreshTokenExpiry);
 
-        return new GeneratedTokenDto(authUser.getUuid(),authUser.getRole().toString(),accessToken,refreshToken);
+        return new GeneratedTokenDto(uuid,role,accessToken,refreshToken);
     }
 
     /**
@@ -58,17 +60,13 @@ public class TokenServiceImpl implements TokenService {
         if(status == RefreshStatus.NORMAL){
             log.debug("액세스 토큰 쿠키 만료 전 재발급 요청옴");
             String uuid = getClaims(accessToken).getSubject();
-            AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
-                    () -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN)
-            );
-            return generateTokens(authUser);
+            String role = getClaims(accessToken).get("role").toString();
+            return generateTokens(uuid, role);
         }else if(status == RefreshStatus.NEED){
             log.debug("액세스 토큰 쿠키 만료 후 재발급 요청옴");
             String uuid = getClaims(refreshToken).getSubject();
-            AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(
-                    () -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN)
-            );
-            return generateTokens(authUser);
+            String role = getClaims(refreshToken).get("role").toString();
+            return generateTokens(uuid, role);
         }else{
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
@@ -104,12 +102,12 @@ public class TokenServiceImpl implements TokenService {
     }
 
     // JwtToken -  클라이언트 측에 전달하는 Token 개인정보 O(서명으로 인증)
-    private String createToken(AuthUser authUser, Date now, Date expiration){
+    private String createToken(String uuid, String role, Date now, Date expiration){
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE,Header.JWT_TYPE)
                 .setHeaderParam("alg","HS256")
-                .setSubject(authUser.getUuid())
-                .claim("role",authUser.getRole())
+                .setSubject(uuid)
+                .claim("role",role)
                 .setIssuer(tokenProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(expiration)

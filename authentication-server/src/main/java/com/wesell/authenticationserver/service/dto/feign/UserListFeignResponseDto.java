@@ -7,9 +7,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthUserListFeignResponseDto {
+public class UserListFeignResponseDto {
 
     private String uuid;
     private String email;
     private String role;
+    private boolean isDeleted;
+    private boolean isForced;
 }

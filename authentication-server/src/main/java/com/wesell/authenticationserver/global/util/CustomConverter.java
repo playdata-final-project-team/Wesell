@@ -1,12 +1,15 @@
 package com.wesell.authenticationserver.global.util;
 
 import com.wesell.authenticationserver.domain.entity.AuthUser;
+import com.wesell.authenticationserver.domain.entity.KakaoUser;
 import com.wesell.authenticationserver.domain.enum_.Role;
-import com.wesell.authenticationserver.service.dto.feign.AuthUserListFeignResponseDto;
+import com.wesell.authenticationserver.service.dto.feign.UserListFeignResponseDto;
 import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestDto;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
 import com.wesell.authenticationserver.service.dto.response.CreateUserFeignResponseDto;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -18,7 +21,7 @@ public class CustomConverter {
     /**
      * dto -> entity
      */
-    public AuthUser toEntity(CreateUserRequestDto createUserRequestDto){
+    public AuthUser toEntity(CreateUserRequestDto createUserRequestDto) {
 
         String email = createUserRequestDto.getEmail();
         String password = createUserRequestDto.getPw();
@@ -32,13 +35,12 @@ public class CustomConverter {
                 .build();
     }
 
-    public AuthUser toEntity(KakaoAccount kakaoAccount){
+    public KakaoUser toEntity(KakaoAccount kakaoAccount) {
         String email = kakaoAccount.getEmail();
         String uuid = UUID.randomUUID().toString();
 
-        return AuthUser.builder()
+        return KakaoUser.builder()
                 .email(email)
-                .password(null)
                 .uuid(uuid)
                 .role(Role.USER)
                 .build();
@@ -50,7 +52,7 @@ public class CustomConverter {
      * dto/entity -> feignDto
      */
 
-    public CreateUserFeignResponseDto toFeignDto(CreateUserRequestDto createUserRequestDto){
+    public CreateUserFeignResponseDto toFeignDto(CreateUserRequestDto createUserRequestDto) {
         return CreateUserFeignResponseDto.builder()
                 .name(createUserRequestDto.getName())
                 .nickname(createUserRequestDto.getNickname())
@@ -60,11 +62,11 @@ public class CustomConverter {
                 .build();
     }
 
-    public CreateUserFeignResponseDto toFeignDto(KakaoAccount kakaoAccount, String uuid){
+    public CreateUserFeignResponseDto toFeignDto(KakaoAccount kakaoAccount, String uuid) {
 
         // phone 양식 통일을 위해 문자열 형태 수정 처리함.
         String data = kakaoAccount.getPhone_number();
-        String phone = data.trim().replace("+82 ","0").replaceAll("-","");
+        String phone = data.trim().replace("+82 ", "0").replaceAll("-", "");
 
         return CreateUserFeignResponseDto.builder()
                 .name(kakaoAccount.getName())
@@ -75,14 +77,32 @@ public class CustomConverter {
                 .build();
     }
 
-    public List<AuthUserListFeignResponseDto> toFeignDtoList(List<AuthUser> authUserList){
-        return authUserList.stream().filter(auth->!auth.isDeleted()).map(
-                user->AuthUserListFeignResponseDto.builder()
-                        .uuid(user.getUuid())
-                        .email(user.getEmail())
-                        .role(user.getRole().toString())
-                        .build()
-        ).collect(Collectors.toList());
+    public List<UserListFeignResponseDto> toFeignDtoList(List<AuthUser> authUserList, List<KakaoUser> kakaoUserList) {
+        List<UserListFeignResponseDto> userList = new ArrayList<>();
+
+        for (AuthUser authUser : authUserList) {
+            UserListFeignResponseDto dto = UserListFeignResponseDto.builder()
+                    .uuid(authUser.getUuid())
+                    .role(authUser.getRole().toString())
+                    .email(authUser.getEmail())
+                    .isDeleted(authUser.isDeleted())
+                    .isForced(authUser.isForced())
+                    .build();
+            userList.add(dto);
+        }
+
+        for (KakaoUser kakaoUser : kakaoUserList) {
+            UserListFeignResponseDto dto = UserListFeignResponseDto.builder()
+                    .uuid(kakaoUser.getUuid())
+                    .role(kakaoUser.getRole().toString())
+                    .email(kakaoUser.getEmail())
+                    .isDeleted(kakaoUser.isDeleted())
+                    .isForced(kakaoUser.isForced())
+                    .build();
+            userList.add(dto);
+        }
+
+        return userList;
     }
 
     /*---------------------------------------------------------------------------*/

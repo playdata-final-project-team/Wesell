@@ -4,27 +4,22 @@ import com.wesell.authenticationserver.domain.enum_.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
-
 @Entity
-@Getter @Builder
+@Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name="auth")
-public class AuthUser {
-
+@Table(name="kakao")
+public class KakaoUser {
     @Id
-    @Column(name="a_uuid", nullable = false, length = 50)
+    @Column(name="k_uuid", nullable = false, length = 50)
     private String uuid;
 
-    @Column(name = "a_email", unique = true ,nullable = false, length = 60)
+    @Column(name = "k_email", unique = true, nullable = false, length = 60)
     private String email;
 
-    @Column(name= "a_password", length = 100)
-    private String password;
-
     @Enumerated(EnumType.STRING)
-    @Column(name= "a_role", nullable = false, length = 20)
+    @Column(name= "k_role", nullable = false, length = 20)
     private Role role;
 
     @Column(name = "is_deleted")
@@ -43,9 +38,5 @@ public class AuthUser {
 
     public void changeIsDeleted(){
         isDeleted = !isDeleted;
-    }
-
-    public void changePassword(String newPassword) {
-        this.password = newPassword;
     }
 }
