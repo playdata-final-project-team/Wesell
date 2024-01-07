@@ -24,6 +24,8 @@ public enum ErrorCode {
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST,"NFU","가입 되지 않은 회원입니다."),
     // Password-Not-Correct
     NOT_CORRECT_PASSWORD(HttpStatus.BAD_REQUEST,"NCP","비밀번호가 일치하지 않습니다."),
+    // Duplicated-Email
+    DUPLICATED_EMAIL(HttpStatus.BAD_REQUEST,"DE","이미 회원 가입된 이메일입니다."),
 
     /**
      * token
@@ -38,12 +40,11 @@ public enum ErrorCode {
     /**
      * user 관련 오류
      */
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "UNF", "유저 정보를 찾을 수 없습니다."),
 
     /**
      * 소셜 로그인 계정 비밀번호 찾기
      */
-    SOCIAL_LOGIN_FOUND_PWD(HttpStatus.INTERNAL_SERVER_ERROR, "SFP", "소셜 로그인 계정입니다."),
+
     /**
      * feign 관련 오류
      */
