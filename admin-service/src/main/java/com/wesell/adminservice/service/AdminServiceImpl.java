@@ -1,5 +1,6 @@
 package com.wesell.adminservice.service;
 
+import com.wesell.adminservice.domain.service.AdminService;
 import com.wesell.adminservice.dto.request.ChangeRoleRequestDto;
 import com.wesell.adminservice.dto.response.AdminUserResponseDto;
 import com.wesell.adminservice.dto.response.PostListResponseDto;
@@ -17,13 +18,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AdminService {
+public class AdminServiceImpl implements AdminService {
 
     private final UserFeignClient userFeignClient;
     private final AuthFeignClient authFeignClient;
     private final DealFeignClient dealFeignClient;
-    private static final Logger logger = LoggerFactory.getLogger(AdminService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 
+    @Override
     public Page<UserListResponseDto> getUserList(int page, int size) {
         try {
             return userFeignClient.getUserList(page, size);
@@ -33,6 +35,7 @@ public class AdminService {
         }
     }
 
+    @Override
     public void changeUserRole(ChangeRoleRequestDto requestDto) {
         try {
             authFeignClient.changeUserRole(requestDto);
@@ -42,6 +45,7 @@ public class AdminService {
         }
     }
 
+    @Override
     public Page<PostListResponseDto> getPostList(String uuid, int page, int size) {
         try {
             return dealFeignClient.getPostList(uuid, page, size);
@@ -51,7 +55,8 @@ public class AdminService {
         }
     }
 
-    public String userIsForced(String uuid) {
+    @Override
+    public String forcedDelete(String uuid) {
         try {
             return authFeignClient.updateIsForced(uuid).getBody();
         } catch (Exception e) {
@@ -60,7 +65,8 @@ public class AdminService {
         }
     }
 
-    public void postIsDeleted(String uuid, Long postId) {
+    @Override
+    public void deletePost(String uuid, Long postId) {
         try {
             dealFeignClient.deletePost(uuid, postId);
         } catch (Exception e) {
@@ -69,6 +75,7 @@ public class AdminService {
         }
     }
 
+    @Override
     public Page<AdminUserResponseDto> searchUsers(String name, String nickname, String phone, String uuid, int page, int size) {
         try {
             return userFeignClient.searchUsers(name, nickname, phone, uuid, page, size);
