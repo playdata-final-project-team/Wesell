@@ -1,0 +1,30 @@
+server:
+  port: 8881
+
+spring:
+  application:
+    name: chat-service
+  profiles:
+    active: db
+  datasource:
+    url: ${url}
+    driver-class-name: ${driver-class-name}
+    username: ${username_}
+    password: ${password}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        check_nullability: true
+    show_sql: true
+
+#eureka:
+#  instance:
+#    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
