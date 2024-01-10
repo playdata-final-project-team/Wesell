@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import './App.css';
 import Main from 'pages/Main';
 import Container from 'layouts/Container';
@@ -18,6 +18,7 @@ import AuthServer from 'pages/Authentication';
 import Test from 'pages/Test';
 import PostDetailPage from 'pages/board/detail';
 import AdminUsersComponent from 'pages/AdminUsers/AdminUsersComponent';
+import Payment from 'pages/Pay';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -44,6 +45,8 @@ function App() {
         <Route path="/board/edit/:postId" element={<EditPostPage />} />
         <Route path="/admin/users" element={<AdminUsersComponent />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
+
+        <Route path="/payment" element={<Payment />} />
       </Route>
     </Routes>
   );
