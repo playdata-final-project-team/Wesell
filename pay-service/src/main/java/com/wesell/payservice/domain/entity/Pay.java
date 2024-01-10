@@ -30,8 +30,11 @@ public class Pay {
     @Column(name = "uuid", nullable = false)
     private String uuid;
 
-    @Column(name = "p_order", nullable = false)
-    private String orderNumber;
+    @Column(name = "productId", nullable = false)
+    private Long productId;
+
+//    @Column(name = "p_order", nullable = false)
+//    private String orderNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "p_type", nullable = false)
@@ -43,12 +46,12 @@ public class Pay {
     @Column(name = "p_add", nullable = false)
     private String address;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "p_shipping", nullable = false)
-    private ShippingStatus status;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "p_shipping", nullable = false)
+//    private ShippingStatus status;
 
-    @Column(name = "p_shipNum", nullable = false)
-    private Integer shippingNumber;
+//    @Column(name = "p_shipNum", nullable = false)
+//    private Integer shippingNumber;
 
     @Column(name = "p_createdAt", nullable = false)
     private LocalDateTime createdAt;
@@ -57,12 +60,12 @@ public class Pay {
     public Pay(String uuid, String orderNumber, Long amount,
                     String address, Integer shippingNumber, LocalDateTime createdAt) {
         this.uuid = uuid;
-        this.orderNumber = orderNumber;
+//        this.orderNumber = orderNumber;
         this.type = PayType.ASSURED;
         this.amount = amount;
         this.address = address;
-        this.status = ShippingStatus.PREPARING;
-        this.shippingNumber = shippingNumber;
+//        this.status = ShippingStatus.PREPARING;
+//        this.shippingNumber = shippingNumber;
         this.createdAt = createdAt;
     }
 
