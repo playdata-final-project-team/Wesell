@@ -43,6 +43,13 @@ spring:
             - Path=/auth-server/**
           filters:
             - RewritePath=/auth-server/(?<path>.*),/$\{path}
+            -
+        - id: pay-service
+          uri: lb://PAY-SERVICE
+          predicates:
+            - Path=/pay-service/**
+          filters:
+            - RewritePath=/pay-service/(?<path>.*),/$\{path}
 
 eureka:
   instance:
