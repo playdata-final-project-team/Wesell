@@ -40,3 +40,7 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: ERROR
+
+iamport:
+  key: ${key}
+  secret: ${secret}
