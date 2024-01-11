@@ -1,4 +1,4 @@
-package com.wesell.payservice.domain.enumerate;
+package com.wesell.payservice.enumerate;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

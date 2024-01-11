@@ -1,6 +1,6 @@
 package com.wesell.payservice.domain.entity;
 
-import com.wesell.payservice.domain.enumerate.ShippingStatus;
+import com.wesell.payservice.enumerate.ShippingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,11 +27,8 @@ public class Delivery {
     @Column(name = "d_id")
     private Long id;
 
-    @Column(name = "uuid", nullable = false)
-    private String uuid;
-
-    @Column(name = "d_order", nullable = false)
-    private String orderNumber;
+    @Column(name = "buyer", nullable = false)
+    private String buyer;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "d_shipping", nullable = false)
@@ -44,9 +41,8 @@ public class Delivery {
     private LocalDateTime createdAt;
 
     @Builder
-    public Delivery(String uuid, String orderNumber, Integer shippingNumber, LocalDateTime createdAt) {
-      this.uuid = uuid;
-      this.orderNumber = orderNumber;
+    public Delivery(String buyer, Integer shippingNumber, LocalDateTime createdAt) {
+      this.buyer = buyer;
       this.status = ShippingStatus.PREPARING;
       this.shippingNumber = shippingNumber;
       this.createdAt = createdAt;

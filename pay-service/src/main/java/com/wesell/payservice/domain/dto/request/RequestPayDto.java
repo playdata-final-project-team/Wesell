@@ -11,11 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestPayDto {
     @NotNull
-    private String uuid;
+    private String buyer;
     @NotBlank
     private Long productId;
     @NotBlank
     private Integer type;
+    @NotBlank
+    private Long amount;
     @NotNull
     private String address;
 
