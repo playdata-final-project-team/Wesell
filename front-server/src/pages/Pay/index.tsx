@@ -42,7 +42,7 @@ const Payment = () => {
   };
 
   const callback = (response: { success: any; error_msg: any; imp_uid: any; merchant_uid: any; pay_method: any; paid_amount: any; status: any; }) => {
-    const { success, error_msg, imp_uid, merchant_uid, pay_method, paid_amount, status } = response;
+    const { success, error_msg } = response;
 
     if (success) {
         alert('결제 성공');
@@ -51,11 +51,11 @@ const Payment = () => {
     }
 };
 
-  return (
-    <div>
-      <button onClick={onClickPayment}>구매 요청하기</button>
-    </div>
-  );
+  // return (
+  //   <div>
+  //     <button onClick={onClickPayment}>구매 요청하기</button>
+  //   </div>
+  // );
 };
 
 export default Payment;
