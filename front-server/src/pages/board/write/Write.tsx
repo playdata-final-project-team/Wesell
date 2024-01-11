@@ -84,7 +84,7 @@ function UploadBoard() {
       window.alert("😎등록이 완료되었습니다😎");
 
       const postId = response.data; 
-      navigate('/board/detail/'+ postId);
+      navigate('/product/detail/'+ postId);
     } catch (e) {
       // 서버에서 받은 에러 메시지 출력
       toast.error("오류발생! 이모지를 사용하면 오류가 발생할 수 있습니다" + "😭", {

@@ -39,14 +39,14 @@ function App() {
         <Route path="/find-pw" element={<EmailfindComponent />} />
         <Route path="/phone/valid/:uuid" element={<FoundSmsComponent />} />
         <Route path="/update-pw/:uuid" element={<PasswordUpdateComponent />} />
-        <Route path="/board/detail/:postId" element={<PostDetailPage />} />
+        <Route path="/product/detail/:postId" element={<PostDetailPage />} />
         <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
         <Route path={MYPAGE_PATH()} element={<Mypage />} />
-        <Route path="/board/edit/:postId" element={<EditPostPage />} />
+        <Route path="/product/update/:postId" element={<EditPostPage />} />
         <Route path="/admin/users" element={<AdminUsersComponent />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
 
-        <Route path="/payment" element={<Payment />} />
+        {/* <Route path="/payment" element={<Payment />} /> */}
       </Route>
     </Routes>
   );
