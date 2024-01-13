@@ -1,10 +1,11 @@
 server:
-  port: 0
+  port: 8080
 
 spring:
+  profiles:
+    active: db
   application:
     name: user-service
-
   datasource:
     url: ${url}
     username: ${username_}
@@ -13,11 +14,25 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
+        check_nullability: true
     show_sql: true
 
-  profiles:
-    active: db
+springdoc:
+  packages-to-scan: com.wesell.userservice.contoller
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
+coolsms:
+  api:
+    key: ${coolsms.api.key}
+    secret: ${coolsms.api.secret}
+

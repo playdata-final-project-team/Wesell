@@ -1,0 +1,64 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: authentication-server
+  datasource:
+    url: ${url}
+    driver-class-name: ${driver-class-name}
+    username: ${username_}
+    password: ${password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        check_nullability: true
+    show_sql: true
+
+  profiles:
+    active: local, db
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+springdoc:
+  packages-to-scan: com.wesell.authenticationserver.controller
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
+token:
+  access-expired-time: ${access-expired}
+  refresh-expired-time: ${refresh-expired}
+  secret-key: ${secret-key}
+  issuer: ${issuer}
+
+kakao:
+  auth-url: ${auth-url}
+  user-api-url: ${user-api-url}
+  client-id: ${client-id}
+  client-secret: ${client-secret}
+  redirect-url : ${redirect-url}
+  logout-api-url: ${logout-api-url}
+  unlink-api-url: ${unlink-api-url}
+  admin-key: ${admin-key}
+
+coolsms:
+  api:
+    key: ${coolsms-key}
+    secret: ${coolsms-secret}
+    phone-number: ${coolsms-phone-number}
+

@@ -1,0 +1,25 @@
+.pw-check-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.withdraw-content-pwCheck {
+  display: flex;
+  align-items: center;
+}
+
+.cinfirmMsg-element {
+  display: flex;
+}
+
+.cinfirmMsg-element > div {
+  cursor: pointer;
+  font-size: 15px;
+  margin: 5px;
+}
+
+.cinfirmMsg-element > div:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+}

@@ -1,0 +1,112 @@
+.mypage-wrapper {
+  min-width: 1440px;
+  min-height: 500px;
+  padding: 50px 0px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mypage-container {
+  width: 1200px;
+  height: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: rgb(255, 255, 255);
+}
+
+/* 회원 정보 card -S */
+.userInfo-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.userInfo-card-content {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.card-input-box {
+  min-width: 500px;
+  height: 300px;
+  margin-right: 80px;
+}
+
+.card-btn-box {
+  box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+
+  padding: 10px;
+}
+/* 회원 정보 card -E */
+
+/* 판매 내역 card -S */
+.dealInfo-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.dealInfo-card-content {
+  display: flex;
+  justify-content: center;
+}
+
+.card-list-box {
+  min-width: 500px;
+  height: 300px;
+  margin-right: 80px;
+}
+
+.card-btn-box {
+  height: 200px;
+}
+
+.dealInfo-list {
+  width: 500px;
+  border-collapse: collapse;
+  border-spacing: 20px 30px;
+}
+
+.dealInfo-list th,
+td {
+  margin: auto 0;
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.dealInfo-list th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: rgba(10, 160, 255, 0.9);
+  color: white;
+}
+
+.dealInfo-element-btn {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dealInfo-element-btn > button {
+  background-color: rgba(10, 160, 255, 0.7);
+  color: rgba(255, 255, 255, 0.95);
+  border: none;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dealInfo-element-btn > button:hover {
+  background-color: rgba(10, 160, 255, 0.9);
+  border: none;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+/* 판매 내역 card -E */

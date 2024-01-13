@@ -1,0 +1,24 @@
+#header {
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.header-container {
+  width: 950px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-wesell-icon {
+  width: 100px;
+  height: 100px;
+}
+
+.header-left-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

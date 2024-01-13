@@ -2,30 +2,47 @@ server:
   port: 8000
 
 spring:
+  profiles:
+    active: jwt,db
   application:
     name: apigateway-server
   cloud:
     gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            message: Spring Cloud Gateway GlobalFilter Message
+            showPreLogger: true
+            showPostLogger: true
+
       routes:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
+          filters:
+            - RewritePath=/user-service/(?<path>.*),/$\{path}
 
         - id: admin-service
           uri: lb://ADMIN-SERVICE
           predicates:
             - Path=/admin-service/**
+          filters:
+            - RewritePath=/admin-service/(?<path>.*),/$\{path}
 
         - id: deal-service
           uri: lb://DEAL-SERVICE
           predicates:
             - Path=/deal-service/**
+          filters:
+            - RewritePath=/deal-service/(?<path>.*),/$\{path}
 
         - id: authentication-server
           uri: lb://AUTHENTICATION-SERVER
           predicates:
-            - Path=/authentication-server/**
+            - Path=/auth-server/**
+          filters:
+            - RewritePath=/auth-server/(?<path>.*),/$\{path}
 
 eureka:
   instance:
@@ -35,3 +52,7 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+token:
+  secret-key: ${secret-key}
+  issuer: ${issuer}
