@@ -75,9 +75,9 @@ function UploadBoard() {
       {type : "application/json"})
 
       // 필드 추가
-    formData.append("requestDto", data);
-    // 파일 추가
-    formData.append("file", image.image_file);
+      formData.append("requestDto", data);
+      // 파일 추가
+      formData.append("file", image.image_file);
 
       const response = await axios.post("/deal-service/api/v1/upload", formData);
 
