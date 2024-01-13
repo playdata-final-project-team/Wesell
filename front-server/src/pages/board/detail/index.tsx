@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './index.css';
-import Payment from 'pages/Pay';
 
 interface PostJson {
   uuid: string;
@@ -24,6 +23,10 @@ function PostDetailPage() {
   const moveToUpdate = () => {
     navigate('/product/update/' + postId);
   };
+
+  const moveToPay = () => {
+    navigate('/payment/'+postId);
+  }
 
   useEffect(() => {
     console.log(postId);
@@ -70,7 +73,7 @@ function PostDetailPage() {
               </button>
            }
            {window.sessionStorage.getItem('uuid') !== post?.uuid &&
-              <button className="update-button" onClick={Payment}>
+              <button className="update-button" onClick={moveToPay}>
               구매하기
             </button>}
           </div>

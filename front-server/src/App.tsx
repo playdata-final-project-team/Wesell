@@ -18,7 +18,8 @@ import AuthServer from 'pages/Authentication';
 import Test from 'pages/Test';
 import PostDetailPage from 'pages/board/detail';
 import AdminUsersComponent from 'pages/AdminUsers/AdminUsersComponent';
-import Payment from 'pages/Pay';
+import RequestPay from 'pages/Pay/beforePay';
+import PayResultPage from 'pages/Pay/detail';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -45,8 +46,8 @@ function App() {
         <Route path="/product/update/:postId" element={<EditPostPage />} />
         <Route path="/admin/users" element={<AdminUsersComponent />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
-
-        {/* <Route path="/payment" element={<Payment />} /> */}
+        <Route path="/payment/:postId" element={<RequestPay />} />
+        <Route path="payment/:payId" element={<PayResultPage />} />
       </Route>
     </Routes>
   );
