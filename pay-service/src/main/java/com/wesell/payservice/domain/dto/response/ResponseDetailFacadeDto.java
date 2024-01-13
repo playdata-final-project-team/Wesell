@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ResponseDetailDto {
+public class ResponseDetailFacadeDto {
     private ResponsePayDto payDto;
     private ResponseDeliveryDto deliveryDto;
 }

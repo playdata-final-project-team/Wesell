@@ -1,14 +1,16 @@
 package com.wesell.payservice.controller;
 
 import com.wesell.payservice.domain.dto.request.RequestPayDto;
-import com.wesell.payservice.domain.dto.response.ResponsePayFacadeDto;
+import com.wesell.payservice.domain.dto.response.ResponseDetailFacadeDto;
 import com.wesell.payservice.service.facade.FacadeService;
-import com.wesell.payservice.service.implement_.PayServiceImpl;
+import com.wesell.payservice.service.pay.PayServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,9 +23,14 @@ public class PaymentController {
         this.payService = payService;
         this.facadeservice = facadeService;
     }
+
     @PostMapping("payment")
-    public ResponseEntity<ResponsePayFacadeDto> pay (@RequestBody RequestPayDto requestDto) {
-        return new ResponseEntity<>(facadeservice.pay(requestDto), HttpStatus.OK);
+    public ResponseEntity<Long> pay (@RequestBody RequestPayDto requestDto) {
+        return new ResponseEntity<>(payService.createPay(requestDto), HttpStatus.OK);
     }
 
+    @GetMapping("payment")
+    public ResponseEntity<ResponseDetailFacadeDto> getPayResult (@RequestParam(name = "payId") Long payId) {
+        return new ResponseEntity<>(facadeservice.getPayResult(payId), HttpStatus.OK);
+    }
 }

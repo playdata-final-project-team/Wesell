@@ -1,9 +1,8 @@
 package com.wesell.payservice.service.facade;
 
-import com.wesell.payservice.domain.dto.request.RequestPayDto;
-import com.wesell.payservice.domain.dto.response.ResponsePayFacadeDto;
-import com.wesell.payservice.enumerate.ShippingStatus;
-import com.wesell.payservice.service.implement_.PayServiceImpl;
+import com.wesell.payservice.domain.dto.response.ResponseDetailFacadeDto;
+import com.wesell.payservice.service.delivery.DeliveryServiceImpl;
+import com.wesell.payservice.service.pay.PayServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -13,16 +12,16 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class FacadeService {
     private final PayServiceImpl payService;
-
-    public FacadeService(PayServiceImpl payService) {
+    private final DeliveryServiceImpl deliveryService;
+    public FacadeService(PayServiceImpl payService, DeliveryServiceImpl deliveryService) {
         this.payService = payService;
+        this.deliveryService = deliveryService;
     }
 
-    public ResponsePayFacadeDto pay(RequestPayDto requestDto) {
-        ResponsePayFacadeDto responseDto = new ResponsePayFacadeDto();
-        responseDto.setPayDto(payService.pay(requestDto));
-        responseDto.setStatus(ShippingStatus.PREPARING);
-        return new ResponsePayFacadeDto();
+    public ResponseDetailFacadeDto getPayResult(Long payId) {
+        ResponseDetailFacadeDto dto = new ResponseDetailFacadeDto();
+        dto.setDeliveryDto(deliveryService.getDeliveryInfo(payService.findDeliveryByPayId(payId)));
+        dto.setPayDto(payService.getPayInfo(payId));
+        return dto;
     }
-
 }

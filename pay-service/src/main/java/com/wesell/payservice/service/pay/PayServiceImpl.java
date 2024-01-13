@@ -1,11 +1,10 @@
-package com.wesell.payservice.service.implement_;
+package com.wesell.payservice.service.pay;
 
 import com.wesell.payservice.domain.dto.request.RequestPayDto;
 import com.wesell.payservice.domain.dto.response.ResponsePayDto;
 import com.wesell.payservice.domain.entity.Pay;
 import com.wesell.payservice.domain.repository.PayRepository;
 import com.wesell.payservice.feign.DealFeign;
-import com.wesell.payservice.service.interface_.PayService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +23,7 @@ public class PayServiceImpl implements PayService {
     }
 
     @Override
-    public Long pay(RequestPayDto requestDto) {
+    public Long createPay(RequestPayDto requestDto) {
         Pay pay = Pay.createPay(requestDto, createOrderNumber(requestDto), dealFeign.getPayInfo(requestDto.getProductId()));
         payRepository.save(pay);
         return pay.getId();
@@ -38,9 +37,14 @@ public class PayServiceImpl implements PayService {
     }
 
     @Override
-    public ResponsePayDto getPayResult(Long payId) {
-        Pay pay = payRepository.findPayByPayId(payId);
-        return  new ResponsePayDto(pay);
+    public ResponsePayDto getPayInfo(Long payId) {
+        Pay pay = payRepository.findPayById(payId);
+        return new ResponsePayDto(pay);
+    }
+
+    public Long findDeliveryByPayId(Long payId) {
+        Pay pay = payRepository.findPayById(payId);
+        return pay.getDeliveryId();
     }
 
 }
