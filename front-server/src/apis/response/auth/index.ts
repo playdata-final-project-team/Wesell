@@ -1,4 +1,5 @@
-import SignUpResponseDto from './sign-up.response.dto';
+import PhoneValidateResponseDto from './phone-validate.response.dto';
+import PhoneValdateResponseAtSignUpDto from './phone-validate-at-signup.response.dto';
 import SignInResponseDto from './sign-in.response.dto';
 
-export type { SignUpResponseDto, SignInResponseDto };
+export type { PhoneValdateResponseAtSignUpDto, PhoneValidateResponseDto, SignInResponseDto };

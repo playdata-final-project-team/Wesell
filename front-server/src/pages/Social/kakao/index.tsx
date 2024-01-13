@@ -35,12 +35,12 @@ export default function Social() {
     }
 
     const responseBodyWithUserInfo = responseBody as SignInResponseDto;
-    if (responseBodyWithUserInfo) {
-      window.sessionStorage.setItem('uuid', responseBodyWithUserInfo.uuid);
+    if (responseBodyWithUserInfo.content) {
+      window.sessionStorage.setItem('uuid', responseBodyWithUserInfo.content.uuid);
 
-      window.sessionStorage.setItem('role', responseBodyWithUserInfo.role);
+      window.sessionStorage.setItem('role', responseBodyWithUserInfo.content.role);
 
-      window.sessionStorage.setItem('kakaoId', responseBodyWithUserInfo.kakaoId.toString());
+      window.sessionStorage.setItem('kakaoId', responseBodyWithUserInfo.content.kakaoId.toString());
     }
 
     navigator(MAIN_PATH());

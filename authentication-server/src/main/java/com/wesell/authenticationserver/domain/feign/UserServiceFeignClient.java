@@ -1,6 +1,5 @@
 package com.wesell.authenticationserver.domain.feign;
 
-import com.wesell.authenticationserver.controller.response.ResponseDto;
 import com.wesell.authenticationserver.service.dto.response.CreateUserFeignResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UserServiceFeignClient {
 
     @PostMapping("api/v1/sign-up")
-    ResponseEntity<ResponseDto> registerUserDetailInfo(@RequestBody CreateUserFeignResponseDto dto);
+    void registerUserDetailInfo(@RequestBody CreateUserFeignResponseDto dto);
 
     @PostMapping("api/v1/users/phone/uuid")
     String findID(@RequestBody String phoneNumber);
 
-    @DeleteMapping("api/v1/user/{uuid}")
+    @DeleteMapping("api/v1/users/{uuid}")
     ResponseEntity<Void> deleteUser(@PathVariable(value="uuid") String uuid);
 
 }

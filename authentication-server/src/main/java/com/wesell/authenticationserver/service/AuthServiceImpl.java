@@ -1,28 +1,25 @@
 package com.wesell.authenticationserver.service;
 
 import com.wesell.authenticationserver.controller.dto.request.*;
-import com.wesell.authenticationserver.controller.response.ResponseDto;
 import com.wesell.authenticationserver.domain.entity.AuthUser;
 import com.wesell.authenticationserver.domain.entity.KakaoUser;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
-import com.wesell.authenticationserver.domain.repository.AuthUserSelectRepository;
+import com.wesell.authenticationserver.domain.repository.AuthUserLoadRepository;
+import com.wesell.authenticationserver.domain.repository.KakaoUserLoadRepository;
 import com.wesell.authenticationserver.domain.repository.KakaoUserRepository;
 import com.wesell.authenticationserver.domain.service.AuthService;
-import com.wesell.authenticationserver.global.util.SmsUtil;
 import com.wesell.authenticationserver.service.dto.feign.UserListFeignResponseDto;
 import com.wesell.authenticationserver.global.util.CustomConverter;
 import com.wesell.authenticationserver.global.util.CustomPasswordEncoder;
-import com.wesell.authenticationserver.controller.response.CustomException;
-import com.wesell.authenticationserver.controller.response.ErrorCode;
+import com.wesell.authenticationserver.global.response.error.CustomException;
+import com.wesell.authenticationserver.global.response.error.ErrorCode;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoInfo;
 import com.wesell.authenticationserver.service.dto.response.CreateUserFeignResponseDto;
 import com.wesell.authenticationserver.domain.feign.UserServiceFeignClient;
-import com.wesell.authenticationserver.service.dto.response.SendSmsResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,23 +34,24 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Log4j2
+@Transactional(readOnly = true)
 public class AuthServiceImpl implements AuthService {
 
     private final UserServiceFeignClient userServiceFeignClient;
     private final TokenServiceImpl tokenServiceImpl;
     private final KakaoUserRepository kakaoUserRepository;
+    private final KakaoUserLoadRepository kakaoUserLoadRepository;
     private final AuthUserRepository authUserRepository;
-    private final AuthUserSelectRepository authUserSelectRepository;
+    private final AuthUserLoadRepository authUserLoadRepository;
     private final CustomPasswordEncoder passwordEncoder;
     private final CustomConverter customConverter;
-    private final SmsUtil smsUtil;
 
     /**
      * 회원 가입 기능
      */
     @Override
     @Transactional
-    public ResponseEntity<ResponseDto> createUser(CreateUserRequestDto createUserRequestDto) {
+    public void createUser(CreateUserRequestDto createUserRequestDto) {
         log.debug("회원 가입 시작");
 
         log.debug("uuid 생성, 비밀번호 암호화, 회원 인증 정보 엔티티로 convert");
@@ -70,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
         log.debug("User-Service Api Call - 회원가입 요청");
         try {
             CreateUserFeignResponseDto feignDto = customConverter.toFeignDto(createUserRequestDto);
-            return userServiceFeignClient.registerUserDetailInfo(feignDto);
+            userServiceFeignClient.registerUserDetailInfo(feignDto);
         } catch (Exception e) {
             log.error("유저 서비스로 Feign 요청 시 오류 발생.");
             log.error("detail : {}", e.getMessage());
@@ -222,6 +220,7 @@ public class AuthServiceImpl implements AuthService {
      * @param uuid
      */
     @Override
+    @Transactional
     public void deleteUser(String uuid) {
         log.debug("회원 탈퇴");
 
@@ -251,16 +250,20 @@ public class AuthServiceImpl implements AuthService {
      * @return
      */
     @Override
-    public SendSmsResponseDto findUserByPhone(String phone) {
-        String uuid = userServiceFeignClient.findID(phone);
+    public String findUserByPhone(String phone) {
 
+        String uuid = null;
+
+        try {
+            uuid = userServiceFeignClient.findID(phone);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.USER_SERVICE_FEIGN_ERROR);
+        }
         if (Objects.isNull(uuid)) {
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }
 
-        String certNum = smsUtil.createCode();
-        smsUtil.sendOne(phone, certNum);
-        return new SendSmsResponseDto(uuid, certNum);
+        return uuid;
     }
 
     /**
@@ -271,13 +274,22 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public String findEmail(String uuid) {
-        return authUserSelectRepository.findEmailByUuid(uuid).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
-        );
+
+        Optional<String> optionalAuthEmail = authUserLoadRepository.findUuidByEmail(uuid);
+        Optional<String> optionalKakaoEmail = kakaoUserLoadRepository.findEmailByUuid(uuid);
+
+        if (optionalAuthEmail.isPresent()) {
+            return optionalAuthEmail.get();
+        } else if (optionalKakaoEmail.isPresent()) {
+            return optionalKakaoEmail.get();
+        } else {
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+        }
     }
 
     /**
      * 회원가입 - 이메일 중복 확인
+     *
      * @param email
      */
     @Override
@@ -292,7 +304,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public void findUserByEmail(String email) {
-        authUserSelectRepository.findUuidByEmail(email).orElseThrow(
+        authUserLoadRepository.findUuidByEmail(email).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
     }
@@ -302,6 +314,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * @param requestDto
      */
+    @Transactional
     @Override
     public void updatePw(UpdatePwRequestDto requestDto) {
         AuthUser authUser = authUserRepository.findById(requestDto.getUuid()).orElseThrow(

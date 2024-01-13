@@ -1,6 +1,5 @@
 package com.wesell.userservice.service;
 
-import com.wesell.userservice.controller.response.CustomException;
 import com.wesell.userservice.domain.repository.UserRepository;
 import com.wesell.userservice.domain.repository.UserSelectRepository;
 import com.wesell.userservice.domain.service.UserService;
@@ -9,25 +8,23 @@ import com.wesell.userservice.dto.feigndto.AuthUserInfoRequestDto;
 import com.wesell.userservice.dto.request.SignupRequestDto;
 import com.wesell.userservice.dto.response.AdminUserResponseDto;
 import com.wesell.userservice.dto.response.MypageResponseDto;
-import com.wesell.userservice.dto.response.ResponseDto;
-import com.wesell.userservice.error.exception.ErrorCode;
-import com.wesell.userservice.error.exception.UserNotFoundException;
 import com.wesell.userservice.domain.entity.User;
+import com.wesell.userservice.global.response.error.CustomException;
+import com.wesell.userservice.global.response.error.ErrorCode;
 import com.wesell.userservice.service.feign.AuthServerFeignClient;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.wesell.userservice.error.exception.ErrorCode.*;
-
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -43,9 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public MypageResponseDto getMyInfo(String uuid) {
         User user = userRepository.findById(uuid).orElseThrow(
-                /**
-                 * 공통 응답 로직 구현 후 수정
-                 */
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
 
         String email = authServerFeignClient.getEmail(uuid);
@@ -63,50 +58,29 @@ public class UserServiceImpl implements UserService {
      *
      * @param requestDto
      */
+    @Transactional
     @Override
     public void update(String uuid, SignupRequestDto requestDto) {
         User user = userRepository.findById(uuid).orElseThrow(
-                /**
-                 * 공통 응답 로직 구현 후 수정
-                 */
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
         user.changeUserInfo(requestDto.getName());
         userRepository.saveAndFlush(user);
     }
 
     /**
-     * 회원 전체 목록 조회
-     *
-     * @return
-     */
-    @Override
-    public List<ResponseDto> findAll() {
-        List<User> users = userRepository.findAll();
-
-        if (users.isEmpty()) {
-            /**
-             * 공통 응답 로직 구현 후 수정
-             */
-            return null;
-        } else {
-            return ResponseDto.of(users);
-        }
-    }
-
-    /**
      * 회원 탈퇴
      *
      * @param uuid
-     * @throws UserNotFoundException
      */
+    @Transactional
     @Override
     public void delete(String uuid) {
         User user = userRepository.findById(uuid).orElseThrow(
-                /**
-                 * 공통 응답 로직 구현 후 수정
-                 */
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
         userRepository.delete(user);
+        userRepository.flush();
     }
 
     /**
@@ -138,12 +112,11 @@ public class UserServiceImpl implements UserService {
      *
      * @param phone
      * @return
-     * @throws UserNotFoundException
      */
     @Override
-    public String getUuidByPhone(String phone) throws UserNotFoundException {
+    public String getUuidByPhone(String phone) {
         return userSelectRepository.findUuidByPhone(phone).orElseThrow(
-                () -> new UserNotFoundException(NOT_FOUND_PHONE)
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
     }
 
@@ -156,7 +129,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getNicknameByUuid(String uuid) {
         return userSelectRepository.findNicknameByUuid(uuid).orElseThrow(
-                () -> new UserNotFoundException(NOT_FOUND_NICKNAME)
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
     }
 

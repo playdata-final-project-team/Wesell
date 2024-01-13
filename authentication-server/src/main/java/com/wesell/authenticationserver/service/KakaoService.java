@@ -1,7 +1,7 @@
 package com.wesell.authenticationserver.service;
 
-import com.wesell.authenticationserver.controller.response.CustomException;
-import com.wesell.authenticationserver.controller.response.ErrorCode;
+import com.wesell.authenticationserver.global.response.error.CustomException;
+import com.wesell.authenticationserver.global.response.error.ErrorCode;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoInfo;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoToken;
 import com.wesell.authenticationserver.domain.feign.KakaoFeignClient;

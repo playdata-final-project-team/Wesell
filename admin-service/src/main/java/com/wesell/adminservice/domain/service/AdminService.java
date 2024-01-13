@@ -14,7 +14,7 @@ public interface AdminService {
     // 회원관리 - 회원 권한 변경
     void changeUserRole(ChangeRoleRequestDto requestDto);
     // 회원관리 - 회원 강제 탈퇴
-    String forcedDelete(String uuid);
+    void forcedDelete(String uuid);
     // 판매글 관리 - 판매글 목록
     Page<PostListResponseDto> getPostList(String uuid, int page, int size);
     // 판매글 관리 - 판매글 삭제

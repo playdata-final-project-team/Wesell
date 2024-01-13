@@ -1,7 +1,5 @@
-import { Pageable } from 'types/interface';
 import ResponseDto from '../response.dto';
 import MyPostlListResponseDto from './my.deal-list.response.dto';
-import { Serializable } from 'child_process';
 export default interface PageResponseDto extends ResponseDto {
   dtoList: MyPostlListResponseDto[];
   page: number;

@@ -60,4 +60,5 @@ coolsms:
   api:
     key: ${coolsms-key}
     secret: ${coolsms-secret}
+    phone-number: ${coolsms-phone-number}
 
