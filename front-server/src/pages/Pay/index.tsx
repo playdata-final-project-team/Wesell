@@ -1,8 +1,21 @@
-import { useEffect } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+
+function getAmount() {
+  const[amount, setAmount] = useState();
+  useEffect(() => {
+    fetch("/deal-service/api/v1/price", {
+      method:"GET"
+    })
+    .then((response) => response.json())
+    .then((json) => setAmount(json))
+  },[]);
+
+  return amount;
+}
 
 const Payment = () => {
-    
+
+  //결제 요청
   useEffect(() => {
     const jquery = document.createElement("script");
     jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
@@ -20,13 +33,14 @@ const Payment = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { IMP } : any = window;
     IMP.init('imp15354308'); //가맹점 식별코드
-
+    const amount = getAmount();
+    
     const data = {
             pg: 'kakaopay',
             pay_method: 'cash',
             merchant_uid: `mid_${new Date().getTime()}`,
             name: '결제 테스트',
-            amount: '1000',
+            amount: amount,
             custom_data: {
                 name: '부가정보',
                 desc: '세부 부가정보',
@@ -51,11 +65,11 @@ const Payment = () => {
     }
 };
 
-  // return (
-  //   <div>
-  //     <button onClick={onClickPayment}>구매 요청하기</button>
-  //   </div>
-  // );
+  return (
+    <div>
+      <button onClick={onClickPayment}>구매 요청하기</button>
+    </div>
+  );
 };
 
 export default Payment;
