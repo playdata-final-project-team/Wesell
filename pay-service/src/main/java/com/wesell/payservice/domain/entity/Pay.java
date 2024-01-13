@@ -27,6 +27,9 @@ public class Pay {
     @Column(name = "p_id")
     private Long id;
 
+    @Column(name = "d_id")
+    private Long deliveryId;
+
     //구매자 uuid
     @Column(name = "buyer", nullable = false)
     private String buyer;
@@ -44,42 +47,39 @@ public class Pay {
     @Column(name = "p_amount", nullable = false)
     private Long amount;
 
-    @Column(name = "p_add", nullable = false)
-    private String address;
-
     @Column(name = "p_createdAt", nullable = false)
     private LocalDateTime createdAt;
 
     @Builder
-    public Pay(String buyer, Long productId, String orderNumber, Long amount,
-                    String address, PayType type , LocalDateTime createdAt) {
+    public Pay(Long deliveryId, String buyer, Long productId, String orderNumber,
+               Long amount, PayType type , LocalDateTime createdAt) {
+        this.deliveryId = deliveryId;
         this.buyer = buyer;
         this.productId = productId;
         this.orderNumber = orderNumber;
         this.type = type;
         this.amount = amount;
-        this.address = address;
         this.createdAt = createdAt;
     }
 
     //비즈니스 로직
-    public static Pay createPay(RequestPayDto requestDto, String orderNumber) {
-        PayType type = PayType.ASSURED;
+    public static Pay createPay(RequestPayDto requestDto, String orderNumber, Long amount) {
+        PayType type = PayType.UNASSURED;
 
-        if(PayType.UNASSURED.getCode() == requestDto.getType()) {
-            type = PayType.UNASSURED;
+        //안전결제 버튼을 누른 경우
+        if(PayType.ASSURED.getCode() == requestDto.getType()) {
+            type = PayType.ASSURED;
         }
 
         Pay pay = Pay.builder()
+                .deliveryId(requestDto.getDeliveryId())
                 .buyer(requestDto.getBuyer())
                 .productId(requestDto.getProductId())
                 .orderNumber(orderNumber)
                 .type(type)
-                .amount(requestDto.getAmount())
-                .address(requestDto.getAddress())
+                .amount(amount)
                 .createdAt(LocalDateTime.now())
                 .build();
-
         return pay;
     }
 

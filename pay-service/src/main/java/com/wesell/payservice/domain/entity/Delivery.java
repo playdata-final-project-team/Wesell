@@ -1,5 +1,7 @@
 package com.wesell.payservice.domain.entity;
 
+import com.wesell.payservice.domain.dto.request.RequestDeliveryDto;
+import com.wesell.payservice.domain.dto.request.RequestPayDto;
 import com.wesell.payservice.enumerate.ShippingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,24 +29,42 @@ public class Delivery {
     @Column(name = "d_id")
     private Long id;
 
-    @Column(name = "buyer", nullable = false)
-    private String buyer;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "d_shipping", nullable = false)
     private ShippingStatus status;
 
-    @Column(name = "d_shipNum", nullable = false)
+    @Column(name = "d_shipNum")
     private Integer shippingNumber;
 
-    @Column(name = "p_createdAt", nullable = false)
-    private LocalDateTime createdAt;
+    //수령인
+    @Column(name = "d_receiver", nullable = false)
+    private String receiver;
+
+    @Column(name = "d_address", nullable = false)
+    private String address;
+
+    @Column(name = "d_createdAt")
+    private LocalDate createdAt;
 
     @Builder
-    public Delivery(String buyer, Integer shippingNumber, LocalDateTime createdAt) {
-      this.buyer = buyer;
-      this.status = ShippingStatus.PREPARING;
-      this.shippingNumber = shippingNumber;
-      this.createdAt = createdAt;
+    public Delivery(ShippingStatus status, Integer shippingNumber,
+                    String receiver, String address, LocalDate createdAt) {
+        this.status = status;
+        this.shippingNumber = shippingNumber;
+        this.receiver = receiver;
+        this.address = address;
+        this.createdAt = createdAt;
+    }
+
+    //비즈니스 로직
+    public static Delivery createDelivery(RequestDeliveryDto requestDto) {
+        Delivery delivery = Delivery.builder()
+                .status(ShippingStatus.PREPARING)
+                .shippingNumber(0)
+                .receiver(requestDto.getReceiver())
+                .address(requestDto.getAddress())
+                .createdAt(LocalDate.now())
+                .build();
+        return delivery;
     }
 }
