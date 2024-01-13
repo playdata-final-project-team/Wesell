@@ -4,6 +4,7 @@ import com.wesell.payservice.domain.dto.request.RequestPayDto;
 import com.wesell.payservice.domain.dto.response.ResponsePayDto;
 import com.wesell.payservice.domain.entity.Pay;
 import com.wesell.payservice.domain.repository.PayRepository;
+import com.wesell.payservice.feign.DealFeign;
 import com.wesell.payservice.service.interface_.PayService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
@@ -15,18 +16,18 @@ import org.springframework.stereotype.Service;
 @Transactional
 @Log4j2
 public class PayServiceImpl implements PayService {
-
     private final PayRepository payRepository;
-
-    public PayServiceImpl(PayRepository payRepository) {
+    private final DealFeign dealFeign;
+    public PayServiceImpl(PayRepository payRepository, DealFeign dealFeign) {
         this.payRepository = payRepository;
+        this.dealFeign = dealFeign;
     }
 
     @Override
-    public ResponsePayDto pay(RequestPayDto requestDto) {
-        Pay pay = Pay.createPay(requestDto, createOrderNumber(requestDto));
+    public Long pay(RequestPayDto requestDto) {
+        Pay pay = Pay.createPay(requestDto, createOrderNumber(requestDto), dealFeign.getPayInfo(requestDto.getProductId()));
         payRepository.save(pay);
-        return new ResponsePayDto(pay);
+        return pay.getId();
     }
 
     @Override
@@ -36,5 +37,10 @@ public class PayServiceImpl implements PayService {
         return  format+productId;
     }
 
+    @Override
+    public ResponsePayDto getPayResult(Long payId) {
+        Pay pay = payRepository.findPayByPayId(payId);
+        return  new ResponsePayDto(pay);
+    }
 
 }
