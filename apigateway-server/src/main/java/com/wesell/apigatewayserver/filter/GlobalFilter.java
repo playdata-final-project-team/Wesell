@@ -26,7 +26,7 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
             log.info("## Global Filter Message : {}", config.getMessage());
 
             if (config.isShowPreLogger()) {
-                log.info("## Global Filter Start : request uri -> {}", req.getURI().getPath());
+                log.info("## Global Filter Start : Request uri -> {}", req.getURI().getPath());
             }
 
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {

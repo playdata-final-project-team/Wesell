@@ -77,27 +77,24 @@ function Mypage() {
 
       // comment: uuid 값 회원 정보 조회하기
       const fetchData = async (uuid: string) => {
-        const responseBody: MypageResponseDto | null = await mypageInfoRequest(uuid);
+        const responseBody: MypageResponseDto | ResponseDto | null = await mypageInfoRequest(uuid);
 
         if (!responseBody) {
           alert('네트워크 연결 상태를 확인해주세요!');
           return;
         }
 
-        if ('email' in responseBody) {
-          setEmail(responseBody.email);
-        }
+        const successData = responseBody as MypageResponseDto;
 
-        if ('name' in responseBody) {
-          setName(responseBody.name);
-        }
+        console.log(successData);
+        if (successData.content) {
+          setEmail(successData.content.email);
 
-        if ('nickname' in responseBody) {
-          setNickname(responseBody.nickname);
-        }
+          setName(successData.content.name);
 
-        if ('phone' in responseBody) {
-          setPhone(responseBody.phone);
+          setNickname(successData.content.nickname);
+
+          setPhone(successData.content.phone);
         }
       };
 
@@ -148,17 +145,16 @@ function Mypage() {
       }
 
       const response = await mypageInfoRequest(uuid);
-
       if (!response) return;
 
-      if (name === response.name) {
+      const successResponse = response as MypageResponseDto;
+      if (name === successResponse.content.name) {
         return;
       }
 
       const requestDto: MypageUpdateRequestDto = { name, nickname, phone };
 
       await myInfoUpdateRequest(uuid, requestDto).then(updateMyInfoResponse);
-      // 입력한 데이터를 업데이트 하는 요청 보내기(수정) - put 메서드
     };
 
     // event-handler: 탈퇴하기 on-click 이벤트 핸들링//
@@ -355,10 +351,16 @@ function Mypage() {
     const onCheckItemsClickHandler = async () => {
       if (checkItems.length === 0) return;
 
-      const data = await deletePostListRequest(checkItems);
-      const { state } = data;
+      const responseBody = await deletePostListRequest(checkItems);
 
-      if (state === '200') {
+      if (!responseBody) {
+        alert('😒 네트워크 연결을 다시 확인해주세요!');
+        return;
+      }
+
+      const { code } = responseBody;
+
+      if (code === ResponseCode.OK) {
         setDeleted(true);
       }
 

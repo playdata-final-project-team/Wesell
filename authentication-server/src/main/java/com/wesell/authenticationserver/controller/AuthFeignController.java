@@ -1,15 +1,11 @@
 package com.wesell.authenticationserver.controller;
 
 import com.wesell.authenticationserver.controller.dto.request.ChangeRoleRequestDto;
-import com.wesell.authenticationserver.controller.response.ResponseDto;
-import com.wesell.authenticationserver.controller.response.SuccessCode;
 import com.wesell.authenticationserver.service.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,15 +29,13 @@ public class AuthFeignController {
 
     // 관리자 - 회원관리 - 권한 변경
     @PutMapping("change-role")
-    public ResponseEntity<?> changeUserRole(@RequestBody ChangeRoleRequestDto requestDto) {
+    public void changeUserRole(@RequestBody ChangeRoleRequestDto requestDto) {
         authService.updateRole(requestDto);
-        return ResponseEntity.ok(ResponseDto.of(SuccessCode.OK));
     }
 
     // 관리자 - 회원관리 - 강제 탈퇴
     @PutMapping("updateIsForced/{uuid}")
-    public ResponseEntity<?> updateIsForced(@PathVariable String uuid) {
+    public void updateIsForced(@PathVariable String uuid) {
         authService.updateIsForced(uuid);
-        return ResponseEntity.ok(ResponseDto.of(SuccessCode.OK));
     }
 }

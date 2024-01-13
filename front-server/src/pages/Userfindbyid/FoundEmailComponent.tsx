@@ -31,7 +31,6 @@ const FoundEmailComponent = () => {
       if (!paramUuid) {
         return;
       }
-
       const response = await axios.get(`/auth-server/api/v1/find/email/${paramUuid}`);
       const emails = response.data;
       setFoundEmails([emails]);

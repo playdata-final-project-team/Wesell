@@ -1,8 +1,7 @@
 package com.wesell.authenticationserver.service;
 
-import com.wesell.authenticationserver.controller.response.CustomException;
-import com.wesell.authenticationserver.controller.response.ErrorCode;
-import com.wesell.authenticationserver.domain.entity.AuthUser;
+import com.wesell.authenticationserver.global.response.error.CustomException;
+import com.wesell.authenticationserver.global.response.error.ErrorCode;
 import com.wesell.authenticationserver.domain.enum_.RefreshStatus;
 import com.wesell.authenticationserver.domain.repository.AuthUserRepository;
 import com.wesell.authenticationserver.domain.service.TokenService;

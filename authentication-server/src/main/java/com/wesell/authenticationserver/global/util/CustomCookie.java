@@ -13,7 +13,7 @@ public class CustomCookie {
         return ResponseCookie.from("access-token", token)
                 .path("/")
                 .httpOnly(true)
-                .maxAge(60*60+(60*30))
+                .maxAge(60*60)
                 .build();
     }
 
@@ -22,7 +22,7 @@ public class CustomCookie {
         return ResponseCookie.from("refresh-token",refreshToken)
                 .path("/")
                 .httpOnly(true)
-                .maxAge(60*60*24+(60*30))
+                .maxAge(60*60*24)
                 .build();
     }
 

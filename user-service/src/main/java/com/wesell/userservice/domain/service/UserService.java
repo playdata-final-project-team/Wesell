@@ -2,9 +2,6 @@ package com.wesell.userservice.domain.service;
 
 import com.wesell.userservice.dto.request.SignupRequestDto;
 import com.wesell.userservice.dto.response.MypageResponseDto;
-import com.wesell.userservice.dto.response.ResponseDto;
-
-import java.util.List;
 
 public interface UserService {
     // 회원 가입
@@ -23,7 +20,7 @@ public interface UserService {
     public MypageResponseDto getMyInfo(String uuid);
 
     // 회원 전체 조회
-    public List<ResponseDto> findAll();
+//    public List<ResponseDto> findAll();
 
     // 휴대전화로 uuid 조회
     public String getUuidByPhone(String phoneNumber);

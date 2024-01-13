@@ -1,10 +1,8 @@
 package com.wesell.userservice.controller;
 
 import com.wesell.userservice.dto.feigndto.AdminFeignResponseDto;
-import com.wesell.userservice.dto.feigndto.SignUpResponseDto;
 import com.wesell.userservice.dto.request.SignupRequestDto;
 import com.wesell.userservice.dto.response.AdminUserResponseDto;
-import com.wesell.userservice.error.exception.SuccessCode;
 import com.wesell.userservice.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -44,18 +42,14 @@ public class UserFeignController {
 
     // 인증/인가 - 회원 가입
     @PostMapping("sign-up")
-    public ResponseEntity<SignUpResponseDto> signup(@RequestBody SignupRequestDto signupRequestDTO) {
-        SignUpResponseDto signUpResponseDto = SignUpResponseDto.of(SuccessCode.USER_CREATED);
+    public void signup(@RequestBody SignupRequestDto signupRequestDTO) {
         userService.save(signupRequestDTO);
-        return ResponseEntity.ok(signUpResponseDto);
     }
 
     // 인증/인가 - 회원 탈퇴
     @DeleteMapping("users/{uuid}")
-    public ResponseEntity<Void> deleteUserEntity(@PathVariable String uuid) {
+    public void deleteUserEntity(@PathVariable String uuid) {
         userService.delete(uuid);
-        return ResponseEntity.ok(null);
-
     }
 
     // 판매글 - 판매 상세 - 닉네임 조회
