@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1")
+@RequestMapping("api/v2")
 public class AuthFeignController {
 
     private final AuthServiceImpl authService;

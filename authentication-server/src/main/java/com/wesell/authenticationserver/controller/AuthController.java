@@ -27,7 +27,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("api/v1")
+@RequestMapping("api/v2")
 public class AuthController {
 
     private final AuthService authService;
