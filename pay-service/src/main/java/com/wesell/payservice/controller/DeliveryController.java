@@ -5,6 +5,7 @@ import com.wesell.payservice.service.delivery.DeliveryServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,5 +22,17 @@ public class DeliveryController {
     @PostMapping("delivery")
     public ResponseEntity<Long> delivery (@RequestBody RequestDeliveryDto requestDto) {
         return new ResponseEntity<>(deliveryService.createDelivery(requestDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("delivery/start")
+    public ResponseEntity<?> startDelivery(@RequestParam("id") Long deliveryId, @RequestBody Integer shippingNumber){
+        deliveryService.startDelivery(shippingNumber, deliveryId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("delivery/finish")
+    public ResponseEntity<?> finishDelivery(@RequestParam("id") Long deliveryId){
+        deliveryService.finishDelivery(deliveryId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

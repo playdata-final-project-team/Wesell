@@ -31,4 +31,16 @@ public class DeliveryServiceImpl implements DeliveryService{
         Delivery delivery = deliveryRepository.findDeliveryById(id);
         return new ResponseDeliveryDto(delivery);
     }
+
+    @Override
+    public void startDelivery(Integer shippingNumber, Long deliveryId) {
+        Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
+        delivery.startDelivery(shippingNumber);
+    }
+
+    @Override
+    public void finishDelivery(Long deliveryId) {
+        Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
+        delivery.finishDelivery();
+    }
 }

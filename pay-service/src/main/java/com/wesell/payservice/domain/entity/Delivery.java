@@ -1,7 +1,6 @@
 package com.wesell.payservice.domain.entity;
 
 import com.wesell.payservice.domain.dto.request.RequestDeliveryDto;
-import com.wesell.payservice.domain.dto.request.RequestPayDto;
 import com.wesell.payservice.enumerate.ShippingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -66,5 +65,14 @@ public class Delivery {
                 .createdAt(LocalDate.now())
                 .build();
         return delivery;
+    }
+
+    public void startDelivery(Integer shippingNumber){
+        this.shippingNumber = shippingNumber;
+        this.status = ShippingStatus.SHIPPING;
+    }
+
+    public void finishDelivery() {
+        this.status = ShippingStatus.COMPLETE;
     }
 }
