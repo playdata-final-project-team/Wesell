@@ -1,0 +1,20 @@
+server:
+  port: 9090
+spring:
+  profiles:
+    active: db
+  application:
+    name: chat-service
+  datasource:
+    driver-class-name: ${driver-class-name}
+    url: ${url}
+    username: ${username_}
+    password: ${password}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        check_nullability: true
+    show_sql: true
