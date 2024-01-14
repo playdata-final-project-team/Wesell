@@ -31,7 +31,7 @@ public class Pay {
     private Long deliveryId;
 
     //구매자 uuid
-    @Column(name = "buyer", nullable = false)
+    @Column(name = "d_buyer_uuid", nullable = false)
     private String buyer;
 
     @Column(name = "productId", nullable = false)
