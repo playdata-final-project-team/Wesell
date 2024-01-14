@@ -2,6 +2,7 @@ package com.wesell.payservice.service.pay;
 
 import com.wesell.payservice.domain.dto.request.RequestPayDto;
 import com.wesell.payservice.domain.dto.response.ResponsePayDto;
+import com.wesell.payservice.domain.dto.search.PayViewDao;
 import com.wesell.payservice.domain.entity.Delivery;
 import com.wesell.payservice.domain.entity.Pay;
 import com.wesell.payservice.domain.repository.DeliveryRepository;
@@ -20,10 +21,13 @@ public class PayServiceImpl implements PayService {
     private final PayRepository payRepository;
     private final DeliveryRepository deliveryRepository;
     private final DealFeign dealFeign;
-    public PayServiceImpl(PayRepository payRepository, DeliveryRepository deliveryRepository, DealFeign dealFeign) {
+    private final PayViewDao payViewDao;
+    public PayServiceImpl(PayRepository payRepository, DeliveryRepository deliveryRepository,
+                          DealFeign dealFeign, PayViewDao payViewDao) {
         this.payRepository = payRepository;
         this.deliveryRepository = deliveryRepository;
         this.dealFeign = dealFeign;
+        this.payViewDao = payViewDao;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class PayServiceImpl implements PayService {
 
     @Override
     public ResponsePayDto getPayInfo(Long payId) {
-        Pay pay = payRepository.findPayById(payId);
+        Pay pay = payViewDao.searchPayById(payId);
         return new ResponsePayDto(pay);
     }
 
@@ -60,5 +64,6 @@ public class PayServiceImpl implements PayService {
         Pay pay = payRepository.findPayById(payId);
         return pay.getDeliveryId();
     }
+
 
 }
