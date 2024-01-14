@@ -1,12 +1,10 @@
 package com.wesell.payservice.service.delivery;
 
 import com.wesell.payservice.domain.dto.request.RequestDeliveryDto;
-import com.wesell.payservice.domain.dto.request.RequestPayDto;
 import com.wesell.payservice.domain.dto.response.ResponseDeliveryDto;
 import com.wesell.payservice.domain.entity.Delivery;
 import com.wesell.payservice.domain.repository.DeliveryRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
