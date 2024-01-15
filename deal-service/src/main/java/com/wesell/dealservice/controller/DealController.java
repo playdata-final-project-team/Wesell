@@ -22,7 +22,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1")
+@RequestMapping("api/v2")
 public class DealController {
 
     private final DealServiceImpl dealService;
