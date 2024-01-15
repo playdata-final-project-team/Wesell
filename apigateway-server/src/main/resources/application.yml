@@ -44,6 +44,13 @@ spring:
           filters:
             - RewritePath=/auth-server/(?<path>.*),/$\{path}
 
+        - id: chat-service
+          uri: lb://CHAT-SERVICE
+          predicates:
+            - Path=/chat-service/**
+          filters:
+            - RewritePath=/chat-service/(?<path>.*),/$\{path}
+
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
