@@ -1,4 +1,4 @@
-package com.wesell.dealservice.redis;
+package com.wesell.dealservice.config.redis;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;

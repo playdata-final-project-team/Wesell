@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestPayDto {
+public class PayRequestDto {
     @NotNull
     private Long deliveryId;
     @NotNull

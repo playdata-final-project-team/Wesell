@@ -73,7 +73,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public EditPostResponseDto editPost(EditPostRequestDto requestDto) {
-        DealPost editPost = dealRepository.findDealPostById(requestDto.getPostId());
+        DealPost editPost = dealRepository.findDealPostById(requestDto.getProductId());
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         editPost.editCategory(category);
@@ -82,8 +82,8 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public void deletePost(Long postId) {
-        DealPost post = dealRepository.findDealPostById(postId);
+    public void deletePost(Long productId) {
+        DealPost post = dealRepository.findDealPostById(productId);
         post.deleteMyPost();
     }
 
@@ -96,24 +96,19 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public void changePostStatus(ChangePostRequestDto requestDto) {
-        dealRepository.findDealPostByIdAndIsDeleted(requestDto.getPostId(), false).changeStatus();
-    }
-
-    public String getSaleStatus(Long postId){
-        DealPost dealPost = dealRepository.findById(postId).get();
-        return dealPost.getSaleStatus().toString();
+        dealRepository.findDealPostByIdAndIsDeleted(requestDto.getProductId(), false).changeStatus();
     }
 
     @Override
-    public PostInfoResponseDto getPostInfo(Long postId) {
+    public PostInfoResponseDto getPostInfo(Long productId) {
         String nickname;
-        DealPost foundPost = readRepository.searchDealPost(postId);
+        DealPost foundPost = readRepository.searchDealPost(productId);
         try {
             nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         } catch (FeignException e) {
             nickname = "nickname";
         }
-        String imageUrl = imageFeignClient.getUrlByProductId(postId);
+        String imageUrl = imageFeignClient.getUrlByProductId(productId);
         return new PostInfoResponseDto(foundPost, nickname, imageUrl);
     }
 
@@ -172,7 +167,7 @@ public class DealServiceImpl implements DealService {
     }
 
     public EditPostResponseDto CompareWithUpdated(EditPostRequestDto dto) {
-        DealPost editPost = dealRepository.findDealPostById(dto.getPostId());
+        DealPost editPost = dealRepository.findDealPostById(dto.getProductId());
         if(editPost.getTitle().equals(dto.getTitle()) && editPost.getPrice() == dto.getPrice()
                 && editPost.getLink().equals(dto.getLink()) && editPost.getDetail().equals(dto.getDetail())) {
             return new EditPostResponseDto(editPost);

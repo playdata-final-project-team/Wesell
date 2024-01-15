@@ -1,6 +1,6 @@
 package com.wesell.payservice.domain.entity;
 
-import com.wesell.payservice.domain.dto.request.RequestPayDto;
+import com.wesell.payservice.domain.dto.request.PayRequestDto;
 import com.wesell.payservice.enumerate.PayType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -63,7 +63,7 @@ public class Pay {
     }
 
     //비즈니스 로직
-    public static Pay createPay(RequestPayDto requestDto, String orderNumber, Long amount) {
+    public static Pay createPay(PayRequestDto requestDto, String orderNumber, Long amount) {
         PayType type = PayType.UNASSURED;
 
         //안전결제 버튼을 누른 경우

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestDeliveryDto {
+public class DeliveryRequestDto {
     @NotBlank
     private String receiver;
     @NotBlank

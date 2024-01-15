@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ResponseMyPaidDto {
+public class MyPaidResponseDto {
     @NotBlank
     private Long payId;
     @NotNull

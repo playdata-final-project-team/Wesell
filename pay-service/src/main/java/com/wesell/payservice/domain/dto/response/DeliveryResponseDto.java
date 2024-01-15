@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseDeliveryDto {
+public class DeliveryResponseDto {
     @NotBlank
     private String receiver;
     @NotNull
@@ -19,7 +19,7 @@ public class ResponseDeliveryDto {
     @NotNull
     private String status;
 
-    public ResponseDeliveryDto(Delivery delivery) {
+    public DeliveryResponseDto(Delivery delivery) {
         this.receiver = delivery.getReceiver();
         this.address = delivery.getAddress();
         this.status = ShippingStatus.PREPARING.getName();

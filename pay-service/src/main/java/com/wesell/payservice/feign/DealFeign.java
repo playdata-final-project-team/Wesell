@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 //Request to deal-service
 @FeignClient(name = "deal-service")
 public interface DealFeign {
-    @GetMapping("api/v2/payments/{postId}/amount")
-    Long getPayInfo(@PathVariable(value = "postId") Long postId);
+    @GetMapping("api/v2/payments/{productId}/amount")
+    Long getPayInfo(@PathVariable(value = "productId") Long productId);
 
 }

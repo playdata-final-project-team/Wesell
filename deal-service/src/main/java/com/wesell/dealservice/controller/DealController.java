@@ -67,19 +67,18 @@ public class DealController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("status/{postId}")
-    public ResponseEntity<?> getSaleStatus(@PathVariable Long postId){
-        String saleStatus = dealService.getSaleStatus(postId);
-        return new ResponseEntity<>(saleStatus,HttpStatus.OK);
+    @GetMapping("status/{productId}")
+    public ResponseEntity<String> getSaleStatus(@PathVariable Long productId){
+        return new ResponseEntity<>(viewDao.searchById(productId).getSaleStatus().toString(),HttpStatus.OK);
     }
 
     /**
-     * @param postId
+     * @param productId
      * @return 게시글 논리 삭제
      */
     @PutMapping("delete")
-    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long postId) {
-        dealService.deletePost(postId);
+    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long productId) {
+        dealService.deletePost(productId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -122,11 +121,11 @@ public class DealController {
     }
 
     @GetMapping("price")
-    public ResponseEntity<?> getPriceByPostId(@RequestParam("postId") Long postId) {
+    public ResponseEntity<?> getPriceByPostId(@RequestParam("productId") Long productId) {
         Long price = 0L;
 
         try {
-            price = viewDao.findPriceByPostId(postId);
+            price = viewDao.searchPriceById(productId);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(price, ErrorCode.NO_PRICE_RESEARCH.getStatus());
         }

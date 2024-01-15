@@ -4,12 +4,10 @@ import com.wesell.dealservice.domain.SaleStatus;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity @Getter
-@Table(name = "post")
+@Table(name = "product")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DealPost {

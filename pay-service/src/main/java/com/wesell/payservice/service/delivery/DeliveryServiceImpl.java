@@ -1,7 +1,7 @@
 package com.wesell.payservice.service.delivery;
 
-import com.wesell.payservice.domain.dto.request.RequestDeliveryDto;
-import com.wesell.payservice.domain.dto.response.ResponseDeliveryDto;
+import com.wesell.payservice.domain.dto.request.DeliveryRequestDto;
+import com.wesell.payservice.domain.dto.response.DeliveryResponseDto;
 import com.wesell.payservice.domain.entity.Delivery;
 import com.wesell.payservice.domain.repository.DeliveryRepository;
 import jakarta.transaction.Transactional;
@@ -18,16 +18,16 @@ public class DeliveryServiceImpl implements DeliveryService{
     }
 
     @Override
-    public Long createDelivery(RequestDeliveryDto requestDto) {
+    public Long createDelivery(DeliveryRequestDto requestDto) {
         Delivery delivery = Delivery.createDelivery(requestDto);
         deliveryRepository.save(delivery);
         return delivery.getId();
     }
 
     @Override
-    public ResponseDeliveryDto getDeliveryInfo(Long id) {
+    public DeliveryResponseDto getDeliveryInfo(Long id) {
         Delivery delivery = deliveryRepository.findDeliveryById(id);
-        return new ResponseDeliveryDto(delivery);
+        return new DeliveryResponseDto(delivery);
     }
 
     @Override
