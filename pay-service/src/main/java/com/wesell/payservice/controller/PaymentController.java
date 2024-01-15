@@ -3,7 +3,7 @@ package com.wesell.payservice.controller;
 import com.wesell.payservice.domain.dto.request.PayRequestDto;
 import com.wesell.payservice.domain.dto.response.DetailFacadeResponseDto;
 import com.wesell.payservice.service.facade.FacadeService;
-import com.wesell.payservice.service.pay.PayServiceImpl;
+import com.wesell.payservice.service.pay.PayService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v2")
 public class PaymentController {
 
-    private final PayServiceImpl payService;
+    private final PayService payService;
     private final FacadeService facadeservice;
-    public PaymentController(PayServiceImpl payService, FacadeService facadeService) {
+    public PaymentController(PayService payService, FacadeService facadeService) {
         this.payService = payService;
         this.facadeservice = facadeService;
     }
