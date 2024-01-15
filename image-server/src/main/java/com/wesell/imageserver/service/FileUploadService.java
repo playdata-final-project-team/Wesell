@@ -1,10 +1,8 @@
-package com.wesell.dealservice.service;
+package com.wesell.imageserver.service;
+
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.wesell.dealservice.domain.dto.request.UploadFileRequestDto;
-import com.wesell.dealservice.domain.entity.Image;
-import com.wesell.dealservice.domain.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
