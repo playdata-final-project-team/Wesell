@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v2")
-public class ProductImageController {
+public class ProductImageFeignController {
     private final ProductImageViewDao productImageViewDao;
-    public ProductImageController(ProductImageViewDao productImageViewDao) {
+    public ProductImageFeignController(ProductImageViewDao productImageViewDao) {
         this.productImageViewDao = productImageViewDao;
     }
 
