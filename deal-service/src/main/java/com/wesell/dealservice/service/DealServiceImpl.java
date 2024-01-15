@@ -11,7 +11,7 @@ import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
 import com.wesell.dealservice.domain.repository.read.DealPostReadRepository;
-import com.wesell.dealservice.error.exception.CustomException;
+import com.wesell.dealservice.global.response.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.ImageFeignClient;
 import com.wesell.dealservice.feignClient.UserFeignClient;
 import com.wesell.dealservice.util.Producer;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import static com.wesell.dealservice.error.ErrorCode.INVALID_POST;
+import static com.wesell.dealservice.global.response.error.ErrorCode.INVALID_POST;
 
 @Service
 @Transactional

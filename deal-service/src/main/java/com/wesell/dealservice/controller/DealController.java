@@ -5,7 +5,7 @@ import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.repository.read.ViewDao;
-import com.wesell.dealservice.error.ErrorCode;
+import com.wesell.dealservice.global.response.error.ErrorCode;
 import com.wesell.dealservice.service.DealServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

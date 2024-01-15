@@ -1,4 +1,4 @@
-package com.wesell.dealservice.config.redis;
+package com.wesell.dealservice.global.config.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

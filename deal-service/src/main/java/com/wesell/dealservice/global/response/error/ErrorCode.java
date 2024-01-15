@@ -1,4 +1,4 @@
-package com.wesell.dealservice.error;
+package com.wesell.dealservice.global.response.error;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

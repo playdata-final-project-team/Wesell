@@ -1,4 +1,4 @@
-package com.wesell.dealservice.config;
+package com.wesell.dealservice.global.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
