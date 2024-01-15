@@ -1,7 +1,7 @@
-package com.wesell.dealservice.controller;
+package com.wesell.dealservice.controller.feign;
 
 import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
-import com.wesell.dealservice.service.AdminDealService;
+import com.wesell.dealservice.service.feign.AdminDealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;

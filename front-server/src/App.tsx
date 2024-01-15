@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import './App.css';
 import Main from 'pages/Main';
 import Container from 'layouts/Container';
@@ -18,6 +18,8 @@ import AuthServer from 'pages/Authentication';
 import Test from 'pages/Test';
 import PostDetailPage from 'pages/board/detail';
 import AdminUsersComponent from 'pages/AdminUsers/AdminUsersComponent';
+import RequestPay from 'pages/Pay/beforePay';
+import PayResultPage from 'pages/Pay/detail';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -38,12 +40,14 @@ function App() {
         <Route path="/find-pw" element={<EmailfindComponent />} />
         <Route path="/phone/valid/:uuid" element={<FoundSmsComponent />} />
         <Route path="/update-pw/:uuid" element={<PasswordUpdateComponent />} />
-        <Route path="/board/detail/:postId" element={<PostDetailPage />} />
+        <Route path="/product/detail/:postId" element={<PostDetailPage />} />
         <Route path={UPLOAD_PATH()} element={<UploadBoard />} />
         <Route path={MYPAGE_PATH()} element={<Mypage />} />
-        <Route path="/board/edit/:postId" element={<EditPostPage />} />
+        <Route path="/product/update/:postId" element={<EditPostPage />} />
         <Route path="/admin/users" element={<AdminUsersComponent />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
+        <Route path="/payment/:postId" element={<RequestPay />} />
+        <Route path="payment/:payId" element={<PayResultPage />} />
       </Route>
     </Routes>
   );

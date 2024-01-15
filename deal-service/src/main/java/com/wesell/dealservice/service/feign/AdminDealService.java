@@ -1,4 +1,4 @@
-package com.wesell.dealservice.service;
+package com.wesell.dealservice.service.feign;
 
 import com.wesell.dealservice.domain.dto.response.MyPostListResponseDto;
 import com.wesell.dealservice.domain.entity.DealPost;

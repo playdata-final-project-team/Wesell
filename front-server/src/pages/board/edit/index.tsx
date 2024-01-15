@@ -84,7 +84,7 @@ const [image, setImage] = useState("");
 },[canSubmit]);
 
   const backToDetail = () => {
-    navigate('/board/detail/'+postId);
+    navigate('/product/detail/'+postId);
   };
 
   useEffect(() => {
