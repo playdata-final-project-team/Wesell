@@ -21,8 +21,12 @@ function PostDetailPage() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const moveToUpdate = () => {
-    navigate('/board/edit/' + postId);
+    navigate('/product/update/' + postId);
   };
+
+  const moveToPay = () => {
+    navigate('/payment/'+postId);
+  }
 
   useEffect(() => {
     console.log(postId);
@@ -68,6 +72,10 @@ function PostDetailPage() {
                 수정하기
               </button>
            }
+           {window.sessionStorage.getItem('uuid') !== post?.uuid &&
+              <button className="update-button" onClick={moveToPay}>
+              구매하기
+            </button>}
           </div>
         </div>
       </div>

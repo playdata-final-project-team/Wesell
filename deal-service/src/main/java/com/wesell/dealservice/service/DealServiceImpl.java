@@ -32,7 +32,6 @@ import static com.wesell.dealservice.error.ErrorCode.INVALID_POST;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 @Log4j2
 public class DealServiceImpl implements DealService {
 
@@ -43,6 +42,17 @@ public class DealServiceImpl implements DealService {
     private final UserFeignClient userFeignClient;
     private final Producer producer;
     private final ObjectMapper objectMapper;
+
+    public DealServiceImpl(DealRepository dealRepository, DealPostReadRepository readRepository, CategoryRepository categoryRepository,
+                           ImageRepository imageRepository, UserFeignClient userFeignClient, Producer producer, ObjectMapper objectMapper) {
+        this.dealRepository = dealRepository;
+        this.readRepository = readRepository;
+        this.categoryRepository = categoryRepository;
+        this.imageRepository = imageRepository;
+        this.userFeignClient = userFeignClient;
+        this.producer = producer;
+        this.objectMapper = objectMapper;
+    }
 
     //todo: 업로드 실패시?
 

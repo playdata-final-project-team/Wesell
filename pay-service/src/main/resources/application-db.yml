@@ -1,0 +1,7 @@
+url: jdbc:mysql://localhost:3306/wesell
+username_: root
+password: 1234
+driver-class-name: com.mysql.cj.jdbc.Driver
+
+key: 2084636616656217
+secret: szpoF90mzb3ginSthKUsgJwirkeDFcKgEqz4FqL16zRG8NlT0rJLRI4pXNS6wubWr7xSj6oCt2Npy7Rs

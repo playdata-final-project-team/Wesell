@@ -5,10 +5,14 @@ import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadFileRequestDto;
+import com.wesell.dealservice.domain.repository.read.ViewDao;
+import com.wesell.dealservice.error.ErrorCode;
+import com.wesell.dealservice.error.exception.CustomException;
 import com.wesell.dealservice.service.DealServiceImpl;
 import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.QueryException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +27,7 @@ public class DealController {
 
     private final DealServiceImpl dealService;
     private final FileUploadService uploadService;
-
+    private final ViewDao viewDao;
 
     /**
      *
@@ -129,6 +133,19 @@ public class DealController {
     @GetMapping("main/title")
     public ResponseEntity<?> findAllByTitle(@RequestParam("title") String title, @RequestParam(value = "page", defaultValue = "0") int page) {
         return new ResponseEntity<>(dealService.findByTitle(title, page-1), HttpStatus.OK);
+    }
+
+    @GetMapping("price")
+    public ResponseEntity<?> getPriceByPostId(@RequestParam("postId") Long postId) {
+        Long price = 0L;
+
+        try {
+            price = viewDao.findPriceByPostId(postId);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(price, ErrorCode.NO_PRICE_RESEARCH.getStatus());
+        }
+
+        return new ResponseEntity<>(price, HttpStatus.OK);
     }
 
 }
