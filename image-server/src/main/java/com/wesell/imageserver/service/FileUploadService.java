@@ -3,6 +3,9 @@ package com.wesell.imageserver.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.wesell.imageserver.domain.dto.request.UploadFileRequestDto;
+import com.wesell.imageserver.domain.entity.ProductImage;
+import com.wesell.imageserver.domain.repository.ProductImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,24 +14,23 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class FileUploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     private final AmazonS3 amazonS3;
-    private final ImageRepository imageRepository;
+    private final ProductImageRepository productImageRepository;
 
-
-    public String getUrl(MultipartFile file) throws IOException {
-        return uploadAndGetUrl(file);
+    public FileUploadService (AmazonS3 amazonS3, ProductImageRepository productImageRepository) {
+        this.amazonS3 = amazonS3;
+        this.productImageRepository = productImageRepository;
     }
 
     public void saveImageUrl(UploadFileRequestDto requestDto) {
-        Image userImage = Image.builder()
+        ProductImage userImage = ProductImage.builder()
                 .postId(requestDto.getPostId())
-                .imageUrl(requestDto.getUrl())
+                .imageUrl(requestDto.getImageUrl())
                 .build();
-        imageRepository.save(userImage);
+        productImageRepository.save(userImage);
     }
 
     public String uploadAndGetUrl(MultipartFile multipartFile) throws IOException {
