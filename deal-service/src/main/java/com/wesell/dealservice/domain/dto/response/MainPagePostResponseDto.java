@@ -1,7 +1,6 @@
 package com.wesell.dealservice.domain.dto.response;
 
 import com.wesell.dealservice.domain.entity.DealPost;
-import com.wesell.dealservice.domain.entity.Image;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

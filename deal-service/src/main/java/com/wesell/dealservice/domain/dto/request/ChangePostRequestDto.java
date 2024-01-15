@@ -11,5 +11,5 @@ public class ChangePostRequestDto {
 
     private String uuid;
     private Long postId;
-    private int division = 4;
+    private int division = 3;
 }

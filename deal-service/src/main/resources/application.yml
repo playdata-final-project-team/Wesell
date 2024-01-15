@@ -43,16 +43,6 @@ springdoc:
     display-request-duration: true
     operations-sorter: alpha
 
-cloud:
-  aws:
-    s3:
-      bucket: ${bucket}
-    stack.auto: false
-    region.static: ap-northeast-2
-    credentials:
-      accessKey: ${accessKey}
-      secretKey: ${secretKey}
-
 logging:
   level:
     com:

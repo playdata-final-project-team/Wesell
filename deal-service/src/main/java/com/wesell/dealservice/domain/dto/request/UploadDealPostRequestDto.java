@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class UploadDealPostRequestDto {
 
+    @NotNull
     private String uuid;
     @NotNull
     private String categoryId;

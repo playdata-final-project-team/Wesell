@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.response.*;
-import com.wesell.dealservice.domain.entity.Image;
-import com.wesell.dealservice.domain.repository.ImageRepository;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.entity.Category;
@@ -19,7 +17,6 @@ import com.wesell.dealservice.util.Producer;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -38,17 +35,15 @@ public class DealServiceImpl implements DealService {
     private final DealRepository dealRepository;
     private final DealPostReadRepository readRepository;
     private final CategoryRepository categoryRepository;
-    private final ImageRepository imageRepository;
     private final UserFeignClient userFeignClient;
     private final Producer producer;
     private final ObjectMapper objectMapper;
 
     public DealServiceImpl(DealRepository dealRepository, DealPostReadRepository readRepository, CategoryRepository categoryRepository,
-                           ImageRepository imageRepository, UserFeignClient userFeignClient, Producer producer, ObjectMapper objectMapper) {
+                            UserFeignClient userFeignClient, Producer producer, ObjectMapper objectMapper) {
         this.dealRepository = dealRepository;
         this.readRepository = readRepository;
         this.categoryRepository = categoryRepository;
-        this.imageRepository = imageRepository;
         this.userFeignClient = userFeignClient;
         this.producer = producer;
         this.objectMapper = objectMapper;
