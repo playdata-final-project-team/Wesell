@@ -20,8 +20,8 @@ public class ProductImageController {
 
     //value = , consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     @PostMapping("upload")
-    public ResponseEntity<?> uploadFile(@RequestPart(value = "id") Long postId, @RequestPart(value = "file")MultipartFile file) throws IOException {
-        fileUploadService.saveImageUrl(postId, fileUploadService.uploadAndGetUrl(file));
+    public ResponseEntity<?> uploadFile(@RequestPart(value = "id") Long productId, @RequestPart(value = "file")MultipartFile file) throws IOException {
+        fileUploadService.saveImageUrl(productId, fileUploadService.uploadAndGetUrl(file));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

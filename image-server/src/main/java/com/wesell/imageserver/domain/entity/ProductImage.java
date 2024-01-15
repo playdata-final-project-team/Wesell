@@ -23,15 +23,15 @@ public class ProductImage {
     @Column(name = "i_id")
     private Long id;
 
-    @Column(name = "post_id")
-    private Long postId;
+    @Column(name = "product_id")
+    private Long productId;
 
     @Column(name = "i_url")
     private String imageUrl;
 
     @Builder
-    public ProductImage(Long postId, String imageUrl) {
-        this.postId = postId;
+    public ProductImage(Long productId, String imageUrl) {
+        this.productId = productId;
         this.imageUrl = imageUrl;
     }
 }

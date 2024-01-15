@@ -25,9 +25,9 @@ public class FileUploadService {
         this.productImageRepository = productImageRepository;
     }
 
-    public void saveImageUrl(Long postId, String url) {
+    public void saveImageUrl(Long productId, String url) {
         ProductImage userImage = ProductImage.builder()
-                .postId(postId)
+                .productId(productId)
                 .imageUrl(url)
                 .build();
         productImageRepository.save(userImage);

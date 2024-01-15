@@ -12,6 +12,7 @@ import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
 import com.wesell.dealservice.domain.repository.read.DealPostReadRepository;
 import com.wesell.dealservice.error.exception.CustomException;
+import com.wesell.dealservice.feignClient.ImageFeignClient;
 import com.wesell.dealservice.feignClient.UserFeignClient;
 import com.wesell.dealservice.util.Producer;
 import feign.FeignException;
@@ -36,15 +37,17 @@ public class DealServiceImpl implements DealService {
     private final DealPostReadRepository readRepository;
     private final CategoryRepository categoryRepository;
     private final UserFeignClient userFeignClient;
+    private final ImageFeignClient imageFeignClient;
     private final Producer producer;
     private final ObjectMapper objectMapper;
 
     public DealServiceImpl(DealRepository dealRepository, DealPostReadRepository readRepository, CategoryRepository categoryRepository,
-                            UserFeignClient userFeignClient, Producer producer, ObjectMapper objectMapper) {
+                            UserFeignClient userFeignClient, ImageFeignClient imageFeignClient, Producer producer, ObjectMapper objectMapper) {
         this.dealRepository = dealRepository;
         this.readRepository = readRepository;
         this.categoryRepository = categoryRepository;
         this.userFeignClient = userFeignClient;
+        this.imageFeignClient = imageFeignClient;
         this.producer = producer;
         this.objectMapper = objectMapper;
     }
@@ -110,7 +113,7 @@ public class DealServiceImpl implements DealService {
         } catch (FeignException e) {
             nickname = "nickname";
         }
-        String imageUrl = imageRepository.findImageByPostId(foundPost.getId()).getImageUrl();
+        String imageUrl = imageFeignClient.getUrlByProductId(postId);
         return new PostInfoResponseDto(foundPost, nickname, imageUrl);
     }
 
@@ -134,7 +137,7 @@ public class DealServiceImpl implements DealService {
         Page<DealPost> posts = readRepository.searchDealPostList(PageRequest.of(page, pageLimit));
         log.info(posts.toList());
         return PageResponseDto.builder()
-                .dtoList(posts.map(post -> new MainPagePostResponseDto(post, imageRepository.findImageByPostId(post.getId()))).toList())
+                .dtoList(posts.map(post -> new MainPagePostResponseDto(post, imageFeignClient.getUrlByProductId(post.getId()))).toList())
                 .page(page)
                 .totalElements(posts.getTotalElements())
                 .size(posts.getSize())
@@ -147,8 +150,7 @@ public class DealServiceImpl implements DealService {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByCategory(categoryId, PageRequest.of(page, pageLimit)).orElse(null);
         return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
+            return new MainPagePostResponseDto(post, imageFeignClient.getUrlByProductId(post.getId()));
         });
     }
 
@@ -157,8 +159,7 @@ public class DealServiceImpl implements DealService {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByTitle(title, PageRequest.of(page, pageLimit)).orElse(null);
         return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
+            return new MainPagePostResponseDto(post, imageFeignClient.getUrlByProductId(post.getId()));
         });
     }
 
