@@ -6,7 +6,7 @@ import com.wesell.chatservice.domain.repository.ChatMessageRepository;
 import com.wesell.chatservice.domain.repository.ChatRoomRepository;
 import com.wesell.chatservice.domain.service.ChatMessageLoadService;
 import com.wesell.chatservice.dto.query.ChatMessageListQuery;
-import com.wesell.chatservice.dto.response.ChatMessageResponse;
+import com.wesell.chatservice.dto.response.ChatMessageResponseDto;
 import com.wesell.chatservice.exception.ChatRoomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +27,7 @@ public class ChatMessageLoadServiceImpl implements ChatMessageLoadService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ChatMessageResponse> getChatMessageList(ChatMessageListQuery query) {
+    public List<ChatMessageResponseDto> getChatMessageList(ChatMessageListQuery query) {
         ChatRoom room = chatRoomRepository.findById(query.getRoomId()).orElseThrow(
                 () -> new ChatRoomNotFoundException()
         );
@@ -39,7 +39,7 @@ public class ChatMessageLoadServiceImpl implements ChatMessageLoadService {
                                 Sort.by("sendDate").descending()));
 
         return chatMessageSlice.getContent().stream().map(
-                (entity) -> ChatMessageResponse.builder()
+                (entity) -> ChatMessageResponseDto.builder()
                         .id(entity.getId())
                         .message(entity.getContent())
                         .sender(entity.getSender())

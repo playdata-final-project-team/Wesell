@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ChatRoomRequest {
+public class ChatRoomRequestDto {
 
     @NotBlank(message = "NullPointer Error - 구매자")
     private String consumer;

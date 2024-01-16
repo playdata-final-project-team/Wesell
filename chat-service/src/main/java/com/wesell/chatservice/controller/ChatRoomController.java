@@ -5,9 +5,9 @@ import com.wesell.chatservice.domain.service.ChatRoomLoadService;
 import com.wesell.chatservice.dto.command.ChatRoomCreateCommand;
 import com.wesell.chatservice.dto.query.ChatRoomListQuery;
 import com.wesell.chatservice.dto.query.ChatRoomQuery;
-import com.wesell.chatservice.dto.request.ChatRoomRequest;
-import com.wesell.chatservice.dto.response.ChatRoomListResponse;
-import com.wesell.chatservice.dto.response.ChatRoomResponse;
+import com.wesell.chatservice.dto.request.ChatRoomRequestDto;
+import com.wesell.chatservice.dto.response.ChatRoomListResponseDto;
+import com.wesell.chatservice.dto.response.ChatRoomResponseDto;
 import com.wesell.chatservice.global.response.success.SuccessApiResponse;
 import com.wesell.chatservice.global.response.success.SuccessCode;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ public class ChatRoomController {
      * @return ResponseEntity<Long>
      */
     @PostMapping
-    public ResponseEntity<?> createChatRoom(@RequestBody @Valid ChatRoomRequest requestDto) {
+    public ResponseEntity<?> createChatRoom(@RequestBody @Valid ChatRoomRequestDto requestDto) {
         ChatRoomCreateCommand chatRoomCreateCommand = ChatRoomCreateCommand.builder()
                 .productId(requestDto.getProductId())
                 .consumer(requestDto.getConsumer())
@@ -48,7 +48,7 @@ public class ChatRoomController {
      * @param roomId
      * @param page
      * @param size
-     * @return ResponseEntity<ChatRoomResponse>
+     * @return ResponseEntity<ChatRoomResponseDto>
      */
     @GetMapping("/{roomId}")
     public ResponseEntity<?> getChatRoom(@PathVariable Long roomId,
@@ -59,8 +59,8 @@ public class ChatRoomController {
                 .page(page)
                 .size(size)
                 .build();
-        ChatRoomResponse chatRoomResponse = chatRoomLoadService.getChatRoomById(chatRoomQuery);
-        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK, chatRoomResponse));
+        ChatRoomResponseDto chatRoomResponseDto = chatRoomLoadService.getChatRoomById(chatRoomQuery);
+        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK, chatRoomResponseDto));
     }
 
     /**
@@ -69,7 +69,7 @@ public class ChatRoomController {
      * @param page
      * @param size
      * @param consumer
-     * @return ResponseEntity<ChatRoomListResponse>
+     * @return ResponseEntity<ChatRoomListResponseDto>
      */
     @GetMapping
     public ResponseEntity<?> getMyChatRoomList(@RequestParam(defaultValue = "0") int page,
@@ -80,10 +80,10 @@ public class ChatRoomController {
                 .page(page)
                 .size(size)
                 .build();
-        ChatRoomListResponse chatRoomListResponse = chatRoomLoadService.getChatRoomList(chatRoomListQuery);
+        ChatRoomListResponseDto chatRoomListResponseDto = chatRoomLoadService.getChatRoomList(chatRoomListQuery);
         return ResponseEntity.ok(SuccessApiResponse.of(
                 SuccessCode.OK,
-                chatRoomListResponse)
+                chatRoomListResponseDto)
         );
     }
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ChatMessageRequest {
+public class ChatMessageRequestDto {
     @NotBlank(message = "NullPointer Error - 작성자")
     private String sender;
     @NotBlank(message = "NullPointer Error - 내용")
