@@ -1,6 +1,6 @@
 package com.wesell.payservice.domain.entity;
 
-import com.wesell.payservice.domain.dto.request.RequestDeliveryDto;
+import com.wesell.payservice.domain.dto.request.DeliveryRequestDto;
 import com.wesell.payservice.enumerate.ShippingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,7 +56,7 @@ public class Delivery {
     }
 
     //비즈니스 로직
-    public static Delivery createDelivery(RequestDeliveryDto requestDto) {
+    public static Delivery createDelivery(DeliveryRequestDto requestDto) {
         Delivery delivery = Delivery.builder()
                 .status(ShippingStatus.PREPARING)
                 .shippingNumber(0)

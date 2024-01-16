@@ -1,6 +1,6 @@
 package com.wesell.payservice.service.facade;
 
-import com.wesell.payservice.domain.dto.response.ResponseDetailFacadeDto;
+import com.wesell.payservice.domain.dto.response.DetailFacadeResponseDto;
 import com.wesell.payservice.service.delivery.DeliveryServiceImpl;
 import com.wesell.payservice.service.pay.PayServiceImpl;
 import jakarta.transaction.Transactional;
@@ -18,8 +18,8 @@ public class FacadeService {
         this.deliveryService = deliveryService;
     }
 
-    public ResponseDetailFacadeDto getPayResult(Long payId) {
-        ResponseDetailFacadeDto dto = new ResponseDetailFacadeDto();
+    public DetailFacadeResponseDto getPayResult(Long payId) {
+        DetailFacadeResponseDto dto = new DetailFacadeResponseDto();
         dto.setDeliveryDto(deliveryService.getDeliveryInfo(payService.findDeliveryByPayId(payId)));
         dto.setPayDto(payService.getPayInfo(payId));
         return dto;

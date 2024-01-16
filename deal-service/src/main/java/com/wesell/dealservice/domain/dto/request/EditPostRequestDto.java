@@ -26,7 +26,7 @@ public class EditPostRequestDto {
     @NotBlank
     private String detail;
 
-    private Long postId;
+    private Long productId;
 
-    private int division = 3;
+    private int division = 2;
 }

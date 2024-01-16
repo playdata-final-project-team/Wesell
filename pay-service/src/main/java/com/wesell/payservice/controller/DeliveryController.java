@@ -1,7 +1,7 @@
 package com.wesell.payservice.controller;
 
-import com.wesell.payservice.domain.dto.request.RequestDeliveryDto;
-import com.wesell.payservice.service.delivery.DeliveryServiceImpl;
+import com.wesell.payservice.domain.dto.request.DeliveryRequestDto;
+import com.wesell.payservice.service.delivery.DeliveryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/v2")
 public class DeliveryController {
-    private final DeliveryServiceImpl deliveryService;
-    public DeliveryController(DeliveryServiceImpl deliveryService) {
+    private final DeliveryService deliveryService;
+    public DeliveryController(DeliveryService deliveryService) {
         this.deliveryService = deliveryService;
     }
 
     @PostMapping("delivery")
-    public ResponseEntity<Long> delivery (@RequestBody RequestDeliveryDto requestDto) {
+    public ResponseEntity<Long> delivery (@RequestBody DeliveryRequestDto requestDto) {
         return new ResponseEntity<>(deliveryService.createDelivery(requestDto), HttpStatus.CREATED);
     }
 

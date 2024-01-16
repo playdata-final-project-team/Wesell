@@ -4,45 +4,31 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
-import com.wesell.dealservice.domain.dto.request.UploadFileRequestDto;
 import com.wesell.dealservice.domain.repository.read.ViewDao;
-import com.wesell.dealservice.error.ErrorCode;
-import com.wesell.dealservice.error.exception.CustomException;
+import com.wesell.dealservice.global.response.error.ErrorCode;
 import com.wesell.dealservice.service.DealServiceImpl;
-import com.wesell.dealservice.service.FileUploadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.QueryException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1")
+@RequestMapping("api/v2")
 public class DealController {
 
     private final DealServiceImpl dealService;
-    private final FileUploadService uploadService;
     private final ViewDao viewDao;
 
     /**
      *
-     * @param file
-     * @return postId와 이미지 url 저장
-     * @throws IOException
+     * @param requestDto
+     * @return
      */
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadFile( @RequestPart("requestDto") UploadDealPostRequestDto requestDto,
-                                         @RequestPart(value = "file") MultipartFile file) throws IOException {
-        Long postId = dealService.createDealPost(requestDto);
-        String url = uploadService.uploadAndGetUrl(file);
-        UploadFileRequestDto fileRequestDto = new UploadFileRequestDto(postId,url);
-        dealService.publishCreateItemMessage(fileRequestDto);
-        return new ResponseEntity<>(postId, HttpStatus.CREATED);
+    @PostMapping( "/upload")
+    public ResponseEntity<?> createProduct( @RequestBody UploadDealPostRequestDto requestDto) {
+        return new ResponseEntity<>(dealService.createDealPost(requestDto), HttpStatus.CREATED);
     }
 
     /**
@@ -81,19 +67,18 @@ public class DealController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("status/{postId}")
-    public ResponseEntity<?> getSaleStatus(@PathVariable Long postId){
-        String saleStatus = dealService.getSaleStatus(postId);
-        return new ResponseEntity<>(saleStatus,HttpStatus.OK);
+    @GetMapping("status/{productId}")
+    public ResponseEntity<String> getSaleStatus(@PathVariable Long productId){
+        return new ResponseEntity<>(viewDao.searchById(productId).getSaleStatus().toString(),HttpStatus.OK);
     }
 
     /**
-     * @param postId
+     * @param productId
      * @return 게시글 논리 삭제
      */
     @PutMapping("delete")
-    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long postId) {
-        dealService.deletePost(postId);
+    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long productId) {
+        dealService.deletePost(productId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -136,11 +121,11 @@ public class DealController {
     }
 
     @GetMapping("price")
-    public ResponseEntity<?> getPriceByPostId(@RequestParam("postId") Long postId) {
+    public ResponseEntity<?> getPriceByPostId(@RequestParam("productId") Long productId) {
         Long price = 0L;
 
         try {
-            price = viewDao.findPriceByPostId(postId);
+            price = viewDao.searchPriceById(productId);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(price, ErrorCode.NO_PRICE_RESEARCH.getStatus());
         }

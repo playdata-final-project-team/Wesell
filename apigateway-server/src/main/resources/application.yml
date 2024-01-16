@@ -58,7 +58,13 @@ spring:
           filters:
             - RewritePath=/pay-service/(?<path>.*),/$\{path}
 
-
+        - id: image-server
+          uri: lb://IMAGE-SERVER
+          predicates:
+            - Path=/image-server/**
+          filters:
+            - RewritePath=/image-server/(?<path>.*),/$\{path}
+            
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}

@@ -1,7 +1,7 @@
 package com.wesell.payservice.service.pay;
 
-import com.wesell.payservice.domain.dto.request.RequestPayDto;
-import com.wesell.payservice.domain.dto.response.ResponsePayDto;
+import com.wesell.payservice.domain.dto.request.PayRequestDto;
+import com.wesell.payservice.domain.dto.response.PayResponseDto;
 import com.wesell.payservice.domain.dto.search.PayViewDao;
 import com.wesell.payservice.domain.entity.Delivery;
 import com.wesell.payservice.domain.entity.Pay;
@@ -31,7 +31,7 @@ public class PayServiceImpl implements PayService {
     }
 
     @Override
-    public Long createPay(RequestPayDto requestDto) {
+    public Long createPay(PayRequestDto requestDto) {
         Long amount = dealFeign.getPayInfo(requestDto.getProductId());
         Pay pay = Pay.createPay(requestDto, createOrderNumber(requestDto), amount);
 
@@ -48,16 +48,16 @@ public class PayServiceImpl implements PayService {
     }
 
     @Override
-    public String createOrderNumber(RequestPayDto requestDto) {
+    public String createOrderNumber(PayRequestDto requestDto) {
         String format = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
         String productId = String.valueOf(requestDto.getProductId());
         return  format+productId;
     }
 
     @Override
-    public ResponsePayDto getPayInfo(Long payId) {
+    public PayResponseDto getPayInfo(Long payId) {
         Pay pay = payViewDao.searchPayById(payId);
-        return new ResponsePayDto(pay);
+        return new PayResponseDto(pay);
     }
 
     public Long findDeliveryByPayId(Long payId) {

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wesell.dealservice.domain.dto.request.ChangePostRequestDto;
 import com.wesell.dealservice.domain.dto.response.*;
-import com.wesell.dealservice.domain.entity.Image;
-import com.wesell.dealservice.domain.repository.ImageRepository;
 import com.wesell.dealservice.domain.dto.request.UploadDealPostRequestDto;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import com.wesell.dealservice.domain.entity.Category;
@@ -13,13 +11,13 @@ import com.wesell.dealservice.domain.entity.DealPost;
 import com.wesell.dealservice.domain.repository.CategoryRepository;
 import com.wesell.dealservice.domain.repository.DealRepository;
 import com.wesell.dealservice.domain.repository.read.DealPostReadRepository;
-import com.wesell.dealservice.error.exception.CustomException;
+import com.wesell.dealservice.global.response.error.exception.CustomException;
+import com.wesell.dealservice.feignClient.ImageFeignClient;
 import com.wesell.dealservice.feignClient.UserFeignClient;
 import com.wesell.dealservice.util.Producer;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -28,7 +26,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import static com.wesell.dealservice.error.ErrorCode.INVALID_POST;
+import static com.wesell.dealservice.global.response.error.ErrorCode.INVALID_POST;
 
 @Service
 @Transactional
@@ -38,18 +36,18 @@ public class DealServiceImpl implements DealService {
     private final DealRepository dealRepository;
     private final DealPostReadRepository readRepository;
     private final CategoryRepository categoryRepository;
-    private final ImageRepository imageRepository;
     private final UserFeignClient userFeignClient;
+    private final ImageFeignClient imageFeignClient;
     private final Producer producer;
     private final ObjectMapper objectMapper;
 
     public DealServiceImpl(DealRepository dealRepository, DealPostReadRepository readRepository, CategoryRepository categoryRepository,
-                           ImageRepository imageRepository, UserFeignClient userFeignClient, Producer producer, ObjectMapper objectMapper) {
+                            UserFeignClient userFeignClient, ImageFeignClient imageFeignClient, Producer producer, ObjectMapper objectMapper) {
         this.dealRepository = dealRepository;
         this.readRepository = readRepository;
         this.categoryRepository = categoryRepository;
-        this.imageRepository = imageRepository;
         this.userFeignClient = userFeignClient;
+        this.imageFeignClient = imageFeignClient;
         this.producer = producer;
         this.objectMapper = objectMapper;
     }
@@ -75,7 +73,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public EditPostResponseDto editPost(EditPostRequestDto requestDto) {
-        DealPost editPost = dealRepository.findDealPostById(requestDto.getPostId());
+        DealPost editPost = dealRepository.findDealPostById(requestDto.getProductId());
         editPost.editPost(requestDto);
         Category category = categoryRepository.findById(requestDto.getCategoryId()).get();
         editPost.editCategory(category);
@@ -84,8 +82,8 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public void deletePost(Long postId) {
-        DealPost post = dealRepository.findDealPostById(postId);
+    public void deletePost(Long productId) {
+        DealPost post = dealRepository.findDealPostById(productId);
         post.deleteMyPost();
     }
 
@@ -98,24 +96,19 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public void changePostStatus(ChangePostRequestDto requestDto) {
-        dealRepository.findDealPostByIdAndIsDeleted(requestDto.getPostId(), false).changeStatus();
-    }
-
-    public String getSaleStatus(Long postId){
-        DealPost dealPost = dealRepository.findById(postId).get();
-        return dealPost.getSaleStatus().toString();
+        dealRepository.findDealPostByIdAndIsDeleted(requestDto.getProductId(), false).changeStatus();
     }
 
     @Override
-    public PostInfoResponseDto getPostInfo(Long postId) {
+    public PostInfoResponseDto getPostInfo(Long productId) {
         String nickname;
-        DealPost foundPost = readRepository.searchDealPost(postId);
+        DealPost foundPost = readRepository.searchDealPost(productId);
         try {
             nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
         } catch (FeignException e) {
             nickname = "nickname";
         }
-        String imageUrl = imageRepository.findImageByPostId(foundPost.getId()).getImageUrl();
+        String imageUrl = imageFeignClient.getUrlByProductId(productId);
         return new PostInfoResponseDto(foundPost, nickname, imageUrl);
     }
 
@@ -139,7 +132,7 @@ public class DealServiceImpl implements DealService {
         Page<DealPost> posts = readRepository.searchDealPostList(PageRequest.of(page, pageLimit));
         log.info(posts.toList());
         return PageResponseDto.builder()
-                .dtoList(posts.map(post -> new MainPagePostResponseDto(post, imageRepository.findImageByPostId(post.getId()))).toList())
+                .dtoList(posts.map(post -> new MainPagePostResponseDto(post, imageFeignClient.getUrlByProductId(post.getId()))).toList())
                 .page(page)
                 .totalElements(posts.getTotalElements())
                 .size(posts.getSize())
@@ -152,8 +145,7 @@ public class DealServiceImpl implements DealService {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByCategory(categoryId, PageRequest.of(page, pageLimit)).orElse(null);
         return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
+            return new MainPagePostResponseDto(post, imageFeignClient.getUrlByProductId(post.getId()));
         });
     }
 
@@ -162,8 +154,7 @@ public class DealServiceImpl implements DealService {
         int pageLimit = 8;
         Page<DealPost> posts = readRepository.searchByTitle(title, PageRequest.of(page, pageLimit)).orElse(null);
         return posts.map(post -> {
-            Image image = imageRepository.findImageByPostId(post.getId());
-            return new MainPagePostResponseDto(post, image);
+            return new MainPagePostResponseDto(post, imageFeignClient.getUrlByProductId(post.getId()));
         });
     }
 
@@ -176,7 +167,7 @@ public class DealServiceImpl implements DealService {
     }
 
     public EditPostResponseDto CompareWithUpdated(EditPostRequestDto dto) {
-        DealPost editPost = dealRepository.findDealPostById(dto.getPostId());
+        DealPost editPost = dealRepository.findDealPostById(dto.getProductId());
         if(editPost.getTitle().equals(dto.getTitle()) && editPost.getPrice() == dto.getPrice()
                 && editPost.getLink().equals(dto.getLink()) && editPost.getDetail().equals(dto.getDetail())) {
             return new EditPostResponseDto(editPost);
