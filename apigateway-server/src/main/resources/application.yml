@@ -44,12 +44,20 @@ spring:
           filters:
             - RewritePath=/auth-server/(?<path>.*),/$\{path}
 
+        - id: chat-service
+          uri: lb://CHAT-SERVICE
+          predicates:
+            - Path=/chat-service/**
+          filters:
+            - RewritePath=/chat-service/(?<path>.*),/$\{path}
+
         - id: pay-service
           uri: lb://PAY-SERVICE
           predicates:
             - Path=/pay-service/**
           filters:
             - RewritePath=/pay-service/(?<path>.*),/$\{path}
+
 
 eureka:
   instance:

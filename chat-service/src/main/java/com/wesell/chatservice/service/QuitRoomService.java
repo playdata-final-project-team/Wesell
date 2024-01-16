@@ -1,4 +1,4 @@
-package com.wesell.chatservice.services;
+package com.wesell.chatservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
