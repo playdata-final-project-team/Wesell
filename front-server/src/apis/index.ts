@@ -7,18 +7,19 @@ import { PwCheckRequestDto } from './request/delete';
 import MyDealListWithPageResponseDto from './response/mypage/my.deal-list-page.response.dto';
 import { DealInfoStatusUpdateRequestDto, MypageUpdateRequestDto } from './request/mypage';
 import PhoneValidateResponseDto from './response/auth/phone-validate.response.dto';
+import { ChatRoomListResponseDto } from './response/chat';
 
-const SIGN_IN_URL = () => '/auth-server/api/v1/sign-in';
-const SIGN_UP_URL = () => '/auth-server/api/v1/sign-up';
-const LOGOUT_URL = () => '/auth-server/api/v1/logout';
-const KAKAO_LOGOUT_URL = (kakaoId: string) => `/auth-server/api/v1/kakao/logout/${kakaoId}`;
-const SIGN_UP_PHONE_CHECK_URL = () => '/auth-service/api/v1/sign-up/phone/validate';
-const PHONE_CHECK_URL = () => '/auth-service/api/v1/phone/validate';
-const KAKAO_CALLBACK_URL = () => '/auth-server/api/v1/kakao/auth-code';
-const REFRESH_TOKEN_URL = () => '/auth-server/api/v1/refresh';
-const PW_CHECK_URL = () => '/auth-server/api/v1/delete/pw-check';
-const DELETE_URL = (uuid: string | null) => `/auth-server/api/v1/delete/${uuid}`;
-const KAKAO_DELETE_URL = () => '/auth-server/api/v1/delete/kakao';
+const SIGN_IN_URL = () => '/auth-server/api/v2/sign-in';
+const SIGN_UP_URL = () => '/auth-server/api/v2/sign-up';
+const LOGOUT_URL = () => '/auth-server/api/v2/logout';
+const KAKAO_LOGOUT_URL = (kakaoId: string) => `/auth-server/api/v2/kakao/logout/${kakaoId}`;
+const SIGN_UP_PHONE_CHECK_URL = () => '/auth-service/api/v2/sign-up/phone/validate';
+const PHONE_CHECK_URL = () => '/auth-service/api/v2/phone/validate';
+const KAKAO_CALLBACK_URL = () => '/auth-server/api/v2/kakao/auth-code';
+const REFRESH_TOKEN_URL = () => '/auth-server/api/v2/refresh';
+const PW_CHECK_URL = () => '/auth-server/api/v2/delete/pw-check';
+const DELETE_URL = (uuid: string | null) => `/auth-server/api/v2/delete/${uuid}`;
+const KAKAO_DELETE_URL = () => '/auth-server/api/v2/delete/kakao';
 
 const NICKNAME_CHECK_URL = () => '/user-service/api/v1/dup-check';
 const MYPAGE_URL = (uuid: string | null) => `/user-service/api/v1/users/${uuid}`;
@@ -27,6 +28,8 @@ const MY_INFO_UPDATE_URL = (uuid: string | null) => `/user-service/api/v1/users/
 const MY_DEAL_LIST_URL = () => '/deal-service/api/v1/list';
 const SALESTATUS_CHANGE_URL = () => '/deal-service/api/v1/complete';
 const DELETE_POSTLIST_URL = () => '/deal-service/api/v1/checked/delete';
+
+const CHAT_ROOM_LIST = () => '/chat-service/api/v2/rooms';
 
 // api request : 로그인 요청 o
 export const signInRequest = async (requestBody: SignInRequestDto) => {
@@ -283,6 +286,25 @@ export const deleteKakaoUserRequest = async (kakaoId: string, uuid: string | nul
   }
 };
 
+// api request : 채팅방 목록 요청
+export const loadChatRoomListRequest = async (uuid: string | null) => {
+  try {
+    const response = await axios.get(CHAT_ROOM_LIST(), {
+      params: {
+        consumer: uuid,
+      },
+    });
+    const responseBody: ChatRoomListResponseDto = response.data;
+    return responseBody;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error('채팅 내역 로드 실패', error);
+    if (!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+};
+
 // comment: *중요 - 순환참조로 인해 Interceptor 내부에서 axios 요청 금지
 axios.interceptors.response.use(
   (res) => res,
@@ -301,7 +323,13 @@ axios.interceptors.response.use(
 
     if (status === 504) {
       console.log('504 Gateway Timeout Error');
-      alert('네트워크 연결 상태를 확인해주세요!');
+      alert('😒 네트워크 연결 상태를 확인해주세요!');
+      return;
+    }
+
+    if (status === 503) {
+      console.log('503 Service Unavailable');
+      alert('💀 서버가 켜져있지 않습니다! 확인바랍니다!');
       return;
     }
 
@@ -310,13 +338,7 @@ axios.interceptors.response.use(
     }
 
     config.sent = true;
-    const responseBody: ResponseDto | null = await refreshTokenRequest();
-
-    if (!responseBody) {
-      alert('네트워크 연결 상태를 확인해주세요!');
-      return;
-    }
-
+    await refreshTokenRequest();
     return axios(config); // 재요청
   },
 );
