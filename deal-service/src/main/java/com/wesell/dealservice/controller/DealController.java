@@ -33,7 +33,7 @@ public class DealController {
 
     /**
      * @param postId 요청
-     * @return 상세글 보기 (제목, 생성날짜, 가격, 상세설명, 링크, 작성자 닉네임)
+     * @return 상세글 보기 (제목, 생성날짜, 가격, 상세설명, 작성자 닉네임, 작성자 판매횟수, 이미지)
      */
     @GetMapping("post")
     public ResponseEntity<?> getPostInfo(@Valid @RequestParam("id") Long postId) {

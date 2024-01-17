@@ -99,17 +99,16 @@ public class DealServiceImpl implements DealService {
         dealRepository.findDealPostByIdAndIsDeleted(requestDto.getProductId(), false).changeStatus();
     }
 
+    //todo: feign 통신 에러
     @Override
-    public PostInfoResponseDto getPostInfo(Long productId) {
-        String nickname;
-        DealPost foundPost = readRepository.searchDealPost(productId);
-        try {
-            nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
-        } catch (FeignException e) {
-            nickname = "nickname";
-        }
-        String imageUrl = imageFeignClient.getUrlByProductId(productId);
-        return new PostInfoResponseDto(foundPost, nickname, imageUrl);
+    public ProductInfoFacadeDto getPostInfo(Long productId) {
+        DealPost foundPost = dealRepository.findDealPostById(productId);
+        ProductInfoFacadeDto dto = new ProductInfoFacadeDto();
+        dto.setProductInfoResponseDto(new ProductInfoResponseDto(foundPost));
+        dto.setUserFeignResponseDto(userFeignClient.getDealInfoByUuid(foundPost.getUuid()));
+        dto.setImageUrl(imageFeignClient.getUrlByProductId(productId));
+
+        return dto;
     }
 
     @Override

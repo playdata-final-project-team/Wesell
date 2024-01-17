@@ -9,6 +9,7 @@ import com.wesell.userservice.dto.request.SignupRequestDto;
 import com.wesell.userservice.dto.response.AdminUserResponseDto;
 import com.wesell.userservice.dto.response.MypageResponseDto;
 import com.wesell.userservice.domain.entity.User;
+import com.wesell.userservice.dto.response.DealUserResponseDto;
 import com.wesell.userservice.global.response.error.CustomException;
 import com.wesell.userservice.global.response.error.ErrorCode;
 import com.wesell.userservice.service.feign.AuthServerFeignClient;
@@ -19,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -204,6 +204,13 @@ public class UserServiceImpl implements UserService {
 
         // 페이징된 데이터를 포함하는 Page 객체로 변환하여 반환
         return new PageImpl<>(responseDtoList, userInfoPage.getPageable(), userInfoPage.getTotalElements());
+    }
+
+    public DealUserResponseDto getDealInfo(String uuid) {
+        return DealUserResponseDto.builder()
+                .nickname(userRepository.findNicknameByUuid(uuid))
+                .dealCount(userRepository.findDealCountByUuid(uuid))
+                .build();
     }
 
     // 엔티티로 변환

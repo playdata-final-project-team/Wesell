@@ -3,6 +3,7 @@ package com.wesell.userservice.controller;
 import com.wesell.userservice.dto.feigndto.AdminFeignResponseDto;
 import com.wesell.userservice.dto.request.SignupRequestDto;
 import com.wesell.userservice.dto.response.AdminUserResponseDto;
+import com.wesell.userservice.dto.response.DealUserResponseDto;
 import com.wesell.userservice.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -52,10 +53,9 @@ public class UserFeignController {
         userService.delete(uuid);
     }
 
-    // 판매글 - 판매 상세 - 닉네임 조회
-    @GetMapping("users/{uuid}/nickname")
-    public ResponseEntity<String> getNicknameByUuid(@PathVariable String uuid) {
-        String nickname = userService.getNicknameByUuid(uuid);
-        return ResponseEntity.ok(nickname);
+    // 판매글 - 판매 상세 - 닉네임, 판매횟수 조회
+    @GetMapping("users/{uuid}/dealInfo")
+    public DealUserResponseDto getNicknameByUuid(@PathVariable String uuid) {
+        return userService.getDealInfo(uuid);
     }
 }
