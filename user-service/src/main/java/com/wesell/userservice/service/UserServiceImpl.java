@@ -207,9 +207,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public DealUserResponseDto getDealInfo(String uuid) {
+        String nickname = userRepository.findNicknameByUuid(uuid);
+        Long dealCount = userRepository.findDealCountByUuid(uuid);
         return DealUserResponseDto.builder()
-                .nickname(userRepository.findNicknameByUuid(uuid))
-                .dealCount(userRepository.findDealCountByUuid(uuid))
+                .nickname(nickname)
+                .dealCount(dealCount)
                 .build();
     }
 

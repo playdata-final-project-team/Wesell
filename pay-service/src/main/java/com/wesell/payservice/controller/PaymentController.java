@@ -33,4 +33,9 @@ public class PaymentController {
     public ResponseEntity<DetailFacadeResponseDto> getPayResult (@RequestParam(name = "payId") Long payId) {
         return new ResponseEntity<>(facadeservice.getPayResult(payId), HttpStatus.OK);
     }
+
+    @GetMapping("mypage/payment")
+    public ResponseEntity<?> getMyPays (@RequestParam(name = "id") String uuid,  @RequestParam(value = "page", defaultValue = "0") int page) {
+        return new ResponseEntity<>(payService.getMyPayList(uuid, page-1), HttpStatus.OK);
+    }
 }

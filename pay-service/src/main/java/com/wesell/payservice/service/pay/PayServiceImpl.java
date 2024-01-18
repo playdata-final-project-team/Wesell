@@ -1,6 +1,7 @@
 package com.wesell.payservice.service.pay;
 
 import com.wesell.payservice.domain.dto.request.PayRequestDto;
+import com.wesell.payservice.domain.dto.response.MyPayListResponseDto;
 import com.wesell.payservice.domain.dto.response.PayResponseDto;
 import com.wesell.payservice.domain.dto.search.PayViewDao;
 import com.wesell.payservice.domain.entity.Delivery;
@@ -8,10 +9,17 @@ import com.wesell.payservice.domain.entity.Pay;
 import com.wesell.payservice.domain.repository.DeliveryRepository;
 import com.wesell.payservice.domain.repository.PayRepository;
 import com.wesell.payservice.feign.DealFeign;
+import com.wesell.payservice.global.response.error.ErrorCode;
+import com.wesell.payservice.global.response.error.exception.CustomException;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,13 +29,12 @@ public class PayServiceImpl implements PayService {
     private final PayRepository payRepository;
     private final DeliveryRepository deliveryRepository;
     private final DealFeign dealFeign;
-    private final PayViewDao payViewDao;
+
     public PayServiceImpl(PayRepository payRepository, DeliveryRepository deliveryRepository,
-                          DealFeign dealFeign, PayViewDao payViewDao) {
+                          DealFeign dealFeign) {
         this.payRepository = payRepository;
         this.deliveryRepository = deliveryRepository;
         this.dealFeign = dealFeign;
-        this.payViewDao = payViewDao;
     }
 
     @Override
@@ -55,9 +62,14 @@ public class PayServiceImpl implements PayService {
     }
 
     @Override
-    public PayResponseDto getPayInfo(Long payId) {
-        Pay pay = payViewDao.searchPayById(payId);
-        return new PayResponseDto(pay);
+    public Page<MyPayListResponseDto> getMyPayList(String buyer, int page) {
+        int pageLimit = 8;
+        Page<Pay> pays = payRepository.findPayByBuyer(buyer, PageRequest.of(page, pageLimit))
+                .orElseThrow(() -> new CustomException(ErrorCode.PAY_NOT_FOUND));
+        return pays.map(pay -> {
+            return new MyPayListResponseDto(pay, dealFeign.getTitle(pay.getProductId()),
+                    deliveryRepository.findDeliveryById(pay.getDeliveryId()));
+        });
     }
 
     public Long findDeliveryByPayId(Long payId) {

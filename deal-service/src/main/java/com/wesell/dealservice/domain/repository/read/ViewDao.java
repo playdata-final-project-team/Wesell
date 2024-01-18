@@ -13,4 +13,8 @@ public interface ViewDao extends Repository<DealPost, Long> {
     @Query("SELECT dp.price FROM DealPost dp "
             + "WHERE dp.id =:productId")
     Long searchPriceById(@Param("productId") Long productId);
+
+    @Query("SELECT dp.title FROM DealPost dp "
+            + "WHERE dp.id =:productId")
+    String searchTitleById(@Param("productId")Long productId);
 }
