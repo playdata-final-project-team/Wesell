@@ -107,8 +107,8 @@ const [image, setImage] = useState("");
             <img src ={image} />
           </div>
           <div className="board-content">
-            <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} setLink={setLink} 
-            title={title} price={price} detail={detail} link={link} />
+            <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} 
+            title={title} price={price} detail={detail} />
           </div>
         </div>
       </div>

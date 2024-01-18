@@ -12,7 +12,7 @@ function GetCategory() {
 
   useEffect(() => {
     axios 
-      .get('/deal-service/api/v1/categories')
+      .get('/deal-service/api/v2/categories')
       .then((response) => {
         console.log(response.data.categories);
         const categoryArray = Object.values(response.data.categories) as category[];
@@ -51,39 +51,37 @@ function UploadBoard() {
   const [categoryId, setCategoryId] = useState('');
   const [price, setPrice] = useState('');
   const [detail, setDetail] = useState('');
-  const [link, setLink] = useState('');
 
   const canSubmit = useCallback(() => {
     return image.image_file !== "" && title !== "" && price !== ""
-    && detail !== "" && link !== "";
-  }, [image, title, price, detail, link]);
+    && detail !== "";
+  }, [image, title, price, detail]);
 
   const handleSubmit = useCallback(async () => {
     try{
-      const formData = new FormData();
-
       const data1 = {
-        uuid: window.sessionStorage.getItem("uuid"),
+        // uuid: window.sessionStorage.getItem("uuid"),
+        uuid: "test",
         categoryId: categoryId,
         title: title,
         price: price,
-        link: link,
         detail: detail
       }
 
-      const data = new Blob([JSON.stringify(data1)], 
-      {type : "application/json"})
+      //step 1. 딜 서비스
+      const response1 = await axios.post("/deal-service/api/v2/upload", data1);
+      const postId = response1.data;
 
-      // 필드 추가
-      formData.append("requestDto", data);
+      //step 2. 이미지 서버
+      const formData = new FormData();
+      formData.append("id", postId);
       // 파일 추가
       formData.append("file", image.image_file);
 
-      const response = await axios.post("/deal-service/api/v1/upload", formData);
+      await axios.post("/iamge-service/api/v2/upload", formData);
 
       window.alert("😎등록이 완료되었습니다😎");
 
-      const postId = response.data; 
       navigate('/product/detail/'+ postId);
     } catch (e) {
       // 서버에서 받은 에러 메시지 출력
@@ -92,7 +90,7 @@ function UploadBoard() {
       });
     }
 
-  }, [uuid, categoryId, title, price, link, detail, image, navigate]);
+  }, [uuid, categoryId, title, price, detail, image, navigate]);
 
   return (
     <div className="addBoard-wrapper">
@@ -106,8 +104,8 @@ function UploadBoard() {
           </select>
         </div>
         <ImageUploader setImage={setImage} preview_URL={image.preview_URL}/>
-        <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} setLink={setLink} 
-        title={title} price={price} detail={detail} link={link}/>
+        <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} 
+        title={title} price={price} detail={detail}/>
         <div className="submitButton">
           {canSubmit() ? (
             <button className="success-button" onClick={handleSubmit}>

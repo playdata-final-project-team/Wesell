@@ -1,7 +1,7 @@
  import "./style.css";
 
-const TextArea = ({setTitle, setPrice, setDetail, setLink, 
-    title, price, detail, link }) => {
+const TextArea = ({setTitle, setPrice, setDetail, 
+    title, price, detail }) => {
     
   return (
     <div className="textArea-wrapper">
@@ -29,14 +29,6 @@ const TextArea = ({setTitle, setPrice, setDetail, setLink,
         className="text"
         placeholder="상세 정보"
         value={detail}
-      />
-      <input
-        onChange={(e) => {
-          setLink(e.target.value);
-        }}
-        className="link"
-        placeholder="오픈 카카오톡 링크"
-        value={link}
       />
     </div>
   );
