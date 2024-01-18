@@ -27,7 +27,7 @@ public class DealController {
      * @return
      */
     @PostMapping( "/upload")
-    public ResponseEntity<?> createProduct( @RequestBody UploadDealPostRequestDto requestDto) {
+    public ResponseEntity<?> createProduct(@RequestBody UploadDealPostRequestDto requestDto) {
         return new ResponseEntity<>(dealService.createDealPost(requestDto), HttpStatus.CREATED);
     }
 
@@ -36,7 +36,7 @@ public class DealController {
      * @return 상세글 보기 (제목, 생성날짜, 가격, 상세설명, 작성자 닉네임, 작성자 판매횟수, 이미지)
      */
     @GetMapping("post")
-    public ResponseEntity<?> getPostInfo(@Valid @RequestParam("id") Long postId) {
+    public ResponseEntity<?> getPostInfo(@RequestParam("id") Long postId) {
         return new ResponseEntity<>(dealService.getPostInfo(postId), HttpStatus.OK);
     }
 

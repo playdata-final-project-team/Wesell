@@ -18,9 +18,10 @@ public class ProductInfoResponseDto {
     private String createdAt;
     private Long price;
     private String detail;
-    private String link;
-
-    public ProductInfoResponseDto(DealPost post) {
+    private String nickname;
+    private Long dealCount;
+    private String imageUrl;
+    public ProductInfoResponseDto(DealPost post, String nickname, Long dealCount, String imageUrl) {
         this.uuid = post.getUuid();
         this.postId = post.getId();
         this.categoryId = post.getCategory().getId();
@@ -28,8 +29,10 @@ public class ProductInfoResponseDto {
         this.createdAt = post.getCreatedAt()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.price = post.getPrice();
+        this.nickname = nickname;
+        this.dealCount = dealCount;
+        this.imageUrl = imageUrl;
         this.detail = post.getDetail();
-        this.link = post.getLink();
     }
 
 }

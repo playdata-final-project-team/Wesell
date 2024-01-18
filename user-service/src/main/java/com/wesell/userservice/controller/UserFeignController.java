@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1")
+@RequestMapping("api/v2")
 public class UserFeignController {
 
     private final UserServiceImpl userService;
@@ -55,7 +55,7 @@ public class UserFeignController {
 
     // 판매글 - 판매 상세 - 닉네임, 판매횟수 조회
     @GetMapping("users/{uuid}/dealInfo")
-    public DealUserResponseDto getNicknameByUuid(@PathVariable String uuid) {
-        return userService.getDealInfo(uuid);
+    public ResponseEntity<DealUserResponseDto> getDealInfoByUuid(@PathVariable String uuid) {
+        return ResponseEntity.ok(userService.getDealInfo(uuid));
     }
 }

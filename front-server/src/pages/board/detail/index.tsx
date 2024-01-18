@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './index.css';
+import axios from 'axios';
 
 interface PostJson {
   uuid: string;
   postId: number;
+  categoryId: number;
   title: string;
   createdAt: string;
   price: number;
   detail: string;
-  link: string;
   nickname: string;
+  dealCount: number;
   imageUrl: string;
 }
 
@@ -31,15 +33,14 @@ function PostDetailPage() {
   useEffect(() => {
     console.log(postId);
 
-    const POST_URL = `/deal-service/api/v1/post?id=${postId}`;
+    const POST_URL = `/deal-service/api/v2/post?id=${postId}`;
     console.log('------url--------');
-    fetch(POST_URL, {
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((json) => setPost(json))
-      .then(() => setIsLoaded(true));
+  axios.get(POST_URL) 
+  .then((response) => setPost(response.data))
+  .then(()=>setIsLoaded(true));
+  console.log(post);
   }, []);
+  
 
   return (
     <>
@@ -53,16 +54,14 @@ function PostDetailPage() {
           {post && (
             <div className="board-content">
               <h2>{post.title}</h2>
+              {
+                post.dealCount < 6 &&
+                <button className="safe-button">안전</button>
+                }
               <p className="createdAt">{post.createdAt}</p>
               <p className="nickname">{post.nickname}</p>
               <p className="price">가격: {post.price}</p>
               <p className="detail">설명: {post.detail}</p>
-              <p>
-                오픈 카카오톡:{' '}
-                <a href={post.link} target="_blank" rel="noopener noreferrer">
-                  {post.link}
-                </a>
-              </p>
             </div>
           )}
           <div className="update-button-wrapper">

@@ -18,8 +18,6 @@ public class UploadDealPostRequestDto {
     @NotNull
     private String  price;
     @NotBlank
-    private String link;
-    @NotBlank
     private String detail;
 
     private int division = 1;

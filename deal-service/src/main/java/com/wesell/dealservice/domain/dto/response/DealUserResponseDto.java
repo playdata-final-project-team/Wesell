@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter @Setter @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserFeignResponseDto {
+public class DealUserResponseDto {
     private String nickname;
     private Long dealCount;
 }
