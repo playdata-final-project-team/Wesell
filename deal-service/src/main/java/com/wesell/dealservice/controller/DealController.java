@@ -77,19 +77,19 @@ public class DealController {
      * @return 게시글 논리 삭제
      */
     @PutMapping("delete")
-    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long productId) {
+    public ResponseEntity<?> deletePost(@RequestParam("id") Long productId) {
         dealService.deletePost(productId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      *
-     * @param idArr
+     * @param idArray
      * @return 게시글 일괄 삭제(논리)
      */
     @PutMapping("checked/delete")
-    public ResponseEntity<?> deletePostList(@RequestBody Long[] idArr){
-        dealService.deletePosts(idArr);
+    public ResponseEntity<?> deletePostList(@RequestBody Long[] idArray){
+        dealService.deletePosts(idArray);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
