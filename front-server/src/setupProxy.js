@@ -55,4 +55,12 @@ module.exports = function (app) {
     }),
   );
 
+  app.use(
+    '/pay-service',
+    createProxyMiddleware({
+      target: 'http://localhost:8000', 
+      changeOrigin: true, 
+    }),
+  );
+
 };
