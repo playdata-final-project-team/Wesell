@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class UploadFileRequestDto {
-    @NotBlank
-    private Long postId;
     @NotNull
+    private Long postId;
+    @NotBlank
     private String imageUrl;
 }
