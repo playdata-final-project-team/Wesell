@@ -23,8 +23,6 @@ function GetCategory() {
       });
   }, []);
 
-  console.log(category);
-
   type category = {
     id: number;
     value: string;
@@ -60,8 +58,7 @@ function UploadBoard() {
   const handleSubmit = useCallback(async () => {
     try{
       const data1 = {
-        // uuid: window.sessionStorage.getItem("uuid"),
-        uuid: "test",
+        uuid: window.sessionStorage.getItem("uuid"),
         categoryId: categoryId,
         title: title,
         price: price,
@@ -72,13 +69,18 @@ function UploadBoard() {
       const response1 = await axios.post("/deal-service/api/v2/upload", data1);
       const postId = response1.data;
 
+      console.log(postId); 
       //step 2. 이미지 서버
       const formData = new FormData();
-      formData.append("id", postId);
+      formData.append( 'id',  postId);
       // 파일 추가
-      formData.append("file", image.image_file);
+      formData.append('file', image.image_file);
 
-      await axios.post("/iamge-service/api/v2/upload", formData);
+      await axios.post("/image-server/api/v2/upload", formData, {
+        headers: {
+          'Content-Type' : 'multipart/form-data'
+        }
+      });
 
       window.alert("😎등록이 완료되었습니다😎");
 
