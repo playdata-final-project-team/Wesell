@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 public class MyPayListResponseDto {
     @NotNull
     private Long payId;
+    @NotNull
+    private Long deliveryId;
     @NotBlank
     private String title;
     @NotBlank
@@ -24,6 +26,7 @@ public class MyPayListResponseDto {
 
     public MyPayListResponseDto(Pay pay, String title, Delivery delivery) {
         this.payId = pay.getId();
+        this.deliveryId = pay.getDeliveryId();
         this.title = title;
         this.date = pay.getCreatedAt().toLocalDate();
         this.status = delivery.getStatus().getName();
