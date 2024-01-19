@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### IntelliJ ###
-application-db.yml
+.application-db.yml

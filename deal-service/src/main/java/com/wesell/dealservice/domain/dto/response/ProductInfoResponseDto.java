@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostInfoResponseDto {
+public class ProductInfoResponseDto {
 
     private String uuid;
     private Long postId;
@@ -18,11 +18,10 @@ public class PostInfoResponseDto {
     private String createdAt;
     private Long price;
     private String detail;
-    private String link;
     private String nickname;
+    private Long dealCount;
     private String imageUrl;
-
-    public PostInfoResponseDto (DealPost post, String nickname, String imageUrl) {
+    public ProductInfoResponseDto(DealPost post, String nickname, Long dealCount, String imageUrl) {
         this.uuid = post.getUuid();
         this.postId = post.getId();
         this.categoryId = post.getCategory().getId();
@@ -30,10 +29,10 @@ public class PostInfoResponseDto {
         this.createdAt = post.getCreatedAt()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.price = post.getPrice();
-        this.detail = post.getDetail();
-        this.link = post.getLink();
         this.nickname = nickname;
+        this.dealCount = dealCount;
         this.imageUrl = imageUrl;
+        this.detail = post.getDetail();
     }
 
 }

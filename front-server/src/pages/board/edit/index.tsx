@@ -50,7 +50,7 @@ const [link, setLink] = useState("");
 const [image, setImage] = useState("");
 
   const getBoard = async () => {
-    const response = await (await axios.get(`/deal-service/api/v1/post?id=${postId}`)).data;
+    const response = await (await axios.get(`/deal-service/api/v2/post?id=${postId}`)).data;
     setTitle(response.title);
     setPrice(response.price);
     setDetail(response.detail);
@@ -73,7 +73,7 @@ const [image, setImage] = useState("");
         detail: detail,
         link: link
       }
-      await axios.put(`/deal-service/api/v1/edit?id=${postId}`, data)
+      await axios.put(`/deal-service/api/v2/edit?id=${postId}`, data)
     .then(() => {
     alert('수정되었습니다.');
     navigate('/board/detail/'+postId)});
@@ -107,8 +107,8 @@ const [image, setImage] = useState("");
             <img src ={image} />
           </div>
           <div className="board-content">
-            <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} setLink={setLink} 
-            title={title} price={price} detail={detail} link={link} />
+            <TextArea setTitle={setTitle} setPrice={setPrice} setDetail={setDetail} 
+            title={title} price={price} detail={detail} />
           </div>
         </div>
       </div>

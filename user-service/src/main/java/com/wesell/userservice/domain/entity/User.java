@@ -38,6 +38,9 @@ public class User {
     @Column(name = "u_agree", nullable = false)
     private boolean agree;
 
+    @Column(name = "u_dealCount")
+    private Long dealCount;
+
     public User changeUserInfo(String name) {
         this.name = name;
         updateCreatedAt();

@@ -15,7 +15,6 @@ import com.wesell.dealservice.global.response.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.ImageFeignClient;
 import com.wesell.dealservice.feignClient.UserFeignClient;
 import com.wesell.dealservice.util.Producer;
-import feign.FeignException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -62,7 +61,6 @@ public class DealServiceImpl implements DealService {
                 .category(category)
                 .title(requestDto.getTitle())
                 .price(Long.parseLong(requestDto.getPrice()))
-                .link(requestDto.getLink())
                 .detail(requestDto.getDetail())
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -99,17 +97,14 @@ public class DealServiceImpl implements DealService {
         dealRepository.findDealPostByIdAndIsDeleted(requestDto.getProductId(), false).changeStatus();
     }
 
+    //todo: feign 통신 에러
     @Override
-    public PostInfoResponseDto getPostInfo(Long productId) {
-        String nickname;
-        DealPost foundPost = readRepository.searchDealPost(productId);
-        try {
-            nickname = userFeignClient.getNicknameByUuid(foundPost.getUuid());
-        } catch (FeignException e) {
-            nickname = "nickname";
-        }
+    public ProductInfoResponseDto getPostInfo(Long productId) {
+        DealPost foundPost = dealRepository.findDealPostById(productId);
+        String nickname = userFeignClient.getDealInfoByUuid(foundPost.getUuid()).getNickname();
+        Long dealCount = userFeignClient.getDealInfoByUuid(foundPost.getUuid()).getDealCount();
         String imageUrl = imageFeignClient.getUrlByProductId(productId);
-        return new PostInfoResponseDto(foundPost, nickname, imageUrl);
+        return new ProductInfoResponseDto(foundPost, nickname, dealCount,imageUrl);
     }
 
     @Override
@@ -169,7 +164,7 @@ public class DealServiceImpl implements DealService {
     public EditPostResponseDto CompareWithUpdated(EditPostRequestDto dto) {
         DealPost editPost = dealRepository.findDealPostById(dto.getProductId());
         if(editPost.getTitle().equals(dto.getTitle()) && editPost.getPrice() == dto.getPrice()
-                && editPost.getLink().equals(dto.getLink()) && editPost.getDetail().equals(dto.getDetail())) {
+                && editPost.getDetail().equals(dto.getDetail())) {
             return new EditPostResponseDto(editPost);
         }
         else

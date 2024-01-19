@@ -46,4 +46,21 @@ module.exports = function (app) {
       changeOrigin: true,
     }),
   );
+
+  app.use(
+    '/image-server',
+    createProxyMiddleware({
+      target: 'http://localhost:8000', 
+      changeOrigin: true, 
+    }),
+  );
+
+  app.use(
+    '/pay-service',
+    createProxyMiddleware({
+      target: 'http://localhost:8000', 
+      changeOrigin: true, 
+    }),
+  );
+
 };

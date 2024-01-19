@@ -27,16 +27,16 @@ public class DealController {
      * @return
      */
     @PostMapping( "/upload")
-    public ResponseEntity<?> createProduct( @RequestBody UploadDealPostRequestDto requestDto) {
+    public ResponseEntity<?> createProduct(@RequestBody UploadDealPostRequestDto requestDto) {
         return new ResponseEntity<>(dealService.createDealPost(requestDto), HttpStatus.CREATED);
     }
 
     /**
      * @param postId 요청
-     * @return 상세글 보기 (제목, 생성날짜, 가격, 상세설명, 링크, 작성자 닉네임)
+     * @return 상세글 보기 (제목, 생성날짜, 가격, 상세설명, 작성자 닉네임, 작성자 판매횟수, 이미지)
      */
     @GetMapping("post")
-    public ResponseEntity<?> getPostInfo(@Valid @RequestParam("id") Long postId) {
+    public ResponseEntity<?> getPostInfo(@RequestParam("id") Long postId) {
         return new ResponseEntity<>(dealService.getPostInfo(postId), HttpStatus.OK);
     }
 
@@ -77,19 +77,19 @@ public class DealController {
      * @return 게시글 논리 삭제
      */
     @PutMapping("delete")
-    public ResponseEntity<?> deletePost(@Valid @RequestParam("id") Long productId) {
+    public ResponseEntity<?> deletePost(@RequestParam("id") Long productId) {
         dealService.deletePost(productId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      *
-     * @param idArr
+     * @param idArray
      * @return 게시글 일괄 삭제(논리)
      */
     @PutMapping("checked/delete")
-    public ResponseEntity<?> deletePostList(@RequestBody Long[] idArr){
-        dealService.deletePosts(idArr);
+    public ResponseEntity<?> deletePostList(@RequestBody Long[] idArray){
+        dealService.deletePosts(idArray);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

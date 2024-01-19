@@ -50,9 +50,12 @@ public class Pay {
     @Column(name = "p_createdAt", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "p_isDeleted",  nullable = false)
+    private Boolean isDeleted;
+
     @Builder
     public Pay(Long deliveryId, String buyer, Long productId, String orderNumber,
-               Long amount, PayType type , LocalDateTime createdAt) {
+               Long amount, PayType type , LocalDateTime createdAt, Boolean isDeleted) {
         this.deliveryId = deliveryId;
         this.buyer = buyer;
         this.productId = productId;
@@ -60,6 +63,7 @@ public class Pay {
         this.type = type;
         this.amount = amount;
         this.createdAt = createdAt;
+        this.isDeleted = isDeleted;
     }
 
     //비즈니스 로직
@@ -79,8 +83,12 @@ public class Pay {
                 .type(type)
                 .amount(amount)
                 .createdAt(LocalDateTime.now())
+                .isDeleted(false)
                 .build();
         return pay;
     }
 
+    public void deleteMyPay() {
+        this.isDeleted = true;
+    }
 }

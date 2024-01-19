@@ -23,16 +23,12 @@ public class EditPostResponseDto {
     private Long price;
 
     @NotBlank
-    private String link;
-
-    @NotBlank
     private String detail;
 
     public EditPostResponseDto(DealPost post) {
         category = post.getCategory().getId();
         title = post.getTitle();
         price = post.getPrice();
-        link = post.getLink();
         detail = post.getDetail();
     }
 }
