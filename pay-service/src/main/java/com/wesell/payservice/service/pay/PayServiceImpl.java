@@ -2,8 +2,6 @@ package com.wesell.payservice.service.pay;
 
 import com.wesell.payservice.domain.dto.request.PayRequestDto;
 import com.wesell.payservice.domain.dto.response.MyPayListResponseDto;
-import com.wesell.payservice.domain.dto.response.PayResponseDto;
-import com.wesell.payservice.domain.dto.search.PayViewDao;
 import com.wesell.payservice.domain.entity.Delivery;
 import com.wesell.payservice.domain.entity.Pay;
 import com.wesell.payservice.domain.repository.DeliveryRepository;
@@ -14,12 +12,10 @@ import com.wesell.payservice.global.response.error.exception.CustomException;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -70,6 +66,20 @@ public class PayServiceImpl implements PayService {
             return new MyPayListResponseDto(pay, dealFeign.getTitle(pay.getProductId()),
                     deliveryRepository.findDeliveryById(pay.getDeliveryId()));
         });
+    }
+
+    @Override
+    public void deleteMyPay(Long payId) {
+        Pay pay = payRepository.findPayById(payId);
+        pay.deleteMyPay();
+    }
+
+    @Override
+    public void deletePays(Long[] idList) {
+        Arrays.stream(idList)
+                .map(id -> payRepository.findPayById(id))
+                .peek(pay -> pay.deleteMyPay())
+                .forEach(pay -> payRepository.saveAndFlush(pay));
     }
 
     public Long findDeliveryByPayId(Long payId) {

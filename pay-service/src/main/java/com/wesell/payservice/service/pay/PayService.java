@@ -8,4 +8,6 @@ public interface PayService {
     Long createPay(PayRequestDto requestDto);
     String createOrderNumber(PayRequestDto requestDto);
     Page<MyPayListResponseDto> getMyPayList(String buyer, int page);
+    void deleteMyPay(Long payId);
+    void deletePays(Long[] idList);
 }
