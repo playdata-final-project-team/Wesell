@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ChatMessageListQuery {
-    private Long roomId;
+    private String roomId;
     private int page;
     private int size;
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 public class ChatMessageCreateCommand {
-    private Long roomId;
+    private String roomId;
 
     private String content;
 

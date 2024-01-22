@@ -14,12 +14,13 @@ public enum ErrorCode {
      */
     // TSE
     TEMPORARY_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"TSE","일시적으로 서버 내 오류가 발생했습니다."),
+    // Validation Fail
+    VALIDATION_FAIL(HttpStatus.BAD_REQUEST,"VF","유효성 검증 실패하였습니다."),
 
     /**
      * chat
      */
-    // Validation Fail
-    VALIDATION_FAIL(HttpStatus.BAD_REQUEST,"VF","유효성 검증 실패하였습니다."),
+
 
     /**
      * feign 관련 오류
