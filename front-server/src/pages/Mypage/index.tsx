@@ -1,5 +1,5 @@
 import InputBox from 'components/InputBox';
-import ABox from 'components/aBox';
+import ABox from 'components/ABox';
 import { ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
@@ -80,7 +80,7 @@ function Mypage() {
         const responseBody: MypageResponseDto | ResponseDto | null = await mypageInfoRequest(uuid);
 
         if (!responseBody) {
-          alert('네트워크 연결 상태를 확인해주세요!');
+          navigator(MAIN_PATH());
           return;
         }
 

@@ -1,6 +1,8 @@
 package com.wesell.chatservice.controller;
 
+import com.wesell.chatservice.domain.entity.ChatMessage;
 import com.wesell.chatservice.dto.response.ChatMessageResponseDto;
+import com.wesell.chatservice.global.util.DateFormatUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -16,23 +18,19 @@ import com.wesell.chatservice.dto.command.ChatMessageCreateCommand;
 public class ChatController {
 
     private final ChatMessageCreateService chatMessageCreateService;
+    private final DateFormatUtil dateFormatUtil;
 
-    @MessageMapping("rooms/{roomId}/send")
+    @MessageMapping("rooms/{roomId}/send") // /pub/rooms/{roomId}/send로 들어오는 메시지들 처리
     @SendTo("/sub/{roomId}")
-    public ChatMessageResponseDto sendMessage(@DestinationVariable Long roomId, @Valid ChatMessageRequestDto requestDto){
+    public ChatMessageResponseDto sendMessage(@DestinationVariable String roomId, @Valid ChatMessageRequestDto requestDto){
         ChatMessageCreateCommand chatMessageCreateCommand =
                 new ChatMessageCreateCommand(roomId, requestDto.getMessage(),requestDto.getSender());
-        Long chatId = chatMessageCreateService.createChatMessage(chatMessageCreateCommand);
+        ChatMessage message = chatMessageCreateService.createChatMessage(chatMessageCreateCommand);
         ChatMessageResponseDto chatMessageResponseDto = ChatMessageResponseDto.builder()
-                .id(chatId)
-                .message(requestDto.getMessage())
-                .sender(requestDto.getSender())
+                .message(message.getContent())
+                .sender(message.getSender())
+                .sendDate(dateFormatUtil.formatSendDate(message.getSendDate()))
                 .build();
         return chatMessageResponseDto;
     }
-
-//    @MessageExceptionHandler
-//    public String exception(){
-//        return "Error has occurred";
-//    }
 }

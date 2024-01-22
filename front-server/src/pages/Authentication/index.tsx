@@ -75,7 +75,7 @@ function AuthServer() {
       // comment: 서버가 안켜진 경우 또는 도메인 주소가 잘못된 경우 //
       console.dir(responseBody);
       if (!responseBody) {
-        alert('네트워크 연결 상태를 확인해주세요!');
+        navigator(MAIN_PATH());
         return;
       }
 
@@ -589,7 +589,7 @@ function AuthServer() {
     const signUpResponse = (responseBody: ResponseDto | null) => {
       // comment: 서버가 안켜진 경우 또는 도메인 주소가 잘못된 경우 //
       if (!responseBody) {
-        alert('네트워크 연결 상태를 확인해주세요!');
+        navigator(MAIN_PATH());
         return;
       }
 

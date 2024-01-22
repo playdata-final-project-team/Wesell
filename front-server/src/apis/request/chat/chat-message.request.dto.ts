@@ -1,5 +1,5 @@
 export default interface ChatMessageRequestDto {
-  roomId: number;
-  sender: string;
+  roomId: string | undefined;
+  sender: string | null;
   message: string;
 }

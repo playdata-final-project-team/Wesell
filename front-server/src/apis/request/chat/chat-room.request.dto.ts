@@ -1,5 +1,5 @@
 export default interface ChatRoomRequestDto {
-  consumer: string;
-  productId: number;
-  seller: string;
+  consumer?: string;
+  productId?: number;
+  seller?: string;
 }

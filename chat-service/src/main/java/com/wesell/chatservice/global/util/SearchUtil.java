@@ -37,4 +37,12 @@ public class SearchUtil {
         return formattedDate;
     }
 
+    public String searchLastSendMessage(ChatRoom chatRoom){
+        String lastMessage = chatRoom.getChatMessageList().stream()
+                .max(Comparator.comparing(ChatMessage::getSendDate))
+                .map(ChatMessage::getContent)
+                .orElse("");
+        return lastMessage;
+    }
+
 }

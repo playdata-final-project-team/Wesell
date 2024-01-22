@@ -15,6 +15,7 @@ import java.util.List;
 public class ChatRoomResponseDto {
     private String roomId;
     private String lastSendDate;
+    private String lastSendMessage;
     private String imageUrl;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String seller;
