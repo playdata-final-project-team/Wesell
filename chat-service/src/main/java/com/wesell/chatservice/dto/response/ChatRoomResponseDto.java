@@ -13,7 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ChatRoomResponseDto {
-    private Long roomId;
+    private String roomId;
+    private String lastSendDate;
+    private String lastSendMessage;
+    private String imageUrl;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String seller;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ChatMessageResponseDto> chatMessageList;

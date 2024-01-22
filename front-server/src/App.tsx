@@ -1,4 +1,4 @@
-import { Route, Routes} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Main from 'pages/Main';
 import Container from 'layouts/Container';
@@ -15,15 +15,12 @@ import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent
 import SearchByCategory from 'pages/search/category';
 import SearchByTitle from 'pages/search/title';
 import AuthServer from 'pages/Authentication';
-import Test from 'pages/Test';
 import PostDetailPage from 'pages/board/detail';
 import AdminUsersComponent from 'pages/AdminUsers/AdminUsersComponent';
 import ChatRoomPage from 'pages/ChatRoomPage';
-import ChatMessagePage from 'pages/ChatMessagePage';
-import ChatTestPage from 'pages/ChatTestPage';
 import RequestPay from 'pages/Pay/beforePay';
 import PayResultPage from 'pages/Pay/detail';
-
+import TestDetailPage from 'pages/board/testDetail';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -48,14 +45,14 @@ function App() {
         <Route path="/admin/users" element={<AdminUsersComponent />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
         <Route path="/rooms" element={<ChatRoomPage />} />
-        <Route path="/rooms/:roomId" element={<ChatMessagePage />} />
+        <Route path="/rooms/:roomId" element={<ChatRoomPage />} />
         <Route path="/payment/:postId" element={<RequestPay />} />
         <Route path="payment/:payId" element={<PayResultPage />} />
       </Route>
 
       {/* 테스트 라우터 */}
       <Route>
-        <Route path="test/rooms/create" element={<ChatTestPage />}></Route>
+        <Route path="/test/detail/:productId" element={<TestDetailPage />} />
       </Route>
     </Routes>
   );

@@ -8,6 +8,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class ChatRoomCreateServiceImpl implements ChatRoomCreateService {
@@ -16,12 +19,23 @@ public class ChatRoomCreateServiceImpl implements ChatRoomCreateService {
 
     @Transactional
     @Override
-    public Long createChatRoom(ChatRoomCreateCommand command) {
+    public String createChatRoom(ChatRoomCreateCommand command) {
+
+        List<ChatRoom> list = chatRoomRepository
+                .findALlByProductIdAndConsumer(command.getProductId(), command.getConsumer());
+
+        if(!list.isEmpty()){
+            ChatRoom chatRoom = list.get(0);
+            return chatRoom.getId();
+        }
+
         ChatRoom chatRoom = ChatRoom.builder()
+                .id(UUID.randomUUID().toString())
                 .productId(command.getProductId().toString())
                 .consumer(command.getConsumer())
                 .seller(command.getSeller())
                 .build();
+
         ChatRoom savedData = chatRoomRepository.save(chatRoom);
         return savedData.getId();
     }

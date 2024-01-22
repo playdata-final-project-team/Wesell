@@ -3,6 +3,7 @@ import './style.css';
 import { useNavigate } from 'react-router-dom';
 import { AUTH_PATH, MYPAGE_PATH, UPLOAD_PATH } from 'constant';
 import { CgAddR } from 'react-icons/cg';
+import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 
 // interface: Props //
 interface Props {
@@ -37,6 +38,11 @@ export default function SideButtonBox(props: Props) {
   // event-handler: 게시글 작성 이미지 버튼 클릭 이벤트 처리 //
   const onWritePostBtnClickHandler = () => {
     navigator(UPLOAD_PATH());
+  };
+
+  // event-handler: 채팅방 목록 버튼 클릭 이벤트 처리 //
+  const onChatRoomListClickHandler = () => {
+    navigator('/rooms');
   };
 
   // render: side button box 렌더링 //
@@ -74,6 +80,15 @@ export default function SideButtonBox(props: Props) {
             className="side-icon-post-button"
             title="게시글 작성"
             onClick={onWritePostBtnClickHandler}
+          />
+        )}
+      </div>
+      <div className="side-button">
+        {isUser && (
+          <IoChatbubbleEllipsesOutline
+            className="side-icon-post-button"
+            title="채팅방 목록 확인"
+            onClick={onChatRoomListClickHandler}
           />
         )}
       </div>

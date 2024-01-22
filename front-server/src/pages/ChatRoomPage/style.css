@@ -1,0 +1,84 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  vertical-align: baseline;
+  box-sizing: border-box;
+}
+
+.chat-page-wrapper {
+  width: 100%;
+  height: 100%;
+
+  background-color: #e5edfa;
+}
+
+.chat-page-container {
+  min-height: 700px;
+  max-width: 1024px;
+  width: 100%;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  background-color: rgb(255, 255, 255);
+}
+
+.chat-room-list-card {
+  width: 50%;
+  height: 100%;
+  border-right: 2px solid rgba(236, 236, 236, 1);
+}
+
+.chat-message-list-card {
+  width: 50%;
+  height: 100%;
+  border-right: 2px solid rgba(236, 236, 236, 1);
+}
+
+.close-box {
+  z-index: 999;
+  width: 470px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  background-color: rgb(255, 255, 255);
+  text-align: center;
+  overflow: hidden;
+}
+
+.close-confirm-comment {
+  white-space: pre-line;
+  max-height: 300px;
+  padding: 40px 30px 0px;
+  margin-bottom: 40px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.close-confirm-comment > h2 {
+  margin-bottom: 10px;
+}
+
+.close-confirm-button {
+  display: flex;
+  overflow: hidden;
+}
+
+.close-confirm-button > button {
+  cursor: pointer;
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  padding: 0px;
+  line-height: 60px;
+  border: 1px solid rgb(246, 246, 246);
+  background: none;
+  font-weight: bolder;
+  font-size: 25px;
+}
+
+.close-confirm-button > button:hover {
+  background-color: azure;
+}

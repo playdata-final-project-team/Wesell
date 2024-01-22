@@ -24,7 +24,7 @@ public class ChatMessage {
     private ChatRoom chatRoom; // 채팅룸
 
     @Column(name = "cm_sender", nullable = false)
-    private String sender; // 메시지 작성자 닉네임
+    private String sender; // 메시지 작성자 uuid
 
     @Column(columnDefinition = "TEXT", name = "cm_message", nullable = false)
     private String content; // 메시지 내용

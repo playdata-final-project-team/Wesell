@@ -4,10 +4,8 @@ import com.wesell.chatservice.domain.service.ChatRoomCreateService;
 import com.wesell.chatservice.domain.service.ChatRoomLoadService;
 import com.wesell.chatservice.dto.command.ChatRoomCreateCommand;
 import com.wesell.chatservice.dto.query.ChatRoomListQuery;
-import com.wesell.chatservice.dto.query.ChatRoomQuery;
 import com.wesell.chatservice.dto.request.ChatRoomRequestDto;
 import com.wesell.chatservice.dto.response.ChatRoomListResponseDto;
-import com.wesell.chatservice.dto.response.ChatRoomResponseDto;
 import com.wesell.chatservice.global.response.success.SuccessApiResponse;
 import com.wesell.chatservice.global.response.success.SuccessCode;
 import jakarta.validation.Valid;
@@ -40,27 +38,6 @@ public class ChatRoomController {
                 SuccessCode.ROOM_CREATED,
                 chatRoomCreateService.createChatRoom(chatRoomCreateCommand))
         );
-    }
-
-    /**
-     * 채팅방 내 메시지 조회 + 페이징(무한 스크롤 구현 예정)
-     *
-     * @param roomId
-     * @param page
-     * @param size
-     * @return ResponseEntity<ChatRoomResponseDto>
-     */
-    @GetMapping("/{roomId}")
-    public ResponseEntity<?> getChatRoom(@PathVariable Long roomId,
-                                         @RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "5") int size) {
-        ChatRoomQuery chatRoomQuery = ChatRoomQuery.builder()
-                .id(roomId)
-                .page(page)
-                .size(size)
-                .build();
-        ChatRoomResponseDto chatRoomResponseDto = chatRoomLoadService.getChatRoomById(chatRoomQuery);
-        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK, chatRoomResponseDto));
     }
 
     /**

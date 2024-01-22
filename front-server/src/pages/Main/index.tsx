@@ -27,7 +27,7 @@ const Main = () => {
   const [totalElements, setTotalElements] = useState<number>(0);
 
   useEffect(() => {
-    const POST_LIST_ENDPOINT = `/deal-service/api/v1/main?page=${curPage}`; // 페이지 파라미터를 직접 URL에 추가
+    const POST_LIST_ENDPOINT = `/deal-service/api/v2/main?page=${curPage}`; // 페이지 파라미터를 직접 URL에 추가
 
     fetch(POST_LIST_ENDPOINT, {
       method: 'GET',

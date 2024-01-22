@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 public class ChatRoomRequestDto {
 
     @NotBlank(message = "NullPointer Error - 구매자")
-    private String consumer;
+    private String consumer; // 구매자 uuid
 
     @NotNull(message = "NullPointer Error - 판매품")
-    private Long productId;
+    private Long productId; // 판매품 id
 
     @NotBlank(message = "NullPointer Error - 판매자")
-    private String seller;
+    private String seller; // 판매자 nickname
 
 }

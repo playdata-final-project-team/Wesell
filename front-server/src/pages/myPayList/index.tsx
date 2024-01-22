@@ -1,15 +1,17 @@
-import ABox from 'components/aBox';
+import ABox from 'components/ABox';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
 import { ResponseDto } from 'apis/response';
 import ListPagenation from 'components/Pagenation';
 import ResponseCode from 'constant/response-code.enum';
-import {
-  BsFileExcelFill,
-} from 'react-icons/bs';
+import { BsFileExcelFill } from 'react-icons/bs';
 import PayPageResponseDto from 'apis/response/myPayPage/my.pay-list-page';
-import { deletePayListRequest, shippingStatusChangeRequest, myPayListRequest } from 'apis/response/myPayPage';
+import {
+  deletePayListRequest,
+  shippingStatusChangeRequest,
+  myPayListRequest,
+} from 'apis/response/myPayPage';
 
 // component: 마이페이지 컴포넌트 //
 function MyPayList() {
@@ -38,7 +40,7 @@ function MyPayList() {
     // state: 삭제 여부 관련 상태값 //
     const [isDeleted, setDeleted] = useState<boolean>(false);
 
-    // function: 체크박스 
+    // function: 체크박스
     const handleSingleCheck = (checked: boolean, id: number) => {
       if (checked) {
         setCheckItems((prev) => [...prev, id]);
@@ -58,7 +60,7 @@ function MyPayList() {
     // effect: 구매 내역 목록
     useEffect(() => {
       async function fetchData(uuid: string | null, page: number) {
-        const responseBody:PayPageResponseDto | ResponseDto | null = await myPayListRequest(
+        const responseBody: PayPageResponseDto | ResponseDto | null = await myPayListRequest(
           uuid,
           page,
         );
@@ -99,7 +101,7 @@ function MyPayList() {
     };
 
     //event-handler: 구매 확정 button click 처리 //
-    const shippingCompleteClickHandler = async (deliveryId : number) => {
+    const shippingCompleteClickHandler = async (deliveryId: number) => {
       await shippingStatusChangeRequest(deliveryId);
       setStatusChange(true);
     };
@@ -153,7 +155,7 @@ function MyPayList() {
                         <td>{post.status}</td>
                         <td>
                           <div className="payInfo-element-btn">
-                            {post.status === "배송 완료" && (
+                            {post.status === '배송 완료' && (
                               <>
                                 <button
                                   type="button"
@@ -165,16 +167,16 @@ function MyPayList() {
                                 </button>
                               </>
                             )}
-                            {
-                            post.status === "배송 준비 중" && 
-                            <button
-                                  onClick={() => {
-                                    onShippingAddressUpdateClickHandler(post.deliveryId);
-                                  }}
-                                  type="button"
-                                >
-                                  배송지 수정
-                                </button>}
+                            {post.status === '배송 준비 중' && (
+                              <button
+                                onClick={() => {
+                                  onShippingAddressUpdateClickHandler(post.deliveryId);
+                                }}
+                                type="button"
+                              >
+                                배송지 수정
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -209,9 +211,7 @@ function MyPayList() {
   // render: 마이페이지 컴포넌트 렌더링 //
   return (
     <div className="mypage-wrapper">
-      <div className="mypage-container">
-        {view === 'deal-info' && <PayInfo />}
-      </div>
+      <div className="mypage-container">{view === 'deal-info' && <PayInfo />}</div>
     </div>
   );
 }

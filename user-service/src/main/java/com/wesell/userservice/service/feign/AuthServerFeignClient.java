@@ -9,9 +9,9 @@ import java.util.List;
 @FeignClient(name="AUTHENTICATION-SERVER")
 public interface AuthServerFeignClient {
 
-    @GetMapping("api/v1/feign/auth-list")
+    @GetMapping("api/v2/feign/auth-list")
     List<AuthUserInfoRequestDto> getListAuthUserInfo();
 
-    @GetMapping("api/v1/{uuid}/email")
+    @GetMapping("api/v2/{uuid}/email")
     String getEmail(@PathVariable("uuid") String uuid);
 }

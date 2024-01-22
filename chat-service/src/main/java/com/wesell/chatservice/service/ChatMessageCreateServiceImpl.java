@@ -1,5 +1,7 @@
 package com.wesell.chatservice.service;
 
+import com.wesell.chatservice.global.response.error.CustomException;
+import com.wesell.chatservice.global.response.error.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,13 +24,13 @@ public class ChatMessageCreateServiceImpl implements ChatMessageCreateService {
     private final ChatRoomRepository chatRoomRepository;
 
     @Override
-    public Long createChatMessage(ChatMessageCreateCommand command) {
+    public ChatMessage createChatMessage(ChatMessageCreateCommand command) {
 
         log.debug("채팅 메시지 생성 시작");
 
         log.debug("채팅 방 번호로 조회 - 없으면 예외처리");
         ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId()).orElseThrow(
-                () -> new ChatRoomNotFoundException()
+                () -> new CustomException(ErrorCode.CHATROOM_NOT_FOUND)
         );
 
         log.debug("채팅 메시지 생성");
@@ -42,6 +44,6 @@ public class ChatMessageCreateServiceImpl implements ChatMessageCreateService {
         log.debug("Cascade 를 이용한 데이터 생성 및 저장");
         chatRoom.createMessage(chatMessage);
         chatRoomRepository.save(chatRoom);
-        return chatMessage.getId();
+        return chatMessage;
     }
 }
