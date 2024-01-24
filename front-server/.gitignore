@@ -24,3 +24,6 @@ yarn-error.log*
 
 # 민감정보
 .env
+
+# 구독 유저 정보
+data.json

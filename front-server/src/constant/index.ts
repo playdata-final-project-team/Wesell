@@ -6,3 +6,6 @@ export const USER_PATH = (userEmail: string) => `/user/${userEmail}`;
 export const TEST_PATH = () => '/test';
 export const MYPAGE_PATH = () => '/mypage';
 export const WITHDRAW_PATH = () => '/withdraw';
+export const DATA_PATH = 'data.json';
+export const NOTIFICATION_MAIN_PATH = () => '/notification/index'
+export const NOTIFICATION_LOGIN_PATH = () => '/notification/login'
