@@ -1,6 +1,7 @@
 package com.wesell.payservice.service.delivery;
 
 import com.wesell.payservice.domain.dto.request.DeliveryRequestDto;
+import com.wesell.payservice.domain.dto.request.DeliveryUpdateRequestDto;
 import com.wesell.payservice.domain.dto.response.DeliveryResponseDto;
 import com.wesell.payservice.domain.entity.Delivery;
 import com.wesell.payservice.domain.repository.DeliveryRepository;
@@ -27,6 +28,12 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Override
     public DeliveryResponseDto getDeliveryInfo(Long id) {
         Delivery delivery = deliveryRepository.findDeliveryById(id);
+        return new DeliveryResponseDto(delivery);
+    }
+
+    @Override
+    public DeliveryResponseDto updateDeliveryInfo(DeliveryUpdateRequestDto requestDto) {
+        Delivery delivery = deliveryRepository.findDeliveryById(requestDto.getId());
         return new DeliveryResponseDto(delivery);
     }
 

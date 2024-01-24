@@ -1,6 +1,7 @@
 package com.wesell.payservice.controller;
 
 import com.wesell.payservice.domain.dto.request.DeliveryRequestDto;
+import com.wesell.payservice.domain.dto.request.DeliveryUpdateRequestDto;
 import com.wesell.payservice.service.delivery.DeliveryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,11 @@ public class DeliveryController {
     @PostMapping("delivery")
     public ResponseEntity<Long> delivery (@RequestBody DeliveryRequestDto requestDto) {
         return new ResponseEntity<>(deliveryService.createDelivery(requestDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("delivery/update")
+    public ResponseEntity<?> update (@RequestBody DeliveryUpdateRequestDto requestDto){
+        return new ResponseEntity<>(deliveryService.updateDeliveryInfo(requestDto), HttpStatus.OK);
     }
 
     @PutMapping("delivery/start")

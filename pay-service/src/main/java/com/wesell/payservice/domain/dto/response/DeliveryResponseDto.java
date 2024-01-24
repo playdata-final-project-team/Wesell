@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeliveryResponseDto {
     @NotBlank
+    private Long id;
+    @NotNull
     private String receiver;
     @NotNull
     private String address;
@@ -20,6 +22,7 @@ public class DeliveryResponseDto {
     private String status;
 
     public DeliveryResponseDto(Delivery delivery) {
+        this.id = delivery.getId();
         this.receiver = delivery.getReceiver();
         this.address = delivery.getAddress();
         this.status = ShippingStatus.PREPARING.getName();

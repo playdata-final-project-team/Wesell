@@ -1,6 +1,7 @@
 package com.wesell.payservice.domain.entity;
 
 import com.wesell.payservice.domain.dto.request.DeliveryRequestDto;
+import com.wesell.payservice.domain.dto.request.DeliveryUpdateRequestDto;
 import com.wesell.payservice.enumerate.ShippingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -65,6 +66,11 @@ public class Delivery {
                 .createdAt(LocalDate.now())
                 .build();
         return delivery;
+    }
+
+    public void updateDelivery(DeliveryUpdateRequestDto requestDto) {
+        this.receiver = requestDto.getReceiver();
+        this.address = requestDto.getAddress();
     }
 
     public void startDelivery(Integer shippingNumber){
