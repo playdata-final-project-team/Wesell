@@ -1,4 +1,4 @@
-package com.wesell.dealservice.util;
+package com.wesell.dealservice.global.util;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
