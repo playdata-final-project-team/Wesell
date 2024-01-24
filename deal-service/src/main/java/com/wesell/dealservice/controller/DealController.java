@@ -8,10 +8,15 @@ import com.wesell.dealservice.domain.repository.read.ViewDao;
 import com.wesell.dealservice.global.response.error.ErrorCode;
 import com.wesell.dealservice.service.DealServiceImpl;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -120,9 +125,19 @@ public class DealController {
         return new ResponseEntity<>(dealService.findByTitle(title, page-1), HttpStatus.OK);
     }
 
-    @GetMapping("price")
-    public ResponseEntity<?> getPriceByPostId(@RequestParam("productId") Long productId) {
+    @GetMapping("price/{productId}")
+    @ResponseBody
+    public ResponseEntity<?> getPriceByPostId(@PathVariable Long productId, WebRequest request) {
         Long price = 0L;
+        CacheControl cacheControl = CacheControl.maxAge(60, TimeUnit.SECONDS)
+                .noTransform().mustRevalidate();
+        ZoneId zoneId = ZoneId.of("GMT");
+        long lastModifiedTimeStamp = LocalDateTime.now().atZone(zoneId)
+                .toInstant().toEpochMilli();
+
+        if(request.checkNotModified(lastModifiedTimeStamp)){
+            return ResponseEntity.status(304).build();
+        }
 
         try {
             price = viewDao.searchPriceById(productId);
@@ -130,7 +145,8 @@ public class DealController {
             return new ResponseEntity<>(price, ErrorCode.NO_PRICE_RESEARCH.getStatus());
         }
 
-        return new ResponseEntity<>(price, HttpStatus.OK);
+        return ResponseEntity.ok().cacheControl(cacheControl)
+                .body(price);
     }
 
 }
