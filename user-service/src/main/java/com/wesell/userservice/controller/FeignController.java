@@ -35,4 +35,17 @@ public class FeignController {
     public String findID(@RequestBody String phoneNumber) {
         return userService.findIDPWD(phoneNumber);
     }
+
+    @PostMapping("FindNickName")
+    public String findNicknameByUuid(@RequestBody String uuid) {
+
+        return userService.getNicknameByUuid(uuid);
+
+    }
+
+    @PostMapping("getNickName")
+    public String getNicknameByUuid(@RequestBody String uuid) {
+
+        return userService.getNicknameByUuid(uuid);
+    }
 }
