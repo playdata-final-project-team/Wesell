@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PayResponseDto {
 
-    @NotBlank
-    private Long productId;
     @NotNull
-    private String orderNumber;
+    private Long productId;
     @NotBlank
+    private String orderNumber;
+    @NotNull
     private Long amount;
 
 
