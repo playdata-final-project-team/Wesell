@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeliveryUpdateRequestDto {
-    @NotBlank
+    @NotNull
     private Long id;
     @NotNull
+    private Long version;
+    @NotBlank
     private String receiver;
-    @NotNull
+    @NotBlank
     private String address;
 
 }

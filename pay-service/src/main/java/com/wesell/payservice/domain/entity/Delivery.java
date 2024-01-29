@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery {
+    @Version
+    private Long version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "d_id")
@@ -47,8 +51,9 @@ public class Delivery {
     private LocalDate createdAt;
 
     @Builder
-    public Delivery(ShippingStatus status, Integer shippingNumber,
+    public Delivery(Long version, ShippingStatus status, Integer shippingNumber,
                     String receiver, String address, LocalDate createdAt) {
+        this.version = version;
         this.status = status;
         this.shippingNumber = shippingNumber;
         this.receiver = receiver;
