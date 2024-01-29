@@ -9,19 +9,23 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.Lock;
 
 @Entity @Getter
 @Table(name = "pay")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pay {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "p_id")
@@ -54,7 +58,7 @@ public class Pay {
     private Boolean isDeleted;
 
     @Builder
-    public Pay(Long deliveryId, String buyer, Long productId, String orderNumber,
+    public Pay( Long deliveryId, String buyer, Long productId, String orderNumber,
                Long amount, PayType type , LocalDateTime createdAt, Boolean isDeleted) {
         this.deliveryId = deliveryId;
         this.buyer = buyer;
@@ -67,6 +71,7 @@ public class Pay {
     }
 
     //비즈니스 로직
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public static Pay createPay(PayRequestDto requestDto, String orderNumber, Long amount) {
         PayType type = PayType.UNASSURED;
 
