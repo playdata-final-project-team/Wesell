@@ -58,4 +58,11 @@ public class UserFeignController {
     public ResponseEntity<DealUserResponseDto> getDealInfoByUuid(@PathVariable String uuid) {
         return ResponseEntity.ok(userService.getDealInfo(uuid));
     }
+    // 게시판 닉네임 조회
+    @PostMapping("FindNickName")
+    public String findNicknameByUuid(@RequestBody String uuid) {
+
+        return userService.getNicknameByUuid(uuid);
+
+    }
 }
