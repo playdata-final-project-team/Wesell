@@ -4,6 +4,7 @@ import com.wesell.imageserver.domain.repository.ChatImageViewDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class ChatImageFeignController {
     private final ChatImageViewDao chatImageViewDao;
 
     @GetMapping("image-urls")
-    public Map<Long,String> getUrlByProductId(List<Long> ids) {
+    public Map<Long,String> getUrlByProductId(@RequestParam List<Long> ids) {
         return chatImageViewDao.getUrlListByproductIds(ids).stream()
                 .collect(Collectors.toMap(
                         obj -> (Long) obj[0],

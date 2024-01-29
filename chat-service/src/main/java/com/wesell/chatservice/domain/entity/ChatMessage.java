@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatMessage {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cm_id")
@@ -30,7 +29,5 @@ public class ChatMessage {
     private String content; // 메시지 내용
 
     @Column(name = "cm_sender_date", updatable = false, nullable = false)
-    @CreatedDate
     private LocalDateTime sendDate; // 메시지 작성일
-
 }

@@ -1,7 +1,6 @@
 package com.wesell.chatservice.controller;
 
-import com.wesell.chatservice.domain.service.ChatMessageLoadService;
-import com.wesell.chatservice.dto.query.ChatMessageListQuery;
+import com.wesell.chatservice.domain.service.ChatMessageService;
 import com.wesell.chatservice.global.response.success.SuccessApiResponse;
 import com.wesell.chatservice.global.response.success.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v2/rooms")
 public class ChatMessageController {
 
-    private final ChatMessageLoadService messageLoadService;
+    private final ChatMessageService chatMessageService;
 
     /**
      * 채팅방 내 메시지 조회 + 페이징(무한 스크롤 구현 예정)
@@ -22,20 +21,13 @@ public class ChatMessageController {
      * @param size
      * @return
      */
-    @GetMapping("{roomId}/messages")
-    public ResponseEntity<?> getMessageList(@PathVariable String roomId,
+    @GetMapping("{room-id}/messages")
+    public ResponseEntity<?> getMessageList(@PathVariable("room-id") String roomId,
                                          @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "5") int size){
-        ChatMessageListQuery chatMessageListQuery =  ChatMessageListQuery.builder()
-                .roomId(roomId)
-                .page(page)
-                .size(size)
-                .build();
-
         return ResponseEntity.ok(SuccessApiResponse.of(
                 SuccessCode.OK,
-                messageLoadService.getChatMessageList(chatMessageListQuery)
-                )
-        );
+                chatMessageService.getChatMessageList(roomId, page, size)
+        ));
     }
 }

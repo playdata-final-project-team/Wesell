@@ -14,11 +14,13 @@ import java.util.List;
 @Builder
 public class ChatRoomResponseDto {
     private String roomId;
-    private String lastSendDate;
-    private String lastSendMessage;
-    private String imageUrl;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String seller;
+    private String consumer;
+    private boolean isAlive;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<ChatMessageResponseDto> chatMessageList;
+    private String lastSendDate;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String lastSendMessage;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String imageUrl;
 }

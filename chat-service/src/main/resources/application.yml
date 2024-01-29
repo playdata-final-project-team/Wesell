@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: db
+    active: db, local
   application:
     name: chat-service
   datasource:
@@ -13,7 +13,7 @@ spring:
     password: ${password}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true

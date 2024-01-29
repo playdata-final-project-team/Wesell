@@ -1,36 +1,38 @@
 package com.wesell.chatservice.controller;
 
 import com.wesell.chatservice.domain.entity.ChatMessage;
+import com.wesell.chatservice.domain.service.ChatMessageService;
+import com.wesell.chatservice.domain.service.ChatRoomService;
 import com.wesell.chatservice.dto.response.ChatMessageResponseDto;
 import com.wesell.chatservice.global.util.DateFormatUtil;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import com.wesell.chatservice.dto.request.ChatMessageRequestDto;
-import com.wesell.chatservice.domain.service.ChatMessageCreateService;
-import com.wesell.chatservice.dto.command.ChatMessageCreateCommand;
 
 @Controller
 @RequiredArgsConstructor
+@Log4j2
 public class ChatController {
 
-    private final ChatMessageCreateService chatMessageCreateService;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ChatMessageService chatMessageService;
+    private final ChatRoomService chatRoomService;
     private final DateFormatUtil dateFormatUtil;
 
-    @MessageMapping("rooms/{roomId}/send") // /pub/rooms/{roomId}/send로 들어오는 메시지들 처리
-    @SendTo("/sub/{roomId}")
-    public ChatMessageResponseDto sendMessage(@DestinationVariable String roomId, @Valid ChatMessageRequestDto requestDto){
-        ChatMessageCreateCommand chatMessageCreateCommand =
-                new ChatMessageCreateCommand(roomId, requestDto.getMessage(),requestDto.getSender());
-        ChatMessage message = chatMessageCreateService.createChatMessage(chatMessageCreateCommand);
-        ChatMessageResponseDto chatMessageResponseDto = ChatMessageResponseDto.builder()
-                .message(message.getContent())
+    @MessageMapping("/chat/message")
+    public void sendMessage(ChatMessageRequestDto requestDto) {
+        ChatMessage message = chatMessageService.createChatMessage(requestDto);
+
+        ChatMessageResponseDto response = ChatMessageResponseDto.builder()
+                .roomId(message.getChatRoom().getId())
                 .sender(message.getSender())
+                .content(message.getContent())
                 .sendDate(dateFormatUtil.formatSendDate(message.getSendDate()))
                 .build();
-        return chatMessageResponseDto;
+
+        redisTemplate.convertAndSend(chatRoomService.getTopic(response.getRoomId()),response);
     }
 }

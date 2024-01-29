@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 @Component
@@ -23,26 +24,38 @@ public class SearchUtil {
      * @return formatted 날짜
      */
     public String searchLastSendDate(ChatRoom chatRoom) {
-        LocalDateTime sendDate = chatRoom.getChatMessageList().stream()
-                .max(Comparator.comparing(ChatMessage::getSendDate))
-                .map(ChatMessage::getSendDate)
-                .orElse(LocalDateTime.of(1970, 1, 1, 0, 0));
+        List <ChatMessage> messages = chatRoom.getChatMessageList();
 
-        // LocalDateTime 객체를 Date 객체로 변환
-        Date date = Date.from(sendDate.atZone(ZoneId.systemDefault()).toInstant());
+        if(messages.isEmpty()) {
+            return "";
+        }
+        else{
+            LocalDateTime sendDate = messages.stream()
+                    .max(Comparator.comparing(ChatMessage::getSendDate))
+                    .map(ChatMessage::getSendDate).get();
+            // LocalDateTime 객체를 Date 객체로 변환
+            Date date = Date.from(sendDate.atZone(ZoneId.systemDefault()).toInstant());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd일 E요일", Locale.KOREA);
-        String formattedDate = dateFormat.format(date);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM월 dd일 E요일", Locale.KOREA);
+            String formattedDate = dateFormat.format(date);
 
-        return formattedDate;
+            return formattedDate;
+
+        }
     }
 
     public String searchLastSendMessage(ChatRoom chatRoom){
-        String lastMessage = chatRoom.getChatMessageList().stream()
-                .max(Comparator.comparing(ChatMessage::getSendDate))
-                .map(ChatMessage::getContent)
-                .orElse("");
-        return lastMessage;
+        List<ChatMessage> messages = chatRoom.getChatMessageList();
+        if(messages.isEmpty()){
+            return "";
+        }else{
+            String lastMessage = messages.stream()
+                    .max(Comparator.comparing(ChatMessage::getSendDate))
+                    .map(ChatMessage::getContent)
+                    .get();
+            return lastMessage;
+
+        }
     }
 
 }
