@@ -1,0 +1,43 @@
+server:
+  port: 8887
+
+redis:
+  host: localhost
+  port: 6379
+
+spring:
+  application:
+    name: pay-service
+  datasource:
+    url: ${url}
+    username: ${username_}
+    password: ${password}
+    driver-class-name: ${driver-class-name}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        check_nullability: true
+    show_sql: true
+  profiles:
+    active: db
+
+springdoc:
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
+
+iamport:
+  key: ${key}
+  secret: ${secret}

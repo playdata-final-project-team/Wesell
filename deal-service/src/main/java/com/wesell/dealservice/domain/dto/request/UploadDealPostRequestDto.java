@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class UploadDealPostRequestDto {
 
+    @NotNull
     private String uuid;
     @NotNull
     private String categoryId;
@@ -16,8 +17,6 @@ public class UploadDealPostRequestDto {
     private String title;
     @NotNull
     private String  price;
-    @NotBlank
-    private String link;
     @NotBlank
     private String detail;
 

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 public interface AuthFeignClient {
 
     @PutMapping("change-role")
-    ResponseEntity<String> changeUserRole (@RequestBody ChangeRoleRequestDto changeRoleRequestDto);
+    void changeUserRole (@RequestBody ChangeRoleRequestDto changeRoleRequestDto);
 
     @PutMapping("updateIsForced/{uuid}")
-    ResponseEntity<String> updateIsForced(@PathVariable String uuid);
+    void updateIsForced(@PathVariable String uuid);
 }

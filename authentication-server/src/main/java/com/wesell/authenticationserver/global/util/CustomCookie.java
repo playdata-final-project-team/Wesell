@@ -13,7 +13,7 @@ public class CustomCookie {
         return ResponseCookie.from("access-token", token)
                 .path("/")
                 .httpOnly(true)
-                .maxAge(60*60+(60*30))
+                .maxAge(60*60)
                 .build();
     }
 
@@ -22,16 +22,7 @@ public class CustomCookie {
         return ResponseCookie.from("refresh-token",refreshToken)
                 .path("/")
                 .httpOnly(true)
-                .maxAge(60*60*24+(60*30))
-                .build();
-    }
-
-    // 로그인 시 이메일 저장 기능 쿠키 생성.
-    public ResponseCookie createSavedEmailCookie(String email){
-
-        return ResponseCookie.from("savedEmail",email)
-                .path("/")
-                .maxAge(60 * 60 *24)
+                .maxAge(60*60*24)
                 .build();
     }
 
@@ -48,13 +39,6 @@ public class CustomCookie {
         return ResponseCookie.from("refresh-token")
                 .path("/")
                 .httpOnly(true)
-                .maxAge(0)
-                .build();
-    }
-
-    public ResponseCookie deleteSavedEmailCookie(){
-        return ResponseCookie.from("savedEmail")
-                .path("/")
                 .maxAge(0)
                 .build();
     }

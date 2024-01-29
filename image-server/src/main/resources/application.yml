@@ -1,0 +1,54 @@
+server:
+  port: 8889
+
+redis:
+  host: localhost
+  port: 6379
+
+spring:
+  application:
+    name: image-server
+  datasource:
+    url: ${url}
+    username: ${username_}
+    password: ${password}
+    driver-class-name: ${driver-class-name}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        check_nullability: true
+    show_sql: true
+  profiles:
+    active: db
+  config:
+    import: "optional:configserver:"
+
+springdoc:
+  packages-to-scan: com.wesell.dealservice.controller
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
+cloud:
+  aws:
+    s3:
+      bucket: ${bucket}
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: ${accessKey}
+      secretKey: ${secretKey}
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR

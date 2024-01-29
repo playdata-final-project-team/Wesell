@@ -1,23 +1,23 @@
 package com.wesell.authenticationserver.controller;
 
 import com.wesell.authenticationserver.controller.dto.GeneratedTokenDto;
-import com.wesell.authenticationserver.controller.dto.request.CreateUserRequestDto;
-import com.wesell.authenticationserver.controller.dto.request.DeleteUserPwCheckRequestDto;
-import com.wesell.authenticationserver.controller.dto.request.SignInUserRequestDto;
-import com.wesell.authenticationserver.controller.response.ResponseDto;
+import com.wesell.authenticationserver.controller.dto.request.*;
+import com.wesell.authenticationserver.domain.service.AuthService;
+import com.wesell.authenticationserver.domain.service.TokenService;
+import com.wesell.authenticationserver.global.response.success.SuccessApiResponse;
 import com.wesell.authenticationserver.global.util.CustomCookie;
 import com.wesell.authenticationserver.global.util.SmsUtil;
-import com.wesell.authenticationserver.service.AuthUserService;
-import com.wesell.authenticationserver.service.dto.oauth.KakaoAccount;
 import com.wesell.authenticationserver.service.dto.oauth.KakaoInfo;
+import com.wesell.authenticationserver.service.dto.response.SendSmsResponseDto;
 import com.wesell.authenticationserver.service.dto.response.SignInSuccessResponseDto;
-import com.wesell.authenticationserver.controller.response.SuccessCode;
-import com.wesell.authenticationserver.service.oauth.KakaoService;
+import com.wesell.authenticationserver.global.response.success.SuccessCode;
+import com.wesell.authenticationserver.service.KakaoService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,90 +27,83 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("api/v1")
+@RequestMapping("api/v2")
 public class AuthController {
 
-    private final AuthUserService authUserService;
+    private final AuthService authService;
+    private final TokenService tokenService;
     private final KakaoService kakaoService;
     private final CustomCookie cookieUtil;
     private final SmsUtil smsUtil;
 
-    // 헬스 체크
-    @GetMapping("health-check")
-    public ResponseEntity<ResponseDto> healthCheck(){
-        return ResponseEntity
-                .status(SuccessCode.OK.getStatus())
-                .body(ResponseDto.of(SuccessCode.OK,"available server"));
-    }
-
     // 회원가입
     @PostMapping("sign-up")
-    public ResponseEntity<?> signUp(@Valid @RequestBody CreateUserRequestDto requestDto){
-
-        log.debug("AuthController - 회원가입");
-
-        return authUserService.createUser(requestDto);
+    public ResponseEntity<?> signUp(@Valid @RequestBody CreateUserRequestDto requestDto) {
+        log.info("client 회원가입 POST 요청");
+        authService.createUser(requestDto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(SuccessApiResponse.of(SuccessCode.USER_CREATED));
     }
 
     // 로그인
     @PostMapping("sign-in")
-    public ResponseEntity<?> login(@Valid @RequestBody SignInUserRequestDto requestDto){
-
-        log.debug("AuthController - 로그인");
-
-        GeneratedTokenDto generatedTokenDto = authUserService.login(requestDto);
+    public ResponseEntity<?> signIn(@Valid @RequestBody SignInUserRequestDto requestDto) {
+        log.info("client 로그인 POST 요청");
+        GeneratedTokenDto generatedTokenDto = authService.signIn(requestDto);
 
         log.debug("AuthController - 액세스 토큰 쿠키 생성");
         ResponseCookie accessTokenCookie = cookieUtil.createAccessTokenCookie(generatedTokenDto.getAccessToken());
         ResponseCookie refreshTokenCookie = cookieUtil.createRefreshTokenCookie(generatedTokenDto.getRefreshToken());
 
-        log.debug("AuthController - 이메일 저장 기능");
-        ResponseCookie savedEmailCookie;
-        if(requestDto.isSavedEmail()) {
-            savedEmailCookie = cookieUtil.createSavedEmailCookie(requestDto.getEmail());
-        }else{
-            savedEmailCookie = cookieUtil.deleteSavedEmailCookie();
-        }
-
         return ResponseEntity
-                .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
-                .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
-                .header(HttpHeaders.SET_COOKIE,savedEmailCookie.toString())
-                .body(new SignInSuccessResponseDto(generatedTokenDto.getUuid(), generatedTokenDto.getRole(),null));
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                .body(SuccessApiResponse.of(
+                        SuccessCode.OK,
+                        new SignInSuccessResponseDto(generatedTokenDto.getUuid(),
+                                generatedTokenDto.getRole(),
+                                null
+                                ))
+                );
     }
 
     // 소셜 로그인 - KAKAO
     @PostMapping("kakao/auth-code")
-    public ResponseEntity<?> kakaoAuthCode(@RequestBody String authCode, HttpSession session){
-
-        log.debug("소셜 로그인 - 카카오 로그인 ");
+    public ResponseEntity<?> kakaoAuthCode(@RequestBody String authCode, HttpSession session) {
+        log.info("client 카카오 로그인 POST 요청");
         KakaoInfo kakaoInfo = kakaoService.getInfo(authCode);
 
         log.debug("소셜 로그인 - 액세스 토큰 정보 session 에 저장");
-        session.setAttribute(kakaoInfo.getId().toString(),kakaoInfo.getKakaoToken());
+        session.setAttribute(kakaoInfo.getId().toString(), kakaoInfo.getKakaoToken());
 
         log.debug("소셜 로그인 - 회원 확인 및 회원 가입");
-        GeneratedTokenDto generatedTokenDto = authUserService.findOrCreateUser(kakaoInfo);
+        GeneratedTokenDto generatedTokenDto = authService.findOrCreateUser(kakaoInfo);
 
         log.debug("AuthController - 쿠키 생성");
         ResponseCookie accessTokenCookie = cookieUtil.createAccessTokenCookie(generatedTokenDto.getAccessToken());
         ResponseCookie refreshTokenCookie = cookieUtil.createRefreshTokenCookie(generatedTokenDto.getRefreshToken());
 
         return ResponseEntity
-                .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,accessTokenCookie.toString())
-                .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
-                .body(new SignInSuccessResponseDto(generatedTokenDto.getUuid(), generatedTokenDto.getRole(),kakaoInfo.getId()));
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                .body(SuccessApiResponse.of(
+                        SuccessCode.OK,
+                        new SignInSuccessResponseDto(generatedTokenDto.getUuid(),
+                                generatedTokenDto.getRole(),
+                                kakaoInfo.getId())
+                ));
     }
 
     // 소셜 로그아웃 - KAKAO
     @GetMapping("kakao/logout/{kakaoId}")
-    public ResponseEntity<?> kakaoLogout(@PathVariable("kakaoId") String kakaoId, HttpSession session){
-        log.debug("소셜 로그인 - 카카오 로그아웃");
+    public ResponseEntity<?> kakaoLogout(@PathVariable("kakaoId") String kakaoId, HttpSession session) {
+        log.info("client 카카오 로그아웃 GET 요청");
         Object token = session.getAttribute(kakaoId);
 
-        if(!Objects.isNull(token)) {
+        if (!Objects.isNull(token)) {
             kakaoService.logout(token.toString());
         }
         session.removeAttribute(kakaoId);
@@ -121,11 +114,11 @@ public class AuthController {
         ResponseCookie deleteJSESSIONID = cookieUtil.deleteJSESSIONIDCookie();
 
         return ResponseEntity
-                .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
                 .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
                 .header(HttpHeaders.SET_COOKIE, deleteJSESSIONID.toString())
-                .body(ResponseDto.of(SuccessCode.OK));
+                .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
     // 만료된 토큰 갱신
@@ -133,87 +126,131 @@ public class AuthController {
     public ResponseEntity<?> refresh(
             @CookieValue(name = "access-token", required = false) String accessToken,
             @CookieValue(name = "refresh-token") String refreshToken
-            ){
+    ) {
 
-        log.debug("AuthController - 토큰 갱신");
-        GeneratedTokenDto generatedTokenDto = authUserService.refreshToken(refreshToken,accessToken);
+        log.debug("client 토큰 갱신 GET 요청");
+        GeneratedTokenDto generatedTokenDto = tokenService.refreshToken(refreshToken, accessToken);
 
         ResponseCookie newAccessTokenCookie = cookieUtil.createAccessTokenCookie(generatedTokenDto.getAccessToken());
         ResponseCookie newRefreshTokenCookie = cookieUtil.createRefreshTokenCookie(generatedTokenDto.getRefreshToken());
 
         return ResponseEntity
-                .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,newAccessTokenCookie.toString())
-                .header(HttpHeaders.SET_COOKIE,newRefreshTokenCookie.toString())
-                .body(ResponseDto.of(SuccessCode.OK));
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, newAccessTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, newRefreshTokenCookie.toString())
+                .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
     // 로그아웃
     @GetMapping("logout")
-    public ResponseEntity<?> logout(){
-        log.debug("AuthController - 로그아웃");
+    public ResponseEntity<?> logout() {
+        log.debug("client 로그아웃 GET 요청");
         ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
         ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
 
         return ResponseEntity
-                .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
                 .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
-                .body(ResponseDto.of(SuccessCode.OK));
+                .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
     // 회원탈퇴 전 비밀번호 확인
     @PostMapping("delete/pw-check")
-    public ResponseEntity<ResponseDto> checkPw(@RequestBody DeleteUserPwCheckRequestDto requestDto){
-        log.debug("AuthController - 회원 탈퇴 전 비밀번호 확인");
-        authUserService.checkPwForDelete(requestDto);
-        return ResponseEntity.ok(ResponseDto.of(SuccessCode.OK));
+    public ResponseEntity<?> checkPw(@RequestBody DeleteUserPwCheckRequestDto requestDto) {
+        log.debug("client 회원 탈퇴 전 비밀번호 확인 POST 요청");
+        authService.checkPwForDelete(requestDto);
+        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK));
     }
 
     // 회원 탈퇴
     @DeleteMapping("delete/{uuid}")
-    public ResponseEntity<ResponseDto> deleteUser(@PathVariable(value="uuid") String uuid){
-        log.debug("AuthController - 회원 탈퇴");
+    public ResponseEntity<?> deleteUser(@PathVariable(value = "uuid") String uuid) {
+        log.debug("client 회원탈퇴 DELETE 요청");
         ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
         ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
 
-        authUserService.deleteUser(uuid);
+        authService.deleteUser(uuid);
 
         return ResponseEntity
-                .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
-                .header(HttpHeaders.SET_COOKIE,deleteRefreshToken.toString())
-                .body(ResponseDto.of(SuccessCode.OK));
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
+                .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
+                .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
     // 카카오 회원 탈퇴
     @DeleteMapping("delete/kakao")
-    public ResponseEntity<ResponseDto> deleteKakaoUser(@RequestParam String kakaoId,
-                                                       @RequestParam String uuid,
-                                                       HttpSession session){
-        log.debug("AuthController - 카카오 회원 탈퇴");
+    public ResponseEntity<?> deleteKakaoUser(@RequestParam String kakaoId,
+                                             @RequestParam String uuid,
+                                             HttpSession session) {
+        log.debug("client 카카오 회원탈퇴 요청");
         ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
         ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
         kakaoService.unlink(session.getAttribute(kakaoId).toString());
 
         return ResponseEntity
-                .status(SuccessCode.OK.getStatus())
-                .header(HttpHeaders.SET_COOKIE,deleteAccessToken.toString())
-                .header(HttpHeaders.SET_COOKIE,deleteRefreshToken.toString())
-                .body(ResponseDto.of(SuccessCode.OK));
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
+                .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
+                .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
-    // 번호 인증
-    @GetMapping("/phone/validate")
-    public ResponseEntity<?> sendSMSById(@RequestParam String phoneNumber) {
+    // 회원가입 시 인증 번호 요청
+    @GetMapping("sign-up/phone/validate")
+    public ResponseEntity<?> sendCertNumber(@RequestParam String phoneNumber){
+        log.info("client 인증 번호 요청 - 회원가입");
+        String certNum = smsUtil.createCode();
 
-        log.debug("AuthController - 번호 인증");
-        String numStr = smsUtil.createCode();
-
-        log.info("수신자 번호 : {}",phoneNumber);
-
-        smsUtil.sendOne(phoneNumber,numStr);
-
-        return ResponseEntity.ok(numStr);
+        smsUtil.sendOne(phoneNumber, certNum);
+        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK, certNum));
     }
+
+    // 휴대전화 인증 번호 요청
+    @GetMapping("phone/validate")
+    public ResponseEntity<?> sendCertNumberWithUuid(@RequestParam String phoneNumber) {
+        log.info("client 인증 번호 요청");
+
+        log.debug("휴대전화 번호로 회원 조회");
+        String uuid = authService.findUserByPhone(phoneNumber);
+        String certNum = smsUtil.createCode();
+
+        smsUtil.sendOne(phoneNumber, certNum);
+        SendSmsResponseDto respDto = SendSmsResponseDto.builder()
+                .uuid(uuid)
+                .certNum(certNum)
+                .build();
+        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK, respDto));
+    }
+
+    // 이메일 찾기 - 이메일 반환
+    @GetMapping("find-email/{uuid}")
+    public ResponseEntity<?> findEmail(@PathVariable("uuid") String uuid) {
+        log.info("client 이메일 요청");
+
+        String email = authService.findEmail(uuid);
+        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK, email));
+    }
+
+    // 비밀번호 찾기 - 이메일 존재 여부 확인
+    @GetMapping("email-check")
+    public ResponseEntity<?> checkEmail(@RequestParam String email) {
+        authService.findUserByEmail(email);
+        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK));
+    }
+
+    // 이메일 중복 조회
+    @GetMapping("dup-check")
+    public ResponseEntity<?> dupCheckEmail(@RequestParam("email") String email) {
+        authService.checkEmail(email);
+        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK));
+    }
+
+    // 비밀번호 찾기 - 비밀번호 수정
+    @PostMapping("update-pw")
+    public ResponseEntity<?> updatePWD(@RequestBody UpdatePwRequestDto requestDto) {
+        authService.updatePw(requestDto);
+        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK));
+    }
+
 }

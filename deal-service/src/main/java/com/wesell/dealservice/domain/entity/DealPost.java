@@ -4,12 +4,10 @@ import com.wesell.dealservice.domain.SaleStatus;
 import com.wesell.dealservice.domain.dto.request.EditPostRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity @Getter
-@Table(name = "post")
+@Table(name = "product")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DealPost {
@@ -31,9 +29,6 @@ public class DealPost {
     @Column(name = "p_price", nullable = false)
     private Long price;
 
-    @Column(name = "p_link", nullable = false)
-    private String link;
-
     @Column(name = "p_detail", nullable = false)
     private String detail;
 
@@ -49,12 +44,11 @@ public class DealPost {
 
     @Builder
     public DealPost(String uuid, Category category, String title, Long price,
-                    String link, String detail, LocalDateTime createdAt) {
+                    String detail, LocalDateTime createdAt) {
         this.uuid = uuid;
         this.category = category;
         this.title = title;
         this.price = price;
-        this.link = link;
         this.detail = detail;
         this.saleStatus = SaleStatus.IN_PROGRESS;
         this.createdAt = createdAt;
@@ -64,7 +58,6 @@ public class DealPost {
     public void editPost(EditPostRequestDto dto) {
         this.title = dto.getTitle();
         this.price = dto.getPrice();
-        this.link = dto.getLink();
         this.detail = dto.getDetail();
     }
 

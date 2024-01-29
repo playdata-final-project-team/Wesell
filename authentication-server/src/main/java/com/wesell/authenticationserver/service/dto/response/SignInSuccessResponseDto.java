@@ -1,22 +1,19 @@
 package com.wesell.authenticationserver.service.dto.response;
 
-import com.wesell.authenticationserver.controller.response.ResponseDto;
-import com.wesell.authenticationserver.controller.response.SuccessCode;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
 @Getter
-public class SignInSuccessResponseDto extends ResponseDto {
+public class SignInSuccessResponseDto{
 
     private String uuid;
 
     private String role;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long kakaoId;
 
     public SignInSuccessResponseDto(String uuid, String role, Long kakaoId){
-        this.setCode(SuccessCode.OK.getCode());
-        this.setStatus(SuccessCode.OK.getStatus().toString());
         this.uuid = uuid;
         this.role = role;
         this.kakaoId = kakaoId;

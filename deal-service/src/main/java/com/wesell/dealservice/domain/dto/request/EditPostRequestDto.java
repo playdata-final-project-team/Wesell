@@ -13,20 +13,13 @@ public class EditPostRequestDto {
 
     @NotNull
     private Long categoryId;
-
     @NotBlank
     private String title;
-
     @NotNull
     private Long price;
-
-    @NotBlank
-    private String link;
-
     @NotBlank
     private String detail;
-
-    private Long postId;
-
-    private int division = 3;
+    @NotNull
+    private Long productId;
+    private int division = 2;
 }

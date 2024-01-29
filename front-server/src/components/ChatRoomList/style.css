@@ -1,0 +1,31 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  text-decoration: none;
+
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.chat-room-list-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.chat-room-list-container > h1 {
+  text-align: center;
+  padding: 10px;
+  background-color: rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(246, 246, 246);
+  z-index: 2;
+  letter-spacing: -0.5px;
+}
+
+.chat-room-list {
+  height: 700px;
+  overflow-y: auto;
+  padding: 10px 20px;
+}
+
+.chat-room-list > ul {
+  list-style: none;
+}

@@ -2,8 +2,6 @@ package com.wesell.dealservice;
 
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wesell.dealservice.domain.entity.Category;
-import com.wesell.dealservice.domain.entity.Image;
 import com.wesell.dealservice.domain.entity.*;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;

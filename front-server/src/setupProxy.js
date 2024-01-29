@@ -38,4 +38,29 @@ module.exports = function (app) {
       changeOrigin: true, // 서버 구성에 따른 호스트 헤더 변경 여부 설정
     }),
   );
+
+  app.use(
+    '/chat-service',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+    }),
+  );
+
+  app.use(
+    '/image-server',
+    createProxyMiddleware({
+      target: 'http://localhost:8000', 
+      changeOrigin: true, 
+    }),
+  );
+
+  app.use(
+    '/pay-service',
+    createProxyMiddleware({
+      target: 'http://localhost:8000', 
+      changeOrigin: true, 
+    }),
+  );
+
 };

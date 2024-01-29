@@ -1,5 +1,10 @@
 import './style.css';
-import { nicknameDupCheckRequest, phoneValidateRequest, signInRequest, signUpRequest } from 'apis';
+import {
+  nicknameDupCheckRequest,
+  phoneValidateAtSignUpRequest,
+  signInRequest,
+  signUpRequest,
+} from 'apis';
 import { useState, useRef, KeyboardEvent, ChangeEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SignInRequestDto, SignUpRequestDto } from 'apis/request/auth';
@@ -7,12 +12,13 @@ import { SignInResponseDto } from 'apis/response/auth';
 import { ResponseDto } from 'apis/response';
 import InputBox from 'components/InputBox';
 import CheckBox from 'components/CheckBox';
-import { MAIN_PATH } from 'constant';
+import { AUTH_PATH, MAIN_PATH } from 'constant';
 import ResponseCode from 'constant/response-code.enum';
 import { MessageType } from 'types/interface';
 import ReactModal from 'react-modal';
 import axios from 'axios';
 import certNumStore from 'stores/cert-num.store';
+import PhoneValidateResponseAtSignUpDto from 'apis/response/auth/phone-validate-at-signup.response.dto';
 
 // component: 인증 화면 컴포넌트 //
 function AuthServer() {
@@ -65,11 +71,11 @@ function AuthServer() {
     };
 
     // function: sign in response 처리 함수//
-    const signInResponse = (responseBody: SignInResponseDto | null) => {
+    const signInResponse = (responseBody: SignInResponseDto | ResponseDto | null) => {
       // comment: 서버가 안켜진 경우 또는 도메인 주소가 잘못된 경우 //
-
+      console.dir(responseBody);
       if (!responseBody) {
-        alert('네트워크 연결 상태를 확인해주세요!');
+        navigator(MAIN_PATH());
         return;
       }
 
@@ -90,14 +96,12 @@ function AuthServer() {
         return;
       }
 
-      // const responseBodyWithDealInfo = responseBody as MyDealListWithPageResponseDto;
-
       // uuid 와 role 을 세션 스토리지에 저장.
       const responseBodyWithUserInfo = responseBody as SignInResponseDto;
-      if (responseBodyWithUserInfo) {
-        window.sessionStorage.setItem('uuid', responseBodyWithUserInfo.uuid);
+      if (responseBodyWithUserInfo.content) {
+        window.sessionStorage.setItem('uuid', responseBodyWithUserInfo.content.uuid);
 
-        window.sessionStorage.setItem('role', responseBodyWithUserInfo.role);
+        window.sessionStorage.setItem('role', responseBodyWithUserInfo.content.role);
       }
 
       navigator(MAIN_PATH());
@@ -496,29 +500,34 @@ function AuthServer() {
 
     // event-handler: 번호 인증 버튼 click 이벤트 처리 //
     const onValidationCheckClickHandler = async () => {
+      const phoneRegex = /^01(0|1|[6-8])\d{3,4}\d{4}$/;
+
       if (!phone) {
         setPhoneError(true);
         //'휴대폰 번호를 입력해주세요'
         setMessage((prev) => ({ ...prev, phone: '휴대폰 번호를 입력해주세요' }));
         return;
+      } else if (phone !== '' && !phoneRegex.test(phone.trim())) {
+        setMessage((prev) => ({ ...prev, phone: '-없이 숫자만 입력' }));
+        return;
       }
 
-      try {
-        const response = await axios.get('/auth-server/api/v1/phone/validate', {
-          params: {
-            phoneNumber: phone,
-          },
-        });
-        console.log('서버 응답 :', response.data);
-        setCertNum(response.data);
-        setMessage((prev) => ({ ...prev, phone: '' }));
-        alert('✅ 인증정보가 전송되었습니다. 인증번호를 입력해주세요.');
+      const response = await phoneValidateAtSignUpRequest(phone);
+
+      if (!response) {
+        alert('네트워크 연결 상태를 확인해주세요');
+        return;
+      }
+
+      const successResponse = response as PhoneValidateResponseAtSignUpDto;
+
+      if (successResponse.content) {
+        setCertNum(successResponse.content);
+        alert('✅ 인증정보가 전송되었습니다. 인증번호를 입력해주세요');
         setMobileCheckPopupOpen(true);
         return;
-      } catch (error) {
-        console.error('에러 발생:', error);
-        alert('😒 서버 오류로 인해 통신 오류가 발생했습니다. 잠시후 다시 시도해주세요!');
-        return;
+      } else {
+        alert('😒 휴대전화 번호를 잘못 입력하셨습니다 다시 입력 바랍니다');
       }
     };
 
@@ -580,17 +589,17 @@ function AuthServer() {
     const signUpResponse = (responseBody: ResponseDto | null) => {
       // comment: 서버가 안켜진 경우 또는 도메인 주소가 잘못된 경우 //
       if (!responseBody) {
-        alert('네트워크 연결 상태를 확인해주세요!');
+        navigator(MAIN_PATH());
         return;
       }
 
       const { code, message } = responseBody;
+      console.log(code);
+      console.log(message);
 
       if (code === ResponseCode.USER_CREATED) {
-        alert(message);
-        navigator(MAIN_PATH());
+        navigator(AUTH_PATH());
       } else {
-        alert(code);
         return;
       }
     };
@@ -645,7 +654,6 @@ function AuthServer() {
         pwRe,
         agree,
       };
-      console.log(signUpEnable);
 
       signUpValidation(requestBody);
 
@@ -661,6 +669,12 @@ function AuthServer() {
         return;
       }
 
+      const phoneRegex = /^01(0|1|[6-8])\d{3,4}\d{4}$/;
+
+      if (phone !== '' && !phoneRegex.test(phone.trim())) {
+        setMessage((prev) => ({ ...prev, phone: '-없이 숫자만 입력' }));
+      }
+
       const response = await signUpRequest(requestBody);
       if (response) {
         if (response.vfMessages) {
@@ -673,7 +687,8 @@ function AuthServer() {
 
     // effect: 번호 인증 및 닉네임 중복 처리 완료 시 가입하기 버튼 활성화
     useEffect(() => {
-      if (!isDuplicated && isValidation) {
+      // 휴대전화 인증 여부 상태값 if 조건문에 추가!
+      if (!isDuplicated) {
         setSignUpEnable(true);
       } else {
         setSignUpEnable(false);
