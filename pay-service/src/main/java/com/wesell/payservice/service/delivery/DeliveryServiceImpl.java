@@ -72,7 +72,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 
     @Override
     public void finishDeliveryAll() {
-        LocalDate deadline = LocalDate.now().minusWeeks(1);
+        LocalDate deadline = LocalDate.now().minusDays(10);
         List<Delivery> deliveries = deliveryRepository.findDeliveryByCreatedAt(deadline);
         deliveries.forEach(Delivery::finishDelivery);
     }
