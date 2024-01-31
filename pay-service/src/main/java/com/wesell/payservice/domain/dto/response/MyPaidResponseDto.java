@@ -8,13 +8,13 @@ import lombok.Setter;
 
 @Getter @Setter
 public class MyPaidResponseDto {
-    @NotBlank
+    @NotNull
     private Long payId;
-    @NotNull
+    @NotBlank
     private String title;
-    @NotNull
+    @NotBlank
     private String createdAt;
-    @NotNull
+    @NotBlank
     private ShippingStatus status;
 
 }

@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class PayRequestDto {
     @NotNull
     private Long deliveryId;
-    @NotNull
+    @NotBlank
     private String buyer;
-    @NotBlank
+    @NotNull
     private Long productId;
-    @NotBlank
+    @NotNull
     private Integer type;
 }

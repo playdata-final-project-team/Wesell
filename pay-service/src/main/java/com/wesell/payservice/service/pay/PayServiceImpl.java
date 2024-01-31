@@ -9,6 +9,7 @@ import com.wesell.payservice.domain.repository.PayRepository;
 import com.wesell.payservice.feign.DealFeign;
 import com.wesell.payservice.global.response.error.ErrorCode;
 import com.wesell.payservice.global.response.error.exception.CustomException;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,19 +36,19 @@ public class PayServiceImpl implements PayService {
 
     @Override
     public Long createPay(PayRequestDto requestDto) {
+        //todo : amount가 null인 경우
         Long amount = dealFeign.getPayInfo(requestDto.getProductId());
         Pay pay = Pay.createPay(requestDto, createOrderNumber(requestDto), amount);
 
-        //todo: 결제 시도 횟수
-        //todo: 프론트에서 -1 을 받는 경우, 결제 실패 처리! -> 다시 시도? ㅜㅜ
-        if(amount == null || amount == 0){
-            Delivery delivery = deliveryRepository.findDeliveryById(pay.getDeliveryId());
-            deliveryRepository.delete(delivery);
-            return -1L;
-        } else {
+        try{
             payRepository.save(pay);
             return pay.getId();
+        } catch(OptimisticLockException e ) {
+            Delivery delivery = deliveryRepository.findDeliveryById(pay.getDeliveryId());
+            deliveryRepository.delete(delivery);
+            throw new CustomException(ErrorCode.REJECT_REASON_SOLD_OUT);
         }
+
     }
 
     @Override
