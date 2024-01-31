@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 function getAmount() {
   const[amount, setAmount] = useState();
   useEffect(() => {
-    fetch("/deal-service/api/v1/price", {
+    fetch("/deal-service/api/v2/price", {
       method:"GET"
     })
     .then((response) => response.json())

@@ -9,13 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PayRequestDto {
+public class DeliveryUpdateRequestDto {
     @NotNull
-    private Long deliveryId;
+    private Long id;
+    @NotNull
+    private Long version;
     @NotBlank
-    private String buyer;
-    @NotNull
-    private Long productId;
-    @NotNull
-    private Integer type;
+    private String receiver;
+    @NotBlank
+    private String address;
+
 }

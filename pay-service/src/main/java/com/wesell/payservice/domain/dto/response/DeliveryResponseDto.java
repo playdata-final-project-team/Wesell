@@ -12,16 +12,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeliveryResponseDto {
+    @NotNull
+    private Long id;
+    @NotNull
+    private Long version;
     @NotBlank
     private String receiver;
-    @NotNull
+    @NotBlank
     private String address;
-    @NotNull
+    @NotBlank
     private String status;
 
     public DeliveryResponseDto(Delivery delivery) {
+        this.id = delivery.getId();
         this.receiver = delivery.getReceiver();
         this.address = delivery.getAddress();
         this.status = ShippingStatus.PREPARING.getName();
+        this.version = delivery.getVersion();
     }
 }

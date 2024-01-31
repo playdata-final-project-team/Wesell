@@ -14,7 +14,7 @@ import com.wesell.dealservice.domain.repository.read.DealPostReadRepository;
 import com.wesell.dealservice.global.response.error.exception.CustomException;
 import com.wesell.dealservice.feignClient.ImageFeignClient;
 import com.wesell.dealservice.feignClient.UserFeignClient;
-import com.wesell.dealservice.util.Producer;
+import com.wesell.dealservice.global.util.Producer;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
