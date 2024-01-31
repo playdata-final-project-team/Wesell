@@ -111,14 +111,13 @@ const Withdraw = (props: Props) => {
   // function: 회원 탈퇴 요청에 대한 응답 처리 //
   function deleteUserResponse(responseBody: ResponseDto | null) {
     if (!responseBody) {
-      alert('네트워크 연결 상태를 확인해주세요!');
       return;
     }
 
     // session storage 삭제
     window.sessionStorage.clear();
 
-    alert('회원 탈퇴가 완료되었습니다.');
+    alert('😀 회원 탈퇴가 완료되었습니다.');
 
     navigator(MAIN_PATH());
   }

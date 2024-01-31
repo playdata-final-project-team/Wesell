@@ -31,9 +31,6 @@ public class KakaoService {
     @Value("${kakao.redirect-url}")
     private String redirectUrl;
 
-    @Value("${kakao.admin-key}")
-    private String adminKey;
-
     @Value("${kakao.logout-api-url}")
     private String kakaoLogoutApiUrl;
 
@@ -75,7 +72,7 @@ public class KakaoService {
 
     public void unlink(String kakaoToken){
         try{
-            kakaoFeignClient.logoutOrUnlink(new URI(kakaoLogoutApiUrl),"Bearer "+ kakaoToken);
+            kakaoFeignClient.logoutOrUnlink(new URI(kakaoUnlinkApiUrl),"Bearer "+ kakaoToken);
         }catch(Exception e){
             log.error("Error! {}",e.getMessage());
             throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"kakao 연결끊기 중 오류 발생");

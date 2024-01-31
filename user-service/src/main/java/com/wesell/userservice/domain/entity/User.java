@@ -47,6 +47,9 @@ public class User {
         return this;
     }
 
+    public void deleteUser(String deletedUuid){
+        this.uuid = deletedUuid;
+    }
     public void updateCreatedAt() {
         this.createdAt = LocalDateTime.now();
     }

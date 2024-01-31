@@ -103,10 +103,8 @@ public class AuthController {
     }
 
     // 소셜 로그아웃 - KAKAO
-//    @GetMapping("kakao/logout/{kakaoId}")
-//    public ResponseEntity<?> kakaoLogout(@PathVariable("kakaoId") String kakaoId, HttpServletRequest request) {
     @GetMapping("kakao/logout")
-    public ResponseEntity<?> kakaoLogout(HttpServletRequest request) {
+    public ResponseEntity<?> kakaoLogout() {
         log.info("client 카카오 로그아웃 GET 요청");
 
         log.debug("쿠키 삭제");
@@ -197,24 +195,24 @@ public class AuthController {
                 isValidJsessionId = jCookie.getValue().equals(session.getId());
 
                 if(isValidJsessionId){
-                    log.info("logout 싫행!");
+                    log.info("회원탈퇴 싫행!");
                     String accessToken = (String) session.getAttribute(kakaoId);
-                    kakaoService.logout(accessToken);
+                    kakaoService.unlink(accessToken);
                     session.invalidate();
                 }
             }
         }else{
             log.info("cookie or session is null");
         }
-
-
+        
         ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
         ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
-
+        ResponseCookie deleteJSESSIONID = cookieUtil.deleteJSESSIONIDCookie();
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
                 .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
+                .header(HttpHeaders.SET_COOKIE, deleteJSESSIONID.toString())
                 .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
