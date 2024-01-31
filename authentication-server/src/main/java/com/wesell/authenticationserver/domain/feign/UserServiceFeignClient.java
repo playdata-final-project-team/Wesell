@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "USER-SERVICE")
 public interface UserServiceFeignClient {
 
-    @PostMapping("api/v1/sign-up")
+    @PostMapping("api/v2/sign-up")
     void registerUserDetailInfo(@RequestBody CreateUserFeignResponseDto dto);
 
-    @PostMapping("api/v1/users/phone/uuid")
+    @PostMapping("api/v2/users/phone/uuid")
     String findID(@RequestBody String phoneNumber);
 
-    @DeleteMapping("api/v1/users/{uuid}")
+    @DeleteMapping("api/v2/users/{uuid}")
     ResponseEntity<Void> deleteUser(@PathVariable(value="uuid") String uuid);
 
 }

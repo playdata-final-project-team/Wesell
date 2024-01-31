@@ -1,4 +1,4 @@
-package com.wesell.chatservice.dto.query;
+package com.wesell.chatservice.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,11 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class ChatRoomListQuery {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ChatRoomListRequestDto {
+
     private int page;
+
     private int size;
+
     private String consumer;
 }

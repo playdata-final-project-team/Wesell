@@ -1,9 +1,7 @@
 package com.wesell.chatservice.controller;
 
-import com.wesell.chatservice.domain.service.ChatRoomCreateService;
-import com.wesell.chatservice.domain.service.ChatRoomLoadService;
-import com.wesell.chatservice.dto.command.ChatRoomCreateCommand;
-import com.wesell.chatservice.dto.query.ChatRoomListQuery;
+import com.wesell.chatservice.domain.service.ChatRoomService;
+import com.wesell.chatservice.dto.request.ChatRoomListRequestDto;
 import com.wesell.chatservice.dto.request.ChatRoomRequestDto;
 import com.wesell.chatservice.dto.response.ChatRoomListResponseDto;
 import com.wesell.chatservice.global.response.success.SuccessApiResponse;
@@ -18,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v2/rooms")
 public class ChatRoomController {
 
-    private final ChatRoomCreateService chatRoomCreateService;
-    private final ChatRoomLoadService chatRoomLoadService;
+    private final ChatRoomService chatRoomService;
 
     /**
      * 채팅방 생성
@@ -28,16 +25,26 @@ public class ChatRoomController {
      * @return ResponseEntity<Long>
      */
     @PostMapping
-    public ResponseEntity<?> createChatRoom(@RequestBody @Valid ChatRoomRequestDto requestDto) {
-        ChatRoomCreateCommand chatRoomCreateCommand = ChatRoomCreateCommand.builder()
-                .productId(requestDto.getProductId())
-                .consumer(requestDto.getConsumer())
-                .seller(requestDto.getSeller())
-                .build();
+    public ResponseEntity<SuccessApiResponse<?>> createChatRoom(@RequestBody @Valid ChatRoomRequestDto requestDto) {
+        String roomId = chatRoomService.createChatRoom(requestDto);
+
         return ResponseEntity.ok(SuccessApiResponse.of(
                 SuccessCode.ROOM_CREATED,
-                chatRoomCreateService.createChatRoom(chatRoomCreateCommand))
+                roomId)
         );
+    }
+
+    /**
+     * 채팅방 오픈
+     * 
+     * @param roomId
+     * @return
+     */
+    @GetMapping("/{room-id}")
+    public ResponseEntity<SuccessApiResponse<?>> openChatRoom(@PathVariable("room-id") String roomId){
+        return ResponseEntity.ok(SuccessApiResponse.of(
+                SuccessCode.OK,
+                chatRoomService.findChatRoom(roomId)));
     }
 
     /**
@@ -49,18 +56,30 @@ public class ChatRoomController {
      * @return ResponseEntity<ChatRoomListResponseDto>
      */
     @GetMapping
-    public ResponseEntity<?> getMyChatRoomList(@RequestParam(defaultValue = "0") int page,
-                                               @RequestParam(defaultValue = "5") int size,
-                                               @RequestParam String consumer) {
-        ChatRoomListQuery chatRoomListQuery = ChatRoomListQuery.builder()
-                .consumer(consumer)
-                .page(page)
-                .size(size)
-                .build();
-        ChatRoomListResponseDto chatRoomListResponseDto = chatRoomLoadService.getChatRoomList(chatRoomListQuery);
+    public ResponseEntity<SuccessApiResponse<?>> getMyChatRoomList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam String consumer) {
+        ChatRoomListResponseDto chatRoomListResponseDto = chatRoomService.myChatRoomList(consumer, page, size);
         return ResponseEntity.ok(SuccessApiResponse.of(
                 SuccessCode.OK,
                 chatRoomListResponseDto)
         );
+    }
+
+    /**
+     * 채팅방 나가기
+     *
+     * @param roomId
+     * @param demander
+     * @return
+     */
+    @DeleteMapping
+    public ResponseEntity<SuccessApiResponse<?>> exitChatRoom(@RequestParam String roomId,
+                                                              @RequestParam String demander)
+    {
+        chatRoomService.exitChatRoom(roomId,demander);
+
+        return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK));
     }
 }

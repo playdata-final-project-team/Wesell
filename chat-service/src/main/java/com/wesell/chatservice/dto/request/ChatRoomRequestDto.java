@@ -19,7 +19,7 @@ public class ChatRoomRequestDto {
     @NotNull(message = "NullPointer Error - 판매품")
     private Long productId; // 판매품 id
 
-    @NotBlank(message = "NullPointer Error - 판매자")
+    @NotBlank(message = "NullPointer Error - 판매품")
     private String seller; // 판매자 nickname
 
 }

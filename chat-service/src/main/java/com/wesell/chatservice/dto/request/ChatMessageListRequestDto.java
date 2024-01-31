@@ -1,18 +1,16 @@
-package com.wesell.chatservice.dto.command;
+package com.wesell.chatservice.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-public class ChatMessageCreateCommand {
+public class ChatMessageListRequestDto {
     private String roomId;
-
-    private String content;
-
-    private String sender;
+    private int page;
+    private int size;
 }

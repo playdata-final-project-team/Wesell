@@ -13,7 +13,7 @@ public class DateFormatUtil {
 
     // 대화창 날짜 표시 형태
     public String formatSendDate(LocalDateTime sendDate){
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd일 E요일", Locale.KOREA);
+        SimpleDateFormat formatter = new SimpleDateFormat("MM월 dd일 E요일", Locale.KOREA);
         Date date = Date.from(sendDate.atZone(ZoneId.systemDefault()).toInstant());
         return formatter.format(date);
     }
