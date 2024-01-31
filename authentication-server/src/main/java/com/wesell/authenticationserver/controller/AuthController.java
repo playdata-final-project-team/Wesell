@@ -12,6 +12,8 @@ import com.wesell.authenticationserver.service.dto.response.SendSmsResponseDto;
 import com.wesell.authenticationserver.service.dto.response.SignInSuccessResponseDto;
 import com.wesell.authenticationserver.global.response.success.SuccessCode;
 import com.wesell.authenticationserver.service.KakaoService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +24,9 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,12 +75,13 @@ public class AuthController {
 
     // 소셜 로그인 - KAKAO
     @PostMapping("kakao/auth-code")
-    public ResponseEntity<?> kakaoAuthCode(@RequestBody String authCode, HttpSession session) {
+    public ResponseEntity<?> kakaoAuthCode(@RequestBody String authCode, HttpServletRequest request) {
         log.info("client 카카오 로그인 POST 요청");
         KakaoInfo kakaoInfo = kakaoService.getInfo(authCode);
 
         log.debug("소셜 로그인 - 액세스 토큰 정보 session 에 저장");
-        session.setAttribute(kakaoInfo.getId().toString(), kakaoInfo.getKakaoToken());
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute(kakaoInfo.getId().toString(), kakaoInfo.getAccessToken());
 
         log.debug("소셜 로그인 - 회원 확인 및 회원 가입");
         GeneratedTokenDto generatedTokenDto = authService.findOrCreateUser(kakaoInfo);
@@ -98,15 +103,11 @@ public class AuthController {
     }
 
     // 소셜 로그아웃 - KAKAO
-    @GetMapping("kakao/logout/{kakaoId}")
-    public ResponseEntity<?> kakaoLogout(@PathVariable("kakaoId") String kakaoId, HttpSession session) {
+//    @GetMapping("kakao/logout/{kakaoId}")
+//    public ResponseEntity<?> kakaoLogout(@PathVariable("kakaoId") String kakaoId, HttpServletRequest request) {
+    @GetMapping("kakao/logout")
+    public ResponseEntity<?> kakaoLogout(HttpServletRequest request) {
         log.info("client 카카오 로그아웃 GET 요청");
-        Object token = session.getAttribute(kakaoId);
-
-        if (!Objects.isNull(token)) {
-            kakaoService.logout(token.toString());
-        }
-        session.removeAttribute(kakaoId);
 
         log.debug("쿠키 삭제");
         ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
@@ -183,11 +184,32 @@ public class AuthController {
     @DeleteMapping("delete/kakao")
     public ResponseEntity<?> deleteKakaoUser(@RequestParam String kakaoId,
                                              @RequestParam String uuid,
-                                             HttpSession session) {
+                                             HttpServletRequest request) {
         log.debug("client 카카오 회원탈퇴 요청");
+        HttpSession session = request.getSession(false);
+        Cookie[] cookies = request.getCookies();
+        boolean isValidJsessionId = false;
+
+        if(cookies != null && session != null){
+            Optional<Cookie> jsessionCookie =  Arrays.stream(cookies).filter((c) -> c.getName().equals("JSESSIONID")).findFirst();
+            if(jsessionCookie.isPresent()){
+                Cookie jCookie = jsessionCookie.get();
+                isValidJsessionId = jCookie.getValue().equals(session.getId());
+
+                if(isValidJsessionId){
+                    log.info("logout 싫행!");
+                    String accessToken = (String) session.getAttribute(kakaoId);
+                    kakaoService.logout(accessToken);
+                    session.invalidate();
+                }
+            }
+        }else{
+            log.info("cookie or session is null");
+        }
+
+
         ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
         ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
-        kakaoService.unlink(session.getAttribute(kakaoId).toString());
 
         return ResponseEntity
                 .ok()

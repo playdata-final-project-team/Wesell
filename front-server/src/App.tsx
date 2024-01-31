@@ -3,7 +3,6 @@ import './App.css';
 import Main from 'pages/Main';
 import Container from 'layouts/Container';
 import { MAIN_PATH, SOCIAL_PATH, UPLOAD_PATH, MYPAGE_PATH, AUTH_PATH } from 'constant';
-import Social from 'pages/Social/kakao';
 import UploadBoard from 'pages/board/write/Write';
 import Mypage from 'pages/Mypage';
 import EditPostPage from 'pages/board/edit';
@@ -21,6 +20,7 @@ import ChatRoomPage from 'pages/ChatRoomPage';
 import RequestPay from 'pages/Pay/beforePay';
 import PayResultPage from 'pages/Pay/detail';
 import TestDetailPage from 'pages/board/testDetail';
+import Kakao from 'pages/Social/kakao';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -31,7 +31,7 @@ function App() {
         <Route path={MAIN_PATH()} element={<Main />} />
         <Route path="/category/:categoryId" element={<SearchByCategory />} />
         <Route path="/title/:title" element={<SearchByTitle />} />
-        <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
+        <Route path={SOCIAL_PATH('kakao')} element={<Kakao />} />
         <Route path={AUTH_PATH()} element={<AuthServer />} />
         <Route path="/found-email/:uuid" element={<FoundEmailComponent />} />
         <Route path="/find-id" element={<UuidComponent />} />
