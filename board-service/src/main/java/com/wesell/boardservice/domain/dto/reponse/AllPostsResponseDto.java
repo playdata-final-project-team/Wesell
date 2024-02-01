@@ -2,8 +2,8 @@ package com.wesell.boardservice.domain.dto.reponse;
 
 import com.wesell.boardservice.domain.entity.Post;
 import lombok.*;
-
-import java.time.LocalDateTime;
+import java.io.Serializable;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,22 +11,22 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AllPostsResponseDto {
+public class AllPostsResponseDto implements Serializable {
     private String title;
     private String writer;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     public AllPostsResponseDto(Post post) {
         this.title = post.getTitle();
         this.writer = post.getWriter();
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
     public static List<AllPostsResponseDto> of(List<Post> postList) {
         return postList.stream()
                 .map(post -> new AllPostsResponseDto(
                         post.getTitle(),
                         post.getWriter(),
-                        LocalDateTime.now()
+                        post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
                 ))
                 .collect(Collectors.toList());
     }

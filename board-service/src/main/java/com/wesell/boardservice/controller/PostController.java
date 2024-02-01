@@ -19,9 +19,9 @@ public class PostController {
         return ResponseEntity.ok(null);
     }
     // 게시글 등록기능
-    @PostMapping("/post")
-    public ResponseEntity<?> post(@RequestBody PostRequestDto postRequestDto) {
-        postService.save(postRequestDto);
+    @PostMapping("/post/{boardId}")
+    public ResponseEntity<?> post(@RequestBody PostRequestDto postRequestDto, @PathVariable("boardId") Long boardId) {
+        postService.save(postRequestDto, boardId);
         return ResponseEntity.ok("게시물이 등록되었습니다.");
     }
     // 게시글 조회 기능
