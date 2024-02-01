@@ -2,7 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Main from 'pages/Main';
 import Container from 'layouts/Container';
-import { MAIN_PATH, SOCIAL_PATH, UPLOAD_PATH, MYPAGE_PATH, AUTH_PATH } from 'constant';
+import { MAIN_PATH, SOCIAL_PATH, UPLOAD_PATH, MYPAGE_PATH, AUTH_PATH, NOTIFICATION_MAIN_PATH, NOTIFICATION_LOGIN_PATH } from 'constant';
+import Social from 'pages/Social/kakao';
 import UploadBoard from 'pages/board/write/Write';
 import Mypage from 'pages/Mypage';
 import EditPostPage from 'pages/board/edit';
@@ -20,7 +21,8 @@ import ChatRoomPage from 'pages/ChatRoomPage';
 import RequestPay from 'pages/Pay/beforePay';
 import PayResultPage from 'pages/Pay/detail';
 import TestDetailPage from 'pages/board/testDetail';
-import Kakao from 'pages/Social/kakao';
+import IndexPage from 'pages/Notification/index';
+import LoginPage from 'pages/Notification/login';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -48,6 +50,8 @@ function App() {
         <Route path="/rooms/:roomId" element={<ChatRoomPage />} />
         <Route path="/payment/:postId" element={<RequestPay />} />
         <Route path="payment/:payId" element={<PayResultPage />} />
+        <Route path={NOTIFICATION_MAIN_PATH()} element={<IndexPage />} />
+        <Route path={NOTIFICATION_LOGIN_PATH()} element={<LoginPage />} />
       </Route>
 
       {/* 테스트 라우터 */}
