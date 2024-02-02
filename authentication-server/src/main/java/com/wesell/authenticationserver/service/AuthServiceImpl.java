@@ -180,7 +180,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (optionalAuthUser.isPresent()) {
             AuthUser authUser = optionalAuthUser.get();
-            authUser.changeIsDeleted();
+            authUser.deleteUser("delete");
             authUser.changeIsForced();
             authUserRepository.saveAndFlush(authUser);
         } else if (optionalKakaoUser.isPresent()) {
@@ -230,12 +230,12 @@ public class AuthServiceImpl implements AuthService {
         });
 
         log.debug("탈퇴한 회원으로 변경 - DB 반영");
-        authUser.changeIsDeleted();
+        String deletedUuid = authUser.deleteUser("delete");
         authUserRepository.saveAndFlush(authUser);
 
         log.debug("User-Service Api Call - 회원가입 요청");
         try {
-            userServiceFeignClient.deleteUser(uuid);
+            userServiceFeignClient.deleteUser(uuid, deletedUuid);
         } catch (Exception e) {
             log.error("유저 서비스로 Feign 요청 시 오류 발생.");
             log.error("detail : {}", e.getMessage());

@@ -11,7 +11,7 @@ public interface UserService {
     public void update(String uuid, SignupRequestDto requestDto);
 
     // 회원 삭제
-    public void delete(String uuid);
+    public void delete(String uuid, String deletedUuid);
 
     // 닉네임 중복 여부
     public void checkNickname(String nickname);

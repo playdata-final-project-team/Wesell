@@ -131,7 +131,7 @@ function AuthServer() {
     // event-handler: 소셜 로그인 button click 이벤트 처리//
     const onSocialLoginClickHandler = () => {
       const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
-      const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+      const REDIRECT_URI = process.env.REACT_APP_LOGIN_REDIRECT_URI;
       window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     };
 

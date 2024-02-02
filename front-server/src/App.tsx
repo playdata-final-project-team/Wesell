@@ -33,7 +33,7 @@ function App() {
         <Route path={MAIN_PATH()} element={<Main />} />
         <Route path="/category/:categoryId" element={<SearchByCategory />} />
         <Route path="/title/:title" element={<SearchByTitle />} />
-        <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
+        <Route path={SOCIAL_PATH('kakao')} element={<Kakao />} />
         <Route path={AUTH_PATH()} element={<AuthServer />} />
         <Route path="/found-email/:uuid" element={<FoundEmailComponent />} />
         <Route path="/find-id" element={<UuidComponent />} />

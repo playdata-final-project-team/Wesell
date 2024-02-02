@@ -41,8 +41,8 @@ public class AuthUser {
         isForced = !isForced;
     }
 
-    public void changeIsDeleted(){
-        isDeleted = !isDeleted;
+    public String deleteUser(String comment){
+        return this.uuid += "__" + comment;
     }
 
     public void changePassword(String newPassword) {

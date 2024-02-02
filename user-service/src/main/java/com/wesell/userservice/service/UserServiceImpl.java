@@ -75,12 +75,12 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     @Override
-    public void delete(String uuid) {
+    public void delete(String uuid, String deletedUuid) {
         User user = userRepository.findById(uuid).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
-        userRepository.delete(user);
-        userRepository.flush();
+        user.deleteUser(deletedUuid);
+        userRepository.saveAndFlush(user);
     }
 
     /**

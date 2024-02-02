@@ -12,7 +12,7 @@ import { ChatRoomListResponseDto } from './response/chat';
 const SIGN_IN_URL = () => '/auth-server/api/v2/sign-in';
 const SIGN_UP_URL = () => '/auth-server/api/v2/sign-up';
 const LOGOUT_URL = () => '/auth-server/api/v2/logout';
-const KAKAO_LOGOUT_URL = (kakaoId: string) => `/auth-server/api/v2/kakao/logout/${kakaoId}`;
+const KAKAO_LOGOUT_URL = () => `/auth-server/api/v2/kakao/logout`;
 const SIGN_UP_PHONE_CHECK_URL = () => '/auth-service/api/v2/sign-up/phone/validate';
 const PHONE_CHECK_URL = () => '/auth-service/api/v2/phone/validate';
 const KAKAO_CALLBACK_URL = () => '/auth-server/api/v2/kakao/auth-code';
@@ -151,9 +151,9 @@ export const logoutRequest = async () => {
 };
 
 // api request : 소셜 로그인 - 로그아웃 요청 o
-export const kakaoLogoutRequest = async (kakaoId: string) => {
+export const kakaoLogoutRequest = async () => {
   try {
-    const response = await axios.get(KAKAO_LOGOUT_URL(kakaoId));
+    const response = await axios.get(KAKAO_LOGOUT_URL());
     const responseBody: ResponseDto = response.data;
     return responseBody;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
