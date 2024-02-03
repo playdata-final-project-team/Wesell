@@ -15,6 +15,6 @@ public interface UserServiceFeignClient {
     String findID(@RequestBody String phoneNumber);
 
     @DeleteMapping("api/v2/users/{uuid}")
-    ResponseEntity<Void> deleteUser(@PathVariable(value="uuid") String uuid, @RequestParam String deletedUuid);
+    ResponseEntity<Void> deleteUser(@PathVariable(value="uuid") String uuid);
 
 }
