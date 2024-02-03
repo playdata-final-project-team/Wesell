@@ -49,8 +49,8 @@ public class UserFeignController {
 
     // 인증/인가 - 회원 탈퇴
     @DeleteMapping("users/{uuid}")
-    public void deleteUserEntity(@PathVariable String uuid, @RequestParam String deletedUuid) {
-        userService.delete(uuid, deletedUuid);
+    public void deleteUserEntity(@PathVariable String uuid) {
+        userService.delete(uuid);
     }
 
     // 판매글 - 판매 상세 - 닉네임, 판매횟수 조회
