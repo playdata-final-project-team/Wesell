@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient(name = "user-service")
 public interface UserFeignClient {
-    @PostMapping("api/v1/FindNickName")
+    @PostMapping("api/v2/FindNickName")
     String findNicknameByUuid(String uuid);
 
-    @PostMapping("api/v1/getNickName")
-    String getNicknameByUuid(String uuid);
 }

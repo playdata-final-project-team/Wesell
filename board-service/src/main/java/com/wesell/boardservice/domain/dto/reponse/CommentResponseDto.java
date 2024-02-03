@@ -5,6 +5,7 @@ import com.wesell.boardservice.domain.entity.DeleteStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,9 @@ public class CommentResponseDto {
     private String content;
     private String writer;
     private List<CommentResponseDto> children = new ArrayList<>();
-    private LocalDateTime createdAt;
+    private String createdAt;
 
-    public CommentResponseDto(Long id, String content, String writer, LocalDateTime createdAt) {
+    public CommentResponseDto(Long id, String content, String writer, String createdAt) {
         this.id = id;
         this.content = content;
         this.writer = writer;
@@ -27,7 +28,7 @@ public class CommentResponseDto {
 
     public static CommentResponseDto convertCommentToDto(Comment comment) {
         return comment.getIsDeleted() == DeleteStatus.Y ?
-                new CommentResponseDto(comment.getId(), "삭제된 댓글입니다.", null, LocalDateTime.now()) :
-                new CommentResponseDto(comment.getId(), comment.getContent(), comment.getWriter(), LocalDateTime.now());
+                new CommentResponseDto(comment.getId(), "삭제된 댓글입니다.", null, comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))) :
+                new CommentResponseDto(comment.getId(), comment.getContent(), comment.getWriter(), comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
     }
 }

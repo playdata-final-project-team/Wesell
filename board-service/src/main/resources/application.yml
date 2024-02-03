@@ -1,9 +1,15 @@
 server:
   port : 8083
 
+redis:
+  host: localhost
+  port: 6379
+
 spring:
   application:
     name : board-service
+  cache:
+    type: redis
   datasource:
     url: ${url}
     driver-class-name: ${driver-class-name}

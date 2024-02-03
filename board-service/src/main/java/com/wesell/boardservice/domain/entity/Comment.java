@@ -55,7 +55,7 @@ public class Comment {
         comment.writer = writer;
         comment.parent = parent;
         comment.isDeleted = DeleteStatus.N;
-        comment.createdAt = LocalDateTime.now();
+        comment.createdAt = createdAt;
         return comment;
     }
 
