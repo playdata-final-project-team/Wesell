@@ -73,6 +73,20 @@ public class AuthController {
                 );
     }
 
+    // 로그아웃
+    @GetMapping("logout")
+    public ResponseEntity<?> logout() {
+        log.debug("client 로그아웃 GET 요청");
+        ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
+        ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
+                .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
+                .body(SuccessApiResponse.of(SuccessCode.OK));
+    }
+
     // 소셜 로그인 - KAKAO
     @PostMapping("kakao/auth-code")
     public ResponseEntity<?> kakaoAuthCode(@RequestBody String authCode, HttpServletRequest request) {
@@ -107,16 +121,11 @@ public class AuthController {
     public ResponseEntity<?> kakaoLogout() {
         log.info("client 카카오 로그아웃 GET 요청");
 
-        log.debug("쿠키 삭제");
-        ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
-        ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
-        ResponseCookie deleteJSESSIONID = cookieUtil.deleteJSESSIONIDCookie();
-
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
-                .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
-                .header(HttpHeaders.SET_COOKIE, deleteJSESSIONID.toString())
+                .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteAccessTokenCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteRefreshTokenCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteJSESSIONIDCookie().toString())
                 .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
@@ -140,20 +149,6 @@ public class AuthController {
                 .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
-    // 로그아웃
-    @GetMapping("logout")
-    public ResponseEntity<?> logout() {
-        log.debug("client 로그아웃 GET 요청");
-        ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
-        ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
-                .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
-                .body(SuccessApiResponse.of(SuccessCode.OK));
-    }
-
     // 회원탈퇴 전 비밀번호 확인
     @PostMapping("delete/pw-check")
     public ResponseEntity<?> checkPw(@RequestBody DeleteUserPwCheckRequestDto requestDto) {
@@ -166,15 +161,13 @@ public class AuthController {
     @DeleteMapping("delete/{uuid}")
     public ResponseEntity<?> deleteUser(@PathVariable(value = "uuid") String uuid) {
         log.debug("client 회원탈퇴 DELETE 요청");
-        ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
-        ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
 
         authService.deleteUser(uuid);
 
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
-                .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
+                .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteAccessTokenCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteRefreshTokenCookie().toString())
                 .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
@@ -204,15 +197,12 @@ public class AuthController {
         }else{
             log.info("cookie or session is null");
         }
-        
-        ResponseCookie deleteAccessToken = cookieUtil.deleteAccessTokenCookie();
-        ResponseCookie deleteRefreshToken = cookieUtil.deleteRefreshTokenCookie();
-        ResponseCookie deleteJSESSIONID = cookieUtil.deleteJSESSIONIDCookie();
+
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, deleteAccessToken.toString())
-                .header(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString())
-                .header(HttpHeaders.SET_COOKIE, deleteJSESSIONID.toString())
+                .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteAccessTokenCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteRefreshTokenCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteJSESSIONIDCookie().toString())
                 .body(SuccessApiResponse.of(SuccessCode.OK));
     }
 
