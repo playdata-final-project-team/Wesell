@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
@@ -13,8 +14,6 @@ public class DateFormatUtil {
 
     // 대화창 날짜 표시 형태
     public String formatSendDate(LocalDateTime sendDate){
-        SimpleDateFormat formatter = new SimpleDateFormat("MM월 dd일 E요일", Locale.KOREA);
-        Date date = Date.from(sendDate.atZone(ZoneId.systemDefault()).toInstant());
-        return formatter.format(date);
+        return sendDate.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 }
