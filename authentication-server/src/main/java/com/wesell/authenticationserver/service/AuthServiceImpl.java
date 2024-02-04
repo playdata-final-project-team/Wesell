@@ -47,9 +47,6 @@ public class AuthServiceImpl implements AuthService {
     private final CustomPasswordEncoder passwordEncoder;
     private final CustomConverter customConverter;
 
-    @Value("${delete.command}")
-    private String deleteCommand;
-
     /**
      * 회원 가입 기능
      */
