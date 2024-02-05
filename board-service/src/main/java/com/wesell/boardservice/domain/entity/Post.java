@@ -48,6 +48,14 @@ public class Post {
     @Where(clause = "parent_id is null")
     private List<Comment> commentList = new ArrayList<>();
 
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
     public void addClick() {
         this.click++;
     }

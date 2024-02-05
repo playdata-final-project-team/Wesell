@@ -41,4 +41,20 @@ public class BoardService {
                 .build();
 
     }
+
+    public PageResponseDto getAllPostsNoRedis(int page, Long boardId) {
+        int pageLimit = 5;
+
+        Page<Post> posts =postRepository.findAllByPostAndBoard(boardId, PageRequest.of(page, pageLimit)).orElseThrow(
+                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+        );
+
+        return PageResponseDto.builder()
+                .dtoList(posts.map(AllPostsResponseDto::new).toList())
+                .page(page)
+                .totalElements(posts.getTotalElements())
+                .size(posts.getSize())
+                .build();
+
+    }
 }

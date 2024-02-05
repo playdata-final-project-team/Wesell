@@ -30,7 +30,7 @@ public class CommentService {
     // 댓글 조회
     public List<CommentResponseDto> findCommentsByPostId(Long postId) {
         postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-        List<Comment> comments = commentRepository.findCommentByPostId(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        List<Comment> comments = commentRepository.findCommentByPostId(postId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
         return convertNestedStructure(comments);
     }
     // 댓글 저장
@@ -44,7 +44,7 @@ public class CommentService {
                         commentRequestDto.getWriter(),
                         commentRequestDto.getParentId() != null ?
                             commentRepository.findById(commentRequestDto.getParentId()).orElseThrow(
-                                    () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+                                    () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
                             ) : null, LocalDateTime.now())
         );
                         return CommentResponseDto.convertCommentToDto(comment);
@@ -54,7 +54,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findCommentByIdWithParent(commentId).orElseThrow(
-                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+                () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
         );
         if(comment.getChildren().size() != 0) {
             comment.changeDeletedStatus(DeleteStatus.Y);
