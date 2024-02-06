@@ -2,6 +2,7 @@ package com.wesell.boardservice.service;
 
 import com.wesell.boardservice.domain.dto.reponse.PostResponseDto;
 import com.wesell.boardservice.domain.dto.request.PostRequestDto;
+import com.wesell.boardservice.domain.dto.request.PostUpdateRequestDto;
 import com.wesell.boardservice.domain.entity.Board;
 import com.wesell.boardservice.domain.entity.Comment;
 import com.wesell.boardservice.domain.entity.Post;
@@ -52,7 +53,7 @@ public class PostService {
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
         List<Comment> comments = commentRepository.findCommentByPostId(post.getId()).orElseThrow(
-                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+                () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
         );
 
         post.addClick();
@@ -62,5 +63,24 @@ public class PostService {
                 .comments(comments)
                 .click(post.getClick())
                 .build();
+    }
+
+    // 게시글 삭제 로직
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+        );
+        postRepository.deleteById(post.getId());
+    }
+
+    // 게시글 수정 로직
+    public void updatePost(PostUpdateRequestDto postUpdateRequestDto, Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+        );
+
+        post.updateTitle(postUpdateRequestDto.getTitle());
+        post.updateContent(postUpdateRequestDto.getContent());
+        postRepository.save(post);
     }
 }
