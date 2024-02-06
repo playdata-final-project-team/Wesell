@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.URI;
 
 @Service
@@ -30,9 +31,6 @@ public class KakaoService {
     @Value("${kakao.redirect-url}")
     private String redirectUrl;
 
-    @Value("${kakao.admin-key}")
-    private String adminKey;
-
     @Value("${kakao.logout-api-url}")
     private String kakaoLogoutApiUrl;
 
@@ -41,12 +39,11 @@ public class KakaoService {
 
     public KakaoInfo getInfo(String authCode){
         KakaoToken token = getToken(authCode);
-        log.debug("token = {}",token);
         try {
-            KakaoInfo info = kakaoFeignClient.getInfo(new URI(kakaoUserApiUrl),
+            KakaoInfo kakaoInfo = kakaoFeignClient.getInfo(new URI(kakaoUserApiUrl),
                     token.getTokenType()+" "+token.getAccessToken());
-            info.setKakaoToken(token.getAccessToken());
-            return info;
+            kakaoInfo.registerToken(token.getAccessToken());
+            return kakaoInfo;
         } catch (Exception e) {
             log.error("Error! {}",e.getMessage());
             throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"kakao 회원 정보 가져오기 중 오류 발생");
@@ -54,13 +51,12 @@ public class KakaoService {
 
     }
 
-    private KakaoToken getToken(String authCode){
+    private KakaoToken getToken(String code){
         try {
             return kakaoFeignClient.getToken(new URI(kakaoAuthUrl), restApiKey,
-                    redirectUrl, authCode, "authorization_code");
+                    redirectUrl, code, "authorization_code");
         } catch (Exception e) {
             log.error("Error! {}",e.getMessage());
-            KakaoToken.fail();
             throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"kakao access-token 발급 중 오류 발생");
         }
     }
@@ -76,7 +72,7 @@ public class KakaoService {
 
     public void unlink(String kakaoToken){
         try{
-            kakaoFeignClient.logoutOrUnlink(new URI(kakaoLogoutApiUrl),"Bearer "+ kakaoToken);
+            kakaoFeignClient.logoutOrUnlink(new URI(kakaoUnlinkApiUrl),"Bearer "+ kakaoToken);
         }catch(Exception e){
             log.error("Error! {}",e.getMessage());
             throw new CustomException(ErrorCode.TEMPORARY_SERVER_ERROR,"kakao 연결끊기 중 오류 발생");

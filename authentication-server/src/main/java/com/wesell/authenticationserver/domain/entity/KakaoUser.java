@@ -22,21 +22,8 @@ public class KakaoUser {
     @Column(name= "k_role", nullable = false, length = 20)
     private Role role;
 
-    @Column(name = "is_deleted")
-    private boolean isDeleted; // 삭제 여부
-
-    @Column(name = "is_forced")
-    private boolean isForced; // 강제 탈퇴 여부
-
     public void changeRole(Role role){
         this.role = role;
     }
 
-    public void changeIsForced(){
-        isForced = !isForced;
-    }
-
-    public void changeIsDeleted(){
-        isDeleted = !isDeleted;
-    }
 }

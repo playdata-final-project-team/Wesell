@@ -79,8 +79,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(uuid).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
-        userRepository.delete(user);
-        userRepository.flush();
+        userRepository.saveAndFlush(user);
     }
 
     /**

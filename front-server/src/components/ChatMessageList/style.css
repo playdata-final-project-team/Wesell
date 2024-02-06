@@ -99,3 +99,40 @@
 .close-button > path {
   color: red;
 }
+
+/* 채팅 메시지 - S */
+
+.chat-message-box {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.my-message-box {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 5px;
+}
+
+.my-message-box > p {
+  width: fit-content;
+  padding: 14px 18px;
+  white-space: pre-line;
+  border-radius: 25px;
+  color: rgb(25, 25, 25);
+  background-color: rgb(246, 246, 246);
+}
+
+.your-message-box {
+  margin: 5px;
+}
+
+.your-message-box > p {
+  width: fit-content;
+  padding: 14px 18px;
+  white-space: pre-line;
+  border-radius: 25px;
+  color: rgb(25, 25, 25);
+  background-color: #aebce2;
+}
+
+/* 채팅 메시지 - E */

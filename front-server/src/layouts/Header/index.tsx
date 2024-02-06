@@ -44,8 +44,7 @@ export default function Header() {
     const isKakaoSignin = sessionStorage.getItem('kakaoId');
 
     if (isKakaoSignin) {
-      // 소셜 로그아웃 처리
-      const responseBody = await kakaoLogoutRequest(isKakaoSignin);
+      const responseBody = await kakaoLogoutRequest();
 
       if (!responseBody) {
         alert('네트워크 연결 상태를 확인해주세요!');
@@ -55,10 +54,13 @@ export default function Header() {
       const { code } = responseBody;
 
       if (code === ResponseCode.OK) {
-        window.sessionStorage.clear();
         console.log('카카오 로그아웃 요청 완료!');
-        navigator(MAIN_PATH());
-        return;
+
+        window.sessionStorage.clear();
+        const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+        const REDIRECT_URI = process.env.REACT_APP_LOGOUT_REDIRECT_URI;
+        // 소셜 로그아웃 처리
+        window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${CLIENT_ID}&logout_redirect_uri=${REDIRECT_URI}`;
       }
     } else {
       const responseBody = await logoutRequest();

@@ -5,21 +5,20 @@ import com.wesell.chatservice.domain.entity.ChatRoom;
 import com.wesell.chatservice.domain.repository.ChatMessageRepository;
 import com.wesell.chatservice.domain.repository.ChatRoomRepository;
 import com.wesell.chatservice.domain.service.ChatMessageService;
-import com.wesell.chatservice.dto.request.ChatMessageListRequestDto;
 import com.wesell.chatservice.dto.request.ChatMessageRequestDto;
 import com.wesell.chatservice.dto.response.ChatMessageListResponseDto;
 import com.wesell.chatservice.dto.response.ChatMessageResponseDto;
-import com.wesell.chatservice.exception.ChatRoomNotFoundException;
 import com.wesell.chatservice.global.response.error.CustomException;
 import com.wesell.chatservice.global.response.error.ErrorCode;
+import com.wesell.chatservice.global.util.DateFormatUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,13 +26,16 @@ import java.util.stream.Collectors;
 @Service
 @Log4j2
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ChatMessageServiceImpl implements ChatMessageService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final DateFormatUtil dateFormatUtil;
 
+    @Transactional
     @Override
-    public ChatMessage createChatMessage(ChatMessageRequestDto requestDto) {
+    public ChatMessageResponseDto createChatMessage(ChatMessageRequestDto requestDto) {
 
         log.debug("채팅 메시지 생성 시작");
 
@@ -47,13 +49,19 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .chatRoom(chatRoom)
                 .sender(requestDto.getSender())
                 .content(requestDto.getMessage())
-                .sendDate(LocalDate.parse(requestDto.getSendDate(), DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay())
+                .sendDate(LocalDateTime.now())
                 .build();
 
         log.debug("Cascade 를 이용한 데이터 생성 및 저장");
         chatRoom.createMessage(chatMessage);
         chatRoomRepository.save(chatRoom); // DB에 메시지 저장
-        return chatMessage;
+
+        return ChatMessageResponseDto.builder()
+                .roomId(chatMessage.getChatRoom().getId())
+                .sender(chatMessage.getSender())
+                .content(chatMessage.getContent())
+                .sendDate(dateFormatUtil.formatSendDate(chatMessage.getSendDate()))
+                .build();
     }
 
     @Override
@@ -72,6 +80,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                         .roomId(entity.getChatRoom().getId())
                         .content(entity.getContent())
                         .sender(entity.getSender())
+                        .sendDate(dateFormatUtil.formatSendDate(entity.getSendDate()))
                         .build()
         ).collect(Collectors.toList());
 

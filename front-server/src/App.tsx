@@ -2,8 +2,15 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Main from 'pages/Main';
 import Container from 'layouts/Container';
-import { MAIN_PATH, SOCIAL_PATH, UPLOAD_PATH, MYPAGE_PATH, AUTH_PATH } from 'constant';
-import Social from 'pages/Social/kakao';
+import {
+  MAIN_PATH,
+  SOCIAL_PATH,
+  UPLOAD_PATH,
+  MYPAGE_PATH,
+  AUTH_PATH,
+  NOTIFICATION_MAIN_PATH,
+  NOTIFICATION_LOGIN_PATH,
+} from 'constant';
 import UploadBoard from 'pages/board/write/Write';
 import Mypage from 'pages/Mypage';
 import EditPostPage from 'pages/board/edit';
@@ -22,6 +29,9 @@ import RequestPay from 'pages/Pay/beforePay';
 import PayResultPage from 'pages/Pay/detail';
 import TestDetailPage from 'pages/board/testDetail';
 import MyPayList from 'pages/myPayList';
+import IndexPage from 'pages/Notification/index';
+import LoginPage from 'pages/Notification/login';
+import Kakao from 'pages/Social/kakao';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -32,7 +42,7 @@ function App() {
         <Route path={MAIN_PATH()} element={<Main />} />
         <Route path="/category/:categoryId" element={<SearchByCategory />} />
         <Route path="/title/:title" element={<SearchByTitle />} />
-        <Route path={SOCIAL_PATH('kakao')} element={<Social />} />
+        <Route path={SOCIAL_PATH('kakao')} element={<Kakao />} />
         <Route path={AUTH_PATH()} element={<AuthServer />} />
         <Route path="/found-email/:uuid" element={<FoundEmailComponent />} />
         <Route path="/find-id" element={<UuidComponent />} />
@@ -44,12 +54,15 @@ function App() {
         <Route path={MYPAGE_PATH()} element={<Mypage />} />
         <Route path="/product/update/:postId" element={<EditPostPage />} />
         <Route path="/admin/users" element={<AdminUsersComponent />} />
-        <Route path="*" element={<h1>404 NOT FOUND</h1>} />
         <Route path="/rooms" element={<ChatRoomPage />} />
         <Route path="/rooms/:roomId" element={<ChatRoomPage />} />
         <Route path="/payment/:postId" element={<RequestPay />} />
         <Route path="/payResult/:payId" element={<PayResultPage />} />
         <Route path="/payList" element={<MyPayList />} />
+        <Route path="payment/:payId" element={<PayResultPage />} />
+        <Route path={NOTIFICATION_MAIN_PATH()} element={<IndexPage />} />
+        <Route path={NOTIFICATION_LOGIN_PATH()} element={<LoginPage />} />
+        <Route path="*" element={<h1>404 NOT FOUND</h1>} />
       </Route>
 
       {/* 테스트 라우터 */}

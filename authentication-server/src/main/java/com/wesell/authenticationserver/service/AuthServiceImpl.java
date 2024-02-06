@@ -20,6 +20,7 @@ import com.wesell.authenticationserver.service.dto.response.CreateUserFeignRespo
 import com.wesell.authenticationserver.domain.feign.UserServiceFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -166,7 +167,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 강제 탈퇴 여부 변경 기능
+     * 강제 탈퇴
      *
      * @param uuid
      * @return
@@ -182,12 +183,10 @@ public class AuthServiceImpl implements AuthService {
             AuthUser authUser = optionalAuthUser.get();
             authUser.changeIsDeleted();
             authUser.changeIsForced();
-            authUserRepository.saveAndFlush(authUser);
-        } else if (optionalKakaoUser.isPresent()) {
+            authUserRepository.save(authUser); // 하나의 쿼리로 관리하기 위함
+        } else if (optionalKakaoUser.isPresent()) { // 카카오 정책에 따라 회원탈퇴 즉시 파기
             KakaoUser kakaoUser = optionalKakaoUser.get();
-            kakaoUser.changeIsDeleted();
-            kakaoUser.changeIsForced();
-            kakaoUserRepository.saveAndFlush(kakaoUser);
+            kakaoUserRepository.delete(kakaoUser);
         } else {
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }
@@ -225,21 +224,19 @@ public class AuthServiceImpl implements AuthService {
         log.debug("회원 탈퇴");
 
         log.debug("탈퇴할 회원 조회");
-        AuthUser authUser = authUserRepository.findById(uuid).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.NOT_FOUND_USER);
-        });
+        Optional<AuthUser> authUserOptional = authUserRepository.findById(uuid);
+        Optional<KakaoUser> kakaoUserOptional = kakaoUserRepository.findById(uuid);
 
         log.debug("탈퇴한 회원으로 변경 - DB 반영");
-        authUser.changeIsDeleted();
-        authUserRepository.saveAndFlush(authUser);
-
-        log.debug("User-Service Api Call - 회원가입 요청");
-        try {
-            userServiceFeignClient.deleteUser(uuid);
-        } catch (Exception e) {
-            log.error("유저 서비스로 Feign 요청 시 오류 발생.");
-            log.error("detail : {}", e.getMessage());
-            throw new CustomException(ErrorCode.USER_SERVICE_FEIGN_ERROR);
+        if(authUserOptional.isPresent()){
+            AuthUser authUser = authUserOptional.get();
+            authUserRepository.delete(authUser);
+        }
+        else if(kakaoUserOptional.isPresent()){
+            KakaoUser kakaoUser = kakaoUserOptional.get();
+            kakaoUserRepository.delete(kakaoUser);
+        }else{
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }
     }
 

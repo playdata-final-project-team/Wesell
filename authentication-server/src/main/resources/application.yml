@@ -54,7 +54,6 @@ kakao:
   redirect-url : ${redirect-url}
   logout-api-url: ${logout-api-url}
   unlink-api-url: ${unlink-api-url}
-  admin-key: ${admin-key}
 
 coolsms:
   api:

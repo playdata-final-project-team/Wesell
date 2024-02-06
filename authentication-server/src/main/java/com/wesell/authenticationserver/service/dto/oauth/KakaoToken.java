@@ -19,10 +19,6 @@ public class KakaoToken {
 
     private Long refreshTokenExpiresIn;
 
-    public static KakaoToken fail(){
-        return new KakaoToken(null,null);
-    }
-
     private KakaoToken(String accessToken, String refreshToken){
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

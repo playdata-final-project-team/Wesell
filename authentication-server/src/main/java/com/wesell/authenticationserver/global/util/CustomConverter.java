@@ -96,8 +96,6 @@ public class CustomConverter {
                     .uuid(kakaoUser.getUuid())
                     .role(kakaoUser.getRole().toString())
                     .email(kakaoUser.getEmail())
-                    .isDeleted(kakaoUser.isDeleted())
-                    .isForced(kakaoUser.isForced())
                     .build();
             userList.add(dto);
         }

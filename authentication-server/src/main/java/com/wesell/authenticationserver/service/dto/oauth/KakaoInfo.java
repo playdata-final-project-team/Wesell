@@ -15,9 +15,9 @@ import lombok.ToString;
 public class KakaoInfo {
     private Long id; // 회원번호
     private KakaoAccount kakaoAccount; // 카카오 계정 정보
-    private String kakaoToken; // 카카오 액세스 토큰
+    private String accessToken; // 카카오 액세스 토큰
 
-    public static KakaoInfo fail(){
-        return null;
+    public void registerToken(String accessToken){
+        this.accessToken = accessToken;
     }
 }

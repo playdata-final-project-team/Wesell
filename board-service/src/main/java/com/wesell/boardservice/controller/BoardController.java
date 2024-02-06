@@ -3,10 +3,7 @@ package com.wesell.boardservice.controller;
 import com.wesell.boardservice.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,8 +12,11 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @GetMapping("board")
-    public ResponseEntity<?> getAllPosts(@RequestParam(name = "page", defaultValue = "0") Integer page) {
-        return ResponseEntity.ok(boardService.getAllPosts(page-1));
+    // 게시판별 모든 게시물 조회
+    @GetMapping("board/{boardId}")
+    public ResponseEntity<?> getAllPosts(@RequestParam(name = "page", defaultValue = "1") Integer page, @PathVariable("boardId") Long boardId) {
+        return ResponseEntity.ok(boardService.getAllPosts(page-1, boardId));
     }
+
+
 }
