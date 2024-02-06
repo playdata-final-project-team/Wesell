@@ -20,19 +20,10 @@ public class ChatController {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChatMessageService chatMessageService;
     private final ChatRoomService chatRoomService;
-    private final DateFormatUtil dateFormatUtil;
 
     @MessageMapping("/chat/message")
     public void sendMessage(ChatMessageRequestDto requestDto) {
-        ChatMessage message = chatMessageService.createChatMessage(requestDto);
-
-        ChatMessageResponseDto response = ChatMessageResponseDto.builder()
-                .roomId(message.getChatRoom().getId())
-                .sender(message.getSender())
-                .content(message.getContent())
-                .sendDate(dateFormatUtil.formatSendDate(message.getSendDate()))
-                .build();
-
+        ChatMessageResponseDto response = chatMessageService.createChatMessage(requestDto);
         redisTemplate.convertAndSend(chatRoomService.getTopic(response.getRoomId()),response);
     }
 }

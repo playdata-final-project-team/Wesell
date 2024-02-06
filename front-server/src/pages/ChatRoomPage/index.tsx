@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { loadChatRoomListRequest } from 'apis';
 import {
+  ChatMessage,
   ChatMessageResponseDto,
   ChatRoomListResponseDto,
   ChatRoomResponseDto,
@@ -30,7 +31,7 @@ const ChatRoomPage = () => {
       const responseBody = await loadChatRoomListRequest(sessionStorage.getItem('uuid'));
 
       const successResponse = responseBody as ChatRoomListResponseDto;
-      if (successResponse.content) {
+      if (successResponse) {
         setChatRoomList(successResponse.content.roomList);
       }
     };
@@ -50,7 +51,7 @@ const ChatRoomPage = () => {
     const [stompClient, setStompClient] = useState<Client | null>(null);
 
     // state: 채팅방 내 메시지 목록 상태값 //
-    const [messages, setMessages] = useState<ChatMessageResponseDto[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
 
     // state: 메시지 작성 내용 상태값 //
     const [newMessage, setNewMessage] = useState<string>('');
@@ -74,9 +75,9 @@ const ChatRoomPage = () => {
     const loadInitChatMessages = useCallback(async () => {
       try {
         const response = await axios.get(`/chat-service/api/v2/rooms/${roomId}/messages?size=10`);
-        const responseMessages = response.data.content as ChatMessageResponseDto[];
-        setMessages(responseMessages);
-        setHasMore(responseMessages.length > 0);
+        const responseMessages = response.data.content as ChatMessageResponseDto;
+        setMessages(responseMessages.messages);
+        setHasMore(messages.length > 0);
       } catch (error) {
         console.error('⚠️ 채팅 내역 로드 실패', error);
       }
@@ -100,8 +101,8 @@ const ChatRoomPage = () => {
           // client.subscribe() : 웹소켓 클라이언트가 특정 room에 구독을 시작하고, 해당 채팅방으로 메시지가
           // 수신되면 실행 될 콜백함수 정의. 콜백 함수에서는 수신된 메시지를 파싱하고 새로운 메시지를 기존
           // 메시지 배열의 앞쪽에 추가한다.
-          client.subscribe(`/sub/${roomId}`, (message: IMessage) => {
-            const msg: ChatMessageResponseDto = JSON.parse(message.body);
+          client.subscribe(`/sub/chat/${roomId}`, (message: IMessage) => {
+            const msg: ChatMessage = JSON.parse(message.body);
             setMessages((prevMessages) => [msg, ...prevMessages]);
           });
         },
@@ -122,10 +123,11 @@ const ChatRoomPage = () => {
         const response = await axios.get(
           `/chat-service/api/v2/rooms/${roomId}/messages?page=${currentPage}&size=10`,
         );
-        const responseMessages = response.data.content as ChatMessageResponseDto[];
-        setMessages([...messages, ...responseMessages]);
+        const responseMessages = response.data.content as ChatMessageResponseDto;
+        const chatMessages = responseMessages.messages;
+        setMessages([...messages, ...chatMessages]);
         setCurrentPage((prev) => prev + 1);
-        setHasMore(responseMessages.length > 0);
+        setHasMore(chatMessages.length > 0);
         scrollToBottom();
       } catch (error) {
         console.error('⚠️ 채팅 내역 로드 실패', error);
@@ -142,7 +144,7 @@ const ChatRoomPage = () => {
           roomId: roomId,
         };
         stompClient.publish({
-          destination: `/pub/rooms/${roomId}/send`,
+          destination: `/pub/chat/message`,
           body: JSON.stringify(chatMessage),
         });
         setNewMessage('');
@@ -154,19 +156,32 @@ const ChatRoomPage = () => {
       setClosePopup(false);
     };
 
+    // event-handler: 채팅방 나가기 버튼 이벤트 처리 //
+    const onChatRoomLeaveBtnClickHandler = () => {
+      //
+      try {
+        axios.delete(`/chat-service/api/v2/rooms?roomId=${roomId}&demander=${sender}`);
+      } catch (error) {
+        console.error('☢️ 채팅방 나가기 실패', error);
+      }
+    };
+
     return (
       <div className="chat-message-list-wrapper">
-        <ChatMessageList
-          onLeaveChatRoomClick={leaveChatRoom}
-          messagesEndRef={messagesEndRef}
-          messages={messages}
-          fetchMessages={fetchMessages}
-          hasMore={hasMore}
-          seller={'판매자 이름'}
-          newMessage={newMessage}
-          sendMessage={sendMessage}
-          setNewMessage={setNewMessage}
-        />
+        {roomId && (
+          <ChatMessageList
+            onLeaveChatRoomClick={leaveChatRoom}
+            messagesEndRef={messagesEndRef}
+            messages={messages}
+            fetchMessages={fetchMessages}
+            hasMore={hasMore}
+            // 판매자 이름 어떻게 가져와야 하지..
+            seller={'판매자 이름'}
+            newMessage={newMessage}
+            sendMessage={sendMessage}
+            setNewMessage={setNewMessage}
+          />
+        )}
         <ReactModal
           overlayClassName={'modal-overlay'}
           className={'modal-content'}
@@ -187,7 +202,9 @@ const ChatRoomPage = () => {
               </p>
             </div>
             <div className="close-confirm-button">
-              <button style={{ color: 'red' }}>예</button>
+              <button style={{ color: 'red' }} onClick={onChatRoomLeaveBtnClickHandler}>
+                예
+              </button>
               <button
                 onClick={() => {
                   setClosePopup(true);

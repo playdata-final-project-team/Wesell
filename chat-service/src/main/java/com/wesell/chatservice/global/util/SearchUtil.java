@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -30,17 +31,9 @@ public class SearchUtil {
             return "";
         }
         else{
-            LocalDateTime sendDate = messages.stream()
+            return messages.stream()
                     .max(Comparator.comparing(ChatMessage::getSendDate))
-                    .map(ChatMessage::getSendDate).get();
-            // LocalDateTime 객체를 Date 객체로 변환
-            Date date = Date.from(sendDate.atZone(ZoneId.systemDefault()).toInstant());
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM월 dd일 E요일", Locale.KOREA);
-            String formattedDate = dateFormat.format(date);
-
-            return formattedDate;
-
+                    .map(ChatMessage::getSendDate).get().format(DateTimeFormatter.ofPattern("MM월 dd일 E요일"));
         }
     }
 

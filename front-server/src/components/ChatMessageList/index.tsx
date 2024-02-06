@@ -1,6 +1,6 @@
 import { Ref } from 'react';
 import './style.css';
-import { ChatMessageResponseDto } from 'apis/response/chat';
+import { ChatMessage } from 'apis/response/chat';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Loading from 'components/Loading';
 import { FaArrowAltCircleUp } from 'react-icons/fa';
@@ -8,11 +8,10 @@ import { IoMdCloseCircle } from 'react-icons/io';
 
 interface Props {
   messagesEndRef: Ref<HTMLDivElement>;
-  messages: ChatMessageResponseDto[];
+  messages: ChatMessage[];
   fetchMessages: () => Promise<void>;
   hasMore: boolean;
   seller: string;
-  sendDate?: string;
   newMessage: string;
   sendMessage: () => void;
   setNewMessage: (value: string) => void;
@@ -20,8 +19,9 @@ interface Props {
 }
 
 const ChatMessageList = (props: Props) => {
-  const { messagesEndRef, messages, fetchMessages, hasMore, sendDate, seller, newMessage } = props;
+  const { messagesEndRef, messages, fetchMessages, hasMore, seller, newMessage } = props;
   const { sendMessage, setNewMessage, onLeaveChatRoomClick } = props;
+  const uuid = sessionStorage.getItem('uuid');
 
   return (
     <div className="chat-message-list-wrapper">
@@ -42,11 +42,16 @@ const ChatMessageList = (props: Props) => {
             inverse={true} // 스크롤을 위로 올릴 때 데이터 로드
             scrollableTarget="scrollableDiv"
           >
-            {messages.map((msg, index) => (
-              <div key={msg.id}>
-                {msg.message} - {sendDate}
-              </div>
-            ))}
+            {uuid &&
+              messages.map((msg, index) => (
+                <div key={index}>
+                  <div className={uuid.match(msg.sender) ? 'my-message-box' : 'your-message-box'}>
+                    <p>
+                      {msg.content} - {msg.sendDate}
+                    </p>
+                  </div>
+                </div>
+              ))}
           </InfiniteScroll>
         </div>
         <div className="input-group">
