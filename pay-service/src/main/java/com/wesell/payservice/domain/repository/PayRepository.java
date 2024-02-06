@@ -15,4 +15,8 @@ public interface PayRepository extends JpaRepository<Pay, Long> {
             + "WHERE p.buyer =:buyer "
             + "ORDER BY p.createdAt DESC")
     Optional<Page<Pay>> findPayByBuyer(@Param("buyer") String buyer, Pageable pageable);
+
+    @Query("SELECT p From Pay p "
+            + "WHERE p.productId =:productId")
+    Optional<Pay> findPayByProductId(@Param("productId") Long id);
 }
