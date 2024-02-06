@@ -1,7 +1,6 @@
-import ABox from 'components/ABox';
+import ABox from 'components/aBox';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style.css';
 import { ResponseDto } from 'apis/response';
 import ListPagenation from 'components/Pagenation';
 import ResponseCode from 'constant/response-code.enum';
@@ -19,7 +18,8 @@ function MyPayList() {
   const [view, setView] = useState<'deal-info'>();
   const navigator = useNavigate();
   // store: uuid, role 값//
-  const uuid = sessionStorage.getItem('uuid');
+  // const uuid = sessionStorage.getItem('uuid');
+  const uuid = "wid";
 
   // component: 마이페이지 - 구매내역 컴포넌트 //
   const PayInfo = () => {
