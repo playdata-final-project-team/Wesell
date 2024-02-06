@@ -156,6 +156,16 @@ const ChatRoomPage = () => {
       setClosePopup(false);
     };
 
+    // event-handler: 채팅방 나가기 버튼 이벤트 처리 //
+    const onChatRoomLeaveBtnClickHandler = () => {
+      //
+      try {
+        axios.delete(`/chat-service/api/v2/rooms?roomId=${roomId}&demander=${sender}`);
+      } catch (error) {
+        console.error('☢️ 채팅방 나가기 실패', error);
+      }
+    };
+
     return (
       <div className="chat-message-list-wrapper">
         {roomId && (
@@ -192,7 +202,9 @@ const ChatRoomPage = () => {
               </p>
             </div>
             <div className="close-confirm-button">
-              <button style={{ color: 'red' }}>예</button>
+              <button style={{ color: 'red' }} onClick={onChatRoomLeaveBtnClickHandler}>
+                예
+              </button>
               <button
                 onClick={() => {
                   setClosePopup(true);
