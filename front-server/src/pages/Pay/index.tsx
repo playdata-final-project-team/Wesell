@@ -1,20 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function getAmount() {
-  const[amount, setAmount] = useState();
-  useEffect(() => {
-    fetch("/deal-service/api/v2/price", {
-      method:"GET"
-    })
-    .then((response) => response.json())
-    .then((json) => setAmount(json))
-  },[]);
-
-  return amount;
+interface Props {
+  payId : number;
 }
+const Payment = (props : Props) => {
 
-const Payment = () => {
-
+  const {payId} = props;
+  const navigate = useNavigate();
   //결제 요청
   useEffect(() => {
     const jquery = document.createElement("script");
@@ -33,23 +26,17 @@ const Payment = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { IMP } : any = window;
     IMP.init('imp15354308'); //가맹점 식별코드
-    const amount = getAmount();
     
     const data = {
             pg: 'kakaopay',
             pay_method: 'cash',
             merchant_uid: `mid_${new Date().getTime()}`,
             name: '결제 테스트',
-            amount: amount,
+            amount: 1000,
             custom_data: {
                 name: '부가정보',
                 desc: '세부 부가정보',
             },
-            buyer_name: '홍길동',
-            buyer_tel: '01012345678',
-            buyer_email: '14279625@gmail.com',
-            buyer_addr: '구천면로 000-00',
-            buyer_postalcode: '01234',
         };
 
         IMP.request_pay(data, callback);
@@ -60,6 +47,7 @@ const Payment = () => {
 
     if (success) {
         alert('결제 성공');
+        navigate('/payResult/'+ payId);
     } else {
         alert(`결제 실패: ${error_msg}`);
     }
@@ -67,7 +55,7 @@ const Payment = () => {
 
   return (
     <div>
-      <button onClick={onClickPayment}>구매 요청하기</button>
+      <button onClick={onClickPayment}>결제하기</button>
     </div>
   );
 };
