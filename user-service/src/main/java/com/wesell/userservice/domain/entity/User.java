@@ -54,4 +54,8 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
+    public Long updateDealCount() {
+        return this.dealCount += 1;
+    }
+
 }

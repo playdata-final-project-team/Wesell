@@ -132,6 +132,13 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    public Long updateDealCount(String uuid) {
+        User user = userRepository.findById(uuid).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        return user.updateDealCount();
+    }
+
     /**
      * 관리자 - 회원관리 - 회원 검색 + 회원 목록 조회 - 페이징 처리
      *
@@ -226,4 +233,6 @@ public class UserServiceImpl implements UserService {
                 .uuid(requestDto.getUuid())
                 .build();
     }
+
+
 }

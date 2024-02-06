@@ -13,4 +13,5 @@ public class DeliveryRequestDto {
     private String receiver;
     @NotBlank
     private String address;
+
 }

@@ -38,4 +38,10 @@ public class UserController {
         return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK));
     }
 
+    //판매 횟수 증가
+    @PutMapping("dealCount")
+    public ResponseEntity<?> updateDealCount(@RequestParam("id") String uuid) {
+        return ResponseEntity.ok(userService.updateDealCount(uuid));
+    }
+
 }

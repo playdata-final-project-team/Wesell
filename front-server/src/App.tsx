@@ -28,6 +28,7 @@ import ChatRoomPage from 'pages/ChatRoomPage';
 import RequestPay from 'pages/Pay/beforePay';
 import PayResultPage from 'pages/Pay/detail';
 import TestDetailPage from 'pages/board/testDetail';
+import MyPayList from 'pages/myPayList';
 import IndexPage from 'pages/Notification/index';
 import LoginPage from 'pages/Notification/login';
 import Kakao from 'pages/Social/kakao';
@@ -56,10 +57,11 @@ function App() {
         <Route path="/rooms" element={<ChatRoomPage />} />
         <Route path="/rooms/:roomId" element={<ChatRoomPage />} />
         <Route path="/payment/:postId" element={<RequestPay />} />
+        <Route path="/payResult/:payId" element={<PayResultPage />} />
+        <Route path="/payList" element={<MyPayList />} />
         <Route path="payment/:payId" element={<PayResultPage />} />
         <Route path={NOTIFICATION_MAIN_PATH()} element={<IndexPage />} />
         <Route path={NOTIFICATION_LOGIN_PATH()} element={<LoginPage />} />
-
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
       </Route>
 

@@ -63,7 +63,7 @@ function UploadBoard() {
         title: title,
         price: price,
         detail: detail
-      }
+      };
 
       //step 1. 딜 서비스
       const response1 = await axios.post("/deal-service/api/v2/upload", data1);

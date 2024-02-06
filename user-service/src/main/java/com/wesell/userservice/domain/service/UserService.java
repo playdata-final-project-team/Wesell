@@ -27,4 +27,6 @@ public interface UserService {
 
     // 회원 닉네임 조회
     public String getNicknameByUuid(String uuid);
+
+    public Long updateDealCount(String uuid);
 }
