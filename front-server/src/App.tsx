@@ -21,6 +21,7 @@ import ChatRoomPage from 'pages/ChatRoomPage';
 import RequestPay from 'pages/Pay/beforePay';
 import PayResultPage from 'pages/Pay/detail';
 import TestDetailPage from 'pages/board/testDetail';
+import MyPayList from 'pages/myPayList';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -47,7 +48,8 @@ function App() {
         <Route path="/rooms" element={<ChatRoomPage />} />
         <Route path="/rooms/:roomId" element={<ChatRoomPage />} />
         <Route path="/payment/:postId" element={<RequestPay />} />
-        <Route path="payment/:payId" element={<PayResultPage />} />
+        <Route path="/payResult/:payId" element={<PayResultPage />} />
+        <Route path="/payList" element={<MyPayList />} />
       </Route>
 
       {/* 테스트 라우터 */}
