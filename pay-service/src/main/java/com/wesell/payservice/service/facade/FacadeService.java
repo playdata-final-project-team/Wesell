@@ -1,6 +1,5 @@
 package com.wesell.payservice.service.facade;
 
-import com.wesell.payservice.domain.dto.request.DeliveryUpdateRequestDto;
 import com.wesell.payservice.domain.dto.response.DetailFacadeResponseDto;
 import com.wesell.payservice.domain.dto.response.PayResponseDto;
 import com.wesell.payservice.domain.dto.search.PayViewDao;

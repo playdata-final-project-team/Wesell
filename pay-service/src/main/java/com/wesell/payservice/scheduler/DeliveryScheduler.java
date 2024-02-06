@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 public class DeliveryScheduler {
     private final DeliveryService deliveryService;
 
-    @Scheduled(cron = "${delivery.update-time}")
-    public void updateToFinish(Long deliveryId) {
+    @Scheduled(cron = "0 59 23 * * *")
+    public void updateToFinish() {
         deliveryService.finishDeliveryAll();
     }
 
