@@ -14,11 +14,27 @@ public class CommentRepositoryImpl implements CustomCommentRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
+    public Optional<List<Comment>> findCommentByPostIdAndParentIsNull(Long postId) {
+        List<Comment> comments = queryFactory.selectFrom(comment)
+                .leftJoin(comment.parent)
+                .fetchJoin()
+                .where (comment.post.id.eq(postId),
+                        comment.parent.isNull()        //parentId가 null인 경우만 필터링
+                )
+                .orderBy(
+                        comment.parent.id.asc().nullsFirst(),
+                        comment.createdAt.asc()
+                ).fetch();
+
+        return Optional.ofNullable(comments);
+    }
+
+    @Override
     public Optional<List<Comment>> findCommentByPostId(Long postId) {
         List<Comment> comments = queryFactory.selectFrom(comment)
                 .leftJoin(comment.parent)
                 .fetchJoin()
-                .where(comment.post.id.eq(postId))
+                .where (comment.post.id.eq(postId))
                 .orderBy(
                         comment.parent.id.asc().nullsFirst(),
                         comment.createdAt.asc()

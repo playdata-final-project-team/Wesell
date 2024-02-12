@@ -12,6 +12,8 @@ import com.wesell.boardservice.domain.repository.PostRepository;
 import com.wesell.boardservice.error.ErrorCode;
 import com.wesell.boardservice.error.exception.CustomException;
 import com.wesell.boardservice.feignClient.UserFeignClient;
+import feign.FeignException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,13 @@ public class PostService {
     // 글 작성 서비스 로직
     public void save(PostRequestDto postRequestDto, Long boardId) {
 
-        String writer = userFeignClient.findNicknameByUuid(postRequestDto.getUuid());
+    String writer;
+    try {
+        writer = userFeignClient.findNicknameByUuid(postRequestDto.getUuid());
+    } catch (FeignException e) {
+        throw new CustomException(ErrorCode.FEIGN_ERROR);
+    }
+
 
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
@@ -48,11 +56,13 @@ public class PostService {
     }
 
     // 게시물 상세 조회
+    @Transactional
     public PostResponseDto getPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
-        List<Comment> comments = commentRepository.findCommentByPostId(post.getId()).orElseThrow(
+
+        List<Comment> comments = commentRepository.findCommentByPostIdAndParentIsNull(post.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
         );
 
