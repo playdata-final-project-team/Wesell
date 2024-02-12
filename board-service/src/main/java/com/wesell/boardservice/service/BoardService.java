@@ -32,8 +32,12 @@ public class BoardService {
         Page<Post> posts =postRepository.findAllByPostAndBoard(boardId, PageRequest.of(page, pageLimit)).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
+        String title = boardRepository.findTitleByBoardId(boardId).orElseThrow(
+                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+        );
 
         return PageResponseDto.builder()
+                .title(title)
                 .dtoList(posts.map(AllPostsResponseDto::new).toList())
                 .page(page)
                 .totalElements(posts.getTotalElements())

@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PageResponseDto implements Serializable {
+    private String title;
     private List<?> dtoList;
     private int page;
     private long totalElements;
