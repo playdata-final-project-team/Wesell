@@ -6,5 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomCommentRepository {
+    Optional<List<Comment>> findCommentByPostIdAndParentIsNull(Long postId);
+
     Optional<List<Comment>> findCommentByPostId(Long postId);
 }
