@@ -32,6 +32,7 @@ import MyPayList from 'pages/myPayList';
 import IndexPage from 'pages/Notification/index';
 import LoginPage from 'pages/Notification/login';
 import Kakao from 'pages/Social/kakao';
+import MainBoard from 'pages/Post/main';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -68,6 +69,7 @@ function App() {
       {/* 테스트 라우터 */}
       <Route>
         <Route path="/test/detail/:productId" element={<TestDetailPage />} />
+        <Route path="/test/board" element={<MainBoard></MainBoard>}></Route>
       </Route>
     </Routes>
   );

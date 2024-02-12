@@ -1,0 +1,27 @@
+.post-list-box {
+  margin: 100px 20px;
+}
+
+.post-list {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: none;
+}
+
+.post-list-thead {
+  background-color: #d9d9d9;
+  border: solid 1px rgba(0, 0, 0, 0.7);
+}
+
+.post-list-tbody {
+  border-bottom: solid 1px #d9d9d9;
+}
+
+.post-list th,
+.post-list td {
+  border: none;
+  padding: 15px 0px;
+  margin: 0;
+  text-align: center;
+}

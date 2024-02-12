@@ -1,4 +1,4 @@
-import ABox from 'components/aBox';
+import ABox from 'components/ABox';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ResponseDto } from 'apis/response';
@@ -19,7 +19,7 @@ function MyPayList() {
   const navigator = useNavigate();
   // store: uuid, role 값//
   // const uuid = sessionStorage.getItem('uuid');
-  const uuid = "wid";
+  const uuid = 'wid';
 
   // component: 마이페이지 - 구매내역 컴포넌트 //
   const PayInfo = () => {
