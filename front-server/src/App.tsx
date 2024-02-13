@@ -69,7 +69,7 @@ function App() {
       {/* 테스트 라우터 */}
       <Route>
         <Route path="/test/detail/:productId" element={<TestDetailPage />} />
-        <Route path="/test/board" element={<MainBoard></MainBoard>}></Route>
+        <Route path="/test/board/:boardId" element={<MainBoard></MainBoard>}></Route>
       </Route>
     </Routes>
   );

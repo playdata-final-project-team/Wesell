@@ -23,6 +23,7 @@
 }
 
 .main-board-btn {
+  width: 170px;
   background-color: #00a8cc;
   color: rgba(0, 0, 0);
   border: none;
@@ -35,4 +36,19 @@
 .main-board-btn:active {
   background-color: #0057ff;
   color: rgba(245, 245, 245);
+}
+
+.main-board-under-bar {
+  display: flex;
+  justify-content: center;
+}
+
+.main-board-pagination {
+  margin-bottom: 30px;
+}
+
+.main-board-pagination button {
+  cursor: pointer;
+  background-color: rgb(255, 255, 255);
+  margin: 5px;
 }

@@ -32,10 +32,12 @@ public class RedisTestController {
     }
 
     @GetMapping("{boardId}/2")
-    public ResponseEntity<?> selectRedis(@RequestParam(name = "page", defaultValue = "1")Integer page, @PathVariable("boardId")Long boardId) {
+    public ResponseEntity<?> selectRedis(@RequestParam(name = "page", defaultValue = "1")Integer page,
+                                         @RequestParam(name = "size", defaultValue = "8") int size,
+                                         @PathVariable("boardId")Long boardId) {
 
         long startTime = System.currentTimeMillis();
-        PageResponseDto result = boardService.getAllPosts(page, boardId);
+        PageResponseDto result = boardService.getAllPosts(page,size, boardId);
         log.info("캐시 적용 후 :" + (System.currentTimeMillis() - startTime)+ "ms");
         log.info("캐시 적용 후 :" + (System.currentTimeMillis() - startTime)+ "ms");
         log.info("캐시 적용 후 :" + (System.currentTimeMillis() - startTime)+ "ms");

@@ -2,7 +2,7 @@ import ABox from 'components/ABox';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ResponseDto } from 'apis/response';
-import ListPagenation from 'components/Pagenation';
+import ListPagenation from 'components/Pagination';
 import ResponseCode from 'constant/response-code.enum';
 import { BsFileExcelFill } from 'react-icons/bs';
 import PayPageResponseDto from 'apis/response/myPayPage/my.pay-list-page';

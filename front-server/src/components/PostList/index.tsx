@@ -22,12 +22,12 @@ const PostList = (props: Props) => {
         <tbody>
           {/* 게시글 목록 */}
           {posts.map((post, index) => (
-            <tr className="post-list-tbody" key={post.id}>
-              <td>{index + 1}</td>
+            <tr className="post-list-tbody" key={index}>
+              <td>{post.id}</td>
               <td>{post.title}</td>
               <td>{post.writer}</td>
-              <td>{post.hit}</td>
-              <td>{post.wirteDate}</td>
+              <td>{post.click}</td>
+              <td>{post.createdAt}</td>
             </tr>
           ))}
         </tbody>
