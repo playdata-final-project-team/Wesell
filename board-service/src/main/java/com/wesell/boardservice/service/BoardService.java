@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,20 +27,25 @@ public class BoardService {
 
     // 모든 게시물 조회
     @Cacheable(key = "'page: ' + #page + ' boardId: ' + #boardId", value = "MAINPAGE_CACHE")
-    public PageResponseDto getAllPosts(int page, Long boardId) {
-        int pageLimit = 5;
+    public PageResponseDto getAllPosts(int page, int size, Long boardId) {
 
-        Page<Post> posts =postRepository.findAllByPostAndBoard(boardId, PageRequest.of(page, pageLimit)).orElseThrow(
+        String title = boardRepository.findTitleById(boardId).orElseThrow(
+                () -> new CustomException(ErrorCode.BOARD_NOT_FOUND)
+        );
+
+        Page<Post> posts =postRepository.findAllByPostAndBoard(boardId,
+                PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")))).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
 
         return PageResponseDto.builder()
                 .dtoList(posts.map(AllPostsResponseDto::new).toList())
+                .boardTitle(title)
                 .page(page)
+                .totalPages(posts.getTotalPages())
                 .totalElements(posts.getTotalElements())
                 .size(posts.getSize())
                 .build();
-
     }
 
     public PageResponseDto getAllPostsNoRedis(int page, Long boardId) {

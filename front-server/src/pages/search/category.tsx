@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import './style.css';
 import { FaSearch } from 'react-icons/fa';
-import ListPagenation from 'components/Pagenation';
+import ListPagenation from 'components/Pagination';
 import { Card } from 'components/card/Card';
 
 interface PostJson {

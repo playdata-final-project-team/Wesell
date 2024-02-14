@@ -13,7 +13,10 @@ import java.util.List;
 @Builder
 public class PageResponseDto implements Serializable {
     private List<?> dtoList;
+    private String boardTitle;
     private int page;
     private long totalElements;
     private int size;
+
+    private long totalPages;
 }

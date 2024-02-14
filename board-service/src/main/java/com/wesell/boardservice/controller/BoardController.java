@@ -14,9 +14,10 @@ public class BoardController {
 
     // 게시판별 모든 게시물 조회
     @GetMapping("board/{boardId}")
-    public ResponseEntity<?> getAllPosts(@RequestParam(name = "page", defaultValue = "1") Integer page, @PathVariable("boardId") Long boardId) {
-        return ResponseEntity.ok(boardService.getAllPosts(page-1, boardId));
+    public ResponseEntity<?> getAllPosts(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                         @RequestParam(name = "size", defaultValue = "10") int size,
+                                         @PathVariable("boardId") Long boardId) {
+        return ResponseEntity.ok(boardService.getAllPosts(page, size, boardId));
     }
-
 
 }
