@@ -41,6 +41,7 @@ const TextEditor = memo((props: Props) => {
             quillRef.current = element;
           }
         }}
+        placeholder="내용을 입력바랍니다."
         value={htmlContent}
         onChange={setHtmlContent}
         modules={modules}

@@ -32,6 +32,12 @@ const PostList = (props: Props) => {
           ))}
         </tbody>
       </table>
+
+      {posts.length === 0 && (
+        <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
+          <span style={{ fontSize: '20px' }}>작성된 게시글이 없습니다.</span>
+        </div>
+      )}
     </div>
   );
 };
