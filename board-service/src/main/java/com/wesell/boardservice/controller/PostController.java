@@ -14,11 +14,6 @@ public class PostController {
 
     private final PostService postService;
 
-    // 글 등록 폼으로 이동
-    @GetMapping("/register")
-    public ResponseEntity<?> register() {
-        return ResponseEntity.ok(null);
-    }
     // 게시글 등록기능
     @PostMapping("/post/{boardId}")
     public ResponseEntity<?> post(@RequestBody PostRequestDto postRequestDto, @PathVariable("boardId") Long boardId) {

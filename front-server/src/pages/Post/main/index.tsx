@@ -3,9 +3,11 @@ import './style.css';
 import { useEffect, useState } from 'react';
 import PostList from 'components/PostList';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 const MainBoard = () => {
   const { boardId } = useParams();
+
+  const navigator = useNavigate();
 
   // state: 게시글 목록 - 페이징 목록 갯수만큼 노출//
   const [posts, setPosts] = useState<PostListItem[]>([]);
@@ -93,7 +95,7 @@ const MainBoard = () => {
   return (
     <div className="main-board-wrapper">
       <div className="main-board-container">
-        <h2 className="main-board-title">{title}</h2>
+        <h2 className="board-title">{title}</h2>
         <PostList posts={posts} />
         <div className="main-board-under-bar">
           <div className="main-board-pagination">
@@ -101,29 +103,32 @@ const MainBoard = () => {
               <>
                 <button onClick={firstPage}>&lt;&lt;</button>
                 <button onClick={prevPage}>&lt;</button>
-              </>
-            )}
-            {totalPages === 0 && <span>작성된 게시글이 없습니다.</span>}
-            {pageArr.map((n: number) => (
-              <button
-                key={n - 1}
-                style={currentPage === n - 1 ? { textDecoration: 'underline' } : {}}
-                onClick={() => {
-                  setCurrentPage(n - 1);
-                }}
-              >
-                {n}
-              </button>
-            ))}
-            {totalPages !== 0 && (
-              <>
+
+                {pageArr.map((n: number) => (
+                  <button
+                    key={n - 1}
+                    style={currentPage === n - 1 ? { textDecoration: 'underline' } : {}}
+                    onClick={() => {
+                      setCurrentPage(n - 1);
+                    }}
+                  >
+                    {n}
+                  </button>
+                ))}
+
                 <button onClick={nextPage}>&gt;</button>
                 <button onClick={lastPage}>&gt;&gt;</button>
               </>
             )}
           </div>
         </div>
-        <button className="main-board-btn" type="button">
+        <button
+          className="main-board-btn"
+          type="button"
+          onClick={() => {
+            navigator(`/board/${boardId}/write`);
+          }}
+        >
           글등록
         </button>
       </div>

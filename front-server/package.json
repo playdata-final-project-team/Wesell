@@ -27,6 +27,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-loader-spinner": "^5.4.5",
     "react-modal": "^3.16.1",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.21.1",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.3",
