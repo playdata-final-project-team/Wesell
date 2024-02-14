@@ -93,7 +93,7 @@ const MainBoard = () => {
   return (
     <div className="main-board-wrapper">
       <div className="main-board-container">
-        <h2 className="main-board-title">{title}</h2>
+        <h2 className="board-title">{title}</h2>
         <PostList posts={posts} />
         <div className="main-board-under-bar">
           <div className="main-board-pagination">

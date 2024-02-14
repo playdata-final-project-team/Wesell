@@ -33,6 +33,7 @@ import IndexPage from 'pages/Notification/index';
 import LoginPage from 'pages/Notification/login';
 import Kakao from 'pages/Social/kakao';
 import MainBoard from 'pages/Post/main';
+import PostWrite from 'pages/Post/write';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -70,6 +71,7 @@ function App() {
       <Route>
         <Route path="/test/detail/:productId" element={<TestDetailPage />} />
         <Route path="/test/board/:boardId" element={<MainBoard></MainBoard>}></Route>
+        <Route path="/test/text-editor" element={<PostWrite></PostWrite>}></Route>
       </Route>
     </Routes>
   );
