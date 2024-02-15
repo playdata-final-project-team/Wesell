@@ -29,7 +29,7 @@ const PostList = (props: Props) => {
               <td
                 id="link-to-detail"
                 onClick={(e) => {
-                  navigator(`/board/${boardId}/${post.id}`);
+                  navigator(`/post/${boardId}/${post.id}`);
                   e.currentTarget.classList.add('visited');
                 }}
               >

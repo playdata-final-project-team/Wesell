@@ -126,7 +126,7 @@ const MainBoard = () => {
           className="main-board-btn"
           type="button"
           onClick={() => {
-            navigator(`/board/${boardId}/write`);
+            navigator(`/post/${boardId}/write`);
           }}
         >
           글등록

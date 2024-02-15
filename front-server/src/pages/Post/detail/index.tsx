@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import './style.css';
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextEditor from 'components/Quill/Detail';
 
 interface postDetail {
@@ -39,6 +39,27 @@ const PostDetail = () => {
 
   // state: 게시글 조회수 //
   const [click, setClick] = useState<number>(0);
+
+  // comment: 수정 + 삭제 관련 - 해당 회원만 삭제 수정이 가능하도록 로직 수정 예정 //
+  // event-handler: 게시글 수정 버튼 핸들러 //
+
+  // event-handler: 게시글 삭제 버튼 핸들러 //
+  const onPostDeleteBtnHandler = async () => {
+    if (confirm('정말로 게시글을 삭제하시겠습니까?')) {
+      try {
+        const response = await axios.delete(`/board-service/api/v1/post/delete/${postId}`);
+        const message = response.data;
+        alert(`😀 ${message}`);
+        navigator(`/board/${boardId}`);
+      } catch (error) {
+        console.log(error);
+        alert('😒 게시글 삭제 실패');
+        return;
+      }
+    } else {
+      return;
+    }
+  };
 
   // function: 게시글 상세 정보 조회 함수 //
   const fetchPost = async () => {
@@ -90,8 +111,17 @@ const PostDetail = () => {
           >
             목록
           </button>
-          <button className="post-update-btn">수정</button>
-          <button className="post-delete-btn">삭제</button>
+          <button
+            className="post-update-btn"
+            onClick={() => {
+              navigator(`/post/${boardId}/${postId}/update`);
+            }}
+          >
+            수정
+          </button>
+          <button className="post-delete-btn" onClick={onPostDeleteBtnHandler}>
+            삭제
+          </button>
         </div>
       </div>
     </div>
