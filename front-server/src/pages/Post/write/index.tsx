@@ -1,4 +1,4 @@
-import TextEditor from 'components/TextEditor';
+import TextEditor from 'components/Quill/Write';
 import './style.css';
 import { useRef, useState } from 'react';
 import axios from 'axios';

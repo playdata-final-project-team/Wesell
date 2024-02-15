@@ -37,7 +37,7 @@ public class Post {
     @Column(name = "p_click", nullable = false)
     private Long click;
 
-    @Column(name = "p_content", nullable = false)
+    @Column(columnDefinition = "TEXT",name = "p_content", nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

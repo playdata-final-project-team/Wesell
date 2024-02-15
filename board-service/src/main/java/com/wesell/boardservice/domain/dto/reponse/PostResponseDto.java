@@ -11,7 +11,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostResponseDto implements Serializable {
+    private String boardTitle;
     private String title;
+    private String writer;
+    private String createdAt;
     private String content;
     private Long click;
     private List<Comment> comments;

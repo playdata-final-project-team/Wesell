@@ -25,3 +25,15 @@
   margin: 0;
   text-align: center;
 }
+
+#link-to-detail {
+  cursor: pointer;
+}
+
+#link-to-detail:hover {
+  color: rgb(51, 0, 255);
+}
+
+.visited {
+  color: red;
+}

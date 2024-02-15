@@ -7,7 +7,7 @@ interface Props {
   // useRef를 사용하여 생성된 ref 객체가 되어야 하기 때문에, MutableRefObject 타입이다.
   quillRef: MutableRefObject<ReactQuill | null>;
   htmlContent: string;
-  setHtmlContent: (content: string) => void;
+  setHtmlContent?: (content: string) => void;
 }
 
 // eslint-disable-next-line react/display-name

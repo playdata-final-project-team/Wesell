@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -68,8 +69,11 @@ public class PostService {
 
         post.addClick();
         return PostResponseDto.builder()
+                .boardTitle(post.getBoard().getTitle())
                 .title(post.getTitle())
+                .writer(post.getWriter())
                 .content(post.getContent())
+                .createdAt(post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .comments(comments)
                 .click(post.getClick())
                 .build();
