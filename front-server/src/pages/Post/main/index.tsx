@@ -96,7 +96,7 @@ const MainBoard = () => {
     <div className="main-board-wrapper">
       <div className="main-board-container">
         <h2 className="board-title">{title}</h2>
-        <PostList posts={posts} />
+        <PostList posts={posts} boardId={boardId} />
         <div className="main-board-under-bar">
           <div className="main-board-pagination">
             {totalPages !== 0 && (
@@ -126,7 +126,7 @@ const MainBoard = () => {
           className="main-board-btn"
           type="button"
           onClick={() => {
-            navigator(`/board/${boardId}/write`);
+            navigator(`/post/${boardId}/write`);
           }}
         >
           글등록

@@ -1,12 +1,14 @@
 import PostListItem from 'types/interface/post-list-item';
 import './style.css';
-
+import { useNavigate } from 'react-router-dom';
 interface Props {
   posts: PostListItem[];
+  boardId: string | undefined;
 }
 
 const PostList = (props: Props) => {
-  const { posts } = props;
+  const { posts, boardId } = props;
+  const navigator = useNavigate();
   return (
     <div className="post-list-box">
       <table className="post-list">
@@ -24,7 +26,15 @@ const PostList = (props: Props) => {
           {posts.map((post, index) => (
             <tr className="post-list-tbody" key={index}>
               <td>{post.id}</td>
-              <td>{post.title}</td>
+              <td
+                id="link-to-detail"
+                onClick={(e) => {
+                  navigator(`/post/${boardId}/${post.id}`);
+                  e.currentTarget.classList.add('visited');
+                }}
+              >
+                {post.title}
+              </td>
               <td>{post.writer}</td>
               <td>{post.click}</td>
               <td>{post.createdAt}</td>
