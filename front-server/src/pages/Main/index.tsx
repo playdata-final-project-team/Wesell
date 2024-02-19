@@ -55,7 +55,7 @@ const Main = () => {
   };
 
   return (
-    <>
+    <div className="boardList-container">
       <div className="searching-box">
         <input
           type="text"
@@ -99,7 +99,7 @@ const Main = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

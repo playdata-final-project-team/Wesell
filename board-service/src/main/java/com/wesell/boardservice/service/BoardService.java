@@ -1,6 +1,7 @@
 package com.wesell.boardservice.service;
 
 import com.wesell.boardservice.domain.dto.reponse.AllPostsResponseDto;
+import com.wesell.boardservice.domain.dto.reponse.BoardListResponseDto;
 import com.wesell.boardservice.domain.dto.reponse.PageResponseDto;
 import com.wesell.boardservice.domain.entity.Board;
 import com.wesell.boardservice.domain.entity.Post;
@@ -13,10 +14,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,16 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final PostRepository postRepository;
+
+    // 게시판 목록 조회
+    public List<BoardListResponseDto> getAllBoards(){
+        return boardRepository.findAll().stream().map(b ->
+            BoardListResponseDto.builder()
+                    .id(b.getId())
+                    .title(b.getTitle())
+                    .build()
+        ).collect(Collectors.toList());
+    }
 
     // 모든 게시물 조회
     @Cacheable(key = "'page: ' + #page + ' boardId: ' + #boardId", value = "MAINPAGE_CACHE")

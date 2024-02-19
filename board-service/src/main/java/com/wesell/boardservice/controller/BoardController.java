@@ -1,6 +1,7 @@
 package com.wesell.boardservice.controller;
 
 import com.wesell.boardservice.service.BoardService;
+import feign.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,12 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
 
     private final BoardService boardService;
+
+    // 모든 게시판 조회
+    @GetMapping("board")
+    public ResponseEntity<?> getAllBoards(){
+        return ResponseEntity.ok(boardService.getAllBoards());
+    }
 
     // 게시판별 모든 게시물 조회
     @GetMapping("board/{boardId}")
