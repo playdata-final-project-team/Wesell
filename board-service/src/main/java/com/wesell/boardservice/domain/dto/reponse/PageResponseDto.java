@@ -17,6 +17,5 @@ public class PageResponseDto implements Serializable {
     private int page;
     private long totalElements;
     private int size;
-
     private long totalPages;
 }

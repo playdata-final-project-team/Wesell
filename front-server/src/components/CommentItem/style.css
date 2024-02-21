@@ -1,0 +1,183 @@
+textarea:focus {
+  outline: none;
+}
+
+.comment-item-box {
+  width: 100%;
+  height: 100%;
+}
+
+/* comment : parent - S */
+.parent-comment {
+  display: flex;
+  border-top: 1px solid #d9d9d9;
+  padding: 8px 3px 6px 3px;
+}
+
+.parent-comment .comment-writer {
+  float: left;
+  width: 132px;
+  padding-left: 5px;
+  margin-right: 33px;
+  margin-top: 3px;
+  line-height: 13px;
+}
+
+.parent-comment .comment-writer span {
+  position: relative;
+  font-size: 13px;
+}
+
+.parent-comment .comment-content {
+  float: left;
+  width: 690px;
+}
+
+.parent-comment .comment-content p {
+  line-height: 20px;
+}
+
+.parent-comment .comment-content p::after {
+  content: '';
+}
+
+.parent-comment .comment-write-date {
+  float: right;
+}
+
+.parent-comment .comment-write-date span {
+  float: left;
+  font-size: 12px;
+  color: #999;
+  vertical-align: top;
+  margin-top: 1px;
+}
+
+/* comment : 삭제 버튼 - S */
+
+.parent-comment .delete-btn {
+  border: none;
+  padding: 2px 3px;
+  cursor: pointer;
+  background-color: red;
+  color: rgb(245, 245, 245);
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.parent-comment .delete-btn:active {
+  box-shadow: inset 1px 1px 1.5px 1px rgba(0, 0, 0, 0.3);
+}
+
+/* comment : 삭제 버튼 - E */
+
+/* comment : parent - E */
+
+/* comment : children - S */
+.child-comment {
+  width: 80%;
+  background-color: #eaeaea;
+  display: flex;
+  justify-content: center;
+  margin-left: 10px;
+  margin: 5px 0px;
+}
+
+.child-comment .comment-writer {
+  float: left;
+  width: 68px;
+  padding-left: 5px;
+}
+
+.child-comment .comment-writer span {
+  position: relative;
+  font-size: 11px;
+}
+
+.child-comment .comment-content {
+  display: inline-flex;
+  align-items: center;
+  float: left;
+  width: 450px;
+}
+
+.child-comment .comment-content p {
+  line-height: 10px;
+  font-size: 12px;
+}
+
+.child-comment .comment-content span {
+  font-weight: 800;
+  margin-right: 5px;
+}
+
+.child-comment .comment-write-date {
+  float: right;
+  margin-right: 10px;
+}
+
+.child-comment .comment-write-date span {
+  float: left;
+  font-size: 11px;
+  color: #999;
+  vertical-align: top;
+  margin-top: 1px;
+}
+
+/* comment: 삭제 버튼 - S */
+.child-comment .delete-btn {
+  border: none;
+  padding: 2px 3px;
+  cursor: pointer;
+  background-color: red;
+  color: rgb(245, 245, 245);
+  font-weight: bold;
+}
+/* comment: 삭제 버튼 - E */
+
+/* comment : children - E */
+
+/* comment : 답글 버튼 - S */
+.reply-box-toggle {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.reply-box {
+  max-height: 0;
+  transition: transform 0.5 ease;
+  overflow: hidden;
+}
+
+.reply-box.visible {
+  max-height: 150px;
+  width: 85%;
+  padding: 5px 0px;
+  margin: 25px;
+  border: none;
+  border: 1px solid #8b8a8a;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reply-box textarea {
+  resize: none;
+  width: 90%;
+  height: 100px;
+}
+
+.reply-box button {
+  cursor: pointer;
+  margin-left: 10px;
+  width: 50px;
+  height: 25px;
+  background-color: #7c7c7c;
+  color: rgb(255, 255, 255);
+}
+/* comment : 답글 버튼 - E */

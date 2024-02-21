@@ -39,7 +39,6 @@ public class CommentRepositoryImpl implements CustomCommentRepository {
                         comment.parent.id.asc().nullsFirst(),
                         comment.createdAt.asc()
                 ).fetch();
-
         return Optional.ofNullable(comments);
     }
 }

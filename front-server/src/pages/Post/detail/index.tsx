@@ -3,6 +3,7 @@ import './style.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import TextEditor from 'components/Quill/Detail';
+import CommentList from 'components/CommentList';
 
 interface postDetail {
   boardTitle: string;
@@ -96,8 +97,6 @@ const PostDetail = () => {
             </div>
             <div className="post-detail-box-left">
               <p>조회 {click}</p>
-              <p>|</p>
-              <p>댓글</p>
             </div>
           </div>
         </div>
@@ -123,6 +122,7 @@ const PostDetail = () => {
             삭제
           </button>
         </div>
+        <CommentList></CommentList>
       </div>
     </div>
   );
