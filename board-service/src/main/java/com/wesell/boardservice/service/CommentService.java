@@ -12,6 +12,7 @@ import com.wesell.boardservice.domain.repository.PostRepository;
 import com.wesell.boardservice.error.ErrorCode;
 import com.wesell.boardservice.error.exception.CustomException;
 import com.wesell.boardservice.feignClient.UserFeignClient;
+import feign.FeignException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final UserFeignClient userFeignClient;
 
     // 댓글 조회 - 페이징 처리
     public PageResponseDto findCommentsWithPage(Long postId, int page, int size){
@@ -63,12 +65,20 @@ public class CommentService {
     // 댓글 저장
     @Transactional
     public CommentResponseDto createComment(CommentRequestDto commentRequestDto) {
+
+        String writer;
+        try {
+            writer = userFeignClient.findNicknameByUuid(commentRequestDto.getWriter());
+        } catch (FeignException e) {
+            throw new CustomException(ErrorCode.FEIGN_ERROR);
+        }
+
         Comment comment = commentRepository.save(
                 Comment.createComment(commentRequestDto.getContent(),
                         postRepository.findById(commentRequestDto.getPostId()).orElseThrow(
                                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
                         ),
-                        commentRequestDto.getWriter(),
+                        writer,
                         commentRequestDto.getParentId() != null ?
                             commentRepository.findById(commentRequestDto.getParentId()).orElseThrow(
                                     () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)

@@ -1,25 +1,45 @@
 import axios from 'axios';
 import './style.css';
 import { Comment } from 'types/interface';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaPlusSquare } from 'react-icons/fa';
 import { FaSquareMinus } from 'react-icons/fa6';
+import { getNicknameRequest } from 'apis';
 
 interface Props {
   parentComment?: Comment;
   childComment?: Comment;
   postId?: number;
+  writer?: string;
+  fetchComments: () => void;
 }
 
 const CommentItem = (props: Props) => {
-  const { childComment, parentComment, postId } = props;
+  const { childComment, parentComment, postId, writer } = props;
+
+  const { fetchComments } = props;
 
   const [content, setContent] = useState<string>('');
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
+  const [nickname, setNickname] = useState<string>('');
+
   // event-handler: 게시글 삭제 버튼 핸들러 //
   const onPostDeleteBtnHandler = async () => {
+    if (parentComment) {
+      if (nickname !== parentComment.writer) {
+        alert('🥹 본인이 작성한 댓글이 아닙니다.');
+        return;
+      }
+    }
+    if (childComment) {
+      if (nickname !== childComment.writer) {
+        alert('🥹 본인이 작성한 댓글이 아닙니다.');
+        return;
+      }
+    }
+
     if (confirm('정말로 게시글을 삭제하시겠습니까?')) {
       try {
         const response = await axios.delete(
@@ -27,6 +47,7 @@ const CommentItem = (props: Props) => {
         );
         const message = response.data;
         alert(`😀 ${message}`);
+        fetchComments();
         return;
       } catch (error) {
         console.log(error);
@@ -42,20 +63,36 @@ const CommentItem = (props: Props) => {
   const onAddCommentEventHandler = async () => {
     try {
       const request = {
-        postId: 102,
+        postId: postId,
         parentId: parentComment?.id,
         content: content,
-        writer: '작성자',
+        writer: writer,
       };
       await axios.post('/board-service/api/v1/comments', request);
       setContent('');
+      fetchComments();
       return;
     } catch (error) {
       console.log(error);
-      alert('😒 댓글 삭제 실패');
+      alert('😒 댓글 등록 실패');
       return;
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log;
+
+      if (!writer) {
+        return;
+      }
+
+      const nickname = await getNicknameRequest(writer);
+      setNickname(nickname);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="comment-item-box">

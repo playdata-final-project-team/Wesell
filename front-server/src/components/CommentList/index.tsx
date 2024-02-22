@@ -6,9 +6,9 @@ import { useParams } from 'react-router-dom';
 import { Comment } from 'types/interface';
 
 const CommentList = () => {
-  const { boardId, postId } = useParams();
+  const { postId } = useParams();
 
-  const uuid = sessionStorage.getItem('uuid');
+  const uuid = sessionStorage.getItem('uuid') || '작성자';
 
   // state: 현재 페이지 //
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -45,9 +45,10 @@ const CommentList = () => {
   const onAddCommentEventHandler = async () => {
     try {
       if (content.trim() == '') return;
-      const request = { postId: postId, content: content, writer: '작성자' };
+      const request = { postId: postId, content: content, writer: uuid };
       await axios.post('/board-service/api/v1/comments', request);
       setContent('');
+      fetchComments();
       return;
     } catch (error) {
       console.error('⚠️ 댓글 등록 중 오류 발생', error);
@@ -128,12 +129,17 @@ const CommentList = () => {
           {comments.map((comment, index) => (
             <div key={index}>
               <li>
-                <CommentItem parentComment={comment} />
+                <CommentItem
+                  parentComment={comment}
+                  postId={Number(postId)}
+                  writer={uuid}
+                  fetchComments={fetchComments}
+                />
               </li>
               {comment.children &&
                 comment.children.map((child, index) => (
                   <li key={index}>
-                    <CommentItem childComment={child} />
+                    <CommentItem childComment={child} writer={uuid} fetchComments={fetchComments} />
                   </li>
                 ))}
             </div>
