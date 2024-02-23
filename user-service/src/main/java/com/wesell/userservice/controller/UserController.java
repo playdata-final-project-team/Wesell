@@ -44,4 +44,10 @@ public class UserController {
         return ResponseEntity.ok(userService.updateDealCount(uuid));
     }
 
+    // 닉네임 조회
+    @GetMapping("{uuid}/nickname")
+    public ResponseEntity getNickname(@PathVariable String uuid){
+        return ResponseEntity.ok(userService.getNicknameByUuid(uuid));
+    }
+
 }

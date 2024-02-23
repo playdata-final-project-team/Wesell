@@ -1,5 +1,6 @@
 package com.wesell.boardservice.service;
 
+import com.wesell.boardservice.domain.dto.reponse.CommentResponseDto;
 import com.wesell.boardservice.domain.dto.reponse.PostResponseDto;
 import com.wesell.boardservice.domain.dto.request.PostRequestDto;
 import com.wesell.boardservice.domain.dto.request.PostUpdateRequestDto;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +69,9 @@ public class PostService {
                 () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
         );
 
+        List<CommentResponseDto> commentList = comments.stream().map(CommentResponseDto::convertCommentToDto
+        ).toList();
+
         post.addClick();
         return PostResponseDto.builder()
                 .boardTitle(post.getBoard().getTitle())
@@ -74,7 +79,7 @@ public class PostService {
                 .writer(post.getWriter())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .comments(comments)
+                .comments(commentList)
                 .click(post.getClick())
                 .build();
     }

@@ -1,0 +1,80 @@
+.comment-list-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.comment-list-container {
+  min-height: 700px;
+  max-width: 1024px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.comment-list-count {
+  padding-left: 15px;
+}
+
+.comment-list-border {
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.comment-list {
+  margin-top: 20px;
+  padding: 5px 0px 15px 0px;
+  list-style: none;
+}
+
+.comment-write-box {
+  margin: 3px;
+  width: 100%;
+  height: 100%;
+
+  background-color: #eaeaea;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.comment-write-content {
+  margin: 0 auto;
+  width: 80%;
+  height: 150px;
+  border: none;
+  padding: 10px;
+}
+
+.comment-write-content textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  padding: 10px;
+}
+
+.comment-list-pagination {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.comment-list-pagination button {
+  cursor: pointer;
+  background-color: rgb(255, 255, 255);
+  margin: 5px;
+}
+
+.comment-write-btn {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px;
+}
+
+.comment-write-btn button {
+  cursor: pointer;
+  width: 80px;
+  height: 25px;
+  background-color: #7c7c7c;
+  color: rgb(255, 255, 255);
+}
+
+.comment-write-btn button:active {
+  box-shadow: inset 1px 1px 1.5px 1px rgba(0, 0, 0, 0.5);
+}
