@@ -2,7 +2,7 @@ import ABox from 'components/aBox';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ResponseDto } from 'apis/response';
-import ListPagenation from 'components/Pagenation';
+import ListPagenation from 'components/Pagination';
 import ResponseCode from 'constant/response-code.enum';
 import { BsFileExcelFill } from 'react-icons/bs';
 import PayPageResponseDto from 'apis/response/myPayPage/my.pay-list-page';
@@ -19,7 +19,7 @@ function MyPayList() {
   const navigator = useNavigate();
   // store: uuid, role 값//
   // const uuid = sessionStorage.getItem('uuid');
-  const uuid = "wid";
+  const uuid = 'wid';
 
   // component: 마이페이지 - 구매내역 컴포넌트 //
   const PayInfo = () => {

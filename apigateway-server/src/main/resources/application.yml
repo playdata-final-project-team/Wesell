@@ -64,6 +64,13 @@ spring:
             - Path=/image-server/**
           filters:
             - RewritePath=/image-server/(?<path>.*),/$\{path}
+
+        - id: board-service
+          uri: lb://BOARD-SERVICE
+          predicates:
+            - Path=/board-service/**
+          filters:
+            - RewritePath=/board-service/(?<path>.*),/$\{path}
             
 eureka:
   instance:

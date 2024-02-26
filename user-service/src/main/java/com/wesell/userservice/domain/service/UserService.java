@@ -8,7 +8,7 @@ public interface UserService {
     public void save(SignupRequestDto requestDto);
 
     // 회원 정보 수정
-    public void update(String uuid, SignupRequestDto requestDto);
+    public void update(String uuid, String name);
 
     // 회원 삭제
     public void delete(String uuid);

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1")
+@RequestMapping("api/v2")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -26,8 +26,8 @@ public class UserController {
 
     // 회원 정보 수정
     @PutMapping("users/{uuid}")
-    public ResponseEntity<?> updateUser(@PathVariable String uuid, @RequestBody SignupRequestDto signupRequestDTO) {
-        userService.update(uuid, signupRequestDTO);
+    public ResponseEntity<?> updateUser(@PathVariable String uuid, @RequestBody String name) {
+        userService.update(uuid, name);
         return ResponseEntity.ok(SuccessApiResponse.of(SuccessCode.OK));
     }
 

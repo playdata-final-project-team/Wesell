@@ -38,6 +38,7 @@ public class User {
     @Column(name = "u_agree", nullable = false)
     private boolean agree;
 
+    @ColumnDefault(value = "0")
     @Column(name = "u_dealCount")
     private Long dealCount;
 

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findById(Long id);
-    @Query("select b.title from Board b where b.id =:id")
-    Optional<String> findTitleByBoardId(@Param("id")Long id);
+
+    @Query("SELECT b.title FROM Board b WHERE b.id = :id")
+    Optional<String> findTitleById(@Param("id") Long id);
 }

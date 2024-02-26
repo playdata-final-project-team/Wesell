@@ -56,15 +56,15 @@ public class UserServiceImpl implements UserService {
     /**
      * 마이페이지 - 회원 정보 수정
      *
-     * @param requestDto
+     * @param name
      */
     @Transactional
     @Override
-    public void update(String uuid, SignupRequestDto requestDto) {
+    public void update(String uuid, String name) {
         User user = userRepository.findById(uuid).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
-        user.changeUserInfo(requestDto.getName());
+        user.changeUserInfo(name);
         userRepository.saveAndFlush(user);
     }
 
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
                 () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
     }
-
+    @Transactional
     @Override
     public Long updateDealCount(String uuid) {
         User user = userRepository.findById(uuid).orElseThrow(

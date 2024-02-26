@@ -62,15 +62,9 @@ public class CommentService {
             commentRepository.delete(getDeleteAncestorComment(comment));
         }
     }
-    // 부모 댓글 삭제 로직
-    private Comment getDeleteAncestorComment(Comment comment) {
-        Comment parent = comment.getParent();
-        if(parent != null && parent.getChildren().size() == 1 && parent.getIsDeleted() == DeleteStatus.Y)
-            return getDeleteAncestorComment(parent);
-        return comment;
-    }
+
     // 대댓글 중첩 구조로 변환하는 로직
-    private List<CommentResponseDto> convertNestedStructure(List<Comment> comments) {
+    public List<CommentResponseDto> convertNestedStructure(List<Comment> comments) {
         List<CommentResponseDto> result = new ArrayList<>();
         Map<Long, CommentResponseDto> map = new HashMap<>();
         comments.stream().forEach(c -> {
@@ -82,5 +76,13 @@ public class CommentService {
                 result.add(dto);
         });
         return result;
+    }
+
+    // 부모 댓글 삭제 로직
+    private Comment getDeleteAncestorComment(Comment comment) {
+        Comment parent = comment.getParent();
+        if(parent != null && parent.getChildren().size() == 1 && parent.getIsDeleted() == DeleteStatus.Y)
+            return getDeleteAncestorComment(parent);
+        return comment;
     }
 }

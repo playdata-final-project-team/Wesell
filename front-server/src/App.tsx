@@ -32,6 +32,10 @@ import MyPayList from 'pages/myPayList';
 import IndexPage from 'pages/Notification/index';
 import LoginPage from 'pages/Notification/login';
 import Kakao from 'pages/Social/kakao';
+import MainBoard from 'pages/Post/main';
+import PostWrite from 'pages/Post/write';
+import PostDetail from 'pages/Post/detail';
+import PostUpdate from 'pages/Post/update';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -62,6 +66,10 @@ function App() {
         <Route path="payment/:payId" element={<PayResultPage />} />
         <Route path={NOTIFICATION_MAIN_PATH()} element={<IndexPage />} />
         <Route path={NOTIFICATION_LOGIN_PATH()} element={<LoginPage />} />
+        <Route path="/board/:boardId" element={<MainBoard></MainBoard>}></Route>
+        <Route path="/post/:boardId/write" element={<PostWrite></PostWrite>}></Route>
+        <Route path="/post/:boardId/:postId" element={<PostDetail></PostDetail>}></Route>
+        <Route path="/post/:boardId/:postId/update" element={<PostUpdate></PostUpdate>}></Route>
         <Route path="*" element={<h1>404 NOT FOUND</h1>} />
       </Route>
 
