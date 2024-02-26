@@ -52,25 +52,9 @@
     .success-button{
       font-size: 1.1rem;
       color: #e0e7e8;
-      background-color: #00a8cc;
-      border: 2px solid #00a8cc; 
+      background-color: #517BE8;
+      border: 2px solid #517BE8; 
       border-radius: 50px; 
       transform: scale(1.5);
     }
   }
-  /* .success-button {
-    min-width: 80px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 400px;
-    margin-right: 400px;
-    flex-direction: row;
-    color: #e0e7e8;
-    background-color: #00a8cc;
-    border: 2px solid #00a8cc; 
-    border-radius: 50px; 
-    transform: scale(1.5);
-  }
-   */

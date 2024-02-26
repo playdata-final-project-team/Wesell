@@ -1,0 +1,67 @@
+@keyframes smoothAppear {
+    from {
+      opacity: 0;
+      transform: translateY(-5%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .pay-wrapper {
+    opacity: 0;
+    animation: smoothAppear 1s forwards;
+    animation-delay: 0.5s;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    margin: 50px 50px;
+    align-items: center;
+  }
+  .pay-body {
+    display: flex;
+    margin: 50px 50px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .submitButton {
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; /* 아래로 세로 방향으로 정렬되도록 설정 */
+    margin-right: 500px; 
+    button{
+
+    }
+    .successButton{
+      min-width: 80px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 400px;
+      flex-direction: row;
+      color: #e0e7e8;
+      background-color: #517BE8;
+      border: 2px solid #517BE8; 
+      border-radius: 50px; 
+      transform: scale(1.5);
+    }
+    .payButton{
+      min-width: 80px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 400px;
+      flex-direction: row;
+      color: #e0e7e8;
+      background-color: #0057FF;
+      border: 2px solid #0057FF; 
+      border-radius: 50px; 
+      transform: scale(1.5);
+      margin-top: 15px;
+    }
+  }

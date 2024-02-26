@@ -60,7 +60,7 @@ public class DealServiceImpl implements DealService {
                 .uuid(requestDto.getUuid())
                 .category(category)
                 .title(requestDto.getTitle())
-                .price(Long.parseLong(requestDto.getPrice()))
+                .price(requestDto.getPrice())
                 .detail(requestDto.getDetail())
                 .createdAt(LocalDateTime.now())
                 .build();

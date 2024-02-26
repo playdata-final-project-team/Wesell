@@ -72,7 +72,7 @@ function PostDetailPage() {
               </button>
            }
            {window.sessionStorage.getItem('uuid') !== post?.uuid &&
-              <button className="update-button" onClick={moveToPay}>
+              <button className="buy-button" onClick={moveToPay}>
               구매하기
             </button>}
           </div>

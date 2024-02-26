@@ -74,7 +74,7 @@ public class DealController {
 
     @GetMapping("status/{productId}")
     public ResponseEntity<String> getSaleStatus(@PathVariable Long productId){
-        return new ResponseEntity<>(viewDao.searchById(productId).getSaleStatus().toString(),HttpStatus.OK);
+        return new ResponseEntity<>(viewDao.searchDealPostById(productId).getSaleStatus().toString(),HttpStatus.OK);
     }
 
     /**
@@ -140,7 +140,7 @@ public class DealController {
         }
 
         try {
-            price = viewDao.searchPriceById(productId);
+            price = Long.parseLong(viewDao.searchPriceById(productId));
         } catch (RuntimeException e) {
             return new ResponseEntity<>(price, ErrorCode.NO_PRICE_RESEARCH.getStatus());
         }
