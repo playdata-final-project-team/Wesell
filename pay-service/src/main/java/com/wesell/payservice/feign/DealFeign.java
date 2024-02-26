@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "deal-service", path = "api/v2")
 public interface DealFeign {
     @GetMapping("payments/{productId}/amount")
-    Long getPayInfo(@PathVariable(value = "productId") Long productId);
+    String getPayInfo(@PathVariable(value = "productId") Long productId);
 
     @GetMapping("titles/{productId}/title")
     String getTitle(@PathVariable(value = "productId") Long productId);
