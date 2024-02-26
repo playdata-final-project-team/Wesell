@@ -55,7 +55,7 @@ const Payment = (props : Props) => {
 
   return (
     <div>
-      <button onClick={onClickPayment}>결제하기</button>
+      <button className="payButton" onClick={onClickPayment}>결제하기</button>
     </div>
   );
 };

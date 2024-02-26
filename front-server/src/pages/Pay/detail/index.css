@@ -1,0 +1,71 @@
+@keyframes smoothAppear {
+    from {
+      opacity: 0;
+      transform: translateY(-10%);
+    }
+    to {
+      opacity: 1.5;
+      transform: translateY(0);
+    }
+  }
+  
+  @media all and (min-width: 1024px) {
+    .board-wrapper {
+      width: 500px;
+      .board-body {
+        height: 400px;
+      }
+    }
+  }
+  
+  @media all and (max-width: 1024px) {
+    .board-wrapper {
+      width: 450px;
+      .board-body {
+        height: 360px;
+      }
+    }
+  }
+  @media all and (max-width: 768px) {
+    .board-wrapper {
+      width: 400px;
+      .board-body {
+        height: 320px;
+      }
+    }
+  }
+  
+  @media all and (max-width: 768px) {
+    .board-wrapper {
+      width: 360px;
+      .board-body {
+        height: 300px;
+      }
+    }
+  }
+
+  .pay-wrapper {
+    transition: width 1s;
+    margin: 0 auto 1.5rem auto;
+    opacity: 0;
+    border-radius: 10px;
+    animation: smoothAppear 1.5s forwards;
+    animation-delay: 0.5s;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fff;
+    padding: 4rem;
+  
+    .pay-body {
+      display: flex;
+      width: 200%;
+      
+      }
+    
+    }
+    .pay-box {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #517BE8;
+      border-radius: 20px; 
+      width: 500px; /* 가로 길이 설정 */
+    }
