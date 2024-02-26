@@ -1,5 +1,6 @@
 import SideButtonBox from 'components/SideButtonBox';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import './style.css';
 
 // component: 사이드버튼 컴포넌트//
 export default function RightAside() {

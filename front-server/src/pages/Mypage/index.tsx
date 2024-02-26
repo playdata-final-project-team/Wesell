@@ -1,5 +1,5 @@
 import InputBox from 'components/InputBox';
-import ABox from 'components/aBox';
+import ABox from 'components/ABox';
 import { ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
@@ -14,7 +14,7 @@ import MypageResponseDto from 'apis/response/mypage/mypage.response.dto';
 import { ResponseDto } from 'apis/response';
 import Withdraw from 'pages/withdraw';
 import MyDealListResponseDto from 'apis/response/mypage/my.deal-list.response.dto';
-import ListPagenation from 'components/Pagenation';
+import ListPagination from 'components/Pagination';
 import PasswordUpdateComponent from 'pages/UserfindbyPwd/PasswordUpdateComponent';
 import { DealInfoStatusUpdateRequestDto, MypageUpdateRequestDto } from 'apis/request/mypage';
 import { MAIN_PATH } from 'constant';
@@ -476,12 +476,12 @@ function Mypage() {
           </div>
         </div>
         {posts && (
-          <ListPagenation
+          <ListPagination
             limit={size}
+            counts={totalElements}
             page={curPage}
             setPage={setCurPage}
             blockNum={blockNum}
-            counts={totalElements}
             setBlockNum={setBlockNum}
           />
         )}

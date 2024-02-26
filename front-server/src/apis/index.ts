@@ -21,13 +21,13 @@ const PW_CHECK_URL = () => '/auth-server/api/v2/delete/pw-check';
 const DELETE_URL = (uuid: string | null) => `/auth-server/api/v2/delete/${uuid}`;
 const KAKAO_DELETE_URL = () => '/auth-server/api/v2/delete/kakao';
 
-const NICKNAME_CHECK_URL = () => '/user-service/api/v1/dup-check';
-const MYPAGE_URL = (uuid: string | null) => `/user-service/api/v1/users/${uuid}`;
-const MY_INFO_UPDATE_URL = (uuid: string | null) => `/user-service/api/v1/users/${uuid}`;
+const NICKNAME_CHECK_URL = () => '/user-service/api/v2/dup-check';
+const MYPAGE_URL = (uuid: string | null) => `/user-service/api/v2/users/${uuid}`;
+const MY_INFO_UPDATE_URL = (uuid: string | null) => `/user-service/api/v2/users/${uuid}`;
 
-const MY_DEAL_LIST_URL = () => '/deal-service/api/v1/list';
-const SALESTATUS_CHANGE_URL = () => '/deal-service/api/v1/complete';
-const DELETE_POSTLIST_URL = () => '/deal-service/api/v1/checked/delete';
+const MY_DEAL_LIST_URL = () => '/deal-service/api/v2/list';
+const SALESTATUS_CHANGE_URL = () => '/deal-service/api/v2/complete';
+const DELETE_POSTLIST_URL = () => '/deal-service/api/v2/checked/delete';
 
 const CHAT_ROOM_LIST = () => '/chat-service/api/v2/rooms';
 
@@ -299,6 +299,19 @@ export const loadChatRoomListRequest = async (uuid: string | null) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('채팅 내역 로드 실패', error);
+    if (!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+};
+
+// 닉네임 조회
+export const getNicknameRequest = async (uuid: string) => {
+  try {
+    const response = await axios.get(`/user-service/api/v1/${uuid}/nickname`);
+    return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     if (!error.response) return null;
     const responseBody: ResponseDto = error.response.data;
     return responseBody;

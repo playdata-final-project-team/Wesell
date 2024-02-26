@@ -26,6 +26,10 @@ public class CommentResponseDto {
         this.createdAt = createdAt;
     }
 
+    public void addChildren(CommentResponseDto child){
+        this.children.add(child);
+    }
+
     public static CommentResponseDto convertCommentToDto(Comment comment) {
         return comment.getIsDeleted() == DeleteStatus.Y ?
                 new CommentResponseDto(comment.getId(), "삭제된 댓글입니다.", null, comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))) :

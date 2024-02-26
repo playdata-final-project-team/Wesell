@@ -1,0 +1,8 @@
+.right-aside-wrapper {
+  transform: matrix(-1, 0, 0, 1, 0, 0);
+  position: absolute;
+  bottom: 150px;
+  right: 500px;
+  width: 50px;
+  min-height: 130px;
+}

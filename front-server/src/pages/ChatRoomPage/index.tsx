@@ -117,7 +117,7 @@ const ChatRoomPage = () => {
       };
     }, [roomId, currentPage]);
 
-    // function: //
+    // function: 메시지 조회 함수//
     const fetchMessages = async () => {
       try {
         const response = await axios.get(

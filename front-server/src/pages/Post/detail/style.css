@@ -1,0 +1,91 @@
+.post-detail-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.post-detail-container {
+  min-height: 700px;
+  max-width: 1024px;
+  width: 100%;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.post-detail-top {
+  border: solid 1px #c0c0c0;
+  padding: 10px;
+}
+
+.post-title {
+  font-size: 1.2rem;
+}
+
+.post-detail-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-detail-box-right {
+  display: flex;
+}
+
+.post-detail-box-right p {
+  margin: 3px;
+}
+
+.post-detail-box-left {
+  display: flex;
+}
+
+.post-detail-box-left p {
+  margin: 3px;
+}
+
+/* .post-content {
+  margin: 10px 0px 50px 0px;
+  height: 400px;
+  border: solid 1px #c0c0c0;
+  padding: 10px;
+} */
+
+.post-detail-btns {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.post-detail-btns button {
+  width: 100px;
+  margin: 5px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 5px;
+  padding: 8px 20px;
+  cursor: pointer;
+}
+
+.post-list-btn {
+  background-color: #7c7c7c;
+}
+
+.post-list-btn:active {
+  background-color: #515151;
+}
+
+.post-update-btn {
+  background-color: #b2aeae;
+}
+
+.post-update-btn:active {
+  background-color: #8d7e7e;
+}
+
+.post-delete-btn {
+  background-color: #e85163;
+}
+
+.post-delete-btn:active {
+  background-color: #e93449;
+}

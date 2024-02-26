@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import { Card } from 'components/card/Card';
-import ListPagenation from 'components/Pagenation';
+import ListPagenation from 'components/Pagination';
 import './style.css';
 
 interface PostJson {
@@ -55,7 +55,7 @@ const Main = () => {
   };
 
   return (
-    <>
+    <div className="boardList-container">
       <div className="searching-box">
         <input
           type="text"
@@ -99,7 +99,7 @@ const Main = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
