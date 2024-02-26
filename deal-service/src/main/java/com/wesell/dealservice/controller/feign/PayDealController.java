@@ -16,7 +16,7 @@ public class PayDealController {
     }
 
     @GetMapping("payments/{productId}/amount")
-    public ResponseEntity<Long> getPriceById(@PathVariable Long productId) {
+    public ResponseEntity<String> getPriceById(@PathVariable Long productId) {
         return ResponseEntity.ok(viewDao.searchPriceById(productId));
     }
 

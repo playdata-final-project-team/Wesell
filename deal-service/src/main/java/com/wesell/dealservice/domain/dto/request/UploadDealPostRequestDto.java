@@ -16,7 +16,7 @@ public class UploadDealPostRequestDto {
     @NotBlank
     private String title;
     @NotNull
-    private String  price;
+    private String price;
     @NotBlank
     private String detail;
 

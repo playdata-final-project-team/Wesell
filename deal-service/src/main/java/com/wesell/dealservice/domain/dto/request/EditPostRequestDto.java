@@ -15,8 +15,8 @@ public class EditPostRequestDto {
     private Long categoryId;
     @NotBlank
     private String title;
-    @NotNull
-    private Long price;
+    @NotBlank
+    private String price;
     @NotBlank
     private String detail;
     @NotNull

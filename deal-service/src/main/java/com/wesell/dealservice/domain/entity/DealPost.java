@@ -27,7 +27,7 @@ public class DealPost {
     private String title;
 
     @Column(name = "p_price", nullable = false)
-    private Long price;
+    private String price;
 
     @Column(name = "p_detail", nullable = false)
     private String detail;
@@ -43,7 +43,7 @@ public class DealPost {
     Boolean isDeleted;
 
     @Builder
-    public DealPost(String uuid, Category category, String title, Long price,
+    public DealPost(String uuid, Category category, String title, String price,
                     String detail, LocalDateTime createdAt) {
         this.uuid = uuid;
         this.category = category;

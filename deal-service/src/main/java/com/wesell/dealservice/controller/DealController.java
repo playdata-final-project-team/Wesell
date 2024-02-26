@@ -140,7 +140,7 @@ public class DealController {
         }
 
         try {
-            price = viewDao.searchPriceById(productId);
+            price = Long.parseLong(viewDao.searchPriceById(productId));
         } catch (RuntimeException e) {
             return new ResponseEntity<>(price, ErrorCode.NO_PRICE_RESEARCH.getStatus());
         }
