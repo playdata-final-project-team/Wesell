@@ -28,7 +28,7 @@ public class ProductInfoResponseDto {
         this.title = post.getTitle();
         this.createdAt = post.getCreatedAt()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        this.price = post.getPrice();
+        this.price = Long.parseLong(post.getPrice());
         this.nickname = nickname;
         this.dealCount = dealCount;
         this.imageUrl = imageUrl;

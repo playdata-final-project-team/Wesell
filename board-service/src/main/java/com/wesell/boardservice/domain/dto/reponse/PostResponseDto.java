@@ -17,5 +17,5 @@ public class PostResponseDto implements Serializable {
     private String createdAt;
     private String content;
     private Long click;
-    private List<Comment> comments;
+    private List<CommentResponseDto> comments;
 }

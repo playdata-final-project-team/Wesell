@@ -4,10 +4,10 @@ import PayTextArea from 'components/payTextArea';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Payment from '..';
+import './index.css';
 
 function RequestPay() {
   const { postId } = useParams();
-  const [deliveryId, setDeliveryId] = useState<number>();
   const [payId, setPayId] = useState<number|null>(null);
   const [ address, setAddress] = useState('');
   const [ receiver, setReceiver] = useState('');
@@ -23,9 +23,9 @@ function RequestPay() {
         console.log("delivery"+data1);
 
         const payDto = {
-          dliveryId:data1,
-          // buyer:window.sessionStorage.getItem("uuid"),
-          buyer: "wid5",
+          deliveryId:data1,
+          buyer:window.sessionStorage.getItem("uuid"),
+          // buyer: "wid5",
           productId:postId,
           type:0,
         };
@@ -45,11 +45,12 @@ function RequestPay() {
     return(
         <div className="pay-wrapper">
             <div className="pay-body">
-              <PayTextArea setReciever={setReceiver} setAddress={setAddress} receiver={receiver} addres={address}/>
-              <button onClick={onClickBeforePay}>배송지 확인</button>
-              {payId && <Payment payId={payId}/>}
+              <PayTextArea setReciever={setReceiver} setAddress={setAddress} receiver={receiver} address={address}/>
             </div>
-        </div>
+            <div className="submitButton">
+              <button className="successButton" onClick={onClickBeforePay}>배송지 확인</button>
+              {payId && <Payment payId={payId}/>}</div>
+            </div>
     );
 }
 

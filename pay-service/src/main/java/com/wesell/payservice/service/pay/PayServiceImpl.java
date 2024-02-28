@@ -37,7 +37,7 @@ public class PayServiceImpl implements PayService {
     @Override
     public Long createPay(PayRequestDto requestDto) {
         //todo : amount가 null인 경우
-        Long amount = dealFeign.getPayInfo(requestDto.getProductId());
+        Long amount = Long.parseLong(dealFeign.getPayInfo(requestDto.getProductId()));
         Pay pay = Pay.createPay(requestDto, createOrderNumber(requestDto), amount);
 
         try{
@@ -48,7 +48,6 @@ public class PayServiceImpl implements PayService {
             deliveryRepository.delete(delivery);
             throw new CustomException(ErrorCode.REJECT_REASON_SOLD_OUT);
         }
-
     }
 
     @Override

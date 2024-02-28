@@ -36,6 +36,7 @@ import MainBoard from 'pages/Post/main';
 import PostWrite from 'pages/Post/write';
 import PostDetail from 'pages/Post/detail';
 import PostUpdate from 'pages/Post/update';
+import CommentList from 'components/CommentList';
 
 // component: Application 컴포넌트 //
 function App() {
@@ -76,6 +77,7 @@ function App() {
       {/* 테스트 라우터 */}
       <Route>
         <Route path="/test/detail/:productId" element={<TestDetailPage />} />
+        <Route path="/test/comment/list" element={<CommentList />} />
       </Route>
     </Routes>
   );

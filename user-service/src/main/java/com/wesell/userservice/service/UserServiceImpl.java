@@ -20,6 +20,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -90,8 +92,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void save(SignupRequestDto signupRequestDto) {
-        User userEntity = convertToEntity(signupRequestDto);
-        userRepository.save(userEntity);
+
+        if (userRepository.existsUserByPhone(signupRequestDto.getPhone())) {
+            throw new CustomException(ErrorCode.DUPLICATED_PHONE);
+        } else {
+            User userEntity = convertToEntity(signupRequestDto);
+            userRepository.save(userEntity);
+        }
     }
 
     /**
@@ -231,6 +238,7 @@ public class UserServiceImpl implements UserService {
                 .phone(requestDto.getPhone())
                 .agree(requestDto.isAgree())
                 .uuid(requestDto.getUuid())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 

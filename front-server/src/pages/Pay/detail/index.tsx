@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import './index.css';
 
 interface PayJson {
     orderNumber:string;
@@ -31,22 +32,41 @@ function PayResultPage() {
 
     return(
         <>
-        <div className="pay-wrapper">
-            <div className="pay-body">
-                {
-                    pay && delivery && (
-                        <div className="pay-content">
-                            <p className="orderNumber">주문번호 {pay.orderNumber}</p>
-                            <p className="receiver">수령인 {delivery.receiver}</p>
-                            <p className="addres">주소 {delivery.address}</p>
-                            <p className="orderNumber">주문번호 {pay.orderNumber}</p>
-                            <p className="amount">결제 금액 {pay.amount}</p>
-                            <p className="shipping-status">배송 상태 {delivery.status}</p>
-                        </div>
-                    )
-                }
-            </div>
+      <div className="pay-wrapper">
+  <div className="pay-body">
+    {
+      pay && delivery && (
+        <div className="pay-content">
+          <div className="pay-box">
+          <p className="orderNumber"  style={{ fontWeight: 'bold' }}>주문번호</p>
+          <p>{pay.orderNumber}</p>
+          </div>
+          <div className="pay-box">
+            <p className="receiver"  style={{ fontWeight: 'bold' }}>수령인</p>
+            <p>{delivery.receiver}</p>
+          </div>
+          <div className="pay-box">
+            <p className="address"  style={{ fontWeight: 'bold' }}>주소</p>
+            <p>{delivery.address}</p>
+          </div>
+          <div className="pay-box">
+            <p className="orderNumber"  style={{ fontWeight: 'bold' }}>주문번호</p>
+            <p>{pay.orderNumber}</p>
+          </div>
+          <div className="pay-box">
+            <p className="amount"  style={{ fontWeight: 'bold' }}>결제 금액</p>
+            <p>{pay.amount}</p>
+          </div>
+          <div className="pay-box">
+            <p className="shipping-status" style={{ fontWeight: 'bold' }}>배송 상태</p>
+            <p>{delivery.status}</p>
+          </div>
         </div>
+      )
+    }
+  </div>
+</div>
+
         </>
     )
 }

@@ -21,7 +21,7 @@ public class MainPagePostResponseDto {
         this.category = post.getCategory().getId();
         this.imageUrl = url;
         this.title = post.getTitle();
-        this.price = post.getPrice();
+        this.price = Long.parseLong(post.getPrice());
     }
 
 }

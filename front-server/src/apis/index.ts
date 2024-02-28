@@ -305,6 +305,19 @@ export const loadChatRoomListRequest = async (uuid: string | null) => {
   }
 };
 
+// 닉네임 조회
+export const getNicknameRequest = async (uuid: string) => {
+  try {
+    const response = await axios.get(`/user-service/api/v1/${uuid}/nickname`);
+    return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (!error.response) return null;
+    const responseBody: ResponseDto = error.response.data;
+    return responseBody;
+  }
+};
+
 // comment: *중요 - 순환참조로 인해 Interceptor 내부에서 axios 요청 금지
 axios.interceptors.response.use(
   (res) => res,

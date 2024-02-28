@@ -1,5 +1,6 @@
+import './index.css';
 
-const PayTextArea = ({setReciever, setAddress, receiver, addres}) => {
+const PayTextArea = ({setReciever, setAddress, receiver, address}) => {
     
   return (
     <div className="textArea-wrapper">
@@ -11,13 +12,14 @@ const PayTextArea = ({setReciever, setAddress, receiver, addres}) => {
         placeholder="수취인"
         value={receiver}
       />
-      <input
+      <textarea
+       rows="10" cols="22"
         onChange={(e) => {
-            setAddress(e.target.value);
+          setAddress(e.target.value);
         }}
-        className="addres"
+        className="address"
         placeholder="배송지"
-        value={addres}
+        value={address}
       />
     </div>
   );

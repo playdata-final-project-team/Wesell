@@ -28,7 +28,7 @@ public class EditPostResponseDto {
     public EditPostResponseDto(DealPost post) {
         category = post.getCategory().getId();
         title = post.getTitle();
-        price = post.getPrice();
+        price = Long.parseLong(post.getPrice());
         detail = post.getDetail();
     }
 }

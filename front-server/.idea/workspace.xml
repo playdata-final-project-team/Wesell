@@ -5,68 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92f63182-175e-4fe9-8f41-34293aef690c" name="Changes" comment="feat: 알림 서비스 구현">
-      <change afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/dto/reponse/BoardListResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/images/board-list-icon1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/images/board-list-icon2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/images/board-list-icon3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/PostList/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/PostList/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Quill/Detail/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Quill/Write/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/layouts/Container/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/layouts/LeftAside/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/layouts/LeftAside/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/layouts/RightAside/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Post/detail/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Post/detail/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Post/main/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Post/main/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Post/update/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Post/update/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Post/write/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Post/write/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/types/interface/post-list-item.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../apigateway-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../apigateway-server/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/controller/AuthFeignController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/controller/AuthFeignController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/service/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../authentication-server/src/main/java/com/wesell/authenticationserver/service/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/controller/BoardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/controller/BoardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/controller/RedisTestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/controller/RedisTestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/dto/reponse/AllPostsResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/dto/reponse/AllPostsResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/dto/reponse/PageResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/dto/reponse/PageResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/dto/reponse/PostResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/dto/reponse/PostResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/entity/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/repository/BoardRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/domain/repository/BoardRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/error/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/error/ErrorCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/service/BoardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/service/BoardService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/service/CommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/java/com/wesell/boardservice/service/PostService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apis/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apis/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Pagenation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Pagination/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Pagenation/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Pagination/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SideButtonBox/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SideButtonBox/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/Container/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Container/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/RightAside/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/RightAside/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ChatRoomPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ChatRoomPage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Main/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Mypage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Mypage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/myPayList/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/myPayList/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/search/category.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/search/category.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/search/title.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/search/title.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/setupProxy.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/setupProxy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/interface/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/interface/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/domain/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/domain/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/domain/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/domain/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/src/main/java/com/wesell/userservice/service/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,23 +25,23 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging feat-208&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Wesell/front-server&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Wesell\\front-server\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "feat-224",
+    "last_opened_file_path": "C:/Wesell/front-server",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "terminal",
+    "ts.external.directory.path": "C:\\Wesell\\front-server\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\teamPRJ\fixwesell\Wesell\front-server\src\types\interface" />
@@ -137,6 +76,7 @@
       <workItem from="1708757719145" duration="139000" />
       <workItem from="1708863994282" duration="8000" />
       <workItem from="1708864034614" duration="35000" />
+      <workItem from="1708943430621" duration="637000" />
     </task>
     <task id="LOCAL-00001" summary="feat: 알림 서비스 구현">
       <option name="closed" value="true" />

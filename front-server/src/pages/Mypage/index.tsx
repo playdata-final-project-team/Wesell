@@ -1,5 +1,5 @@
 import InputBox from 'components/InputBox';
-import ABox from 'components/aBox/index';
+import ABox from 'components/ABox';
 import { ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';

@@ -3,7 +3,6 @@ package com.wesell.imageserver.controller;
 import com.wesell.imageserver.service.FileUploadService;
 import java.io.IOException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,7 @@ public class ProductImageController {
     }
 
     @PostMapping( "upload")
-    public ResponseEntity<?> uploadFile(@RequestPart(value = "id") Long productId, @RequestPart(value = "file")MultipartFile file) throws IOException {
+    public ResponseEntity<?> uploadFile(@RequestParam(value = "id") Long productId, @RequestPart(value = "file")MultipartFile file) throws IOException {
         fileUploadService.saveImageUrl(productId, fileUploadService.uploadAndGetUrl(file));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

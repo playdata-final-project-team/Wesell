@@ -22,7 +22,7 @@ const PostWrite = () => {
     const request = {
       title: title,
       content: htmlContent,
-      uuid: '58e681e6-aaca-46a7-b186-5e48a5a24c81',
+      uuid: uuid,
     };
     //axios 요청
     try {

@@ -26,7 +26,8 @@ public enum ErrorCode {
     /**
      * feign 관련 오류
      */
-    AUTH_SERVICE_FEIGN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"UFE","유저 서비스로 Feign 요청 시 오류 발생");
+    AUTH_SERVICE_FEIGN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"UFE","유저 서비스로 Feign 요청 시 오류 발생"),
+    DUPLICATED_PHONE(HttpStatus.BAD_REQUEST, "DP", "중복된 전화번호입니다.");
 
     private final HttpStatus status; // 상태코드(숫자)
     private final String code; // 커스텀 코드(서버 내 관리하는 에러 코드)

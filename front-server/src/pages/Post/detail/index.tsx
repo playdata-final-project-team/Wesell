@@ -3,6 +3,8 @@ import './style.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import TextEditor from 'components/Quill/Detail';
+import CommentList from 'components/CommentList';
+import { getNicknameRequest } from 'apis';
 
 interface postDetail {
   boardTitle: string;
@@ -21,6 +23,7 @@ interface postDetail {
 const PostDetail = () => {
   const navigator = useNavigate();
   const { boardId, postId } = useParams();
+  const uuid = sessionStorage.getItem('uuid');
 
   // state: 게시판 제목 //
   const [boardTitle, setBoardTitle] = useState<string>('');
@@ -40,9 +43,10 @@ const PostDetail = () => {
   // state: 게시글 조회수 //
   const [click, setClick] = useState<number>(0);
 
-  // comment: 수정 + 삭제 관련 - 해당 회원만 삭제 수정이 가능하도록 로직 수정 예정 //
-  // event-handler: 게시글 수정 버튼 핸들러 //
+  // state: 작성자 여부 확인 //
+  const [isWriter, setIsWriter] = useState<boolean>(false);
 
+  // comment: 수정 + 삭제 관련 - 해당 회원만 삭제 수정이 가능하도록 로직 수정 예정 //
   // event-handler: 게시글 삭제 버튼 핸들러 //
   const onPostDeleteBtnHandler = async () => {
     if (confirm('정말로 게시글을 삭제하시겠습니까?')) {
@@ -61,6 +65,21 @@ const PostDetail = () => {
     }
   };
 
+  // function: 작성자 여부 확인 함수 //
+  const confirmWriter = async (postWriter: string) => {
+    if (!uuid) {
+      return;
+    }
+
+    const nickname = await getNicknameRequest(uuid);
+
+    if (postWriter === nickname) {
+      setIsWriter(true);
+    } else {
+      setIsWriter(false);
+    }
+  };
+
   // function: 게시글 상세 정보 조회 함수 //
   const fetchPost = async () => {
     try {
@@ -73,6 +92,7 @@ const PostDetail = () => {
       setClick(click);
       setCreatedAt(createdAt);
       setWriter(writer);
+      await confirmWriter(writer);
     } catch (error) {
       console.error('⚠️ 게시글 조회 시 오류 발생', error);
     }
@@ -96,8 +116,6 @@ const PostDetail = () => {
             </div>
             <div className="post-detail-box-left">
               <p>조회 {click}</p>
-              <p>|</p>
-              <p>댓글</p>
             </div>
           </div>
         </div>
@@ -111,18 +129,23 @@ const PostDetail = () => {
           >
             목록
           </button>
-          <button
-            className="post-update-btn"
-            onClick={() => {
-              navigator(`/post/${boardId}/${postId}/update`);
-            }}
-          >
-            수정
-          </button>
-          <button className="post-delete-btn" onClick={onPostDeleteBtnHandler}>
-            삭제
-          </button>
+          {isWriter && (
+            <>
+              <button
+                className="post-update-btn"
+                onClick={() => {
+                  navigator(`/post/${boardId}/${postId}/update`);
+                }}
+              >
+                수정
+              </button>
+              <button className="post-delete-btn" onClick={onPostDeleteBtnHandler}>
+                삭제
+              </button>
+            </>
+          )}
         </div>
+        <CommentList></CommentList>
       </div>
     </div>
   );
