@@ -51,7 +51,9 @@ public class BoardService {
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
 
+
         return PageResponseDto.builder()
+                .title(title)
                 .dtoList(posts.map(AllPostsResponseDto::new).toList())
                 .boardTitle(title)
                 .page(page)

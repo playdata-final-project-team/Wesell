@@ -47,7 +47,6 @@ const PostDetail = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
 
   // comment: 수정 + 삭제 관련 - 해당 회원만 삭제 수정이 가능하도록 로직 수정 예정 //
-
   // event-handler: 게시글 삭제 버튼 핸들러 //
   const onPostDeleteBtnHandler = async () => {
     if (confirm('정말로 게시글을 삭제하시겠습니까?')) {

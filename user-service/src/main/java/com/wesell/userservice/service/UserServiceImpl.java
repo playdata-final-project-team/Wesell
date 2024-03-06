@@ -20,6 +20,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -56,15 +58,15 @@ public class UserServiceImpl implements UserService {
     /**
      * 마이페이지 - 회원 정보 수정
      *
-     * @param requestDto
+     * @param name
      */
     @Transactional
     @Override
-    public void update(String uuid, SignupRequestDto requestDto) {
+    public void update(String uuid, String name) {
         User user = userRepository.findById(uuid).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
-        user.changeUserInfo(requestDto.getName());
+        user.changeUserInfo(name);
         userRepository.saveAndFlush(user);
     }
 
@@ -90,8 +92,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void save(SignupRequestDto signupRequestDto) {
-        User userEntity = convertToEntity(signupRequestDto);
-        userRepository.save(userEntity);
+
+        if (userRepository.existsUserByPhone(signupRequestDto.getPhone())) {
+            throw new CustomException(ErrorCode.DUPLICATED_PHONE);
+        } else {
+            User userEntity = convertToEntity(signupRequestDto);
+            userRepository.save(userEntity);
+        }
     }
 
     /**
@@ -131,7 +138,7 @@ public class UserServiceImpl implements UserService {
                 () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
     }
-
+    @Transactional
     @Override
     public Long updateDealCount(String uuid) {
         User user = userRepository.findById(uuid).orElseThrow(
@@ -231,6 +238,7 @@ public class UserServiceImpl implements UserService {
                 .phone(requestDto.getPhone())
                 .agree(requestDto.isAgree())
                 .uuid(requestDto.getUuid())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 

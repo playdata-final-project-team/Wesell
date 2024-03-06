@@ -272,7 +272,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String findEmail(String uuid) {
 
-        Optional<String> optionalAuthEmail = authUserLoadRepository.findUuidByEmail(uuid);
+        Optional<String> optionalAuthEmail = authUserLoadRepository.findEmailByUuid(uuid);
         Optional<String> optionalKakaoEmail = kakaoUserLoadRepository.findEmailByUuid(uuid);
 
         if (optionalAuthEmail.isPresent()) {

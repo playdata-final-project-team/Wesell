@@ -27,7 +27,7 @@ public class User {
     @Column(name = "u_nickname", length = 15, nullable = false)
     private String nickname;
 
-    @Column(name = "u_phone", nullable = false)
+    @Column(name = "u_phone", nullable = false, unique = true)
     private String phone;
 
     @CreationTimestamp
@@ -38,6 +38,7 @@ public class User {
     @Column(name = "u_agree", nullable = false)
     private boolean agree;
 
+    @ColumnDefault(value = "0")
     @Column(name = "u_dealCount")
     private Long dealCount;
 

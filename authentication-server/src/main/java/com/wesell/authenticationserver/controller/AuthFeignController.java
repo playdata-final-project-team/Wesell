@@ -23,9 +23,8 @@ public class AuthFeignController {
     // 회원 - 마이페이지 - 회원 이메일 조회
     @GetMapping("{uuid}/email")
     public String getUserByEmail(@PathVariable("uuid") String uuid) {
-        String email = authService.findEmail(uuid);
-        return email;
-    }
+        return authService.findEmail(uuid);
+}
 
     // 관리자 - 회원관리 - 권한 변경
     @PutMapping("change-role")

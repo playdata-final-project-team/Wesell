@@ -76,6 +76,7 @@ const MainBoard = () => {
       });
 
       const { dtoList, page, boardTitle, totalPages } = response.data;
+
       setCurrentPage(page);
       setPosts(dtoList);
       setTitle(boardTitle);
