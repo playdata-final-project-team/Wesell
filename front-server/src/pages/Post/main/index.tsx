@@ -76,10 +76,7 @@ const MainBoard = () => {
       });
 
       const { dtoList, page, boardTitle, totalPages } = response.data;
-<<<<<<< HEAD
-      console.log(response.data);
-=======
->>>>>>> b52ef505fe05f71efe787da691ef86e8e1e6510d
+
       setCurrentPage(page);
       setPosts(dtoList);
       setTitle(boardTitle);
