@@ -21,6 +21,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,6 +65,7 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
+    @CachePut(key = "'postId : ' + #requestDto.postId", value = "EDIT_POST_CACHE")
     public EditPostResponseDto editPost(EditPostRequestDto requestDto) {
         DealPost editPost = dealRepository.findDealPostById(requestDto.getPostId());
         editPost.editPost(requestDto);
