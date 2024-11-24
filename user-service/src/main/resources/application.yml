@@ -21,6 +21,15 @@ spring:
         check_nullability: true
     show_sql: true
 
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
 springdoc:
   packages-to-scan: com.wesell.userservice.contoller
   default-consumes-media-type: application/json;charset=UTF-8

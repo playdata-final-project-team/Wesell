@@ -21,6 +21,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -76,11 +77,13 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
+    @CacheEvict(key = "'postId : ' + #postId", value = "POST_INFO_CACHE")
     public void deletePost(Long postId) {
         DealPost post = dealRepository.findDealPostById(postId);
         post.deleteMyPost();
     }
 
+    @CacheEvict(value = "POST_INFO_CACHE", allEntries = true)
     public void deletePosts(Long[] idList){
         Arrays.stream(idList)
                 .map(id -> dealRepository.findDealPostById(id))
@@ -99,6 +102,7 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
+    @Cacheable(key = "'postId : ' + #postId", value = "POST_INFO_CACHE")
     public PostInfoResponseDto getPostInfo(Long postId) {
         String nickname;
         DealPost foundPost = readRepository.searchDealPost(postId);
@@ -112,7 +116,6 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    @Cacheable(key = "'uuid: ' + #uuid + ' page: ' + #page", value = "MYPAGE_CACHE")
     public PageResponseDto getMyPostList(String uuid, int page) {
         int pageLimit = 6;
         Page<DealPost> allByUuid = readRepository.searchMyList(uuid, PageRequest.of(page, pageLimit));
